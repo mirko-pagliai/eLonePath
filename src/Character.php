@@ -209,7 +209,7 @@ class Character
     }
 
     /**
-     * Export character data to array (for session storage).
+     * Export character data to array.
      *
      * @return array<string, mixed>
      */
@@ -227,9 +227,17 @@ class Character
     }
 
     /**
-     * Create character from array data (from session storage).
+     * Create character from array data.
      *
-     * @param array{name: string, sex: string, skill: array{current: int, max: int}, stamina: array{current: int, max: int}, luck: array{current: int, max: int}, inventory: array<string>, gold: int} $data
+     * @param array{
+     *     name: string,
+     *     sex: string,
+     *     skill: array{current: int, max: int},
+     *     stamina: array{current: int, max: int},
+     *     luck: array{current: int, max: int},
+     *     inventory: array<string>,
+     *     gold: int,
+     * } $data
      * @return self
      */
     public static function fromArray(array $data): self

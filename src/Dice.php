@@ -44,7 +44,6 @@ class Dice
         $total = 0;
         for ($i = 0; $i < $count; $i++) {
             $total += self::rollD6();
-            dump($total);
         }
         return $total;
     }

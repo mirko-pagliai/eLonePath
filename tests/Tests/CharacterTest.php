@@ -5,9 +5,9 @@ namespace eLonePath\Test;
 
 use eLonePath\Character;
 use eLonePath\Sex;
-use eLonePath\Stat\Luck;
-use eLonePath\Stat\Skill;
-use eLonePath\Stat\Stamina;
+use eLonePath\Stats\Luck;
+use eLonePath\Stats\Skill;
+use eLonePath\Stats\Stamina;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

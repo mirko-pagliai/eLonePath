@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace eLonePath\Test\Stat;
 
-use eLonePath\Stat\Skill;
+use eLonePath\Stats\Skill;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

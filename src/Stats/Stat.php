@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace eLonePath\Stat;
+namespace eLonePath\Stats;
 
 use InvalidArgumentException;
 

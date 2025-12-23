@@ -1,26 +1,26 @@
 <?php
 declare(strict_types=1);
 
-namespace eLonePath\Stat;
+namespace eLonePath\Stats;
 
 use eLonePath\Dice;
 
 /**
- * SKILL stat for character.
+ * STAMINA stat for character.
  *
- * Represents combat and general ability.
+ * Represents health and endurance.
  */
-class Skill extends Stat
+class Stamina extends Stat
 {
     /**
-     * Create a SKILL stat with randomly rolled value (1d6+6).
+     * Create a STAMINA stat with randomly rolled value (2d6+12).
      *
      * @return self
      * @throws \Random\RandomException
      */
     public static function rollRandom(): self
     {
-        $value = Dice::rollD6() + 6; // Range: 7-12
+        $value = Dice::roll2D6() + 12; // Range: 14-24
 
         return new self($value);
     }

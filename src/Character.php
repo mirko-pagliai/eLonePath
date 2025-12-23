@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace eLonePath;
 
-use eLonePath\Stat\Luck;
-use eLonePath\Stat\Skill;
-use eLonePath\Stat\Stamina;
+use eLonePath\Stats\Luck;
+use eLonePath\Stats\Skill;
+use eLonePath\Stats\Stamina;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -72,9 +72,9 @@ class Character
      *
      * @param string $name Character name
      * @param \eLonePath\Sex $sex Character sex
-     * @param \eLonePath\Stat\Skill $skill SKILL stat
-     * @param \eLonePath\Stat\Stamina $stamina STAMINA stat
-     * @param \eLonePath\Stat\Luck $luck LUCK stat
+     * @param \eLonePath\Stats\Skill $skill SKILL stat
+     * @param \eLonePath\Stats\Stamina $stamina STAMINA stat
+     * @param \eLonePath\Stats\Luck $luck LUCK stat
      * @param int $gold Initial gold amount
      */
     public function __construct(
@@ -234,11 +234,11 @@ class Character
      */
     public static function fromArray(array $data): self
     {
-        /** @var \eLonePath\Stat\Skill $Skill */
+        /** @var \eLonePath\Stats\Skill $Skill */
         $Skill = Skill::fromArray($data['skill']);
-        /** @var \eLonePath\Stat\Stamina $Stamina */
+        /** @var \eLonePath\Stats\Stamina $Stamina */
         $Stamina = Stamina::fromArray($data['stamina']);
-        /** @var \eLonePath\Stat\Luck $Luck */
+        /** @var \eLonePath\Stats\Luck $Luck */
         $Luck = Luck::fromArray($data['luck']);
 
         $character = new self(

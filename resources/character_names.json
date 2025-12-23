@@ -1,0 +1,45 @@
+{
+  "male": [
+    "Aldric", "Borin", "Cedric", "Darin", "Eldan", "Falkor", "Garrick", "Hadrian", "Icarus", "Jorlan",
+    "Kael", "Loric", "Merrick", "Nolan", "Orin", "Perrin", "Quentin", "Roderic", "Sylas", "Theron",
+    "Ulric", "Varric", "Wystan", "Xander", "Yorick", "Zorin", "Alaric", "Bastian", "Cyril", "Dorian",
+    "Emric", "Fendrel", "Galen", "Hector", "Ivor", "Jareth", "Kieran", "Lucan", "Malric", "Neric",
+    "Orrin", "Percival", "Quorin", "Rurik", "Soren", "Tavian", "Ulric", "Valen", "Wulfric", "Xavian",
+    "Yoric", "Zanric", "Adric", "Balin", "Corwin", "Dain", "Eamon", "Faelan", "Garron", "Hadrin",
+    "Ilan", "Jorvik", "Kaelen", "Leoric", "Marlon", "Nethan", "Odrin", "Phalen", "Quarin", "Ravric",
+    "Salar", "Toren", "Ulric", "Veyran", "Warin", "Xeric", "Yandor", "Zephan", "Alric", "Bran",
+    "Caelen", "Draven", "Eryndor", "Fenric", "Galen", "Harken", "Isen", "Jarek", "Kael", "Lorien",
+    "Merrin", "Nolin", "Orric", "Pryor", "Quenric", "Rion", "Sorin", "Tavric", "Uthar", "Varyn",
+    "Wystan", "Xavin", "Yorven", "Zyric", "Aric", "Brennan", "Caius", "Derrin", "Eldan", "Farrin",
+    "Garrick", "Hadrin", "Ilan", "Jorvan", "Kerric", "Leoric", "Merrick", "Neric", "Orin", "Perrin",
+    "Quentin", "Roderic", "Sylas", "Theron", "Ulric", "Varric", "Wystan", "Xander", "Yorick", "Zorin",
+    "Alaric", "Bastian", "Cyril", "Dorian", "Emric", "Fendrel", "Galen", "Hector", "Ivor", "Jareth",
+    "Kieran", "Lucan", "Malric", "Neric", "Orrin", "Percival", "Quorin", "Rurik", "Soren", "Tavian",
+    "Ulric", "Valen", "Wulfric", "Xavian", "Yoric", "Zanric", "Adric", "Balin", "Corwin", "Dain"
+  ],
+  "female": [
+    "Aria", "Brynn", "Celia", "Dara", "Elara", "Fiona", "Gwyneth", "Helena", "Isolde", "Jora",
+    "Kaela", "Liora", "Mira", "Nerys", "Orla", "Petra", "Quilla", "Rhiannon", "Selene", "Thalia",
+    "Una", "Vespera", "Wynne", "Xyra", "Ysolde", "Zara", "Aeliana", "Brina", "Caelia", "Delyth",
+    "Elyra", "Faelina", "Galenna", "Hestia", "Ilara", "Junia", "Kaelen", "Lyra", "Morrigan", "Nyssa",
+    "Oriana", "Persephone", "Quenara", "Ravena", "Saphira", "Thessaly", "Ullara", "Viona", "Wynara", "Xylia",
+    "Ylena", "Zephyra", "Althea", "Bellara", "Cerys", "Danika", "Elaria", "Feryn", "Gwyneira", "Hilaria",
+    "Isla", "Jorina", "Kalyra", "Lyanna", "Maelis", "Nivara", "Olira", "Parisa", "Quindra", "Rivara",
+    "Selara", "Tyria", "Ulyra", "Vanyra", "Wylla", "Xylla", "Ysera", "Zalina", "Amara", "Briala",
+    "Celara", "Drisana", "Elwyn", "Faylen", "Gavina", "Helya", "Isara", "Jalina", "Keryn", "Lysara",
+    "Melara", "Nimira", "Orya", "Pyrena", "Quivara", "Rysara", "Sylvara", "Talyra", "Uvara", "Velyra",
+    "Wynsera", "Xylara", "Yllira", "Zyrena", "Ariella", "Brylina", "Calira", "Delyra", "Elara", "Fynara",
+    "Gwynna", "Hilaria", "Isilyn", "Jorina", "Kaelyra", "Lyrina", "Myrrha", "Nyara", "Orlina", "Perlina",
+    "Quenara", "Rivara", "Selyra", "Tyrana", "Ulyra", "Velyra", "Wynna", "Xylina", "Ysera", "Zalira"
+  ],
+  "other": [
+    "Aeris", "Ashen", "Bryn", "Cyren", "Dariel", "Erynd", "Fael", "Galen", "Haven", "Ilyan",
+    "Joryn", "Kael", "Lorien", "Merrin", "Niv", "Oryn", "Perrin", "Quen", "Ryn", "Sylv",
+    "Tarian", "Ulin", "Vey", "Wren", "Xen", "Yllan", "Zeph", "Alar", "Brynne", "Ciel", "Darian",
+    "Elwyn", "Fynn", "Gwyn", "Halyn", "Iven", "Jyn", "Kaelin", "Lior", "Mavric", "Nyx",
+    "Orin", "Peryn", "Quorin", "Ravyn", "Soren", "Tavian", "Uryn", "Valen", "Wystan", "Xyra",
+    "Yaren", "Zyra", "Aelin", "Belen", "Carynn", "Delyr", "Erya", "Farynn", "Galyth", "Helyn",
+    "Ilyra", "Jorwyn", "Kaelith", "Lysyn", "Myrrin", "Nyrel", "Orynn", "Phaelin", "Quyra", "Rynel",
+    "Sylin", "Tyrin", "Urynn", "Velyr", "Wynel", "Xyryn", "Ylen", "Zyrel", "Aelwyn", "Brynith"
+  ]
+}

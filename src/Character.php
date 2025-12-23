@@ -83,7 +83,7 @@ class Character
         Skill $skill,
         Stamina $stamina,
         Luck $luck,
-        int $gold = 10
+        int $gold = 10,
     ) {
         $this->name = $name;
         $this->sex = $sex;
@@ -137,7 +137,8 @@ class Character
      * @return self Returns a new instance of the class with rolled stats.
      * @throws \Random\RandomException
      */
-    public static function createWithRolledStats(?string $name = null, ?Sex $sex = null, int $gold = 10): self {
+    public static function createWithRolledStats(?string $name = null, ?Sex $sex = null, int $gold = 10): self
+    {
         if (!$sex) {
             $sex = Sex::cases()[array_rand(Sex::cases())];
         }

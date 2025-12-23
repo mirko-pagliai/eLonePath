@@ -14,9 +14,6 @@ abstract class Stat
      * Current value of the stat.
      */
     public int $current {
-        get {
-            return $this->current;
-        }
         set {
             $this->current = max(0, min($value, $this->max));
         }
@@ -26,9 +23,6 @@ abstract class Stat
      * Maximum value of the stat.
      */
     public int $max {
-        get {
-            return $this->max;
-        }
         set {
             if ($value < 1) {
                 throw new InvalidArgumentException('Max value must be at least 1');

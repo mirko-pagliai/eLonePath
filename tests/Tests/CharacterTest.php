@@ -19,7 +19,6 @@ class CharacterTest extends TestCase
 
     /**
      * @inheritDoc
-     * @throws \Random\RandomException
      */
     protected function setUp(): void
     {
@@ -82,6 +81,11 @@ class CharacterTest extends TestCase
         $this->assertSame('Vader', $character->name);
         $this->assertSame(Sex::MALE, $character->sex);
         $this->assertSame(12, $character->gold);
+
+        $character = Character::createWithRolledStats('Vader', Sex::MALE);
+        $this->assertSame('Vader', $character->name);
+        $this->assertSame(Sex::MALE, $character->sex);
+        $this->assertSame(10, $character->gold);
 
         $character = Character::createWithRolledStats('Han');
         $this->assertSame('Han', $character->name);

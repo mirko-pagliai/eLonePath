@@ -41,7 +41,7 @@ $request->setSession($session);
 // Load routes configuration
 $routes = require __DIR__ . '/../config/routes.php';
 
-// Setup routing context and matcher
+// Set up routing context and matcher
 $context = new RequestContext();
 $context->fromRequest($request);
 $matcher = new UrlMatcher($routes, $context);
@@ -52,7 +52,7 @@ $dispatcher = new EventDispatcher();
 // Add routing listener
 $dispatcher->addSubscriber(new RouterListener($matcher, new RequestStack()));
 
-// Setup controller and argument resolvers
+// Set up controller and argument resolvers
 $controllerResolver = new ControllerResolver();
 $argumentResolver = new ArgumentResolver();
 
@@ -69,8 +69,7 @@ try {
     $response = $kernel->handle($request);
     $response->send();
     $kernel->terminate($request, $response);
-}
-catch (\Exception $e) {
+} catch (Exception $e) {
     // Basic error handling - in production you'd want better error pages
     $response = new Response(
         'An error occurred: ' . $e->getMessage(),

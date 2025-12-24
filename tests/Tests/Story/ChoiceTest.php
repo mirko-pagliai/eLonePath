@@ -10,7 +10,6 @@ use eLonePath\Stats\Stamina;
 use eLonePath\Story\Choice;
 use eLonePath\Story\ConditionType;
 use Generator;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -83,7 +82,7 @@ class ChoiceTest extends TestCase
     {
         $this->character
             ->method('hasItem')
-            ->willReturnCallback(fn (string $item): bool => $item === 'key');
+            ->willReturnCallback(fn(string $item): bool => $item === 'key');
 
         //The character has the key in his inventory.
         $this->choice->conditionType = ConditionType::HAS_ITEM;

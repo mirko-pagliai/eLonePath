@@ -89,7 +89,7 @@ class ParagraphTest extends TestCase
             'choices' => [
                 ['text' => 'Choice 1', 'target' => 2],
                 ['text' => 'Choice 2', 'target' => 3],
-            ]
+            ],
         ];
 
         $this->assertSame($expected, $this->paragraph->toArray());
@@ -111,7 +111,7 @@ class ParagraphTest extends TestCase
             'choices' => [
                 ['text' => 'Choice 1', 'target' => 2],
                 ['text' => 'Choice 2', 'target' => 3],
-            ]
+            ],
         ];
 
         $paragraph = Paragraph::fromArray(1, $array);
@@ -145,7 +145,7 @@ class ParagraphTest extends TestCase
         ];
 
         yield [
-            "Paragraph 2 has invalid event type: `noExistingType`",
+            'Paragraph 2 has invalid event type: `noExistingType`',
             ['text' => 'A text', 'event' => ['type' => 'noExistingType']],
         ];
     }

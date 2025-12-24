@@ -38,7 +38,7 @@ class Paragraph
     /**
      * Available choices.
      *
-     * @var \eLonePath\Story\Choice[]
+     * @var array<\eLonePath\Story\Choice>
      */
     public array $choices;
 
@@ -49,14 +49,14 @@ class Paragraph
      * @param string $text Paragraph text
      * @param \eLonePath\Story\EventType|null $eventType Optional event type
      * @param array<string, mixed> $eventData Optional event data
-     * @param \eLonePath\Story\Choice[] $choices Available choices
+     * @param array<\eLonePath\Story\Choice> $choices Available choices
      */
     public function __construct(
         int $id,
         string $text,
         ?EventType $eventType = null,
         array $eventData = [],
-        array $choices = []
+        array $choices = [],
     ) {
         if ($id < 1) {
             throw new InvalidArgumentException('Paragraph ID must be positive');
@@ -144,7 +144,9 @@ class Paragraph
             try {
                 $eventType = EventType::from($data['event']['type']);
             } catch (ValueError) {
-                throw new InvalidArgumentException("Paragraph {$id} has invalid event type: `{$data['event']['type']}`");
+                throw new InvalidArgumentException(
+                    "Paragraph {$id} has invalid event type: `{$data['event']['type']}`",
+                );
             }
 
             unset($data['event']['type']);

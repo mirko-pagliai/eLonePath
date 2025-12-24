@@ -48,7 +48,7 @@ class Choice
         string $text,
         int $target,
         ?ConditionType $conditionType = null,
-        array $conditionData = []
+        array $conditionData = [],
     ) {
         if (trim($text) === '') {
             throw new InvalidArgumentException('Choice text cannot be empty');

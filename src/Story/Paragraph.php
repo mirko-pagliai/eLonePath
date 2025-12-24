@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace eLonePath\Story;
 
 use InvalidArgumentException;
+use ValueError;
 
 /**
  * Story paragraph.
@@ -23,14 +24,21 @@ class Paragraph
     public string $text;
 
     /**
-     * Optional event that occurs in this paragraph.
+     * Optional event type that occurs in this paragraph.
      */
-    public ?EventInterface $event;
+    public ?EventType $eventType;
+
+    /**
+     * Optional event data.
+     *
+     * @var array<string, mixed>
+     */
+    public array $eventData;
 
     /**
      * Available choices.
      *
-     * @var array<Choice>
+     * @var \eLonePath\Story\Choice[]
      */
     public array $choices;
 
@@ -39,11 +47,17 @@ class Paragraph
      *
      * @param int $id Paragraph ID
      * @param string $text Paragraph text
-     * @param \eLonePath\Story\EventInterface|null $event Optional event
-     * @param array<Choice> $choices Available choices
+     * @param \eLonePath\Story\EventType|null $eventType Optional event type
+     * @param array<string, mixed> $eventData Optional event data
+     * @param \eLonePath\Story\Choice[] $choices Available choices
      */
-    public function __construct(int $id, string $text, ?EventInterface $event = null, array $choices = [])
-    {
+    public function __construct(
+        int $id,
+        string $text,
+        ?EventType $eventType = null,
+        array $eventData = [],
+        array $choices = []
+    ) {
         if ($id < 1) {
             throw new InvalidArgumentException('Paragraph ID must be positive');
         }
@@ -53,8 +67,19 @@ class Paragraph
 
         $this->id = $id;
         $this->text = trim($text);
-        $this->event = $event;
+        $this->eventType = $eventType;
+        $this->eventData = $eventData;
         $this->choices = $choices;
+    }
+
+    /**
+     * Check if this paragraph has an event.
+     *
+     * @return bool
+     */
+    public function hasEvent(): bool
+    {
+        return $this->eventType !== null;
     }
 
     /**
@@ -68,7 +93,7 @@ class Paragraph
     }
 
     /**
-     * Export paragraph data to array.
+     * Export the Paragraph data to array.
      *
      * @return array<string, mixed>
      */
@@ -78,8 +103,11 @@ class Paragraph
             'text' => $this->text,
         ];
 
-        if ($this->event !== null) {
-            $data['event'] = $this->event->toArray();
+        if ($this->eventType !== null) {
+            $data['event'] = array_merge(
+                ['type' => $this->eventType->value],
+                $this->eventData,
+            );
         }
 
         if (!empty($this->choices)) {
@@ -90,47 +118,47 @@ class Paragraph
     }
 
     /**
-     * Create paragraph from array data.
+     * Create the Paragraph from array data.
      *
      * @param int $id Paragraph ID
-     * @param array<string, mixed> $data Paragraph data
+     * @param array{
+     *     text: string,
+     *     event?: array{type: string, ...},
+     *     choices?: array<array{text: string, target: int, condition?: array{type: string, item?: string, value?: int}}>
+     * } $data Paragraph data
      * @return self
      */
     public static function fromArray(int $id, array $data): self
     {
-        $text = $data['text'] ?? throw new InvalidArgumentException("Paragraph {$id} missing 'text'");
+        if (empty($data['text'])) {
+            throw new InvalidArgumentException('Choice missing "text"');
+        }
 
-        $event = null;
+        $eventData = [];
+
         if (isset($data['event'])) {
-            $event = self::createEventFromArray($data['event']);
-        }
-
-        $choices = [];
-        if (isset($data['choices'])) {
-            foreach ($data['choices'] as $choiceData) {
-                $choices[] = Choice::fromArray($choiceData);
+            if (empty($data['event']['type'])) {
+                throw new InvalidArgumentException("Paragraph {$id} event missing 'type'");
             }
+
+            try {
+                $eventType = EventType::from($data['event']['type']);
+            } catch (ValueError) {
+                throw new InvalidArgumentException("Paragraph {$id} has invalid event type: `{$data['event']['type']}`");
+            }
+
+            unset($data['event']['type']);
+            $eventData = $data['event'];
         }
 
-        return new self($id, $text, $event, $choices);
-    }
+        $choices = array_map(fn(array $choiceData) => Choice::fromArray($choiceData), $data['choices'] ?? []);
 
-    /**
-     * Create an event instance from array data.
-     *
-     * @param array<string, mixed> $data Event data
-     * @return EventInterface
-     */
-    private static function createEventFromArray(array $data): EventInterface
-    {
-        $type = $data['type'] ?? throw new InvalidArgumentException('Event missing "type"');
-
-        return match ($type) {
-            'combat' => CombatEvent::fromArray($data),
-            'add_item' => AddItemEvent::fromArray($data),
-            'modify_stat' => ModifyStatEvent::fromArray($data),
-            'modify_gold' => ModifyGoldEvent::fromArray($data),
-            default => throw new InvalidArgumentException("Unknown event type: {$type}"),
-        };
+        return new self(
+            id: $id,
+            text: $data['text'],
+            eventType: $eventType ?? null,
+            eventData: $eventData ?? [],
+            choices: $choices,
+        );
     }
 }

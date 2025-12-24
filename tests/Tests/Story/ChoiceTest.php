@@ -9,6 +9,7 @@ use eLonePath\Stats\Skill;
 use eLonePath\Stats\Stamina;
 use eLonePath\Story\Choice;
 use eLonePath\Story\ConditionType;
+use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -95,6 +96,26 @@ class ChoiceTest extends TestCase
     }
 
     /**
+     * Tests for the `isAvailable()` method with `ConditionType::HAS_ITEM` condition, but the item is missing.
+     *
+     * @param array{'item': string|null} $conditionData
+     */
+    #[Test]
+    #[TestWith([[]])]
+    #[TestWith([['item' => '']])]
+    #[TestWith([['item' => ' ']])]
+    #[TestWith([['item' => null]])]
+    public function testIsAvailableForHasItemWithNoValidItem(array $conditionData): void
+    {
+        $this->choice->conditionType = ConditionType::HAS_ITEM;
+        $this->choice->conditionData = $conditionData;
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Condition `' . ConditionType::HAS_ITEM->value . '` requires `item` to be set and a string');
+        $this->choice->isAvailable($this->character);
+    }
+
+    /**
      * Tests for the `isAvailable()` method with `ConditionType::SKILL_GREATER_THAN` condition.
      */
     #[Test]
@@ -164,6 +185,28 @@ class ChoiceTest extends TestCase
             ->with(8)
             ->willReturn(true);
         $this->assertTrue($this->choice->isAvailable($this->character));
+    }
+
+    /**
+     * Tests for the `isAvailable()` method with `ConditionType::HAS_ITEM` condition, but the item is missing.
+     *
+     * @param array{'value': int} $conditionData
+     * @param \eLonePath\Story\ConditionType $ConditionType
+     */
+    #[Test]
+    #[TestWith([[], ConditionType::LUCK_GREATER_THAN])]
+    #[TestWith([['value' => ''], ConditionType::LUCK_GREATER_THAN])]
+    #[TestWith([['value' => 'string'], ConditionType::LUCK_GREATER_THAN])]
+    #[TestWith([['value' => 0], ConditionType::LUCK_GREATER_THAN])]
+    #[TestWith([['value' => -1], ConditionType::LUCK_GREATER_THAN])]
+    public function testIsAvailableWithForGreaterThanWithNoValidValue(array $conditionData, ConditionType $ConditionType): void
+    {
+        $this->choice->conditionType = $ConditionType;
+        $this->choice->conditionData = $conditionData;
+
+        $this->expectException(InvalidArgumentException::class);
+        $this->expectExceptionMessage('Condition `' . $ConditionType->value . '` requires `value` to be set and a positive integer');
+        $this->choice->isAvailable($this->character);
     }
 
     /**

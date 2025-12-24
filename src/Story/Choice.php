@@ -76,21 +76,41 @@ class Choice
             return true;
         }
 
-        if ($this->conditionType === ConditionType::COMBAT_WON) {
+        if ($this->conditionType == ConditionType::COMBAT_WON) {
             return $combatWon;
         }
 
-        if ($this->conditionType === ConditionType::HAS_ITEM) {
-            return $character->hasItem($this->conditionData['item'] ?? '');
+        if ($this->conditionType == ConditionType::HAS_ITEM) {
+            if (
+                empty($this->conditionData['item']) ||
+                !is_string($this->conditionData['item']) ||
+                trim($this->conditionData['item']) === ''
+            ) {
+                throw new InvalidArgumentException(
+                    'Condition `' . $this->conditionType->value . '` requires `item` to be set and a string',
+                );
+            }
+
+            return $character->hasItem($this->conditionData['item']);
         }
 
-        $value = $this->conditionData['value'] ?? 0;
+        if (
+            empty($this->conditionData['value']) ||
+            !is_int($this->conditionData['value']) ||
+            $this->conditionData['value'] <= 0
+        ) {
+            throw new InvalidArgumentException(
+                'Condition `' . $this->conditionType->value . '` requires `value` to be set and a positive integer',
+            );
+        }
 
-        return match ($this->conditionType) {
-            ConditionType::SKILL_GREATER_THAN => $character->skill->isGreaterThan($value),
-            ConditionType::STAMINA_GREATER_THAN => $character->stamina->isGreaterThan($value),
-            ConditionType::LUCK_GREATER_THAN => $character->luck->isGreaterThan($value),
+        $propertyToCheck = match ($this->conditionType) {
+            ConditionType::SKILL_GREATER_THAN => 'skill',
+            ConditionType::STAMINA_GREATER_THAN => 'stamina',
+            ConditionType::LUCK_GREATER_THAN => 'luck',
         };
+
+        return $character->{$propertyToCheck}->isGreaterThan($this->conditionData['value']);
     }
 
     /**

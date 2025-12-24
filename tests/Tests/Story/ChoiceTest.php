@@ -18,6 +18,8 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(Choice::class)]
 class ChoiceTest extends TestCase
 {
+    protected Character $character;
+
     protected Choice $choice;
 
     /**
@@ -25,6 +27,8 @@ class ChoiceTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->character = $this->createStub(Character::class);
+
         $this->choice = new Choice(
             text: ' Go north ',
             target: 5,
@@ -62,11 +66,10 @@ class ChoiceTest extends TestCase
     #[Test]
     public function testIsAvailableForCombatWon(): void
     {
-        $character = $this->createStub(Character::class);
         $this->choice->conditionType = ConditionType::COMBAT_WON;
 
-        $this->assertFalse($this->choice->isAvailable($character));
-        $this->assertTrue($this->choice->isAvailable($character, true));
+        $this->assertFalse($this->choice->isAvailable($this->character));
+        $this->assertTrue($this->choice->isAvailable($this->character, true));
     }
 
     /**
@@ -75,24 +78,20 @@ class ChoiceTest extends TestCase
     #[Test]
     public function testIsAvailableForHasItem(): void
     {
+        $character = $this->createStub(Character::class);
+        $character
+            ->method('hasItem')
+            ->willReturnCallback(fn (string $item): bool => $item === 'key');
+
+        //The character has the key in his inventory.
         $this->choice->conditionType = ConditionType::HAS_ITEM;
         $this->choice->conditionData['item'] = 'key';
-
-        $character = $this->createStub(Character::class);
-        $character
-            ->method('hasItem')
-            ->with('key')
-            ->willReturn(false);
-
-        $this->assertFalse($this->choice->isAvailable($character));
-
-        $character = $this->createStub(Character::class);
-        $character
-            ->method('hasItem')
-            ->with('key')
-            ->willReturn(true);
-
         $this->assertTrue($this->choice->isAvailable($character));
+
+        //The character does not have the sword in his inventory.
+        $this->choice->conditionType = ConditionType::HAS_ITEM;
+        $this->choice->conditionData['item'] = 'sword';
+        $this->assertFalse($this->choice->isAvailable($character));
     }
 
     /**
@@ -104,21 +103,19 @@ class ChoiceTest extends TestCase
         $this->choice->conditionType = ConditionType::SKILL_GREATER_THAN;
         $this->choice->conditionData['value'] = 8;
 
-        $character = $this->createStub(Character::class);
-
-        $character->skill = $this->createStub(Skill::class);
-        $character->skill
+        $this->character->skill = $this->createStub(Skill::class);
+        $this->character->skill
             ->method('isGreaterThan')
             ->with(8)
             ->willReturn(false);
-        $this->assertFalse($this->choice->isAvailable($character));
+        $this->assertFalse($this->choice->isAvailable($this->character));
 
-        $character->skill = $this->createStub(Skill::class);
-        $character->skill
+        $this->character->skill = $this->createStub(Skill::class);
+        $this->character->skill
             ->method('isGreaterThan')
             ->with(8)
             ->willReturn(true);
-        $this->assertTrue($this->choice->isAvailable($character));
+        $this->assertTrue($this->choice->isAvailable($this->character));
     }
 
     /**
@@ -130,21 +127,19 @@ class ChoiceTest extends TestCase
         $this->choice->conditionType = ConditionType::STAMINA_GREATER_THAN;
         $this->choice->conditionData['value'] = 8;
 
-        $character = $this->createStub(Character::class);
-
-        $character->stamina = $this->createStub(Stamina::class);
-        $character->stamina
+        $this->character->stamina = $this->createStub(Stamina::class);
+        $this->character->stamina
             ->method('isGreaterThan')
             ->with(8)
             ->willReturn(false);
-        $this->assertFalse($this->choice->isAvailable($character));
+        $this->assertFalse($this->choice->isAvailable($this->character));
 
-        $character->stamina = $this->createStub(Stamina::class);
-        $character->stamina
+        $this->character->stamina = $this->createStub(Stamina::class);
+        $this->character->stamina
             ->method('isGreaterThan')
             ->with(8)
             ->willReturn(true);
-        $this->assertTrue($this->choice->isAvailable($character));
+        $this->assertTrue($this->choice->isAvailable($this->character));
     }
 
     /**
@@ -156,21 +151,19 @@ class ChoiceTest extends TestCase
         $this->choice->conditionType = ConditionType::LUCK_GREATER_THAN;
         $this->choice->conditionData['value'] = 8;
 
-        $character = $this->createStub(Character::class);
-
-        $character->luck = $this->createStub(Luck::class);
-        $character->luck
+        $this->character->luck = $this->createStub(Luck::class);
+        $this->character->luck
             ->method('isGreaterThan')
             ->with(8)
             ->willReturn(false);
-        $this->assertFalse($this->choice->isAvailable($character));
+        $this->assertFalse($this->choice->isAvailable($this->character));
 
-        $character->luck = $this->createStub(Luck::class);
-        $character->luck
+        $this->character->luck = $this->createStub(Luck::class);
+        $this->character->luck
             ->method('isGreaterThan')
             ->with(8)
             ->willReturn(true);
-        $this->assertTrue($this->choice->isAvailable($character));
+        $this->assertTrue($this->choice->isAvailable($this->character));
     }
 
     /**
@@ -179,9 +172,8 @@ class ChoiceTest extends TestCase
     #[Test]
     public function testIsAvailableWithNoConditionType(): void
     {
-        $character = $this->createStub(Character::class);
         $this->choice->conditionType = null;
-        $this->assertTrue($this->choice->isAvailable($character));
+        $this->assertTrue($this->choice->isAvailable($this->character));
     }
 
     #[Test]

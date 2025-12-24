@@ -1,0 +1,133 @@
+{
+  "paragraphs": {
+    "1": {
+      "text": "You stand at the entrance of a dark cave. The air is cold and you hear strange noises echoing from within. A weathered sign reads: 'Only the brave may enter'. What do you do?",
+      "choices": [
+        {
+          "text": "Enter the cave bravely",
+          "target": 2
+        },
+        {
+          "text": "Search around the entrance first",
+          "target": 5
+        },
+        {
+          "text": "Turn back and leave",
+          "target": 99
+        }
+      ]
+    },
+    "2": {
+      "text": "You step into the darkness, your eyes slowly adjusting to the dim light. Suddenly, a goblin jumps out from behind a rock, brandishing a crude weapon!",
+      "event": {
+        "type": "combat",
+        "enemy": {
+          "name": "Goblin",
+          "skill": 5,
+          "stamina": 4
+        }
+      },
+      "choices": [
+        {
+          "text": "Continue deeper into the cave",
+          "target": 3,
+          "condition": {
+            "type": "combat_won"
+          }
+        }
+      ]
+    },
+    "3": {
+      "text": "You defeat the goblin and notice a small wooden chest partially hidden behind the rocks. You open it carefully and find a glowing blue amulet inside!",
+      "event": {
+        "type": "add_item",
+        "item": "magic_amulet"
+      },
+      "choices": [
+        {
+          "text": "Take the amulet and proceed",
+          "target": 4
+        }
+      ]
+    },
+    "4": {
+      "text": "As you place the amulet around your neck, it pulses with warm energy. You feel your wounds healing! The amulet restores some of your strength.",
+      "event": {
+        "type": "modify_stat",
+        "stat": "stamina",
+        "change": 2
+      },
+      "choices": [
+        {
+          "text": "Exit the cave victorious",
+          "target": 100
+        },
+        {
+          "text": "Explore deeper into the cave",
+          "target": 6
+        }
+      ]
+    },
+    "5": {
+      "text": "You search carefully around the entrance and find a rusty sword hidden in the bushes. It's old and worn, but still sharp enough to be useful!",
+      "event": {
+        "type": "add_item",
+        "item": "rusty_sword"
+      },
+      "choices": [
+        {
+          "text": "Enter the cave now",
+          "target": 2
+        }
+      ]
+    },
+    "6": {
+      "text": "You venture deeper into the cave and discover a fork in the path. The left tunnel is narrow and dark. The right tunnel has a faint glow coming from within.",
+      "choices": [
+        {
+          "text": "Take the left tunnel",
+          "target": 7
+        },
+        {
+          "text": "Take the right tunnel",
+          "target": 8
+        }
+      ]
+    },
+    "7": {
+      "text": "The narrow tunnel leads to a dead end, but you find 5 gold pieces scattered on the ground!",
+      "event": {
+        "type": "modify_gold",
+        "change": 5
+      },
+      "choices": [
+        {
+          "text": "Return and try the other path",
+          "target": 8
+        }
+      ]
+    },
+    "8": {
+      "text": "The glowing tunnel opens into a large chamber. In the center stands a pedestal with a crystal orb. As you approach, the orb speaks: 'You have proven yourself worthy, brave adventurer. Take this blessing.' Your LUCK increases!",
+      "event": {
+        "type": "modify_stat",
+        "stat": "luck",
+        "change": 1
+      },
+      "choices": [
+        {
+          "text": "Leave the cave with your rewards",
+          "target": 100
+        }
+      ]
+    },
+    "99": {
+      "text": "You decide that discretion is the better part of valor and walk away from the cave. Perhaps you will return another day when you are better prepared. Your adventure ends here.",
+      "choices": []
+    },
+    "100": {
+      "text": "Congratulations! You have successfully conquered the Cave of Trials! You emerge into the sunlight, richer in experience and treasure. Your adventure is complete.",
+      "choices": []
+    }
+  }
+}

@@ -270,7 +270,7 @@ class ChoiceTest extends TestCase
         $this->assertEquals($this->choice, $choice);
     }
 
-    public static function fromArrayOnErrorDataProvider(): \Generator
+    public static function fromArrayOnErrorDataProvider(): Generator
     {
         //Missing `target`
         yield [

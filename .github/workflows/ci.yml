@@ -1,10 +1,9 @@
-name: PHP Composer
+name: CI
 
 on:
   push:
-    branches: [ "main" ]
   pull_request:
-    branches: [ "main" ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -12,6 +11,14 @@ permissions:
 jobs:
   testsuite:
     runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.4']
+        dependencies: ['highest']
+        include:
+          - php-version: '8.4'
+            dependencies: 'lowest'
 
     steps:
     - uses: actions/checkout@v4
@@ -19,7 +26,8 @@ jobs:
     - name: Set up PHP
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.4'
+        php-version: ${{ matrix.php-version }}
+        coverage: pcov
 
     - name: Validate composer.json and composer.lock
       run: composer validate --strict
@@ -33,11 +41,25 @@ jobs:
         restore-keys: |
           ${{ runner.os }}-php-
 
-    - name: Install dependencies
-      run: composer install --prefer-dist --no-progress
+    - name: Composer install
+      uses: ramsey/composer-install@v3
+      with:
+        dependency-versions: ${{ matrix.dependencies }}
 
     - name: Run PHPUnit
-      run: composer run-script test
+      run: |
+        if [[ ${{ matrix.dependencies }} == 'highest' ]]; then
+          export XDEBUG_MODE=coverage;
+          vendor/bin/phpunit --display-skipped --display-deprecations --display-warnings --coverage-clover=coverage.xml
+        else
+          vendor/bin/phpunit --display-deprecations --display-warnings
+        fi
+
+    - name: Submit code coverage
+      if: success() && matrix.dependencies == 'highest'
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   coding-standard:
     name: Coding Standard & Static Analysis

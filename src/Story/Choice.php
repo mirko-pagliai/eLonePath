@@ -76,12 +76,14 @@ class Choice
             return true;
         }
 
+        $value = $this->conditionData['value'] ?? 0;
+
         return match ($this->conditionType) {
             ConditionType::COMBAT_WON => $combatWon,
             ConditionType::HAS_ITEM => $character->hasItem($this->conditionData['item'] ?? ''),
-            ConditionType::SKILL_GREATER_THAN => $character->skill->current > ($this->conditionData['value'] ?? 0),
-            ConditionType::STAMINA_GREATER_THAN => $character->stamina->current > ($this->conditionData['value'] ?? 0),
-            ConditionType::LUCK_GREATER_THAN => $character->luck->current > ($this->conditionData['value'] ?? 0),
+            ConditionType::SKILL_GREATER_THAN => $character->skill->isGreaterThan($value),
+            ConditionType::STAMINA_GREATER_THAN => $character->stamina->isGreaterThan($value),
+            ConditionType::LUCK_GREATER_THAN => $character->luck->isGreaterThan($value),
         };
     }
 

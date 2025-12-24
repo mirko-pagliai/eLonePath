@@ -105,10 +105,19 @@ class ChoiceTest extends TestCase
         $this->choice->conditionData['value'] = 8;
 
         $character = $this->createStub(Character::class);
-        $character->skill = new Skill(7);
+
+        $character->skill = $this->createStub(Skill::class);
+        $character->skill
+            ->method('isGreaterThan')
+            ->with(8)
+            ->willReturn(false);
         $this->assertFalse($this->choice->isAvailable($character));
 
-        $character->skill = new Skill(9);
+        $character->skill = $this->createStub(Skill::class);
+        $character->skill
+            ->method('isGreaterThan')
+            ->with(8)
+            ->willReturn(true);
         $this->assertTrue($this->choice->isAvailable($character));
     }
 
@@ -122,10 +131,19 @@ class ChoiceTest extends TestCase
         $this->choice->conditionData['value'] = 8;
 
         $character = $this->createStub(Character::class);
-        $character->stamina = new Stamina(7);
+
+        $character->stamina = $this->createStub(Stamina::class);
+        $character->stamina
+            ->method('isGreaterThan')
+            ->with(8)
+            ->willReturn(false);
         $this->assertFalse($this->choice->isAvailable($character));
 
-        $character->stamina = new Stamina(9);
+        $character->stamina = $this->createStub(Stamina::class);
+        $character->stamina
+            ->method('isGreaterThan')
+            ->with(8)
+            ->willReturn(true);
         $this->assertTrue($this->choice->isAvailable($character));
     }
 
@@ -139,10 +157,19 @@ class ChoiceTest extends TestCase
         $this->choice->conditionData['value'] = 8;
 
         $character = $this->createStub(Character::class);
-        $character->luck = new Luck(7);
+
+        $character->luck = $this->createStub(Luck::class);
+        $character->luck
+            ->method('isGreaterThan')
+            ->with(8)
+            ->willReturn(false);
         $this->assertFalse($this->choice->isAvailable($character));
 
-        $character->luck = new Luck(9);
+        $character->luck = $this->createStub(Luck::class);
+        $character->luck
+            ->method('isGreaterThan')
+            ->with(8)
+            ->willReturn(true);
         $this->assertTrue($this->choice->isAvailable($character));
     }
 

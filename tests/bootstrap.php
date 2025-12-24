@@ -14,6 +14,14 @@ if (!defined('TESTS_RESOURCES')) {
     define('TESTS_RESOURCES', ROOT . DS . 'tests' . DS . 'resources');
 }
 
+if (!defined('TMP')) {
+    define('TMP', sys_get_temp_dir() . DS . 'elonepath-engine');
+}
+
+if (!file_exists(TMP)) {
+    mkdir(TMP, 0777, true);
+}
+
 // Set error reporting for tests
 error_reporting(E_ALL);
 ini_set('display_errors', '1');

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace eLonePath\Story;
 
+use eLonePath\Utility\Filesystem;
 use InvalidArgumentException;
 use RuntimeException;
 
@@ -23,44 +24,34 @@ class StoryLoader
      *
      * @param string $storiesDirectory Path to the directory containing story files. Defaults to the 'resources/stories' directory.
      * @return void
-     * @throws \InvalidArgumentException If the provided path does not exist or is not a directory.
+     * @throws \RuntimeException If the provided path does not exist or is not a directory.
      */
     public function __construct(string $storiesDirectory = '')
     {
-        if (!$storiesDirectory) {
-            $storiesDirectory = RESOURCES . DS . 'stories';
-        }
-
-        if (!file_exists($storiesDirectory)) {
-            throw new InvalidArgumentException("File or directory `{$storiesDirectory}` does not exist.");
-        }
-        if (!is_dir($storiesDirectory)) {
-            throw new InvalidArgumentException("File or directory `{$storiesDirectory}` is not a directory.");
-        }
-
-        $this->storiesDirectory = rtrim($storiesDirectory, DS);
+        $this->storiesDirectory = rtrim($storiesDirectory ?: RESOURCES . DS . 'stories', DS);
+        Filesystem::directoryIsReadable($this->storiesDirectory);
     }
 
     /**
      * Loads a story file, validates its content, and returns a Story object.
      *
-     * @param string $filename The name of the story file to load.
+     * @param string $storyId Story ID (directory name)
      * @return \eLonePath\Story\Story The loaded and validated Story object.
-     * @throws \RuntimeException If the file does not exist, is not readable, or contains invalid JSON.
+     * @throws \RuntimeException If the directory or files do not exist, are not readable, or contain invalid JSON.
      * @throws \InvalidArgumentException If the story validation fails.
      */
-    public function load(string $filename): Story
+    public function load(string $storyId): Story
     {
-        $filepath = $this->storiesDirectory . DS . $filename;
+        $storyPath = $this->storiesDirectory . DS . $storyId;
 
-        if (!file_exists($filepath) || !is_readable($filepath)) {
-            throw new RuntimeException("File or directory `{$filepath}` does not exist or is not readable.");
-        }
+        Filesystem::directoryIsReadable($storyPath);
+        $metadata = Filesystem::readJsonDataFromFile($storyPath . DS . 'metadata.json');
+        $content = Filesystem::readJsonDataFromFile($storyPath . DS . 'en.json');
 
-        $data = json_decode(file_get_contents($filepath) ?: '', true);
-        if ($data === null) {
-            throw new RuntimeException("Failed to parse JSON in `{$filepath}` story file");
-        }
+        $data = [
+            'metadata' => $metadata,
+            'paragraphs' => $content['paragraphs'] ?? [],
+        ];
 
         /** @phpstan-ignore argument.type */
         $story = Story::fromArray($data);
@@ -68,7 +59,7 @@ class StoryLoader
         $validationErrors = $story->validate();
         if (!empty($validationErrors)) {
             throw new InvalidArgumentException(
-                "Story validation failed in `{$filepath}`:\n- " . implode("\n- ", $validationErrors)
+                "Story validation failed in `{$storyPath}`:\n- " . implode("\n- ", $validationErrors)
             );
         }
 
@@ -78,28 +69,28 @@ class StoryLoader
     /**
      * List all available story files.
      *
-     * @return array<string> List of story filenames
+     * @return array<string> List of story IDs
      */
     public function listAvailableStories(): array
     {
-        $files = glob($this->storiesDirectory . DS . '*.json');
-        if ($files === false) {
+        $directories = glob($this->storiesDirectory . DS . '*', GLOB_ONLYDIR);
+        if ($directories === false) {
             return [];
         }
 
-        return array_map(fn(string $path): string => basename($path), $files);
+        return array_map(fn(string $path): string => basename($path), $directories);
     }
 
     /**
      * Check if a story file exists.
      *
-     * @param string $filename Story filename
+     * @param string $storyId Story ID
      * @return bool
      */
-    public function exists(string $filename): bool
+    public function exists(string $storyId): bool
     {
-        $filepath = $this->storiesDirectory . DS . $filename;
+        $storyPath = $this->storiesDirectory . DS . $storyId;
 
-        return file_exists($filepath);
+        return is_dir($storyPath) && file_exists($storyPath . DS . 'metadata.json');
     }
 }

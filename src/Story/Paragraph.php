@@ -131,7 +131,7 @@ class Paragraph
     public static function fromArray(int $id, array $data): self
     {
         if (empty($data['text'])) {
-            throw new InvalidArgumentException('Choice missing "text"');
+            throw new InvalidArgumentException("Paragraph {$id} missing 'text'");
         }
 
         $eventData = [];

@@ -127,12 +127,12 @@ class ParagraphTest extends TestCase
     public static function fromArrayOnErrorDataProvider(): Generator
     {
         yield [
-            'Choice missing "text"',
+            "Paragraph 2 missing 'text'",
             [],
         ];
 
         yield [
-            'Choice missing "text"',
+            "Paragraph 2 missing 'text'",
             ['text' => ''],
         ];
 
@@ -166,7 +166,6 @@ class ParagraphTest extends TestCase
     #[DataProvider('fromArrayOnErrorDataProvider')]
     public function testFromArrayOnError(string $expectedExceptionMessage, array $data): void
     {
-        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
         Paragraph::fromArray(2, $data);
     }

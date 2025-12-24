@@ -7,10 +7,9 @@ use eLonePath\Story\Choice;
 use eLonePath\Story\Paragraph;
 use eLonePath\Story\Story;
 use eLonePath\Story\StoryLoader;
-use Generator;
 use PHPUnit\Framework\Attributes\CoversClass;
-use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(StoryLoader::class)]
@@ -33,21 +32,9 @@ class StoryLoaderTest extends TestCase
         $this->assertSame($expected, $loader->getStoriesDirectory());
     }
 
-    public static function dataProviderConstructOnError(): Generator
-    {
-        yield [
-            'File or directory `' . DS . 'noExistingDir` does not exist.',
-            DS . 'noExistingDir',
-        ];
-
-        yield [
-            'File or directory `' . __FILE__ . '` is not a directory.',
-            __FILE__,
-        ];
-    }
-
     #[Test]
-    #[DataProvider('dataProviderConstructOnError')]
+    #[TestWith(['File or directory `/noExistingDir` does not exist.', '/noExistingDir'])]
+    #[TestWith(['File or directory `composer.json` is not a directory.', 'composer.json'])]
     public function testConstructOnError(string $expectedExceptionMessage, string $badPath): void
     {
         $this->expectExceptionMessage($expectedExceptionMessage);

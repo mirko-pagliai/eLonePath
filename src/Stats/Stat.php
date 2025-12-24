@@ -86,6 +86,17 @@ abstract class Stat
     }
 
     /**
+     * Check if the stat is greater than a given value.
+     *
+     * @param int $value
+     * @return bool
+     */
+    public function isGreaterThan(int $value): bool
+    {
+        return $this->current > $value;
+    }
+
+    /**
      * Export stat data to array.
      *
      * @return array{current: int, max: int}

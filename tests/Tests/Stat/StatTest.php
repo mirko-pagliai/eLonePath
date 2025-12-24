@@ -59,6 +59,15 @@ class StatTest extends TestCase
     }
 
     #[Test]
+    public function testIsGreaterThan(): void
+    {
+        $stat = new class (10) extends Stat {
+        };
+        $this->assertTrue($stat->isGreaterThan(5));
+        $this->assertFalse($stat->isGreaterThan(11));
+    }
+
+    #[Test]
     public function testToArray(): void
     {
         $stat = new class (10, 5) extends Stat {

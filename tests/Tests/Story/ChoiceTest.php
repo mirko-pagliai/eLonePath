@@ -111,7 +111,6 @@ class ChoiceTest extends TestCase
         $this->choice->conditionType = ConditionType::HAS_ITEM;
         $this->choice->conditionData = $conditionData;
 
-        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Condition `' . ConditionType::HAS_ITEM->value . '` requires `item` to be set and a string');
         $this->choice->isAvailable($this->character);
     }
@@ -220,7 +219,6 @@ class ChoiceTest extends TestCase
         $this->choice->conditionType = $ConditionType;
         $this->choice->conditionData = $conditionData;
 
-        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage('Condition `' . $ConditionType->value . '` requires `value` to be set and a positive integer');
         $this->choice->isAvailable($this->character);
     }

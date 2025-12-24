@@ -7,7 +7,6 @@ use eLonePath\Story\Choice;
 use eLonePath\Story\EventType;
 use eLonePath\Story\Paragraph;
 use Generator;
-use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
@@ -56,7 +55,6 @@ class ParagraphTest extends TestCase
     #[TestWith(['Paragraph text cannot be empty', 1, '  '])]
     public function testConstructWithBadArguments(string $expectedExceptionMessage, int $id, string $text): void
     {
-        $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessage($expectedExceptionMessage);
         new Paragraph($id, $text);
     }

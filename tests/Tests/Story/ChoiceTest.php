@@ -9,6 +9,7 @@ use eLonePath\Stats\Skill;
 use eLonePath\Stats\Stamina;
 use eLonePath\Story\Choice;
 use eLonePath\Story\ConditionType;
+use Generator;
 use InvalidArgumentException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
@@ -96,7 +97,7 @@ class ChoiceTest extends TestCase
     }
 
     /**
-     * Tests for the `isAvailable()` method with `ConditionType::HAS_ITEM` condition, but the item is missing.
+     * Tests for the `isAvailable()` method with `ConditionType::HAS_ITEM` condition, but the item is not valid.
      *
      * @param array{'item': string|null} $conditionData
      */
@@ -105,7 +106,7 @@ class ChoiceTest extends TestCase
     #[TestWith([['item' => '']])]
     #[TestWith([['item' => ' ']])]
     #[TestWith([['item' => null]])]
-    public function testIsAvailableForHasItemWithNoValidItem(array $conditionData): void
+    public function testIsAvailableForHasItemWithNotValidItem(array $conditionData): void
     {
         $this->choice->conditionType = ConditionType::HAS_ITEM;
         $this->choice->conditionData = $conditionData;
@@ -187,18 +188,33 @@ class ChoiceTest extends TestCase
         $this->assertTrue($this->choice->isAvailable($this->character));
     }
 
+    public static function isAvailableWithForGreaterThanWithNotValidValueDataProvider(): Generator
+    {
+        $conditionsTypes = [
+            ConditionType::LUCK_GREATER_THAN,
+            ConditionType::SKILL_GREATER_THAN,
+            ConditionType::STAMINA_GREATER_THAN,
+        ];
+
+        foreach ($conditionsTypes as $ConditionType) {
+            yield [[], $ConditionType];
+            yield [['value' => ' '], $ConditionType];
+            yield [['value' => null], $ConditionType];
+            yield [['value' => 'string'], $ConditionType];
+            yield [['value' => 0], $ConditionType];
+            yield [['value' => -1], $ConditionType];
+        }
+    }
+
     /**
-     * Tests for the `isAvailable()` method with `ConditionType::HAS_ITEM` condition, but the item is missing.
+     * Tests for the `isAvailable()` method with `ConditionType::LUCK_GREATER_THAN`, `ConditionType::SKILL_GREATER_THAN`
+     *  and `ConditionType::STAMINA_GREATER_THAN` conditions, but the value is not valid.
      *
      * @param array{'value': int} $conditionData
      * @param \eLonePath\Story\ConditionType $ConditionType
      */
     #[Test]
-    #[TestWith([[], ConditionType::LUCK_GREATER_THAN])]
-    #[TestWith([['value' => ''], ConditionType::LUCK_GREATER_THAN])]
-    #[TestWith([['value' => 'string'], ConditionType::LUCK_GREATER_THAN])]
-    #[TestWith([['value' => 0], ConditionType::LUCK_GREATER_THAN])]
-    #[TestWith([['value' => -1], ConditionType::LUCK_GREATER_THAN])]
+    #[DataProvider('isAvailableWithForGreaterThanWithNotValidValueDataProvider')]
     public function testIsAvailableWithForGreaterThanWithNoValidValue(array $conditionData, ConditionType $ConditionType): void
     {
         $this->choice->conditionType = $ConditionType;

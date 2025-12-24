@@ -144,7 +144,7 @@ class Story
 
         // Check that paragraph 1 exists
         if (!$this->hasParagraph(1)) {
-            $errors[] = 'Story must have a starting paragraph with ID `1`';
+            $errors[] = 'Story must have a starting paragraph with ID `#1`';
         }
 
         // Check all choice targets
@@ -198,9 +198,13 @@ class Story
      *          choices?: array<array{
      *              text: string,
      *              target: int,
-     *              condition?: array{type: string, item?: string, value?: int}
-     *          }>
-     *      }>
+     *              condition?: array{
+     *                  type: string,
+     *                  item?: string,
+     *                  value?: int,
+     *              },
+     *          }>,
+     *      }>,
      * } $data Story data
      * @return self
      */

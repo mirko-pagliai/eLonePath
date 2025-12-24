@@ -117,7 +117,7 @@ class StoryTest extends TestCase
         $story = new Story('A title', 'Mirko', 'A description', 10);
 
         //The story we just created does not contain any paragraphs
-        $expected = ['Story must have a starting paragraph with ID `1`'];
+        $expected = ['Story must have a starting paragraph with ID `#1`'];
         $this->assertSame($expected, $story->validate());
 
         //Paragraph #3 is added, but the error is the same.
@@ -164,8 +164,8 @@ class StoryTest extends TestCase
                 'initial_gold' => 10,
             ],
             'paragraphs' => [
-                '1' => ['text' => 'A paragraph'],
-                '2' => ['text' => 'Another paragraph'],
+                1 => ['text' => 'A paragraph'],
+                2 => ['text' => 'Another paragraph'],
             ],
         ]);
 

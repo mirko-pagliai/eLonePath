@@ -47,7 +47,19 @@ jobs:
         dependency-versions: ${{ matrix.dependencies }}
 
     - name: Run PHPUnit
-      run: composer run-script test
+      run: |
+        if [[ ${{ matrix.dependencies }} == 'highest' ]]; then
+          export XDEBUG_MODE=coverage;
+          vendor/bin/phpunit --display-skipped --display-deprecations --display-warnings --coverage-clover=coverage.xml
+        else
+          vendor/bin/phpunit --display-deprecations --display-warnings
+        fi
+
+    - name: Submit code coverage
+      if: success() && matrix.dependencies == 'highest'
+      uses: codecov/codecov-action@v5
+      with:
+        token: ${{ secrets.CODECOV_TOKEN }}
 
   coding-standard:
     name: Coding Standard & Static Analysis

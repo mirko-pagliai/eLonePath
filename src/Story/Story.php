@@ -35,7 +35,7 @@ class Story
     /**
      * Collection of paragraphs indexed by ID.
      *
-     * @var array<int, Paragraph>
+     * @var array<int, \eLonePath\Story\Paragraph>
      */
     private array $paragraphs;
 
@@ -46,7 +46,7 @@ class Story
      * @param string $author Story author
      * @param string $description Story description
      * @param int $initialGold Initial gold amount
-     * @param array<int, Paragraph> $paragraphs Paragraphs indexed by ID
+     * @param array<int, \eLonePath\Story\Paragraph> $paragraphs Paragraphs indexed by ID
      */
     public function __construct(
         string $title,
@@ -71,9 +71,7 @@ class Story
         $this->initialGold = $initialGold;
         $this->paragraphs = [];
 
-        foreach ($paragraphs as $paragraph) {
-            $this->addParagraph($paragraph);
-        }
+        array_walk($paragraphs, [$this, 'addParagraph']);
     }
 
     /**
@@ -97,7 +95,7 @@ class Story
     public function getParagraph(int $id): Paragraph
     {
         if (!isset($this->paragraphs[$id])) {
-            throw new InvalidArgumentException("Paragraph {$id} does not exist in this story");
+            throw new InvalidArgumentException("Paragraph with ID `{$id}` does not exist in this story");
         }
 
         return $this->paragraphs[$id];
@@ -146,14 +144,19 @@ class Story
 
         // Check that paragraph 1 exists
         if (!$this->hasParagraph(1)) {
-            $errors[] = 'Story must have a starting paragraph with ID 1';
+            $errors[] = 'Story must have a starting paragraph with ID `1`';
         }
 
         // Check all choice targets
         foreach ($this->paragraphs as $paragraph) {
             foreach ($paragraph->choices as $choice) {
                 if (!$this->hasParagraph($choice->target)) {
-                    $errors[] = "Paragraph {$paragraph->id}: Choice '{$choice->text}' points to non-existent paragraph {$choice->target}";
+                    $errors[] = sprintf(
+                        'Paragraph with ID `#%d`: choice "%s" points to non-existent `#%d` target paragraph',
+                        $paragraph->id,
+                        $choice->text,
+                        $choice->target,
+                    );
                 }
             }
         }
@@ -168,10 +171,6 @@ class Story
      */
     public function toArray(): array
     {
-        $paragraphsArray = array_map(function ($paragraph) {
-            return $paragraph->toArray();
-        }, $this->paragraphs);
-
         return [
             'metadata' => [
                 'title' => $this->title,
@@ -179,39 +178,57 @@ class Story
                 'description' => $this->description,
                 'initial_gold' => $this->initialGold,
             ],
-            'paragraphs' => $paragraphsArray,
+            'paragraphs' => array_map(fn($paragraph): array => $paragraph->toArray(), $this->paragraphs),
         ];
     }
 
     /**
      * Create the Story from array data.
      *
-     * @param array<string, mixed> $data Story data
+     * @param array{
+     *      metadata: array{
+     *          title: string,
+     *          author: string,
+     *          description?: string,
+     *          initial_gold?: int,
+     *      },
+     *      paragraphs: array<int, array{
+     *          text: string,
+     *          event?: array{type: string, ...},
+     *          choices?: array<array{
+     *              text: string,
+     *              target: int,
+     *              condition?: array{type: string, item?: string, value?: int}
+     *          }>
+     *      }>
+     * } $data Story data
      * @return self
      */
     public static function fromArray(array $data): self
     {
-        if (!isset($data['metadata'])) {
+        if (empty($data['metadata'])) {
             throw new InvalidArgumentException('Story data missing "metadata"');
         }
-        if (!isset($data['paragraphs'])) {
+        if (empty($data['metadata']['title'])) {
+            throw new InvalidArgumentException('Metadata missing "title"');
+        }
+        if (empty($data['metadata']['author'])) {
+            throw new InvalidArgumentException('Metadata missing "author"');
+        }
+        if (empty($data['paragraphs'])) {
             throw new InvalidArgumentException('Story data missing "paragraphs"');
         }
 
-        $metadata = $data['metadata'];
-
-        $story = new self(
-            title: $metadata['title'] ?? throw new InvalidArgumentException('Metadata missing "title"'),
-            author: $metadata['author'] ?? throw new InvalidArgumentException('Metadata missing "author"'),
-            description: $metadata['description'] ?? '',
-            initialGold: $metadata['initial_gold'] ?? 10,
+        return new self(
+            title: $data['metadata']['title'],
+            author: $data['metadata']['author'],
+            description: $data['metadata']['description'] ?? '',
+            initialGold: $data['metadata']['initial_gold'] ?? 10,
+            paragraphs: array_map(
+                fn(array $paragraphData, int $id): Paragraph => Paragraph::fromArray($id, $paragraphData),
+                $data['paragraphs'],
+                array_keys($data['paragraphs']),
+            ),
         );
-
-        foreach ($data['paragraphs'] as $id => $paragraphData) {
-            $paragraph = Paragraph::fromArray((int) $id, $paragraphData);
-            $story->addParagraph($paragraph);
-        }
-
-        return $story;
     }
 }

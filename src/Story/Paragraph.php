@@ -124,7 +124,11 @@ class Paragraph
      * @param array{
      *     text: string,
      *     event?: array{type: string, ...},
-     *     choices?: array<array{text: string, target: int, condition?: array{type: string, item?: string, value?: int}}>
+     *     choices?: array<array{
+     *          text: string,
+     *          target: int,
+     *          condition?: array{type: string, item?: string, value?: int}
+     *     }>
      * } $data Paragraph data
      * @return self
      */

@@ -61,6 +61,31 @@ jobs:
       with:
         token: ${{ secrets.CODECOV_TOKEN }}
 
+  testsuite-windows:
+    runs-on: windows-2022
+    name: Windows - PHP 8.4
+
+    env:
+      PHP_VERSION: '8.4'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          coverage: none
+
+      - name: Composer install
+        uses: ramsey/composer-install@v3
+
+      - name: Run PHPUnit
+        run: |
+          vendor/bin/phpunit --display-incomplete
+
   coding-standard:
     name: Coding Standard & Static Analysis
     runs-on: ubuntu-latest

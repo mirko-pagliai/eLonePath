@@ -5,6 +5,7 @@ namespace eLonePath\Story;
 
 use eLonePath\Character;
 use InvalidArgumentException;
+use ValueError;
 
 /**
  * Choice in a paragraph.
@@ -24,21 +25,31 @@ class Choice
     public int $target;
 
     /**
-     * Optional condition for this choice to be available.
-     *
-     * @var array<string, mixed>|null
+     * Optional condition type for this choice to be available.
      */
-    public ?array $condition;
+    public ?ConditionType $conditionType;
+
+    /**
+     * Optional condition data (e.g., item name, stat value).
+     *
+     * @var array<string, mixed>
+     */
+    public array $conditionData;
 
     /**
      * Create a choice.
      *
      * @param string $text Choice text
      * @param int $target Target paragraph ID
-     * @param array<string, mixed>|null $condition Optional condition
+     * @param \eLonePath\Story\ConditionType|null $conditionType Optional condition type
+     * @param array<string, mixed> $conditionData Optional condition data
      */
-    public function __construct(string $text, int $target, ?array $condition = null)
-    {
+    public function __construct(
+        string $text,
+        int $target,
+        ?ConditionType $conditionType = null,
+        array $conditionData = []
+    ) {
         if (trim($text) === '') {
             throw new InvalidArgumentException('Choice text cannot be empty');
         }
@@ -48,7 +59,8 @@ class Choice
 
         $this->text = trim($text);
         $this->target = $target;
-        $this->condition = $condition;
+        $this->conditionType = $conditionType;
+        $this->conditionData = $conditionData;
     }
 
     /**
@@ -60,24 +72,21 @@ class Choice
      */
     public function isAvailable(Character $character, bool $combatWon = false): bool
     {
-        if ($this->condition === null) {
+        if ($this->conditionType === null) {
             return true;
         }
 
-        $type = $this->condition['type'] ?? null;
-
-        return match ($type) {
-            'combat_won' => $combatWon,
-            'has_item' => $character->hasItem($this->condition['item'] ?? ''),
-            'skill_greater_than' => $character->skill->current > ($this->condition['value'] ?? 0),
-            'stamina_greater_than' => $character->stamina->current > ($this->condition['value'] ?? 0),
-            'luck_greater_than' => $character->luck->current > ($this->condition['value'] ?? 0),
-            default => true,
+        return match ($this->conditionType) {
+            ConditionType::COMBAT_WON => $combatWon,
+            ConditionType::HAS_ITEM => $character->hasItem($this->conditionData['item'] ?? ''),
+            ConditionType::SKILL_GREATER_THAN => $character->skill->current > ($this->conditionData['value'] ?? 0),
+            ConditionType::STAMINA_GREATER_THAN => $character->stamina->current > ($this->conditionData['value'] ?? 0),
+            ConditionType::LUCK_GREATER_THAN => $character->luck->current > ($this->conditionData['value'] ?? 0),
         };
     }
 
     /**
-     * Export choice data to array.
+     * Export the Choice data to array.
      *
      * @return array<string, mixed>
      */
@@ -88,23 +97,25 @@ class Choice
             'target' => $this->target,
         ];
 
-        if ($this->condition !== null) {
-            $data['condition'] = $this->condition;
+        if ($this->conditionType !== null) {
+            $data['condition'] = array_merge(
+                ['type' => $this->conditionType->value],
+                $this->conditionData,
+            );
         }
 
         return $data;
     }
 
     /**
-     * Create a choice instance from an array of data.
+     * Create the Choice from array data.
      *
      * @param array{
-     *      text: string,
-     *      target: int,
-     *      condition: array<string, mixed>|null,
-     * } $data Associative array containing choice data with keys 'text', 'target', and optionally 'condition'
-     * @return self Returns an instance of the current class
-     * @throws \InvalidArgumentException If the 'text' or 'target' keys are missing or empty
+     *     text: string,
+     *     target: int,
+     *     condition?: array{type: string, item?: string, value?: int}
+     * } $data
+     * @return self
      */
     public static function fromArray(array $data): self
     {
@@ -115,6 +126,26 @@ class Choice
             throw new InvalidArgumentException('Choice missing "target"');
         }
 
-        return new self(text: $data['text'] , target: $data['target'], condition: $data['condition'] ?? null);
+        if (isset($data['condition'])) {
+            if (empty($data['condition']['type'])) {
+                throw new InvalidArgumentException('Condition missing "type"');
+            }
+
+            try {
+                $conditionType = ConditionType::from($data['condition']['type']);
+            } catch (ValueError) {
+                throw new InvalidArgumentException('Invalid condition type: `' . $data['condition']['type'] . '`');
+            }
+
+            unset($data['condition']['type']);
+            $conditionData = $data['condition'];
+        }
+
+        return new self(
+            text: $data['text'],
+            target: $data['target'],
+            conditionType: $conditionType ?? null,
+            conditionData: $conditionData ?? [],
+        );
     }
 }

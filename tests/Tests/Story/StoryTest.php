@@ -71,8 +71,8 @@ class StoryTest extends TestCase
         $this->assertFalse($this->story->hasParagraph(3));
 
         $newParagraph = new Paragraph(3, 'A new paragraph');
-        $this->story->addParagraph($newParagraph);
-
+        $result = $this->story->addParagraph($newParagraph);
+        $this->assertEquals($this->story, $result);
         $this->assertSame($newParagraph, $this->story->getParagraph(3));
     }
 

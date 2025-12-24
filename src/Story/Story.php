@@ -78,11 +78,13 @@ class Story
      * Add a paragraph to the story.
      *
      * @param \eLonePath\Story\Paragraph $paragraph
-     * @return void
+     * @return self
      */
-    public function addParagraph(Paragraph $paragraph): void
+    public function addParagraph(Paragraph $paragraph): self
     {
         $this->paragraphs[$paragraph->id] = $paragraph;
+
+        return $this;
     }
 
     /**

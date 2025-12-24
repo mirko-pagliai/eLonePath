@@ -13,12 +13,13 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
+use PHPUnit\Framework\MockObject\Stub;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Choice::class)]
 class ChoiceTest extends TestCase
 {
-    protected Character $character;
+    protected Character&Stub $character;
 
     protected Choice $choice;
 
@@ -78,20 +79,19 @@ class ChoiceTest extends TestCase
     #[Test]
     public function testIsAvailableForHasItem(): void
     {
-        $character = $this->createStub(Character::class);
-        $character
+        $this->character
             ->method('hasItem')
             ->willReturnCallback(fn (string $item): bool => $item === 'key');
 
         //The character has the key in his inventory.
         $this->choice->conditionType = ConditionType::HAS_ITEM;
         $this->choice->conditionData['item'] = 'key';
-        $this->assertTrue($this->choice->isAvailable($character));
+        $this->assertTrue($this->choice->isAvailable($this->character));
 
         //The character does not have the sword in his inventory.
         $this->choice->conditionType = ConditionType::HAS_ITEM;
         $this->choice->conditionData['item'] = 'sword';
-        $this->assertFalse($this->choice->isAvailable($character));
+        $this->assertFalse($this->choice->isAvailable($this->character));
     }
 
     /**

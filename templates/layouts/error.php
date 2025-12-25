@@ -17,9 +17,13 @@ declare(strict_types=1);
     <title>Error <?= $statusCode ?></title>
     <link href="assets/bootstrap/bootstrap.min.css" rel="stylesheet">
 </head>
-<body>
-<div class="container mt-5">
-    <?= $content ?>
+<body class="bg-light">
+<div class="container min-vh-100 d-flex align-items-center justify-content-center py-5">
+    <div class="col-lg-8">
+        <div class="card shadow-lg border-0">
+            <?= $content ?>
+        </div>
+    </div>
 </div>
 </body>
 </html>

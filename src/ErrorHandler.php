@@ -53,12 +53,12 @@ class ErrorHandler
 
             // Highlight project files vs vendor files
             $isVendor = str_contains($itemFile, '/vendor/');
-            $fileClass = $isVendor ? 'vendor-file' : 'project-file';
+            $fileClass = $isVendor ? 'text-secondary' : 'fw-bold';
             $itemFile = htmlspecialchars($itemFile, ENT_QUOTES, 'UTF-8');
 
-            $html .= '<div class="trace-item">';
-            $html .= '<div><span class="trace-num">#' . $i . '</span> <span class="trace-func">' . $fullFunc . '()</span></div>';
-            $html .= '<div class="trace-file ' . $fileClass . '">' . $itemFile . ':<span class="trace-line">' . $itemLine . '</span></div>';
+            $html .= '<div class="mb-2">';
+            $html .= '<div><span class="fw-bolder me-1 text-secondary">#' . $i . '</span> <span class="trace-func">' . $fullFunc . '()</span></div>';
+            $html .= '<div class="mt-1 small ' . $fileClass . '">' . $itemFile . ':<span class="ms-1 text-danger fw-bold">' . $itemLine . '</span></div>';
             $html .= '</div>';
         }
 

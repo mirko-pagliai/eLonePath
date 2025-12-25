@@ -8,3 +8,7 @@ parameters:
         - config/bootstrap.php
 
     treatPhpDocTypesAsCertain: false
+
+    excludePaths:
+        - src/old
+        - tests/Tests/old

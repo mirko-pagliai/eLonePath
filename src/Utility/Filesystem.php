@@ -36,6 +36,8 @@ class Filesystem
      */
     public static function fileIsReadable(string $path): void
     {
+        self::directoryIsReadable(dirname($path));
+
         if (!is_readable($path)) {
             throw new RuntimeException("File `$path` is not readable.");
         }

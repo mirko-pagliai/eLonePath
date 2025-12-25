@@ -56,7 +56,7 @@ class FilesystemTest extends TestCase
     #[Test]
     public function testReadJsonDataFromFile(): void
     {
-        $result = Filesystem::readJsonDataFromFile(TESTS_RESOURCES . DS . 'stories' . DS . 'cave_of_trials' . DS . 'metadata.json');
+        $result = Filesystem::readJsonDataFromFile(RESOURCES . DS . 'stories' . DS . 'cave_of_trials' . DS . 'metadata.json');
         $this->assertNotEmpty($result);
     }
 

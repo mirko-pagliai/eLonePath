@@ -6,12 +6,14 @@ if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
 }
 
-// Include the main bootstrap
-require_once dirname(__DIR__) . DS . 'config' . DS . 'bootstrap.php';
+// Define the root directory of the project
+if (!defined('ROOT')) {
+    define('ROOT', dirname(__DIR__));
+}
 
 // Additional constants for tests, if needed
-if (!defined('TESTS_RESOURCES')) {
-    define('TESTS_RESOURCES', ROOT . DS . 'tests' . DS . 'resources');
+if (!defined('RESOURCES')) {
+    define('RESOURCES', ROOT . DS . 'tests' . DS . 'resources');
 }
 
 if (!defined('TMP')) {
@@ -21,6 +23,13 @@ if (!defined('TMP')) {
 if (!file_exists(TMP)) {
     mkdir(TMP, 0777, true);
 }
+
+/**
+ * Includes the main bootstrap.
+ *
+ * @link config/bootstrap.php
+ */
+require_once ROOT . '/config/bootstrap.php';
 
 // Set error reporting for tests
 error_reporting(E_ALL);

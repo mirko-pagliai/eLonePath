@@ -33,6 +33,58 @@ class StoryLoader
     }
 
     /**
+     * Constructs the file path to the directory of a specific story based on its ID.
+     *
+     * @param string $storyId The ID of the story for which to construct the file path.
+     * @return string The file path to the specified story's directory.
+     */
+    protected function getStoryPath(string $storyId): string
+    {
+        return $this->storiesDirectory . DS . $storyId;
+    }
+
+    /**
+     * Retrieves the metadata for a given story.
+     *
+     * @param string $storyId The identifier of the story.
+     * @return array{
+     *      title: string,
+     *      author: string,
+     *      description?: string,
+     *      initial_gold?: int,
+     * } The metadata of the story as an associative array.
+     */
+    protected function getMetadata(string $storyId): array
+    {
+        /** @phpstan-ignore return.type */
+        return Filesystem::readJsonDataFromFile($this->getStoryPath($storyId) . DS . 'metadata.json');
+    }
+
+    /**
+     * Retrieves an array of paragraphs from a JSON file corresponding to the given story ID.
+     *
+     * @param string $storyId The ID of the story for which to retrieve paragraphs.
+     * @return array<int, array{
+     *      text: string,
+     *      event?: array{type: string, ...},
+     *      choices?: array<array{
+     *          text: string,
+     *          target: int,
+     *          condition?: array{
+     *              type: string,
+     *              item?: string,
+     *              value?: int,
+     *          },
+     *      }>,
+     * }> An array of paragraphs, or an empty array if none are found.
+     */
+    protected function getParagraphs(string $storyId): array
+    {
+        /** @phpstan-ignore return.type */
+        return Filesystem::readJsonDataFromFile($this->getStoryPath($storyId) . DS . 'en.json')['paragraphs'] ?? [];
+    }
+
+    /**
      * Loads a story file, validates its content, and returns a Story object.
      *
      * @param string $storyId Story ID (directory name)
@@ -42,24 +94,15 @@ class StoryLoader
      */
     public function load(string $storyId): Story
     {
-        $storyPath = $this->storiesDirectory . DS . $storyId;
-
-        Filesystem::directoryIsReadable($storyPath);
-        $metadata = Filesystem::readJsonDataFromFile($storyPath . DS . 'metadata.json');
-        $content = Filesystem::readJsonDataFromFile($storyPath . DS . 'en.json');
-
-        $data = [
-            'metadata' => $metadata,
-            'paragraphs' => $content['paragraphs'] ?? [],
-        ];
-
-        /** @phpstan-ignore argument.type */
-        $story = Story::fromArray($data);
+        $story = Story::fromArray([
+            'metadata' => $this->getMetadata($storyId),
+            'paragraphs' => $this->getParagraphs($storyId),
+        ]);
 
         $validationErrors = $story->validate();
         if (!empty($validationErrors)) {
             throw new InvalidArgumentException(
-                "Story validation failed in `{$storyPath}`:\n- " . implode("\n- ", $validationErrors)
+                "Story validation failed in `{$this->getStoryPath($storyId)}`:\n- " . implode("\n- ", $validationErrors)
             );
         }
 
@@ -69,28 +112,24 @@ class StoryLoader
     /**
      * List all available story files.
      *
-     * @return array<string> List of story IDs
+     * @return array<string, array{title: string, author: string, description?: string}> List of stories with their metadata.
      */
     public function listAvailableStories(): array
     {
-        $directories = glob($this->storiesDirectory . DS . '*', GLOB_ONLYDIR);
-        if ($directories === false) {
-            return [];
+        $stories = [];
+
+        $directories = glob($this->storiesDirectory . DS . '*', GLOB_ONLYDIR) ?: [];
+
+        foreach ($directories as $directory) {
+            $metadata = $this->getMetadata(basename($directory));
+            unset($metadata['initial_gold']);
+            $stories[basename($directory)] = $metadata;
         }
 
-        return array_map(fn(string $path): string => basename($path), $directories);
-    }
+        if (empty($stories)) {
+            throw new RuntimeException("No stories found in `{$this->storiesDirectory}` directory.");
+        }
 
-    /**
-     * Check if a story file exists.
-     *
-     * @param string $storyId Story ID
-     * @return bool
-     */
-    public function exists(string $storyId): bool
-    {
-        $storyPath = $this->storiesDirectory . DS . $storyId;
-
-        return is_dir($storyPath) && file_exists($storyPath . DS . 'metadata.json');
+        return $stories;
     }
 }

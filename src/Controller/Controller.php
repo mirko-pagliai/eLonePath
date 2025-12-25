@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace eLonePath\Controller;
 
 use eLonePath\View\View;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Abstract base class for managing controllers in an application.
@@ -40,12 +41,12 @@ abstract class Controller
     }
 
     /**
-     * Renders the view and returns the rendered content as a string.
+     * Renders the view and returns the response.
      *
-     * @return string The rendered content.
+     * @return \Symfony\Component\HttpFoundation\Response The rendered response object.
      */
-    public function render(): string
+    public function render(): Response
     {
-        return $this->view->render();
+        return new Response($this->view->render());
     }
 }

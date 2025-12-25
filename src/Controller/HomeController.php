@@ -15,8 +15,6 @@ class HomeController extends Controller
             'items' => ['First', 'Second', 'Third']
         ]);
 
-        $content = $this->render();
-
-        return new Response($content);
+        return $this->render();
     }
 }

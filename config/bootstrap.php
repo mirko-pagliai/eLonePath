@@ -22,7 +22,7 @@ if (!defined('RESOURCES')) {
 }
 
 // Include Composer autoloader if exists
-$composerAutoload = ROOT . DS . 'vendor' . DS . 'autoload.php';
+$composerAutoload = ROOT . '/vendor/autoload.php';
 if (file_exists($composerAutoload)) {
     require_once $composerAutoload;
 }

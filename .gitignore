@@ -1,3 +1,5 @@
 .idea/
 .phpunit.cache/
+/src/old/
+/tests/Tests/old/
 /vendor/

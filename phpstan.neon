@@ -10,5 +10,5 @@ parameters:
     treatPhpDocTypesAsCertain: false
 
     excludePaths:
-        - src/old
-        - tests/Tests/old
+        - src/old (?)
+        - tests/Tests/old (?)

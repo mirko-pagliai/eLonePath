@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\Routing\Exception\ResourceNotFoundException;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
@@ -62,7 +63,9 @@ try {
         throw new ResourceNotFoundException('Controller not found for the request');
     }
 
-    assert(is_array($controller) && $controller[0] instanceof Controller);
+    assert(is_array($controller));
+    assert($controller[0] instanceof Controller);
+    assert(is_string($controller[1]));
 
     $controller[0]->view->setRequest($request);
     $arguments = $argumentResolver->getArguments($request, $controller);
@@ -77,11 +80,19 @@ try {
     if (!$response instanceof Response) {
         $response = $controller[0]->render();
     }
-
 } catch (ResourceNotFoundException $e) {
+    // 404 - Route not found
     $response = new Response('Page not found', 404);
-} catch (\Throwable $e) {
-    $response = new Response('Error: ' . $e->getMessage(), 500);
+
+} catch (HttpExceptionInterface $e) {
+    // 4xx/5xx - HTTP exceptions (405, 400, 401, 403, etc.)
+    $response = new Response(
+        $e->getMessage() ?: 'An error occurred',
+        $e->getStatusCode()
+    );
+} catch (Throwable $e) {
+    // 500 - Server error (generic)
+    $response = new Response('Internal server error', 500);
 }
 
 $response->send();

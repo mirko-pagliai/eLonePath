@@ -13,10 +13,10 @@ declare(strict_types=1);
 
 require_once __DIR__ . '/../config/bootstrap.php';
 
+use eLonePath\ErrorHandler;
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\RequestStack;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
 use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
@@ -73,11 +73,17 @@ try {
     $response = $kernel->handle($request);
     $response->send();
     $kernel->terminate($request, $response);
-} catch (Exception $e) {
-    // Basic error handling - in production you'd want better error pages
-    $response = new Response(
-        'An error occurred: ' . $e->getMessage(),
-        Response::HTTP_INTERNAL_SERVER_ERROR,
-    );
-    $response->send();
+} catch (Throwable $e) {
+    // Log to terminal/console
+    error_log(sprintf(
+        "\n\n=== EXCEPTION ===\nType: %s\nMessage: %s\nFile: %s:%d\n\nStack Trace:\n%s\n",
+        get_class($e),
+        $e->getMessage(),
+        $e->getFile(),
+        $e->getLine(),
+        $e->getTraceAsString(),
+    ));
+
+    // Send error response to browser
+    ErrorHandler::display($e);
 }

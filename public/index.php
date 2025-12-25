@@ -83,13 +83,9 @@ try {
 } catch (ResourceNotFoundException $e) {
     // 404 - Route not found
     $response = new Response('Page not found', 404);
-
 } catch (HttpExceptionInterface $e) {
-    // 4xx/5xx - HTTP exceptions (405, 400, 401, 403, etc.)
-    $response = new Response(
-        $e->getMessage() ?: 'An error occurred',
-        $e->getStatusCode()
-    );
+    // HTTP exceptions (mostly 4xx, rarely 5xx if explicitly thrown)
+    $response = new Response($e->getMessage() ?: 'An error occurred', $e->getStatusCode());
 } catch (Throwable $e) {
     // 500 - Server error (generic)
     $response = new Response('Internal server error', 500);

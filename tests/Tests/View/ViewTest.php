@@ -21,7 +21,7 @@ class ViewTest extends TestCase
 
         $this->assertSame('layouts/default.php', $view->layout);
 
-        $view->setLayout('layouts/custom.php');
+        $view->layout = 'layouts/custom.php';
         $this->assertSame('layouts/custom.php', $view->layout);
     }
 

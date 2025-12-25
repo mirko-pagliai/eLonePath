@@ -6,6 +6,12 @@ namespace eLonePath\View;
 use InvalidArgumentException;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * The `View` class provides functionality to render templates with optional layout support.
+ *
+ * It manages template-related data, integrates request handling, and supports auto-detecting templates
+ * based on the current request.
+ */
 class View
 {
     private string $templatePath;
@@ -17,9 +23,17 @@ class View
 
     private ?Request $request = null;
 
+    /**
+     * Constructor method.
+     *
+     * @param string|null $templatePath The path to the templates' directory. Defaults to `TEMPLATES` constant if not provided.
+     * @param string|null $layout The default layout file or null for no layout. Defaults to 'layouts/default.php'.
+     * @return void
+     * @throws \InvalidArgumentException If the provided template path does not exist.
+     */
     public function __construct(
         ?string $templatePath = null,
-        ?string $defaultLayout = 'layouts/default.php'
+        ?string $layout = 'layouts/default.php'
     ) {
         $templatePath = rtrim($templatePath ?: TEMPLATES, DS);
 
@@ -28,7 +42,7 @@ class View
         }
 
         $this->templatePath = $templatePath;
-        $this->layout = $defaultLayout;
+        $this->layout = $layout;
     }
 
     /**

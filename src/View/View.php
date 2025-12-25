@@ -100,10 +100,16 @@ class View
         return $content;
     }
 
-    private function autoDetectTemplate(): string
+    /**
+     * Automatically detects the template path based on the controller and action in the current request.
+     *
+     * @return string The resolved template path in the format `ControllerName/action_name.php`.
+     * @throws \InvalidArgumentException If the request is not set, or if the controller cannot be determined from the request attributes.
+     */
+    protected function autoDetectTemplate(): string
     {
         if ($this->request === null) {
-            throw new InvalidArgumentException('Request not set. Call setRequest() before render().');
+            throw new InvalidArgumentException('Request not set. Call `setRequest()` before `render()`.');
         }
 
         /** @var array{class-string, non-empty-string}|non-empty-string $controller */
@@ -115,8 +121,8 @@ class View
         /**
          * Handles both:
          *
-         *  - controller as an array `[Namespace\Controller\ClassName::class, 'methodName']`;
-         *  - controller as a string `'Namespace\Controller\ClassName::methodName'`.
+         *  - Controller as an array `[Namespace\Controller\ClassName::class, 'methodName']`;
+         *  - Controller as a string `'Namespace\Controller\ClassName::methodName'`.
          */
         if (is_array($controller)) {
             [$class, $action] = $controller;
@@ -128,7 +134,7 @@ class View
         $controllerName = basename(str_replace('\\', '/', $class));
         $controllerName = str_replace('Controller', '', $controllerName);
 
-        // Convert action to snake_case
+        // Convert action to `snake_case`
         $actionName = $this->camelToSnake($action);
 
         return "{$controllerName}/{$actionName}.php";
@@ -148,6 +154,14 @@ class View
         return strtolower($result);
     }
 
+    /**
+     * Renders a template file with the given data and returns the result as a string.
+     *
+     * @param string $file The name of the template file to render.
+     * @param array<string, mixed> $data An associative array of data to be extracted and made available within the template file.
+     * @return string The rendered content of the template file.
+     * @throws \InvalidArgumentException If the template file does not exist, or if the output from the template file is invalid.
+     */
     private function renderFile(string $file, array $data): string
     {
         $filePath = $this->templatePath . '/' . $file;

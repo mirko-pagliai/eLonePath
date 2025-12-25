@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class HomeController
 {
-    private View $view;
+    protected View $view;
 
     public function __construct()
     {
@@ -19,11 +19,13 @@ class HomeController
 
     public function index(Request $Request): Response
     {
-        $content = $this->view->render('home/index.php', [
+        $this->view->set([
             'title' => 'Homepage',
             'message' => 'Welcome to your Symfony application!',
             'items' => ['First', 'Second', 'Third']
         ]);
+
+        $content = $this->view->render('home/index.php');
 
         return new Response($content);
     }

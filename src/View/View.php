@@ -11,6 +11,8 @@ class View
 
     private ?string $layout = null;
 
+    private array $data = [];
+
     public function __construct(?string $templatePath = null)
     {
         $templatePath = rtrim($templatePath ?: TEMPLATES, DS);
@@ -27,15 +29,21 @@ class View
         $this->layout = $layout;
     }
 
-    public function render(string $template, array $data = []): string
+    public function set(array $data): void
+    {
+        $this->data = array_merge($this->data, $data);
+    }
+
+    public function render(string $template): string
     {
         // Render template
-        $content = $this->renderFile($template, $data);
+        $content = $this->renderFile($template, $this->data);
 
         // If the layout is set, render content inside the layout
         if ($this->layout !== null) {
-            $data['content'] = $content;
-            return $this->renderFile($this->layout, $data);
+            $this->data['content'] = $content;
+
+            return $this->renderFile($this->layout, $this->data);
         }
 
         return $content;

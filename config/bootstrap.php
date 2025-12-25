@@ -21,6 +21,11 @@ if (!defined('RESOURCES')) {
     define('RESOURCES', ROOT . DS . 'resources');
 }
 
+// Define templates directory
+if (!defined('TEMPLATES')) {
+    define('TEMPLATES', ROOT . DS . 'templates');
+}
+
 // Include Composer autoloader if exists
 $composerAutoload = ROOT . '/vendor/autoload.php';
 if (file_exists($composerAutoload)) {

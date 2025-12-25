@@ -7,11 +7,11 @@ declare(strict_types=1);
  * Run on the dev server with:
  *
  * ```
- * $ php -d opcache.jit=disable -S localhost:8000
+ * $ php -d opcache.jit=disable -S localhost:8000 -t public
  * ```
  */
 
-require_once __DIR__ . '/../vendor/autoload.php';
+require_once __DIR__ . '/../config/bootstrap.php';
 
 use Symfony\Component\EventDispatcher\EventDispatcher;
 use Symfony\Component\HttpFoundation\Request;
@@ -38,8 +38,12 @@ $session = new Session(new NativeSessionStorage([
 $session->start();
 $request->setSession($session);
 
-// Load routes configuration
-$routes = require __DIR__ . '/../config/routes.php';
+/**
+ * Loads routes configuration.
+ *
+ * @link config/routes.php
+ */
+$routes = require_once CONFIG . '/routes.php';
 
 // Set up routing context and matcher
 $context = new RequestContext();

@@ -1,15 +1,22 @@
+<?php
+declare(strict_types=1);
+/**
+ * @var string|null $title
+ * @var string $content
+ */
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= htmlspecialchars($title ?? 'Symfony Application') ?></title>
+    <title><?= htmlspecialchars($title ?? 'My application') ?></title>
     <link href="assets/bootstrap/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
     <div class="container">
-        <a class="navbar-brand" href="/">My Symfony App</a>
+        <a class="navbar-brand" href="/">My App</a>
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -29,7 +36,7 @@
 
 <footer class="bg-light text-center py-4 mt-5">
     <div class="container">
-        <p class="text-muted mb-0">&copy; <?= date('Y') ?> - Symfony Standalone Application</p>
+        <p class="text-muted mb-0">&copy; <?= date('Y') ?></p>
     </div>
 </footer>
 

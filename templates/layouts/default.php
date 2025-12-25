@@ -1,100 +1,39 @@
 <!DOCTYPE html>
-<html lang="it">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><?= $title ?? 'eLonePath' ?></title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .wrapper {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        header {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 15px;
-            padding: 20px 40px;
-            margin-bottom: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        header h1 {
-            color: #333;
-            font-size: 1.8em;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-        }
-        nav a {
-            color: #667eea;
-            text-decoration: none;
-            margin-left: 20px;
-            font-weight: 600;
-            transition: color 0.3s;
-        }
-        nav a:hover {
-            color: #764ba2;
-        }
-        .container {
-            background: white;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
-            padding: 60px;
-            min-height: 400px;
-        }
-        h1 {
-            color: #333;
-            font-size: 2.5em;
-            margin-bottom: 20px;
-        }
-        p {
-            color: #666;
-            font-size: 1.2em;
-            line-height: 1.6;
-        }
-        footer {
-            text-align: center;
-            color: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            margin-top: 20px;
-            font-size: 0.9em;
-        }
-        <?= $styles ?? '' ?>
-    </style>
-    <?= $headExtra ?? '' ?>
+    <title><?= htmlspecialchars($title ?? 'Symfony Application') ?></title>
+
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
-    <div class="wrapper">
-        <header>
-            <h1>eLonePath</h1>
-            <nav>
-                <a href="/">Home</a>
-                <a href="/about">About</a>
-                <a href="/start">Start Game</a>
-            </nav>
-        </header>
-        
-        <div class="container">
-            <?= $content ?>
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <div class="container">
+        <a class="navbar-brand" href="/">My Symfony App</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav ms-auto">
+                <li class="nav-item">
+                    <a class="nav-link active" href="/">Home</a>
+                </li>
+            </ul>
         </div>
-        
-        <footer>
-            <p>&copy; <?= date('Y') ?> eLonePath - Interactive Gamebook Engine</p>
-        </footer>
     </div>
-    <?= $scripts ?? '' ?>
+</nav>
+
+<main class="container my-5">
+    <?= $content ?>
+</main>
+
+<footer class="bg-light text-center py-4 mt-5">
+    <div class="container">
+        <p class="text-muted mb-0">&copy; <?= date('Y') ?> - Symfony Standalone Application</p>
+    </div>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

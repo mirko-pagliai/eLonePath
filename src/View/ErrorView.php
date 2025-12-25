@@ -42,7 +42,7 @@ class ErrorView extends View
      * is passed to the template for displaying detailed error information.
      *
      * @param int $statusCode The HTTP status code (e.g., 404, 500)
-     * @param Throwable|null $exception The exception that caused the error, if any
+     * @param \Throwable|null $exception The exception that caused the error, if any
      * @return string The rendered HTML content
      */
     public function renderError(int $statusCode, ?Throwable $exception = null): string
@@ -51,6 +51,7 @@ class ErrorView extends View
 
         $data = ['statusCode' => $statusCode];
 
+        // @phpstan-ignore booleanAnd.leftAlwaysTrue
         if (DEBUG && $exception !== null) {
             $data['exception'] = $exception;
         }

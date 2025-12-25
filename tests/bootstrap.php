@@ -6,19 +6,10 @@ if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
 }
 
-// Define the root directory of the project
-if (!defined('ROOT')) {
-    define('ROOT', dirname(__DIR__));
-}
-
-// Additional constants for tests, if needed
-if (!defined('RESOURCES')) {
-    define('RESOURCES', ROOT . DS . 'tests' . DS . 'resources');
-}
-
-if (!defined('TMP')) {
-    define('TMP', sys_get_temp_dir() . DS . 'elonepath-engine');
-}
+const DEBUG = true;
+define('ROOT', dirname(__DIR__));
+const RESOURCES = ROOT . DS . 'tests' . DS . 'resources';
+define('TMP', sys_get_temp_dir() . DS . 'elonepath-engine');
 
 if (!file_exists(TMP)) {
     mkdir(TMP, 0777, true);
@@ -26,6 +17,8 @@ if (!file_exists(TMP)) {
 
 /**
  * Includes the main bootstrap.
+ *
+ * All constants that the main bootstrap should not override have already been set at this point.
  *
  * @link config/bootstrap.php
  */

@@ -71,8 +71,15 @@ class ErrorRenderer
         error_log($message);
         error_log($trace);
 
-        // Write to STDERR (development - visible in terminal)
-        file_put_contents('php://stderr', $message . "\n");
-        file_put_contents('php://stderr', $trace . "\n\n");
+        // Write directly to STDERR using fwrite (avoids output buffering issues)
+        // @phpstan-ignore if.alwaysTrue
+        if (DEBUG) {
+            $stderr = fopen('php://stderr', 'w');
+            if ($stderr !== false) {
+                fwrite($stderr, $message . "\n");
+                fwrite($stderr, $trace . "\n\n");
+                fclose($stderr);
+            }
+        }
     }
 }

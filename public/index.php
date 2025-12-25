@@ -62,9 +62,7 @@ try {
         throw new ResourceNotFoundException('Controller not found for the request');
     }
 
-    assert(is_array($controller));
-    assert($controller[0] instanceof Controller);
-    assert(is_string($controller[1]));
+    assert(is_array($controller) && $controller[0] instanceof Controller);
 
     $controller[0]->view->setRequest($request);
     $arguments = $argumentResolver->getArguments($request, $controller);

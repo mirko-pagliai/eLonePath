@@ -12,7 +12,8 @@ class View
 
     private ?string $layout = null;
 
-    private array $data = [];
+    /** @var array<string, mixed> */
+    protected array $data = [];
 
     private ?Request $request = null;
 
@@ -37,9 +38,23 @@ class View
         $this->request = $request;
     }
 
+    /**
+     * Stores the provided data array into the internal storage.
+     * Throws an exception if a key in the provided data already exists in the internal storage.
+     *
+     * @param array<string, mixed> $data An associative array where the keys and values will be added to the internal storage.
+     * @return void
+     *
+     * @throws \InvalidArgumentException If a key in the input array already exists in the storage.
+     */
     public function set(array $data): void
     {
-        $this->data = array_merge($this->data, $data);
+        foreach ($data as $key => $value) {
+            if (array_key_exists($key, $this->data)) {
+                throw new InvalidArgumentException("Data key `{$key}` already exists.");
+            }
+            $this->data[$key] = $value;
+        }
     }
 
     public function render(?string $template = null): string
@@ -65,13 +80,13 @@ class View
     private function autoDetectTemplate(): string
     {
         if ($this->request === null) {
-            throw new InvalidArgumentException('Request not set. Call setRequest() before render()');
+            throw new InvalidArgumentException('Request not set. Call setRequest() before render().');
         }
 
         /** @var array{class-string, non-empty-string}|non-empty-string $controller */
         $controller = $this->request->attributes->get('_controller');
         if (!$controller) {
-            throw new InvalidArgumentException('Controller not found in request attributes');
+            throw new InvalidArgumentException('Controller not found in request attributes.');
         }
 
         /**
@@ -96,9 +111,18 @@ class View
         return "{$controllerName}/{$actionName}.php";
     }
 
-    private function camelToSnake(string $input): string
+    /**
+     * Converts a `camelCase` string to `snake_case` format.
+     *
+     * @param string $input The `camelCase` string to be converted.
+     * @return string The resulting `snake_case` string.
+     */
+    protected function camelToSnake(string $input): string
     {
-        return strtolower(preg_replace('/([a-z])([A-Z])/', '$1_$2', $input));
+        $result = preg_replace('/([a-z\d])([A-Z])/', '$1_$2', $input) ?: '';
+        $result = preg_replace('/([A-Z]+)([A-Z][a-z])/', '$1_$2', $result) ?: '';
+
+        return strtolower($result);
     }
 
     private function renderFile(string $file, array $data): string
@@ -106,14 +130,19 @@ class View
         $filePath = $this->templatePath . '/' . $file;
 
         if (!file_exists($filePath)) {
-            throw new InvalidArgumentException("Template file not found: {$filePath}");
+            throw new InvalidArgumentException("Template file not found: `{$filePath}`.");
         }
 
         extract($data, EXTR_SKIP);
 
         ob_start();
         include $filePath;
+        $result = ob_get_clean();
 
-        return ob_get_clean();
+        if (!is_string($result)) {
+            throw new InvalidArgumentException("Template file returned invalid output: `{$filePath}`.");
+        }
+
+        return $result;
     }
 }

@@ -26,8 +26,7 @@ class ErrorHandler
         $line = $e->getLine();
         $trace = self::formatTrace($e->getTrace());
 
-        /** @link templates/errors/exception.php */
-        require_once TEMPLATES . '/errors/exception.php';
+        require TEMPLATES . '/errors/500.php';
     }
 
     /**

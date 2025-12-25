@@ -22,6 +22,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
@@ -31,7 +32,8 @@ $request = Request::createFromGlobals();
 
 // Initialize session
 $session = new Session(new NativeSessionStorage([
-    'cookie_lifetime' => 3600,
+    // By default, the session is maintained until the browser is closed.
+    'cookie_lifetime' => 0,
     'cookie_httponly' => true,
     'cookie_samesite' => 'lax',
 ]));
@@ -73,8 +75,19 @@ try {
     $response = $kernel->handle($request);
     $response->send();
     $kernel->terminate($request, $response);
+} catch (NotFoundHttpException $e) {
+    // Log 404 to terminal
+    error_log(sprintf(
+        "\n\n=== 404 NOT FOUND ===\nPath: %s\n",
+        $request->getPathInfo(),
+    ));
+
+    // Send 404 response to browser
+    http_response_code(404);
+
+    require TEMPLATES . '/errors/400.php';
 } catch (Throwable $e) {
-    // Log to terminal/console
+    // Log to terminal
     error_log(sprintf(
         "\n\n=== EXCEPTION ===\nType: %s\nMessage: %s\nFile: %s:%d\n\nStack Trace:\n%s\n",
         get_class($e),

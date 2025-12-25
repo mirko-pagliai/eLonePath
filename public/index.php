@@ -22,7 +22,7 @@ use Symfony\Component\HttpFoundation\Session\Storage\NativeSessionStorage;
 use Symfony\Component\HttpKernel\Controller\ArgumentResolver;
 use Symfony\Component\HttpKernel\Controller\ControllerResolver;
 use Symfony\Component\HttpKernel\EventListener\RouterListener;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use Symfony\Component\HttpKernel\Exception\HttpExceptionInterface;
 use Symfony\Component\HttpKernel\HttpKernel;
 use Symfony\Component\Routing\Matcher\UrlMatcher;
 use Symfony\Component\Routing\RequestContext;
@@ -75,15 +75,32 @@ try {
     $response = $kernel->handle($request);
     $response->send();
     $kernel->terminate($request, $response);
-} catch (NotFoundHttpException $e) {
-    // Log 404 to terminal
+} catch (HttpExceptionInterface $e) {
+    // Get HTTP status code from exception
+    $statusCode = $e->getStatusCode();
+
+    // Map status code to message
+    $statusMessages = [
+        400 => 'Bad Request',
+        401 => 'Unauthorized',
+        403 => 'Forbidden',
+        404 => 'Not Found',
+        405 => 'Method Not Allowed',
+        408 => 'Request Timeout',
+        429 => 'Too Many Requests',
+    ];
+    $statusMessage = $statusMessages[$statusCode] ?? 'Client Error';
+
+    // Log to terminal
     error_log(sprintf(
-        "\n\n=== 404 NOT FOUND ===\nPath: %s\n",
+        "\n\n=== HTTP %d ===\nPath: %s\nMessage: %s\n",
+        $statusCode,
         $request->getPathInfo(),
+        $e->getMessage(),
     ));
 
-    // Send 404 response to browser
-    http_response_code(404);
+    // Send error response to browser
+    http_response_code($statusCode);
 
     require TEMPLATES . '/errors/400.php';
 } catch (Throwable $e) {

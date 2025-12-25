@@ -9,7 +9,8 @@
 >
     <testsuites>
         <testsuite name="eLonePath Test Suite">
-            <directory>tests</directory>
+            <directory>tests/Tests</directory>
+            <exclude>tests/Tests/old</exclude>
         </testsuite>
     </testsuites>
 

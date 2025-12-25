@@ -10,7 +10,7 @@ class HomeController extends Controller
         $this->set([
             'title' => 'Homepage',
             'message' => 'Welcome to your application!',
-            'items' => ['First', 'Second', 'Third']
+            'items' => ['First', 'Second', 'Third'],
         ]);
     }
 }

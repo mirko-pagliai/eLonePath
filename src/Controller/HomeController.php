@@ -9,7 +9,7 @@ class HomeController extends Controller
     {
         $this->set([
             'title' => 'Homepage',
-            'message' => 'Welcome to your Symfony application!',
+            'message' => 'Welcome to your application!',
             'items' => ['First', 'Second', 'Third']
         ]);
     }

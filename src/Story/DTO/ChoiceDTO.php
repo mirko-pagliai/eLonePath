@@ -15,9 +15,11 @@ readonly class ChoiceDTO
     /**
      * Create a choice DTO.
      *
-     * @param string $text Choice text displayed to player
-     * @param int $target Target paragraph ID
-     * @param \eLonePath\Story\DTO\ConditionDTO|null $condition Optional condition for availability
+     * @param string $text The text associated with the choice. Cannot be empty.
+     * @param int $target The ID of the target paragraph. Must be a positive integer.
+     * @param \eLonePath\Story\DTO\ConditionDTO|null $condition An optional condition associated with the choice.
+     * @return void
+     * @throws \InvalidArgumentException If the provided text is empty or the target ID is not positive.
      */
     public function __construct(
         public string $text,
@@ -46,10 +48,10 @@ readonly class ChoiceDTO
     public static function fromArray(array $data): self
     {
         if (empty($data['text'])) {
-            throw new InvalidArgumentException('Choice missing "text"');
+            throw new InvalidArgumentException('Choice missing "text".');
         }
         if (empty($data['target'])) {
-            throw new InvalidArgumentException('Choice missing "target"');
+            throw new InvalidArgumentException('Choice missing "target".');
         }
 
         $condition = null;
@@ -57,10 +59,6 @@ readonly class ChoiceDTO
             $condition = ConditionDTO::fromArray($data['condition']);
         }
 
-        return new self(
-            text: $data['text'],
-            target: $data['target'],
-            condition: $condition,
-        );
+        return new self(text: $data['text'], target: $data['target'], condition: $condition);
     }
 }

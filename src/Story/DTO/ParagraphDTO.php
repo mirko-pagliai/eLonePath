@@ -15,10 +15,12 @@ readonly class ParagraphDTO
     /**
      * Create a paragraph DTO.
      *
-     * @param int $id Paragraph ID
-     * @param string $text Paragraph text
-     * @param \eLonePath\Story\DTO\EventDTO|null $event Optional event
-     * @param array<\eLonePath\Story\DTO\ChoiceDTO> $choices Available choices
+     * @param int $id The unique identifier for the paragraph. Must be a positive integer.
+     * @param string $text The content of the paragraph. Cannot be an empty string.
+     * @param \eLonePath\Story\DTO\EventDTO|null $event An optional event associated with the paragraph.
+     * @param array<\eLonePath\Story\DTO\ChoiceDTO> $choices An array of choices related to the paragraph.
+     * @return void
+     * @throws \InvalidArgumentException If the $id is not positive or if $text is empty.
      */
     public function __construct(
         public int $id,
@@ -27,10 +29,10 @@ readonly class ParagraphDTO
         public array $choices = [],
     ) {
         if ($id < 1) {
-            throw new InvalidArgumentException('Paragraph ID must be positive');
+            throw new InvalidArgumentException('Paragraph ID must be positive.');
         }
         if (trim($text) === '') {
-            throw new InvalidArgumentException('Paragraph text cannot be empty');
+            throw new InvalidArgumentException('Paragraph text cannot be empty.');
         }
     }
 
@@ -53,34 +55,27 @@ readonly class ParagraphDTO
     public static function fromArray(int $id, array $data): self
     {
         if (empty($data['text'])) {
-            throw new InvalidArgumentException("Paragraph {$id} missing 'text'");
+            throw new InvalidArgumentException('Paragraph #' . $id . ' missing "text".');
         }
 
-        $event = null;
         if (isset($data['event'])) {
             try {
                 $event = EventDTO::fromArray($data['event']);
             } catch (InvalidArgumentException $e) {
-                throw new InvalidArgumentException("Paragraph {$id}: {$e->getMessage()}");
+                throw new InvalidArgumentException('Paragraph #' . $id . ': ' . lcfirst($e->getMessage()) . '.');
             }
         }
 
-        $choices = [];
         if (isset($data['choices'])) {
             foreach ($data['choices'] as $choiceData) {
                 try {
                     $choices[] = ChoiceDTO::fromArray($choiceData);
                 } catch (InvalidArgumentException $e) {
-                    throw new InvalidArgumentException("Paragraph {$id}: {$e->getMessage()}");
+                    throw new InvalidArgumentException('Paragraph #' . $id . ': ' . lcfirst(rtrim($e->getMessage(), '.')) . '.');
                 }
             }
         }
 
-        return new self(
-            id: $id,
-            text: $data['text'],
-            event: $event,
-            choices: $choices,
-        );
+        return new self(id: $id, text: $data['text'], event: $event ?? null, choices: $choices ?? []);
     }
 }

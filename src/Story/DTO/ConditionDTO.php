@@ -20,10 +20,8 @@ readonly class ConditionDTO
      * @param \eLonePath\Story\ConditionType $type Condition type
      * @param array<string, mixed> $data Additional condition data (item name, stat value, etc.)
      */
-    public function __construct(
-        public ConditionType $type,
-        public array $data = [],
-    ) {
+    public function __construct(public ConditionType $type, public array $data = [])
+    {
     }
 
     /**
@@ -36,18 +34,17 @@ readonly class ConditionDTO
     public static function fromArray(array $data): self
     {
         if (empty($data['type'])) {
-            throw new InvalidArgumentException('Condition missing "type"');
+            throw new InvalidArgumentException('Condition missing "type".');
         }
 
         try {
             $type = ConditionType::from($data['type']);
         } catch (ValueError) {
-            throw new InvalidArgumentException("Invalid condition type: `{$data['type']}`");
+            throw new InvalidArgumentException("Invalid condition type: `{$data['type']}`.");
         }
 
-        $conditionData = $data;
-        unset($conditionData['type']);
+        unset($data['type']);
 
-        return new self($type, $conditionData);
+        return new self(type: $type, data: $data);
     }
 }

@@ -15,10 +15,12 @@ readonly class StoryMetadataDTO
     /**
      * Create a story metadata DTO.
      *
-     * @param string $title Story title
-     * @param string $author Story author
-     * @param string $description Story description
-     * @param int $initialGold Initial gold amount for new characters
+     * @param string $title The title of the story. Must not be empty.
+     * @param string $author The author of the story. Must not be empty.
+     * @param string $description The description of the story. Defaults to an empty string.
+     * @param int $initialGold The initial gold amount. Must not be negative. Defaults to 10.
+     * @return void
+     * @throws \InvalidArgumentException If the title or the author is empty, or if the initial gold value is negative.
      */
     public function __construct(
         public string $title,
@@ -27,13 +29,13 @@ readonly class StoryMetadataDTO
         public int $initialGold = 10,
     ) {
         if (trim($title) === '') {
-            throw new InvalidArgumentException('Story title cannot be empty');
+            throw new InvalidArgumentException('Story title cannot be empty.');
         }
         if (trim($author) === '') {
-            throw new InvalidArgumentException('Story author cannot be empty');
+            throw new InvalidArgumentException('Story author cannot be empty.');
         }
         if ($initialGold < 0) {
-            throw new InvalidArgumentException('Initial gold cannot be negative');
+            throw new InvalidArgumentException('Initial gold cannot be negative.');
         }
     }
 
@@ -52,10 +54,10 @@ readonly class StoryMetadataDTO
     public static function fromArray(array $data): self
     {
         if (empty($data['title'])) {
-            throw new InvalidArgumentException('Metadata missing "title"');
+            throw new InvalidArgumentException('Metadata missing "title".');
         }
         if (empty($data['author'])) {
-            throw new InvalidArgumentException('Metadata missing "author"');
+            throw new InvalidArgumentException('Metadata missing "author".');
         }
 
         return new self(

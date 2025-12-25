@@ -20,10 +20,8 @@ readonly class EventDTO
      * @param \eLonePath\Story\EventType $type Event type
      * @param array<string, mixed> $data Additional event data (enemy stats, item name, stat changes, etc.)
      */
-    public function __construct(
-        public EventType $type,
-        public array $data = [],
-    ) {
+    public function __construct(public EventType $type, public array $data = [])
+    {
     }
 
     /**
@@ -36,18 +34,17 @@ readonly class EventDTO
     public static function fromArray(array $data): self
     {
         if (empty($data['type'])) {
-            throw new InvalidArgumentException('Event missing "type"');
+            throw new InvalidArgumentException('Event missing "type".');
         }
 
         try {
             $type = EventType::from($data['type']);
         } catch (ValueError) {
-            throw new InvalidArgumentException("Invalid event type: `{$data['type']}`");
+            throw new InvalidArgumentException("Invalid event type: `{$data['type']}`.");
         }
 
-        $eventData = $data;
-        unset($eventData['type']);
+        unset($data['type']);
 
-        return new self($type, $eventData);
+        return new self(type: $type, data: $data);
     }
 }

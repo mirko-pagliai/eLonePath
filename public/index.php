@@ -16,6 +16,7 @@ declare(strict_types=1);
 require_once __DIR__ . '/../config/bootstrap.php';
 
 use eLonePath\Controller\Controller;
+use eLonePath\Error\ErrorRenderer;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\Session\Session;
@@ -52,6 +53,9 @@ $context = new RequestContext();
 $context->fromRequest($request);
 $matcher = new UrlMatcher($routes, $context);
 
+// Initialize the `ErrorRenderer`.
+$errorRenderer = new ErrorRenderer();
+
 try {
     $request->attributes->add($matcher->match($request->getPathInfo()));
 
@@ -82,13 +86,13 @@ try {
     }
 } catch (ResourceNotFoundException $e) {
     // 404 - Route not found
-    $response = new Response('Page not found', 404);
+    $response = $errorRenderer->render(404, $e);
 } catch (HttpExceptionInterface $e) {
     // HTTP exceptions (mostly 4xx, rarely 5xx if explicitly thrown)
-    $response = new Response($e->getMessage() ?: 'An error occurred', $e->getStatusCode());
+    $response = $errorRenderer->render($e->getStatusCode(), $e);
 } catch (Throwable $e) {
     // 500 - Server error (generic)
-    $response = new Response('Internal server error', 500);
+    $response = $errorRenderer->render(500, $e);
 }
 
 $response->send();

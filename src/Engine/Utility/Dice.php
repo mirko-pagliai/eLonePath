@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace eLonePath\Utility;
+namespace eLonePath\Engine\Utility;
 
 /**
  * Provides methods to simulate rolling six-sided dice.

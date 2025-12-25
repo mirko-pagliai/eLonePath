@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Stat;
+namespace Tests\Engine\Stat;
 
-use eLonePath\Stats\Stat;
+use eLonePath\Engine\Stats\Stat;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Tests\Utility;
+namespace Tests\Engine\Utility;
 
-use eLonePath\Utility\Dice;
+use eLonePath\Engine\Utility\Dice;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;

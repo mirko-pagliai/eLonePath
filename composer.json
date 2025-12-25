@@ -39,8 +39,8 @@
         ],
         "link-bootstrap-assets": [
             "@php -r \"if (!file_exists('public/assets/bootstrap')) { mkdir('public/assets/bootstrap', 0755, true); }\"",
-            "@php -r \"if (!is_link('public/assets/bootstrap/bootstrap.min.css')) { symlink('vendor/twbs/bootstrap/dist/css/bootstrap.min.css', 'public/assets/bootstrap/bootstrap.min.css'); }\"",
-            "@php -r \"if (!is_link('public/assets/bootstrap/bootstrap.min.js')) { symlink('vendor/twbs/bootstrap/dist/js/bootstrap.min.js', 'public/assets/bootstrap/bootstrap.min.js'); }\""
+            "@php -r \"if (!is_link('public/assets/bootstrap/bootstrap.min.css')) { symlink('../../../vendor/twbs/bootstrap/dist/css/bootstrap.min.css', 'public/assets/bootstrap/bootstrap.min.css'); }\"",
+            "@php -r \"if (!is_link('public/assets/bootstrap/bootstrap.min.js')) { symlink('../../../vendor/twbs/bootstrap/dist/js/bootstrap.min.js', 'public/assets/bootstrap/bootstrap.min.js'); }\""
         ],
         "test": "vendor/bin/phpunit --display-skipped --display-deprecations --display-warnings"
     }

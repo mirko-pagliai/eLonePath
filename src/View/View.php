@@ -68,14 +68,23 @@ class View
             throw new InvalidArgumentException('Request not set. Call setRequest() before render()');
         }
 
+        /** @var array{class-string, non-empty-string}|non-empty-string $controller */
         $controller = $this->request->attributes->get('_controller');
-
         if (!$controller) {
             throw new InvalidArgumentException('Controller not found in request attributes');
         }
 
-        // Parse "Namespace\Controller\HomeController::index"
-        [$class, $action] = explode('::', $controller);
+        /**
+         * Handles both:
+         *
+         *  - controller as an array `[Namespace\Controller\ClassName::class, 'methodName']`;
+         *  - controller as a string `'Namespace\Controller\ClassName::methodName'`.
+         */
+        if (is_array($controller)) {
+            [$class, $action] = $controller;
+        } else {
+            [$class, $action] = explode('::', $controller);
+        }
 
         // Extract controller name (remove namespace and "Controller" suffix)
         $controllerName = basename(str_replace('\\', '/', $class));

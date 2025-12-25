@@ -57,6 +57,7 @@ try {
     $argumentResolver = new ArgumentResolver();
 
     $controller = $controllerResolver->getController($request);
+    $controller[0]->view->setRequest($request);
     $arguments = $argumentResolver->getArguments($request, $controller);
 
     $response = call_user_func_array($controller, $arguments);

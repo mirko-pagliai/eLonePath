@@ -1,5 +1,12 @@
 <?php
 declare(strict_types=1);
+
+/**
+ * 400 Bad Request.
+ *
+ * @var int $statusCode
+ * @var \Throwable|null $exception
+ */
 ?>
 
 <div class="alert alert-warning">

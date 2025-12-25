@@ -1,5 +1,12 @@
 <?php
 declare(strict_types=1);
+
+/**
+ * Error layout template.
+ *
+ * @var int $statusCode
+ * @var string $content
+ */
 ?>
 
 <!DOCTYPE html>

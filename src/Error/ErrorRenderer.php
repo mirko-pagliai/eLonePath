@@ -36,16 +36,16 @@ class ErrorRenderer
         $this->logToConsole($statusCode, $exception);
 
         $view = new ErrorView();
-        $content = $view->render($statusCode, $exception);
+        $content = $view->renderError($statusCode, $exception);
 
         return new Response($content, $statusCode);
     }
 
     /**
-     * Logs error information to the console using error_log().
+     * Logs error information to the console using `error_log()`.
      *
      * Logs both the error message with file/line information and the full stack trace.
-     * This runs regardless of DEBUG mode - console logging is always enabled.
+     * This runs regardless of `DEBUG` mode - console logging is always enabled.
      *
      * @param int $statusCode The HTTP status code
      * @param \Throwable|null $exception The exception to log, if any
@@ -57,13 +57,22 @@ class ErrorRenderer
             return;
         }
 
-        error_log(sprintf(
-            "[%d] %s in %s:%d",
+        $message = sprintf(
+            '[%d] %s in %s:%d',
             $statusCode,
             $exception->getMessage(),
             $exception->getFile(),
-            $exception->getLine(),
-        ));
-        error_log($exception->getTraceAsString());
+            $exception->getLine()
+        );
+
+        $trace = $exception->getTraceAsString();
+
+        // Write to error_log (production)
+        error_log($message);
+        error_log($trace);
+
+        // Write to STDERR (development - visible in terminal)
+        file_put_contents('php://stderr', $message . "\n");
+        file_put_contents('php://stderr', $trace . "\n\n");
     }
 }

@@ -162,7 +162,7 @@ class View
      * @return string The rendered content of the template file.
      * @throws \InvalidArgumentException If the template file does not exist, or if the output from the template file is invalid.
      */
-    private function renderFile(string $file, array $data): string
+    protected function renderFile(string $file, array $data): string
     {
         $filePath = $this->templatePath . '/' . $file;
 

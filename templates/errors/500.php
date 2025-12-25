@@ -1,5 +1,12 @@
 <?php
 declare(strict_types=1);
+
+/**
+ * 500 Internal Server Error.
+ *
+ * @var int $statusCode
+ * @var \Throwable|null $exception
+ */
 ?>
 
 <div class="alert alert-danger">

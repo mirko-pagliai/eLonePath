@@ -19,13 +19,15 @@ class HomeController
 
     public function index(Request $Request): Response
     {
+        $this->view->setRequest($Request);
+
         $this->view->set([
             'title' => 'Homepage',
             'message' => 'Welcome to your Symfony application!',
             'items' => ['First', 'Second', 'Third']
         ]);
 
-        $content = $this->view->render('home/index.php');
+        $content = $this->view->render();
 
         return new Response($content);
     }

@@ -13,6 +13,19 @@ use PHPUnit\Framework\TestCase;
 class ViewTest extends TestCase
 {
     #[Test]
+    public function testSetLayout(): void
+    {
+        $view = new class extends View {
+            public ?string $layout;
+        };
+
+        $this->assertSame('layouts/default.php', $view->layout);
+
+        $view->setLayout('layouts/custom.php');
+        $this->assertSame('layouts/custom.php', $view->layout);
+    }
+
+    #[Test]
     public function testSet(): void
     {
         $expected = [

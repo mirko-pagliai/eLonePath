@@ -10,15 +10,17 @@ class View
 {
     private string $templatePath;
 
-    private ?string $layout = null;
+    protected ?string $layout;
 
     /** @var array<string, mixed> */
     protected array $data = [];
 
     private ?Request $request = null;
 
-    public function __construct(?string $templatePath = null)
-    {
+    public function __construct(
+        ?string $templatePath = null,
+        ?string $defaultLayout = 'layouts/default.php'
+    ) {
         $templatePath = rtrim($templatePath ?: TEMPLATES, DS);
 
         if (!is_dir($templatePath)) {
@@ -26,9 +28,16 @@ class View
         }
 
         $this->templatePath = $templatePath;
+        $this->layout = $defaultLayout;
     }
 
-    public function setLayout(string $layout): void
+    /**
+     * Sets the layout template to be used when rendering.
+     *
+     * @param string|null $layout The layout file path relative to templatePath, or null for no layout.
+     * @return void
+     */
+    public function setLayout(?string $layout): void
     {
         $this->layout = $layout;
     }

@@ -2,7 +2,6 @@
 <phpunit
         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         colors="true"
-        stopOnFailure="false"
         bootstrap="tests/bootstrap.php"
         xsi:noNamespaceSchemaLocation="https://schema.phpunit.de/10.5/phpunit.xsd"
         cacheDirectory=".phpunit.cache"
@@ -17,7 +16,7 @@
     <!-- configure code coverage -->
     <source>
         <include>
-            <directory suffix=".php">./src/</directory>
+            <directory>./src/</directory>
         </include>
     </source>
 </phpunit>

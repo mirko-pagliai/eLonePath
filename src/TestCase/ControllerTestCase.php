@@ -110,10 +110,10 @@ abstract class ControllerTestCase extends TestCase
         /** @var \eLonePath\Controller\Controller $controller */
         $controller = new $controllerClass();
 
-        // Replace route placeholders with actual values
+        // Replace route placeholders with actual values (URL-encoded)
         $path = $routeInfo->getPath();
         foreach ($routeParameters as $key => $value) {
-            $path = str_replace("{{$key}}", (string)$value, $path);
+            $path = str_replace("{{$key}}", urlencode((string)$value), $path);
         }
 
         // Create a simulated Request with proper parameters

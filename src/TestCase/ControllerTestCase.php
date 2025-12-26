@@ -49,21 +49,22 @@ abstract class ControllerTestCase extends TestCase
      * Executes a controller action for the given route.
      *
      * This method performs the following steps:
+     *
      * 1. Matches the route name to find the controller class and action method
      * 2. Validates that controller class and action method exist
-     * 3. Instantiates the controller (which creates its own View instance)
-     * 4. Creates a simulated Request object with route parameters substituted
-     * 5. Injects the Request into the controller's view
+     * 3. Instantiates the controller (which creates its own `View` instance)
+     * 4. Creates a simulated `Request` object with route parameters substituted
+     * 5. Injects the `Request` into the controller's view
      * 6. Calls the action method on the controller
      * 7. Renders the view and captures the Response object
      *
-     * The resulting Response is stored in $this->response for assertions.
+     * The resulting `Response` is stored in `$this->response` for assertions.
      *
      * @param string $route The route name as defined in routes.php (e.g., 'home', 'user_profile')
      * @param string $method The HTTP method to simulate (GET, POST, PUT, DELETE, etc.). Defaults to 'GET'.
      * @param array<string, mixed> $parameters Request parameters (query params for GET, body params for POST, etc.)
-     * @param array<string, mixed> $routeParameters Route placeholder values (e.g., ['id' => 123] for `/users/{id}`)
-     * @param array<string, string> $server Server and headers parameters ($_SERVER values)
+     * @param array<string, mixed> $routeParameters Route placeholder values (e.g., `['id' => 123]` for `/users/{id}`)
+     * @param array<string, string> $server Server and headers parameters (`$_SERVER` values)
      * @param string|null $content Raw request body content
      * @return void
      * @throws \RuntimeException If the route is not found, controller/action are invalid, or the class doesn't exist
@@ -83,14 +84,33 @@ abstract class ControllerTestCase extends TestCase
             throw new RuntimeException("Route `{$route}` not found. Available routes: {$availableRoutes}.");
         }
 
-        // Validate controller and action defaults exist
-        $controllerClass = $routeInfo->getDefault('_controller');
-        $action = $routeInfo->getDefault('_action');
+        /**
+         * Extract controller and action from route defaults.
+         *
+         * Supports two formats:
+         * 1. `_controller` as an array: `['ControllerClass', 'methodName']`
+         * 2. Separate `_controller` and `_action`
+         */
+        $controller = $routeInfo->getDefault('_controller');
 
-        if ($controllerClass === null || $action === null) {
-            throw new RuntimeException(
-                "Route `{$route}` is missing required defaults: `_controller` and/or `_action`."
-            );
+        if (is_array($controller)) {
+            // Format 1: `_controller` is `['ControllerClass', 'methodName']`
+            if (count($controller) !== 2) {
+                throw new RuntimeException(
+                    "Route `{$route}` has invalid `_controller` format. Expected [class, method]."
+                );
+            }
+            [$controllerClass, $action] = $controller;
+        } else {
+            // Format 2: separate `_controller` and `_action`
+            $controllerClass = $controller;
+            $action = $routeInfo->getDefault('_action');
+
+            if ($controllerClass === null || $action === null) {
+                throw new RuntimeException(
+                    "Route `{$route}` is missing required defaults: `_controller` and/or `_action`."
+                );
+            }
         }
 
         // Validate controller class exists and extends base Controller

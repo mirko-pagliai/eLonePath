@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace eLonePath\TestCase;
 
+use eLonePath\Controller\Controller;
 use PHPUnit\Framework\TestCase;
 use RuntimeException;
 use Symfony\Component\Routing\RouteCollection;
@@ -49,25 +50,29 @@ abstract class ControllerTestCase extends TestCase
      *
      * This method performs the following steps:
      * 1. Matches the route name to find the controller class and action method
-     * 2. Instantiates the controller (which creates its own View instance)
-     * 3. Creates a simulated Request object and injects it into the controller's view
-     * 4. Calls the action method on the controller
-     * 5. Renders the view and captures the Response object
+     * 2. Validates that controller class and action method exist
+     * 3. Instantiates the controller (which creates its own View instance)
+     * 4. Creates a simulated Request object with route parameters substituted
+     * 5. Injects the Request into the controller's view
+     * 6. Calls the action method on the controller
+     * 7. Renders the view and captures the Response object
      *
      * The resulting Response is stored in $this->response for assertions.
      *
      * @param string $route The route name as defined in routes.php (e.g., 'home', 'user_profile')
      * @param string $method The HTTP method to simulate (GET, POST, PUT, DELETE, etc.). Defaults to 'GET'.
      * @param array<string, mixed> $parameters Request parameters (query params for GET, body params for POST, etc.)
+     * @param array<string, mixed> $routeParameters Route placeholder values (e.g., ['id' => 123] for `/users/{id}`)
      * @param array<string, string> $server Server and headers parameters ($_SERVER values)
      * @param string|null $content Raw request body content
      * @return void
-     * @throws \RuntimeException If the route is not found in the route collection
+     * @throws \RuntimeException If the route is not found, controller/action are invalid, or the class doesn't exist
      */
     protected function executeAction(
         string $route,
         string $method = 'GET',
         array $parameters = [],
+        array $routeParameters = [],
         array $server = [],
         ?string $content = null,
     ): void {
@@ -78,23 +83,46 @@ abstract class ControllerTestCase extends TestCase
             throw new RuntimeException("Route `{$route}` not found. Available routes: {$availableRoutes}.");
         }
 
-        /** @var class-string<\eLonePath\Controller\Controller> $controllerClass */
+        // Validate controller and action defaults exist
         $controllerClass = $routeInfo->getDefault('_controller');
-        /** @var string $action */
         $action = $routeInfo->getDefault('_action');
 
-        if (!class_exists($controllerClass)) {
+        if ($controllerClass === null || $action === null) {
+            throw new RuntimeException(
+                "Route `{$route}` is missing required defaults: `_controller` and/or `_action`."
+            );
+        }
+
+        // Validate controller class exists and extends base Controller
+        if (!is_string($controllerClass) || !class_exists($controllerClass)) {
             throw new RuntimeException("Controller class `{$controllerClass}` does not exist.");
         }
-        if (!method_exists($controllerClass, $action)) {
+
+        if (!is_subclass_of($controllerClass, Controller::class)) {
+            throw new RuntimeException("Controller `{$controllerClass}` must extend " . Controller::class . ".");
+        }
+
+        // Validate action method exists
+        if (!is_string($action) || !method_exists($controllerClass, $action)) {
             throw new RuntimeException("Action `{$action}` does not exist in controller `{$controllerClass}`.");
         }
 
+        /** @var \eLonePath\Controller\Controller $controller */
         $controller = new $controllerClass();
 
-        // Create a simulated `Request` with proper parameters
+        // Replace route placeholders with actual values
         $path = $routeInfo->getPath();
+        foreach ($routeParameters as $key => $value) {
+            $path = str_replace("{{$key}}", (string)$value, $path);
+        }
+
+        // Create a simulated Request with proper parameters
         $request = Request::create($path, $method, $parameters, [], [], $server, $content);
+
+        // Set route parameters in request attributes
+        foreach ($routeParameters as $key => $value) {
+            $request->attributes->set($key, $value);
+        }
 
         // Set the controller in array format for View's autoDetectTemplate()
         $request->attributes->set('_controller', [$controllerClass, $action]);
@@ -118,10 +146,7 @@ abstract class ControllerTestCase extends TestCase
      */
     protected function assertResponseExists(): void
     {
-        $this->assertNotNull(
-            $this->response,
-            'Response has not been set. Did you call `executeAction()`?'
-        );
+        $this->assertNotNull($this->response, 'Response has not been set. Did you call `executeAction()`?');
     }
 
     /**
@@ -176,6 +201,20 @@ abstract class ControllerTestCase extends TestCase
     {
         $this->assertResponseExists();
         $this->assertTrue($this->response->isRedirect());
+    }
+
+    /**
+     * Asserts that the response is a redirect to a specific URL.
+     *
+     * @param string $expectedUrl The expected redirect URL
+     * @return void
+     */
+    protected function assertRedirectsTo(string $expectedUrl): void
+    {
+        $this->assertResponseExists();
+        $this->assertTrue($this->response->isRedirect(), 'Response is not a redirect.');
+
+        $this->assertSame($expectedUrl, $this->response->headers->get('Location'));
     }
 
     /**

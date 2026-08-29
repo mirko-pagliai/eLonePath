@@ -1,9 +1,8 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core;
+namespace App\Core\Routing;
 
-use App\Core\Routing\Route;
 use App\Core\Server\Request;
 
 final class Router

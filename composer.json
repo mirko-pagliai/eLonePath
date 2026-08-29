@@ -25,9 +25,9 @@
 	"scripts": {
 		"run-server": "php -S localhost:9996 -t webroot webroot/index.php",
 		"assets": [
-			"mkdir -p webroot/css webroot/js",
-			"ln -sfn ../../vendor/twbs/bootstrap/dist/css/bootstrap.min.css webroot/css/bootstrap.min.css",
-			"ln -sfn ../../vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js webroot/js/bootstrap.bundle.min.js"
+			"mkdir -p webroot/assets/css webroot/assets/js",
+			"ln -sfn ../../../vendor/twbs/bootstrap/dist/css/bootstrap.min.css webroot/assets/css/bootstrap.min.css",
+			"ln -sfn ../../../vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js webroot/assets/js/bootstrap.bundle.min.js"
 		],
 		"post-install-cmd": [
 			"@assets"

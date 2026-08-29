@@ -11,7 +11,6 @@ use App\Core\Application;
 use App\Core\Dispatcher;
 use App\Core\ErrorHandler;
 use App\Core\Routing\Router;
-use App\Core\View\View;
 use josegonzalez\Dotenv\Loader;
 
 if (PHP_SAPI === 'cli-server') {

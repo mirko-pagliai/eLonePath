@@ -4,7 +4,8 @@
 	"type": "project",
 	"license": "MIT",
 	"require": {
-		"php": "^8.4"
+		"php": "^8.4",
+		"twbs/bootstrap": "5.3.8"
 	},
 	"require-dev": {
 		"cakephp/cakephp-codesniffer": "^5.3.2",
@@ -22,7 +23,18 @@
 		]
 	},
 	"scripts": {
-		"run-server": "php -S localhost:9996 -t webroot webroot/index.php"
+		"run-server": "php -S localhost:9996 -t webroot webroot/index.php",
+		"assets": [
+			"mkdir -p webroot/css webroot/js",
+			"ln -sfn ../../vendor/twbs/bootstrap/dist/css/bootstrap.min.css webroot/css/bootstrap.min.css",
+			"ln -sfn ../../vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js webroot/js/bootstrap.bundle.min.js"
+		],
+		"post-install-cmd": [
+			"@assets"
+		],
+		"post-update-cmd": [
+			"@assets"
+		]
 	},
 	"config": {
 		"allow-plugins": {

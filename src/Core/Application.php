@@ -22,6 +22,7 @@ final readonly class Application
         try {
             $route = $this->router->dispatch($request);
 
+            // `Application` takes the router result and passes it to the dispatcher
             $response = $this->dispatcher->dispatch(
                 $route['controller'],
                 $route['action'],

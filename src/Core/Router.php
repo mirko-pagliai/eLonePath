@@ -9,7 +9,31 @@ use App\Core\Server\Request;
 final class Router
 {
     /**
-     * @return array{controller: string, action: string, params: list<string>}
+     * Handles the dispatch process by resolving the controller, action, and parameters from the given request's path.
+     *
+     * It receives:
+     * ```
+     * /pages/view/123
+     * ```
+     * and divides it into segments:
+     * ```
+     * pages
+     * view
+     * 123
+     * ```
+     *
+     * The returned result is:
+     * ```
+     *  [
+     *      'controller' => 'App\\Controller\\PagesController',
+     *      'action' => 'view',
+     *      'params' => ['123'],
+     *  ]
+     * ```
+     *
+     * @param \App\Core\Server\Request $request The HTTP request instance containing the path information.
+     * @return array{controller: string, action: string, params: list<string>} An associative array containing the
+     * resolved 'controller' class, 'action' method, and 'params' to be passed to the action.
      */
     public function dispatch(Request $request): array
     {
@@ -19,11 +43,7 @@ final class Router
         $action = $segments[1] ?? 'index';
         $params = array_slice($segments, 2);
 
-        return [
-            'controller' => $this->controllerClass($controller),
-            'action' => $action,
-            'params' => $params,
-        ];
+        return ['controller' => $this->controllerClass($controller)] + compact('action', 'params');
     }
 
     /**

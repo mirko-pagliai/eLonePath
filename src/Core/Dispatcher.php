@@ -18,28 +18,38 @@ final readonly class Dispatcher
     }
 
     /**
+     * It receives the router result.
+     *
+     * It first checks that:
+     *
+     * - the class exists and extends `Controller`;
+     * - the method exists and is public.
+     *
+     * It then instantiates the class with the view, resolves the arguments, and executes the requested method.
+     *
+     * If the method returns a response, it returns that. Otherwise, it automatically proceeds with rendering.
+     *
      * @param list<string> $params
      */
     public function dispatch(string $controllerClass, string $action, array $params): Response
     {
         if (!class_exists($controllerClass)) {
-            throw new HttpException("Controller not found: {$controllerClass}");
+            throw new HttpException("Controller not found: $controllerClass.");
         }
 
         if (!is_subclass_of($controllerClass, Controller::class)) {
-            throw new RuntimeException("{$controllerClass} must extend Controller.");
+            throw new RuntimeException("$controllerClass must extend Controller.");
         }
 
         if (!method_exists($controllerClass, $action)) {
-            throw new HttpException("Action not found: {$controllerClass}::{$action}()");
+            throw new HttpException("Action not found: $controllerClass::$action().");
         }
 
         $controller = new $controllerClass($this->view);
 
         $method = new ReflectionMethod($controller, $action);
-
         if (!$method->isPublic()) {
-            throw new HttpException("Action is not public: {$controllerClass}::{$action}()");
+            throw new HttpException("Action is not public: $controllerClass::$action().");
         }
 
         $arguments = $this->resolveArguments($method, $params);
@@ -85,6 +95,14 @@ final readonly class Dispatcher
         return $arguments;
     }
 
+    /**
+     * Converts a string value to a specified type based on the provided parameter's type hint.
+     *
+     * @param string $value The string value to be converted.
+     * @param \ReflectionParameter $parameter The reflection parameter containing type information for the conversion.
+     * @return mixed The converted value, matching the parameter's type hint.
+     * @throws \App\Core\Exception\HttpException If the conversion fails due to an invalid value matching a built-in type.
+     */
     private function convert(string $value, ReflectionParameter $parameter): mixed
     {
         $type = $parameter->getType();

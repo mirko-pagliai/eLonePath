@@ -9,6 +9,21 @@ final class Request
     {
     }
 
+    /**
+     * Captures the current HTTP request method and URI, then returns a new instance of the class.
+     *
+     * It receives:
+     * ```
+     * REQUEST_URI = /pages/view/123
+     * REQUEST_METHOD = GET
+     * ```
+     * and builds:
+     * ```
+     * new Request('GET', '/pages/view/123')
+     * ```
+     *
+     * @return self An instance of the class initialized with the HTTP method and URI.
+     */
     public static function capture(): self
     {
         $url = $_SERVER['REQUEST_URI'] ?? '/';

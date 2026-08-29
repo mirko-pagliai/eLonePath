@@ -5,9 +5,7 @@
 
     <file>.</file>
 
-    <rule ref="PSR12"/>
-
-    <rule ref="SlevomatCodingStandard"/>
+    <rule ref="./vendor/cakephp/cakephp-codesniffer/CakePHP/ruleset.xml"/>
 
     <rule ref="Generic.Files.LineLength.TooLong">
         <severity>0</severity>

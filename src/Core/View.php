@@ -9,10 +9,8 @@ final class View
 {
     private array $data = [];
 
-    public function __construct(
-        private readonly string $templatesPath,
-        private readonly string $layout = 'layout',
-    ) {
+    public function __construct(private readonly string $templatesPath)
+    {
     }
 
     public function set(array $data): void

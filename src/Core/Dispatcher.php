@@ -32,7 +32,7 @@ final readonly class Dispatcher
         $method = new ReflectionMethod($controller, $action);
 
         if (!$method->isPublic()) {
-            return new Response('Not Found', 400);
+            throw new HttpException(400, "Action is not public: {$controllerClass}::{$action}()");
         }
 
         $arguments = $this->resolveArguments($method, $params);

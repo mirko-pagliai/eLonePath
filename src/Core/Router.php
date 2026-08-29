@@ -3,17 +3,18 @@ declare(strict_types=1);
 
 namespace App\Core;
 
-use App\Core\Exception\RouteNotFoundException;
+use App\Core\Routing\Route;
 use App\Core\Server\Request;
 
 final class Router
 {
     /**
-     * @param \App\Core\Server\Request $request The HTTP request instance containing the path information.
-     * @return array{controller: class-string<\App\Core\Controller>, action: string, params: list<string>} Associative
-     * array containing the resolved 'controller' class, 'action' method, and 'params' to be passed to the action.
+     * Handles the routing of a given request by determining the controller, action, and parameters.
+     *
+     * @param \App\Core\Server\Request $request The incoming request containing the path to be dispatched.
+     * @return \App\Core\Routing\Route Returns the resolved route for the given request.
      */
-    public function dispatch(Request $request): array
+    public function dispatch(Request $request): Route
     {
         $segments = $this->segments($request->path());
 
@@ -33,15 +34,10 @@ final class Router
 
     /**
      * @param list<string> $params
-     * @return array{controller: class-string<\App\Core\Controller>, action: string, params: list<string>}
      */
-    public function resolve(string $controller, string $action, array $params = []): array
+    public function resolve(string $controller, string $action, array $params = []): Route
     {
-        return [
-            'controller' => $this->controllerClass($controller),
-            'action' => $action,
-            'params' => $params,
-        ];
+        return new Route($controller, $action, $params);
     }
 
     /**
@@ -61,27 +57,5 @@ final class Router
                 callback: fn(string $segment): bool => $segment !== '',
             ),
         );
-    }
-
-    /**
-     * @param string $name
-     * @return class-string<\App\Core\Controller>
-     */
-    private function controllerClass(string $name): string
-    {
-        if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_-]*$/', $name)) {
-            throw new RouteNotFoundException("Invalid controller name: $name.");
-        }
-
-        $name = str_replace(
-            ' ',
-            '',
-            ucwords(str_replace(['-', '_'], ' ', $name)),
-        );
-
-        /** @var class-string<\App\Core\Controller> $className */
-        $className = "App\\Controller\\{$name}Controller";
-
-        return $className;
     }
 }

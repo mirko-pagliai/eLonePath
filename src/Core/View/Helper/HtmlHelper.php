@@ -5,14 +5,10 @@ namespace App\Core\View\Helper;
 
 use App\Core\Dispatcher;
 use App\Core\Exception\RouteNotFoundException;
-use App\Core\Router;
+use App\Core\Routing\Route;
 
 final class HtmlHelper
 {
-    public function __construct(private readonly Router $router)
-    {
-    }
-
     /**
      * @param array<string|int, string|int|float|bool> $route
      */
@@ -29,35 +25,21 @@ final class HtmlHelper
 
         foreach ($route as $key => $value) {
             if (is_string($key) && !in_array($key, ['controller', 'action'], true)) {
-                throw new RouteNotFoundException("Invalid route parameter: {$key}.");
+                throw new RouteNotFoundException("Invalid route parameter: `$key`.");
             }
 
             if (is_int($key)) {
-                $params[] = $value;
+                $params[] = (string)$value;
             }
         }
 
-        $params = array_map(
-            callback: static fn(mixed $value): string => (string)$value,
-            array: $params,
-        );
+        $route = new Route($controller, $action, $params);
 
-        $resolved = $this->router->resolve($controller, $action, $params);
+        $method = Dispatcher::getMethod($route);
 
-        $method = Dispatcher::getMethod($resolved['controller'], $resolved['action']);
+        Dispatcher::resolveArguments($method, $route->params);
 
-        Dispatcher::resolveArguments($method, $resolved['params']);
-
-        $segments = [
-            strtolower($controller),
-            $action,
-            ...$resolved['params'],
-        ];
-
-        return '/' . implode('/', array_map(
-            callback: static fn(string $value): string => rawurlencode($value),
-            array: $segments,
-        ));
+        return $route->path();
     }
 
     /**

@@ -5,6 +5,7 @@ namespace App\Core;
 
 use App\Core\Exception\HttpException;
 use App\Core\Exception\RouteNotFoundException;
+use App\Core\Routing\Route;
 use App\Core\Server\Response;
 use App\Core\View\View;
 use ReflectionMethod;
@@ -19,19 +20,17 @@ final readonly class Dispatcher
     }
 
     /**
-     * @param class-string<\App\Core\Controller> $controllerClass
-     * @param string $action
-     * @param list<string> $params
+     * @param \App\Core\Routing\Route $route
      * @return \App\Core\Server\Response
-     * @throws \ReflectionException
      */
-    public function dispatch(string $controllerClass, string $action, array $params): Response
+    public function dispatch(Route $route): Response
     {
-        $method = self::getMethod($controllerClass, $action);
+        $controllerClass = $route->controllerClass();
+        $method = self::getMethod($route);
 
-        $controller = new $controllerClass($this->view);
+        $controller = new ($controllerClass)($this->view);
 
-        $arguments = self::resolveArguments($method, $params);
+        $arguments = self::resolveArguments($method, $route->params);
 
         $result = $method->invokeArgs($controller, $arguments);
 
@@ -39,30 +38,31 @@ final readonly class Dispatcher
             return $result;
         }
 
-        $content = $controller->render($this->templateName($controllerClass, $action));
+        $template = $this->templateName($controllerClass, $route->action);
+        $content = $controller->render($template);
 
         return new Response($content);
     }
 
-    public static function getMethod(string $controllerClass, string $action): ReflectionMethod
+    public static function getMethod(Route $route): ReflectionMethod
     {
+        $controllerClass = $route->controllerClass();
+
         if (!class_exists($controllerClass)) {
-            throw new RouteNotFoundException("Controller not found: {$controllerClass}");
+            throw new RouteNotFoundException("Controller not found: `$controllerClass`");
         }
 
         if (!is_subclass_of($controllerClass, Controller::class)) {
-            throw new RuntimeException(
-                "$controllerClass must extend `" . Controller::class . '`.',
-            );
+            throw new RuntimeException("$controllerClass must extend `" . Controller::class . '`.');
         }
 
-        if (!method_exists($controllerClass, $action)) {
-            throw new RouteNotFoundException("Action not found: $controllerClass::$action().");
+        if (!method_exists($controllerClass, $route->action)) {
+            throw new RouteNotFoundException("Action not found: `$controllerClass::$route->action()`.");
         }
 
-        $method = new ReflectionMethod($controllerClass, $action);
+        $method = new ReflectionMethod($controllerClass, $route->action);
         if (!$method->isPublic()) {
-            throw new RouteNotFoundException("Action is not public: $controllerClass::$action().");
+            throw new RouteNotFoundException("Action is not public: `$controllerClass::$route->action()`.");
         }
 
         return $method;

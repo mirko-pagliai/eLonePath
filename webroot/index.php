@@ -38,7 +38,7 @@ $config = require dirname(__DIR__) . '/config/config.php';
 
 $router = new Router();
 
-$view = new View(dirname(__DIR__) . '/templates', $router);
+$view = new View(dirname(__DIR__) . '/templates');
 
 $errorHandler = new ErrorHandler($view, debug: $config['app']['debug']);
 

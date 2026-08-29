@@ -19,13 +19,21 @@ use App\Core\Dispatcher;
 use App\Core\ErrorHandler;
 use App\Core\Router;
 use App\Core\View\View;
+use josegonzalez\Dotenv\Loader;
+
+$envFile = dirname(__DIR__) . '/.env';
+if (file_exists($envFile)) {
+    new Loader($envFile)
+        ->parse()
+        ->toEnv();
+}
+
+$config = require dirname(__DIR__) . '/config/config.php';
 
 $view = new View(dirname(__DIR__) . '/templates');
 
-$app = new Application(
-    new Router(),
-    new Dispatcher($view),
-    new ErrorHandler($view, debug: true),
-);
+$errorHandler = new ErrorHandler($view, debug: $config['app']['debug']);
+
+$app = new Application(new Router(), new Dispatcher($view), $errorHandler);
 
 $app->run();

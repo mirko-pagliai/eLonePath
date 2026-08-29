@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Core\Exception\HttpException;
+use App\Core\Server\Response;
+use App\Core\View\View;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;

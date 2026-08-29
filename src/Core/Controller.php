@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Core\View\View;
+
 abstract class Controller
 {
     public function __construct(protected readonly View $view)

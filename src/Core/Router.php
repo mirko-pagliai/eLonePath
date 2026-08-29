@@ -3,6 +3,9 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Core\Exception\HttpException;
+use App\Core\Server\Request;
+
 final class Router
 {
     /**

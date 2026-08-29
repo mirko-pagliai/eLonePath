@@ -18,7 +18,7 @@ use App\Core\Application;
 use App\Core\Dispatcher;
 use App\Core\ErrorHandler;
 use App\Core\Router;
-use App\Core\View;
+use App\Core\View\View;
 
 $view = new View(dirname(__DIR__) . '/templates');
 

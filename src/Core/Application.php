@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Core;
 
+use App\Core\Server\Request;
 use Throwable;
 
 final readonly class Application

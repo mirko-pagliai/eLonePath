@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\Core\Routing;
 
+use App\Core\Controller;
 use App\Core\Exception\RouteNotFoundException;
+use ReflectionMethod;
 
 final readonly class Route
 {
@@ -14,6 +16,32 @@ final readonly class Route
     {
         if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_-]*$/', $controller)) {
             throw new RouteNotFoundException("Invalid controller name: `$controller`.");
+        }
+
+        $controllerClass = $this->controllerClass();
+
+        if (!class_exists($controllerClass)) {
+            throw new RouteNotFoundException("Controller not found: `$controllerClass`.");
+        }
+
+        if (!is_subclass_of($controllerClass, Controller::class)) {
+            throw new RouteNotFoundException(
+                "$controllerClass must extend `" . Controller::class . '`.',
+            );
+        }
+
+        if (!method_exists($controllerClass, $action)) {
+            throw new RouteNotFoundException(
+                "Action not found: `$controllerClass::$action()`.",
+            );
+        }
+
+        $method = new ReflectionMethod($controllerClass, $action);
+
+        if (!$method->isPublic()) {
+            throw new RouteNotFoundException(
+                "Action is not public: `$controllerClass::$action()`.",
+            );
         }
     }
 

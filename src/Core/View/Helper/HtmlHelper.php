@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Core\View\Helper;
 
-use App\Core\Dispatcher;
 use App\Core\Exception\RouteNotFoundException;
 use App\Core\Routing\Route;
 
@@ -33,13 +32,7 @@ final class HtmlHelper
             }
         }
 
-        $route = new Route($controller, $action, $params);
-
-        $method = Dispatcher::getMethod($route);
-
-        Dispatcher::resolveArguments($method, $route->params);
-
-        return $route->path();
+        return new Route($controller, $action, $params)->path();
     }
 
     /**

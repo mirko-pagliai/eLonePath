@@ -30,7 +30,7 @@ final class View
         $this->data = array_merge($this->data, $data);
     }
 
-    public function render(string $template, string $layout): string
+    public function render(string $template, ?string $layout = 'default'): string
     {
         $templateFile = $this->templatesPath . "/$template.php";
 

@@ -10,8 +10,9 @@ final class Router
 {
     /**
      * @param \App\Core\Server\Request $request The HTTP request instance containing the path information.
-     * @return array{controller: string, action: string, params: list<string>} An associative array containing the
-     * resolved 'controller' class, 'action' method, and 'params' to be passed to the action.*/
+     * @return array{controller: class-string<\App\Core\Controller>, action: string, params: list<string>} Associative
+     * array containing the resolved 'controller' class, 'action' method, and 'params' to be passed to the action.
+     */
     public function dispatch(Request $request): array
     {
         $segments = $this->segments($request->path());
@@ -32,7 +33,7 @@ final class Router
 
     /**
      * @param list<string> $params
-     * @return array{controller: string, action: string, params: list<string>}
+     * @return array{controller: class-string<\App\Core\Controller>, action: string, params: list<string>}
      */
     public function resolve(string $controller, string $action, array $params = []): array
     {
@@ -56,16 +57,20 @@ final class Router
 
         return array_values(
             array_filter(
-                explode('/', $path),
-                static fn(string $segment): bool => $segment !== '',
+                array: explode('/', $path),
+                callback: fn(string $segment): bool => $segment !== '',
             ),
         );
     }
 
+    /**
+     * @param string $name
+     * @return class-string<\App\Core\Controller>
+     */
     private function controllerClass(string $name): string
     {
         if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_-]*$/', $name)) {
-            throw new RouteNotFoundException("Invalid controller name: {$name}");
+            throw new RouteNotFoundException("Invalid controller name: $name.");
         }
 
         $name = str_replace(
@@ -74,6 +79,9 @@ final class Router
             ucwords(str_replace(['-', '_'], ' ', $name)),
         );
 
-        return 'App\\Controller\\' . $name . 'Controller';
+        /** @var class-string<\App\Core\Controller> $className */
+        $className = "App\\Controller\\{$name}Controller";
+
+        return $className;
     }
 }

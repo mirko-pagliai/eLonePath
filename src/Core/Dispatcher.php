@@ -19,7 +19,11 @@ final readonly class Dispatcher
     }
 
     /**
+     * @param class-string<\App\Core\Controller> $controllerClass
+     * @param string $action
      * @param list<string> $params
+     * @return \App\Core\Server\Response
+     * @throws \ReflectionException
      */
     public function dispatch(string $controllerClass, string $action, array $params): Response
     {
@@ -35,7 +39,7 @@ final readonly class Dispatcher
             return $result;
         }
 
-        $content = $this->view->render($this->templateName($controllerClass, $action));
+        $content = $controller->render($this->templateName($controllerClass, $action));
 
         return new Response($content);
     }

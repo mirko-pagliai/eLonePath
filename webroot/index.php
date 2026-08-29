@@ -14,6 +14,7 @@ use App\Core\Routing\Router;
 use App\Core\View\View;
 use josegonzalez\Dotenv\Loader;
 
+
 if (PHP_SAPI === 'cli-server') {
     $url = $_SERVER['REQUEST_URI'] ?? '/';
     assert(is_string($url));
@@ -26,19 +27,20 @@ if (PHP_SAPI === 'cli-server') {
 }
 
 require dirname(__DIR__) . '/vendor/autoload.php';
+require dirname(__DIR__) . '/config/bootstrap.php';
 
-$envFile = dirname(__DIR__) . '/.env';
+$envFile = ROOT . '/.env';
 if (file_exists($envFile)) {
     new Loader($envFile)
         ->parse()
         ->toEnv();
 }
 
-$config = require dirname(__DIR__) . '/config/config.php';
+$config = require ROOT . '/config/config.php';
 
 $router = new Router();
 
-$view = new View(dirname(__DIR__) . '/templates');
+$view = new View(ROOT . '/templates');
 
 $errorHandler = new ErrorHandler($view, debug: $config['app']['debug']);
 

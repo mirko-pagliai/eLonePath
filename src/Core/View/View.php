@@ -16,7 +16,7 @@ final class View
      */
     private array $data = [];
 
-    public function __construct(private readonly string $templatesPath)
+    public function __construct(private readonly string $templatesPath = ROOT . '/templates')
     {
         $this->Html = new HtmlHelper();
     }

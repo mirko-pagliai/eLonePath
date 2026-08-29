@@ -1,0 +1,205 @@
+{
+    "format": {
+        "version": "1.0"
+    },
+    "game": {
+        "id": "la_torre_oltre_il_bosco",
+        "title": "La Torre oltre il Bosco",
+        "author": "Mirko Pagliai - mirko.pagliai@gmail.com",
+        "description": ""
+    },
+    "settings": {
+        "language": "it"
+    },
+    "variables": {},
+    "nodes": {
+        "1": {
+            "type": "story",
+            "content": "Il sole è ormai tramontato quando raggiungi **Valdombra**. Le ultime strisce di luce si sono ritirate dietro le montagne e, nelle vie del villaggio, le prime lanterne vengono accese una dopo l'altra.\n\nSulla collina, oltre il bosco, una torre *nera* emerge dalla nebbia. È troppo lontana per distinguerne i dettagli, eppure la sua sagoma sembra incredibilmente nitida, quasi fosse più vicina di quanto dovrebbe. Nessuna luce brilla dalle finestre strette che interrompono le sue mura.\n\nAppena entri nella piazza, ti accorgi che gli abitanti evitano di guardare verso la collina. Quando provi a chiedere della torre, le conversazioni si interrompono e le porte si chiudono con discrezione.\n\n> Nessuno sembra disposto a parlartene.\n\nLa notte sta calando rapidamente. Se vuoi raggiungere la torre, dovrai decidere da solo da dove cominciare.",
+            "choices": [
+                {
+                    "text": "Se vuoi attraversare il bosco, vai a pagina {{page}}",
+                    "target": "2"
+                },
+                {
+                    "text": "Se vuoi cercare qualcuno che possa aiutarti, vai a pagina {{page}}",
+                    "target": "3"
+                }
+            ]
+        },
+        "2": {
+            "type": "story",
+            "content": "Il sentiero si inoltra tra gli alberi e, dopo pochi minuti, le ultime luci di Valdombra scompaiono completamente dietro i tronchi. Il bosco è molto più fitto di quanto sembrasse dalla collina. I rami si intrecciano sopra la testa e la nebbia si raccoglie bassa tra le radici.\n\nCammini cercando di seguire il sentiero, ma il silenzio viene interrotto da un rumore secco alle tue spalle.\n\nTi volti.\n\nNulla.\n\nSoltanto alberi scuri e il sottile movimento della nebbia.\n\nRiprendi a camminare. Pochi passi dopo, il rumore ricomincia, questa volta davanti a te. Un ramo scricchiola. Poi un altro.\n\nTra i rami compare una figura incappucciata. È immobile e sembra aspettare proprio te.",
+            "choices": [
+                {
+                    "text": "Se vuoi chiedere chi è, vai a pagina {{page}}",
+                    "target": "4"
+                },
+                {
+                    "text": "Se vuoi proseguire senza fermarsi, vai a pagina {{page}}",
+                    "target": "5"
+                }
+            ]
+        },
+        "3": {
+            "type": "story",
+            "content": "Nella locanda trovi una vecchia donna seduta accanto al fuoco. Tiene le mani raccolte intorno a una tazza e osserva le fiamme senza parlare. Quando nomini la torre, il suo volto cambia: per un istante sembra più stanca e molto più vecchia.\n\n«Quella torre non appartiene più a questo mondo.»\n\nLa frase viene pronunciata a bassa voce, come se anche il fuoco potesse ascoltarla.\n\nTi racconta che, molti anni prima, un cavaliere entrò nella torre per affrontare il signore che vi abitava. Nessuno seppe mai cosa accadde al suo interno. Il cavaliere non tornò e, da allora, la torre è rimasta chiusa.\n\nSecondo la donna, però, alcune notti si può vedere una luce muoversi dietro le finestre più alte.\n\nPrima che tu possa fare altre domande, la donna ti indica la porta.\n\n«Se vuoi andare lassù, almeno non andarci dopo mezzanotte.»\n\nFuori, il cielo è ormai completamente buio.",
+            "choices": [
+                {
+                    "text": "Se vuoi chiederle di accompagnarti, vai a pagina {{page}}",
+                    "target": "6"
+                },
+                {
+                    "text": "Se vuoi partire immediatamente, vai a pagina {{page}}",
+                    "target": "2"
+                }
+            ]
+        },
+        "4": {
+            "type": "story",
+            "content": "La figura abbassa lentamente il cappuccio.\n\nÈ un uomo anziano, con il volto scavato e una lunga cicatrice che gli attraversa la guancia fino alla mascella. I suoi occhi, però, sono vigili e ti osservano con attenzione.\n\n«Sei diretto alla torre.»\n\nNon è una domanda.\n\nPrima che tu possa rispondere, l'uomo aggiunge:\n\n«Quasi tutti quelli che arrivano a Valdombra prima o poi guardano quella collina. Pochissimi decidono di salirci.»\n\nIndica un punto tra gli alberi.\n\n«Posso mostrarti una strada sicura. Ma dovrai fidarti di me.»\n\nPer qualche istante nessuno dei due parla. Nel bosco, alle tue spalle, senti di nuovo un ramo spezzarsi.",
+            "choices": [
+                {
+                    "text": "Se vuoi accettare il suo aiuto, vai a pagina {{page}}",
+                    "target": "7"
+                },
+                {
+                    "text": "Se vuoi rifiutare e continuare da solo, vai a pagina {{page}}",
+                    "target": "5"
+                }
+            ]
+        },
+        "5": {
+            "type": "story",
+            "content": "Ignori lo sconosciuto e continui lungo il sentiero.\n\nIl bosco diventa sempre più fitto. La luce della sera è ormai quasi scomparsa e procedi affidandoti soprattutto alla debole luminosità che filtra tra le nuvole.\n\nDopo qualche minuto il sentiero si divide in due.\n\nA sinistra senti il rumore di un torrente. L'acqua scorre con forza, anche se non riesci a vederla.\n\nA destra, invece, compare una debole luce tra gli alberi. È calda e tremolante, come quella di una lanterna, ma non riesci a capire da dove provenga.\n\nIl sentiero davanti a te è completamente deserto.\n\nPuoi scegliere una delle due direzioni.",
+            "choices": [
+                {
+                    "text": "Se vuoi seguire la luce, vai a pagina {{page}}",
+                    "target": "8"
+                },
+                {
+                    "text": "Se vuoi seguire il torrente, vai a pagina {{page}}",
+                    "target": "9"
+                }
+            ]
+        },
+        "6": {
+            "type": "story",
+            "content": "La vecchia scuote lentamente la testa.\n\n«No. Io sono già stata abbastanza vicina a quella torre.»\n\nPer un momento guarda verso la finestra della locanda. Fuori è ormai buio e, attraverso il vetro, la collina non è quasi più visibile.\n\nPoi apre una piccola tasca del suo mantello e ne estrae una candela sottile, consumata e macchiata di cera scura.\n\nTe la porge.\n\n«Portala con te.»\n\nQuando la prendi, aggiunge:\n\n«Quando la fiamma diventerà blu, non guardare dietro di te.»\n\nNon capisci cosa significhi e lei non sembra intenzionata a spiegartelo.\n\n«E qualunque cosa tu senta, continua a camminare.»\n\nAccetti il dono e lasci la locanda.",
+            "choices": [
+                {
+                    "text": "Se vuoi proseguire verso il bosco, vai a pagina {{page}}",
+                    "target": "2"
+                }
+            ]
+        },
+        "7": {
+            "type": "story",
+            "content": "L'uomo ti conduce fuori dal sentiero principale.\n\nAttraversate il bosco in silenzio, seguendo un passaggio così stretto che in alcuni punti devi farti strada tra i rami. L'uomo non sembra avere bisogno di una torcia: procede con sicurezza, come se conoscesse ogni albero e ogni pietra.\n\nDopo un lungo tratto raggiungete una radura.\n\nLa torre è davanti a voi.\n\nÈ molto più vicina di quanto immaginassi. Le sue mura nere salgono dalla nebbia fino a perdersi nell'oscurità, e nessuna delle finestre lascia filtrare luce.\n\nL'uomo si ferma.\n\n«Da qui devi proseguire da solo.»\n\nTi volti verso di lui, ma il vecchio ha già fatto qualche passo indietro.\n\nPrima che tu possa chiedergli altro, scompare tra gli alberi.\n\nDavanti a te c'è una porta di ferro.",
+            "choices": [
+                {
+                    "text": "Se vuoi entrare nella torre, vai a pagina {{page}}",
+                    "target": "10"
+                },
+                {
+                    "text": "Se vuoi cercare un'altra entrata, vai a pagina {{page}}",
+                    "target": "11"
+                }
+            ]
+        },
+        "8": {
+            "type": "story",
+            "content": "La luce proviene da una piccola cappella abbandonata.\n\nIl tetto è in parte crollato e l'edera ha invaso le pareti, ma una vecchia lanterna continua a bruciare accanto all'ingresso. Non sai chi possa averla accesa.\n\nAll'interno trovi un altare coperto di polvere. Sopra di esso è appoggiata una vecchia campana d'argento, annerita dal tempo ma stranamente intatta.\n\nTi avvicini e la sfiori.\n\nLa campana suona da sola.\n\nIl rintocco è limpido e sembra attraversare il bosco intero.\n\nDalla torre, in lontananza, arriva una risposta.\n\nUn rintocco.\n\nPoi un secondo.\n\nPoi un terzo.\n\nLa fiamma della lanterna vacilla.\n\nLa porta della cappella si chiude violentemente alle tue spalle.",
+            "choices": [
+                {
+                    "text": "Se vuoi provare a uscire, vai a pagina {{page}}",
+                    "target": "12"
+                },
+                {
+                    "text": "Se vuoi suonare di nuovo la campana, vai a pagina {{page}}",
+                    "target": "13"
+                }
+            ]
+        },
+        "9": {
+            "type": "story",
+            "content": "Segui il torrente, lasciandoti guidare dal rumore dell'acqua.\n\nDopo un lungo tratto raggiungi un piccolo ponte di pietra. Le pietre sono scivolose e ricoperte di muschio, e sotto di te il torrente scorre nero nell'oscurità.\n\nA metà del ponte trovi un cavaliere immobile.\n\nLa sua armatura è completamente ricoperta di ruggine. Non sembra esserci alcun punto in cui il metallo sia ancora lucido. Il cavaliere tiene la testa abbassata e le mani appoggiate sull'elsa di una spada.\n\nQuando ti avvicini, solleva lentamente la testa.\n\nNon riesci a vedere il suo volto attraverso l'elmo.\n\nEppure hai la netta sensazione che ti stia guardando.",
+            "choices": [
+                {
+                    "text": "Se vuoi attraversare il ponte, vai a pagina {{page}}",
+                    "target": "12"
+                },
+                {
+                    "text": "Se vuoi tornare indietro, vai a pagina {{page}}",
+                    "target": "5"
+                }
+            ]
+        },
+        "10": {
+            "type": "story",
+            "content": "La porta della torre si apre senza che tu la tocchi.\n\nAll'interno non c'è alcun corridoio. Solo una grande sala circolare, fredda e completamente vuota, attraversata da una scala che sale verso l'alto.\n\nL'aria odora di pietra umida.\n\nAl centro della sala trovi una statua di pietra raffigurante un cavaliere. È consumata dal tempo, ma l'armatura è ancora riconoscibile. Una mano stringe una spada spezzata; l'altra è appoggiata sul petto.\n\nQuando passi accanto alla statua, senti una voce.\n\n«Finalmente.»\n\nTi fermi.\n\nLa voce non sembra provenire da nessun punto preciso della stanza.\n\nPoi torna il silenzio.\n\nLa scala davanti a te sale nell'oscurità.",
+            "choices": [
+                {
+                    "text": "Se vuoi salire la scala, vai a pagina {{page}}",
+                    "target": "14"
+                },
+                {
+                    "text": "Se vuoi toccare la statua, vai a pagina {{page}}",
+                    "target": "13"
+                }
+            ]
+        },
+        "11": {
+            "type": "story",
+            "content": "Giri intorno alla torre cercando un'altra entrata.\n\nSul lato posteriore, nascosta tra le rocce e quasi completamente coperta dal muschio, trovi una piccola porta.\n\nÈ socchiusa.\n\nDall'interno proviene un vento gelido che porta con sé un odore di terra e pietra bagnata.\n\nEsiti per qualche istante, poi entri.\n\nLa porta si chiude alle tue spalle con un rumore secco.\n\nProvi a riaprirla, ma la maniglia non si muove.\n\nDavanti a te si apre un lungo corridoio sotterraneo. Le pareti sono scavate direttamente nella roccia e, a intervalli regolari, piccoli anelli di ferro sono fissati alla pietra.\n\nIn fondo al corridoio non riesci a distinguere nulla.",
+            "choices": [
+                {
+                    "text": "Se vuoi percorrere il corridoio, vai a pagina {{page}}",
+                    "target": "14"
+                },
+                {
+                    "text": "Se vuoi cercare di riaprire la porta, vai a pagina {{page}}",
+                    "target": "12"
+                }
+            ]
+        },
+        "12": {
+            "type": "ending",
+            "victory": false,
+            "content": "Corri.\n\nNon sai da cosa stai fuggendo, ma senti passi dietro di te.\n\nPrima lontani.\n\nPoi più vicini.\n\nIl rumore della tua corsa si confonde con quello di qualcosa che avanza alle tue spalle, senza fretta e senza mai inciampare.\n\nTi volti.\n\nLa figura del cavaliere arrugginito è ormai a pochi passi.\n\nCerchi di accelerare, ma il terreno cede sotto i tuoi piedi.\n\nQuando riapri gli occhi è mattina.\n\nGli abitanti di Valdombra trovano soltanto le tue impronte nel fango, che si interrompono improvvisamente ai margini del bosco.",
+            "choices": []
+        },
+        "13": {
+            "type": "ending",
+            "victory": false,
+            "content": "Appena la campana suona per la seconda volta, tutte le fiamme della cappella si spengono.\n\nIl buio è assoluto.\n\nPer qualche secondo senti soltanto il tuo respiro.\n\nPoi una voce parla accanto a te.\n\n«Hai risposto alla chiamata.»\n\nNon riesci a capire da dove provenga.\n\nUna mano gelida si posa sulla tua spalla.\n\nCerchi di voltarti, ma qualcosa ti trattiene.\n\nQuando finalmente torna la luce, nella cappella non c'è più nessuno.\n\nL'altare è vuoto.\n\nLa porta è aperta.\n\nFuori, il bosco è immobile.\n\nNemmeno tu sei più nella cappella.",
+            "choices": []
+        },
+        "14": {
+            "type": "story",
+            "content": "La scala termina in una stanza circolare.\n\nNon ci sono finestre e nessuna torcia illumina le pareti. Eppure riesci a vedere tutto con una chiarezza innaturale.\n\nAl centro della stanza si trova un trono di pietra.\n\nSeduto sul trono c'è un cavaliere in armatura nera. Non si muove, ma sai che è cosciente della tua presenza.\n\nDopo un lungo silenzio parla.\n\n«Sono morto cento anni fa.»\n\nLa voce è calma, quasi stanca.\n\n«Ma qualcuno deve ancora portare la mia corona fuori da questa torre.»\n\nIndica una corona d'argento appoggiata ai suoi piedi.\n\n«Prendila e sarai libero di andartene.»\n\nLa corona riflette una luce che non sai da dove provenga.\n\nIl cavaliere non aggiunge altro.",
+            "choices": [
+                {
+                    "text": "Se vuoi prendere la corona, vai a pagina {{page}}",
+                    "target": "15"
+                },
+                {
+                    "text": "Se vuoi rifiutare, vai a pagina {{page}}",
+                    "target": "16"
+                }
+            ]
+        },
+        "15": {
+            "type": "ending",
+            "victory": true,
+            "content": "Afferri la corona.\n\nPer un istante non accade nulla.\n\nPoi l'armatura del cavaliere si sgretola in una nuvola di polvere. Il trono rimane vuoto e la stanza viene attraversata da un boato profondo.\n\nLa torre comincia a tremare.\n\nCorri verso la scala mentre le pietre cadono intorno a te. Una parte del soffitto crolla alle tue spalle e per un momento temi di rimanere intrappolato.\n\nRiesci a raggiungere l'uscita.\n\nQuando raggiungi il bosco, la torre crolla alle tue spalle con un fragore che fa volare gli uccelli dagli alberi.\n\nAll'alba torni a Valdombra.\n\nGli abitanti escono lentamente dalle loro case. Quando vedono la corona che porti tra le mani, nessuno dice una parola.\n\nPoi, una dopo l'altra, le porte del villaggio si aprono.\n\nLa maledizione è finita.",
+            "choices": []
+        },
+        "16": {
+            "type": "ending",
+            "victory": false,
+            "content": "«Non voglio la tua corona.»\n\nIl cavaliere rimane immobile.\n\nPer qualche istante temi di aver commesso un errore.\n\nPoi sorride.\n\n«Allora resterai al suo posto.»\n\nLa porta alle tue spalle scompare.\n\nLa stanza diventa buia.\n\nCerchi di muoverti, ma le gambe non rispondono. Il freddo attraversa l'armatura e il silenzio della torre sembra diventare infinito.\n\nMolto tempo dopo, un viaggiatore entrerà nella torre e troverà un nuovo cavaliere seduto sul trono.\n\nIndossa la tua armatura.",
+            "choices": []
+        }
+    }
+}

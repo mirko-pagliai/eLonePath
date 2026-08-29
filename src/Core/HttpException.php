@@ -7,7 +7,7 @@ use RuntimeException;
 
 class HttpException extends RuntimeException
 {
-    public function __construct(private readonly int $statusCode, string $message = 'Bad Request')
+    public function __construct(string $message = 'Bad Request', private readonly int $statusCode = 400)
     {
         parent::__construct($message);
     }

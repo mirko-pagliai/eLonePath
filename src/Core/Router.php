@@ -45,7 +45,7 @@ final class Router
     private function controllerClass(string $name): string
     {
         if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_-]*$/', $name)) {
-            throw new HttpException(400, "Invalid controller name: {$name}");
+            throw new HttpException("Invalid controller name: {$name}");
         }
 
         $name = str_replace(

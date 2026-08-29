@@ -20,7 +20,7 @@ final readonly class Dispatcher
     public function dispatch(string $controllerClass, string $action, array $params): Response
     {
         if (!class_exists($controllerClass)) {
-            throw new HttpException(400, "Controller not found: {$controllerClass}");
+            throw new HttpException("Controller not found: {$controllerClass}");
         }
 
         if (!is_subclass_of($controllerClass, Controller::class)) {
@@ -28,7 +28,7 @@ final readonly class Dispatcher
         }
 
         if (!method_exists($controllerClass, $action)) {
-            throw new HttpException(400, "Action not found: {$controllerClass}::{$action}()");
+            throw new HttpException("Action not found: {$controllerClass}::{$action}()");
         }
 
         $controller = new $controllerClass($this->view);
@@ -36,7 +36,7 @@ final readonly class Dispatcher
         $method = new ReflectionMethod($controller, $action);
 
         if (!$method->isPublic()) {
-            throw new HttpException(400, "Action is not public: {$controllerClass}::{$action}()");
+            throw new HttpException("Action is not public: {$controllerClass}::{$action}()");
         }
 
         $arguments = $this->resolveArguments($method, $params);
@@ -61,7 +61,7 @@ final readonly class Dispatcher
         $parameters = $method->getParameters();
 
         if (count($params) !== count($parameters)) {
-            throw new HttpException(400, sprintf(
+            throw new HttpException(sprintf(
                 'Invalid number of parameters for %s::%s(). Expected %d, received %d.',
                 $method->getDeclaringClass()->getName(),
                 $method->getName(),
@@ -95,7 +95,6 @@ final readonly class Dispatcher
                 FILTER_VALIDATE_INT,
                 FILTER_NULL_ON_FAILURE,
             ) ?? throw new HttpException(
-                400,
                 "Invalid integer parameter '{$value}' for \${$parameter->getName()}.",
             ),
 
@@ -104,7 +103,6 @@ final readonly class Dispatcher
                 FILTER_VALIDATE_FLOAT,
                 FILTER_NULL_ON_FAILURE,
             ) ?? throw new HttpException(
-                400,
                 "Invalid float parameter '{$value}' for \${$parameter->getName()}.",
             ),
 
@@ -112,7 +110,6 @@ final readonly class Dispatcher
                 '1', 'true', 'yes' => true,
                 '0', 'false', 'no' => false,
                 default => throw new HttpException(
-                    400,
                     "Invalid boolean parameter '{$value}' for \${$parameter->getName()}.",
                 ),
             },

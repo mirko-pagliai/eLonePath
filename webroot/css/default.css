@@ -1,0 +1,118 @@
+@font-face {
+    font-family: 'Cinzel';
+    src: url('/fonts/cinzel/latin-wght-normal.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400 900;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'IM Fell English';
+    src: url('/fonts/im-fell-english/latin-400-normal.woff2') format('woff2');
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'IM Fell English';
+    src: url('/fonts/im-fell-english/latin-400-italic.woff2') format('woff2');
+    font-style: italic;
+    font-weight: 400;
+    font-display: swap;
+}
+
+:root {
+    --elone-paper: #eee2c8;
+    --elone-paper-dark: #d8c6a3;
+    --elone-ink: #30271f;
+    --elone-muted: #665543;
+    --elone-accent: #69452f;
+}
+
+body {
+    background-color: #29251f;
+    font-family: "IM Fell English", serif;
+    color: var(--elone-ink);
+}
+
+.elone-page {
+    /** max-width: 900px; */
+    background: radial-gradient(
+            ellipse at center,
+            var(--elone-paper) 0%,
+            #e8d9bb 75%,
+            var(--elone-paper-dark) 100%
+    );
+}
+
+.elone-title {
+    font-family: "Cinzel Variable", serif;
+}
+
+.story-page {
+    font-family: "Cinzel Variable", serif;
+    color: var(--elone-muted);
+}
+
+#story-content img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+}
+
+#story-content blockquote {
+    color: var(--elone-muted);
+    font-style: italic;
+}
+
+#story-choices button {
+    color: var(--elone-ink);
+    background-color: transparent;
+    border: 1px solid var(--elone-accent);
+    font-size: 1.4rem;
+    padding: .2rem .4rem;
+    text-align: left;
+}
+
+#story-choices button:hover {
+    background-color: rgba(105, 69, 47, 0.1);
+}
+
+.elone-button {
+    border: 1px solid var(--elone-accent);
+    border-radius: 0;
+    color: var(--elone-ink);
+    font-size: 1.5rem;
+    background-color: transparent;
+    font-family: "Cinzel Variable", serif;
+}
+
+.elone-button:hover {
+    color: var(--elone-paper);
+    background-color: var(--elone-accent);
+    border-color: var(--elone-accent);
+}
+
+#stories-list a {
+    color: var(--elone-ink);
+    border-bottom: 1px solid var(--elone-accent);
+}
+
+#stories-list a:hover {
+    background-color: rgba(105, 69, 47, 0.1);
+}
+
+#story-victory {
+    background-color: rgba(90, 110, 70, 0.12);
+}
+
+#story-defeat {
+    background-color: rgba(130, 70, 50, 0.12);
+}
+
+#story-victory a:hover,
+#story-defeat a:hover {
+    color: var(--elone-paper);
+    background-color: var(--elone-accent);
+}

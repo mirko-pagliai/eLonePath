@@ -44,7 +44,7 @@ final class HtmlHelper
 
         $resolved = $this->router->resolve($controller, $action, $params);
 
-        $method = Dispatcher::resolve($resolved['controller'], $resolved['action']);
+        $method = Dispatcher::getMethod($resolved['controller'], $resolved['action']);
 
         Dispatcher::resolveArguments($method, $resolved['params']);
 

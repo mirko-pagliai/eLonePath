@@ -23,7 +23,7 @@ final readonly class Dispatcher
      */
     public function dispatch(string $controllerClass, string $action, array $params): Response
     {
-        $method = self::resolve($controllerClass, $action);
+        $method = self::getMethod($controllerClass, $action);
 
         $controller = new $controllerClass($this->view);
 
@@ -40,7 +40,7 @@ final readonly class Dispatcher
         return new Response($content);
     }
 
-    public static function resolve(string $controllerClass, string $action): ReflectionMethod
+    public static function getMethod(string $controllerClass, string $action): ReflectionMethod
     {
         if (!class_exists($controllerClass)) {
             throw new RouteNotFoundException("Controller not found: {$controllerClass}");

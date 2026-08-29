@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\Core\View\Helper;
 
 use App\Core\Dispatcher;
+use App\Core\Exception\RouteNotFoundException;
 use App\Core\Router;
-use InvalidArgumentException;
 
 final class HtmlHelper
 {
@@ -13,31 +13,43 @@ final class HtmlHelper
     {
     }
 
+    /**
+     * @param array<string|int, string|int|float|bool> $route
+     */
     public function url(array $route): string
     {
-        $controller = $route[0] ?? null;
-        $action = $route[1] ?? 'index';
-        $params = array_slice($route, 2);
+        $controller = $route['controller'] ?? null;
+        $action = $route['action'] ?? 'index';
 
         if (!is_string($controller) || !is_string($action)) {
-            throw new InvalidArgumentException('Invalid route.');
+            throw new RouteNotFoundException('Invalid route.');
         }
 
-        $resolved = $this->router->resolve(
-            $controller,
-            $action,
-            array_map(
-                callback: static fn(mixed $value): string => (string)$value,
-                array: $params,
-            ),
+        $params = [];
+
+        foreach ($route as $key => $value) {
+            if (is_string($key) && !in_array($key, ['controller', 'action'], true)) {
+                throw new RouteNotFoundException("Invalid route parameter: {$key}.");
+            }
+
+            if (is_int($key)) {
+                $params[] = $value;
+            }
+        }
+
+        $params = array_map(
+            callback: static fn(mixed $value): string => (string)$value,
+            array: $params,
         );
+
+        $resolved = $this->router->resolve($controller, $action, $params);
 
         $method = Dispatcher::resolve($resolved['controller'], $resolved['action']);
 
         Dispatcher::resolveArguments($method, $resolved['params']);
 
         $segments = [
-            $controller,
+            strtolower($controller),
             $action,
             ...$resolved['params'],
         ];
@@ -48,6 +60,10 @@ final class HtmlHelper
         ));
     }
 
+    /**
+     * @param array<string|int, string|int|float|bool> $route
+     * @param array<string, string|int|float|bool> $attributes
+     */
     public function link(string $text, array $route, array $attributes = []): string
     {
         $htmlAttributes = '';
@@ -55,7 +71,7 @@ final class HtmlHelper
         foreach ($attributes as $name => $value) {
             $htmlAttributes .= sprintf(
                 ' %s="%s"',
-                htmlspecialchars((string)$name, ENT_QUOTES),
+                htmlspecialchars($name, ENT_QUOTES),
                 htmlspecialchars((string)$value, ENT_QUOTES),
             );
         }

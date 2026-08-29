@@ -17,7 +17,7 @@ final class Router
         $segments = $this->segments($request->path());
 
         // Default behavior with unspecified controller and action.
-        if (!$segments[0] && !$segments[1]) {
+        if (empty($segments[0]) && empty($segments[1])) {
             $controller = 'pages';
             $action = 'home';
         } else {

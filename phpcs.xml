@@ -7,6 +7,10 @@
 
     <rule ref="./vendor/cakephp/cakephp-codesniffer/CakePHP/ruleset.xml"/>
 
+    <rule ref="CakePHP.Commenting.FunctionComment.Missing">
+        <severity>0</severity>
+    </rule>
+
     <rule ref="Generic.Files.LineLength.TooLong">
         <severity>0</severity>
     </rule>

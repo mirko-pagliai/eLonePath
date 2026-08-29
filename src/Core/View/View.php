@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Core\View;
 
+use App\Core\Exception\TemplateNotFoundException;
 use RuntimeException;
 
 final class View
@@ -29,7 +30,7 @@ final class View
         $templateFile = $this->templatesPath . "/$template.php";
 
         if (!is_file($templateFile)) {
-            throw new RuntimeException("Template not found: $template");
+            throw new TemplateNotFoundException("Template not found: `$template.php`.");
         }
 
         $data = $this->data;

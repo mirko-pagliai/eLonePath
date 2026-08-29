@@ -1,0 +1,137 @@
+name: CI
+
+on:
+  pull_request:
+
+  push:
+    branches:
+      - master
+
+  schedule:
+    - cron: '0 0 * * 0' # weekly
+
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  testsuite:
+    runs-on: ubuntu-24.04
+    strategy:
+      fail-fast: false
+      matrix:
+        php-version: ['8.4', '8.5']
+        dependencies: ['highest']
+        include:
+          - php-version: '8.4'
+            dependencies: 'lowest'
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php-version }}
+          extensions: mbstring, intl
+          ini-values: zend.assertions = 1
+          coverage: pcov
+
+      - name: Composer install
+        uses: ramsey/composer-install@v3
+        with:
+          dependency-versions: ${{ matrix.dependencies }}
+
+      - name: Run PHPUnit
+        run: |
+          if [[ ${{ matrix.dependencies }} == 'highest' ]]; then
+            vendor/bin/phpunit --display-skipped --display-deprecations --display-warnings --coverage-clover=coverage.xml
+          else
+            vendor/bin/phpunit --display-deprecations --display-warnings
+          fi
+
+      - name: Submit code coverage
+        if: success() && matrix.dependencies == 'highest' && matrix.php-version == '8.5'
+        uses: codecov/codecov-action@v5
+        with:
+          token: ${{ secrets.CODECOV_TOKEN }}
+
+  testsuite-windows:
+    if: github.event_name == 'pull_request'
+    runs-on: windows-2022
+    name: Windows - PHP 8.4
+
+    env:
+      EXTENSIONS: mbstring, intl
+      PHP_VERSION: '8.4'
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Get date part for cache key
+        id: key-date
+        run: echo "date=$(date +'%Y-%m')" >> $env:GITHUB_OUTPUT
+
+      - name: Setup PHP extensions cache
+        id: php-ext-cache
+        uses: shivammathur/cache-extensions@v1
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: ${{ env.EXTENSIONS }}
+          key: ${{ steps.key-date.outputs.date }}
+
+      - name: Cache PHP extensions
+        uses: actions/cache@v4
+        with:
+          path: ${{ steps.php-ext-cache.outputs.dir }}
+          key: ${{ runner.os }}-php-ext-${{ steps.php-ext-cache.outputs.key }}
+          restore-keys: ${{ runner.os }}-php-ext-${{ steps.php-ext-cache.outputs.key }}
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ env.PHP_VERSION }}
+          extensions: ${{ env.EXTENSIONS }}
+          ini-values: zend.assertions = 1, extension = php_fileinfo.dll
+          coverage: none
+
+      - name: Composer install
+        uses: ramsey/composer-install@v3
+
+      - name: Run PHPUnit
+        run: |
+          vendor/bin/phpunit --display-incomplete
+
+  cs-stan:
+    name: Coding Standard & Static Analysis
+    runs-on: ubuntu-24.04
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          persist-credentials: false
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.5'
+          extensions: mbstring, intl
+          coverage: none
+          tools: cs2pr
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Composer install
+        uses: ramsey/composer-install@v3
+
+      - name: Run phpcs
+        run: vendor/bin/phpcs --report-full --report-checkstyle=./phpcs-report.xml
+
+      - name: Show phpcs results in PR
+        run: cs2pr ./phpcs-report.xml
+
+      - name: Run phpstan
+        run: vendor/bin/phpstan analyse --memory-limit=1G --error-format=github

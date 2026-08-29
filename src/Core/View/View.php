@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Core\View;
 
 use App\Core\Exception\TemplateNotFoundException;
+use App\Core\Router;
 use App\Core\View\Helper\HtmlHelper;
 use RuntimeException;
 
@@ -16,9 +17,9 @@ final class View
      */
     private array $data = [];
 
-    public function __construct(private readonly string $templatesPath)
+    public function __construct(private readonly string $templatesPath, Router $router)
     {
-        $this->Html = new HtmlHelper();
+        $this->Html = new HtmlHelper($router);
     }
 
     /**

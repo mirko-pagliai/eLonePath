@@ -36,10 +36,12 @@ if (file_exists($envFile)) {
 
 $config = require dirname(__DIR__) . '/config/config.php';
 
-$view = new View(dirname(__DIR__) . '/templates');
+$router = new Router();
+
+$view = new View(dirname(__DIR__) . '/templates', $router);
 
 $errorHandler = new ErrorHandler($view, debug: $config['app']['debug']);
 
-$app = new Application(new Router(), new Dispatcher($view), $errorHandler);
+$app = new Application($router, new Dispatcher($view), $errorHandler);
 
 $app->run();

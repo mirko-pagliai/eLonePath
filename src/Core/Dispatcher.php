@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Core;
 
 use App\Core\Exception\HttpException;
+use App\Core\Exception\RouteNotFoundException;
 use App\Core\Server\Response;
 use App\Core\View\View;
 use ReflectionMethod;
@@ -18,41 +19,15 @@ final readonly class Dispatcher
     }
 
     /**
-     * It receives the router result.
-     *
-     * It first checks that:
-     *
-     * - the class exists and extends `Controller`;
-     * - the method exists and is public.
-     *
-     * It then instantiates the class with the view, resolves the arguments, and executes the requested method.
-     *
-     * If the method returns a response, it returns that. Otherwise, it automatically proceeds with rendering.
-     *
      * @param list<string> $params
      */
     public function dispatch(string $controllerClass, string $action, array $params): Response
     {
-        if (!class_exists($controllerClass)) {
-            throw new HttpException("Controller not found: $controllerClass.");
-        }
-
-        if (!is_subclass_of($controllerClass, Controller::class)) {
-            throw new RuntimeException("$controllerClass must extend Controller.");
-        }
-
-        if (!method_exists($controllerClass, $action)) {
-            throw new HttpException("Action not found: $controllerClass::$action().");
-        }
+        $method = self::resolve($controllerClass, $action);
 
         $controller = new $controllerClass($this->view);
 
-        $method = new ReflectionMethod($controller, $action);
-        if (!$method->isPublic()) {
-            throw new HttpException("Action is not public: $controllerClass::$action().");
-        }
-
-        $arguments = $this->resolveArguments($method, $params);
+        $arguments = self::resolveArguments($method, $params);
 
         $result = $method->invokeArgs($controller, $arguments);
 
@@ -65,11 +40,35 @@ final readonly class Dispatcher
         return new Response($content);
     }
 
+    public static function resolve(string $controllerClass, string $action): ReflectionMethod
+    {
+        if (!class_exists($controllerClass)) {
+            throw new RouteNotFoundException("Controller not found: {$controllerClass}");
+        }
+
+        if (!is_subclass_of($controllerClass, Controller::class)) {
+            throw new RuntimeException(
+                "$controllerClass must extend `" . Controller::class . '`.',
+            );
+        }
+
+        if (!method_exists($controllerClass, $action)) {
+            throw new RouteNotFoundException("Action not found: $controllerClass::$action().");
+        }
+
+        $method = new ReflectionMethod($controllerClass, $action);
+        if (!$method->isPublic()) {
+            throw new RouteNotFoundException("Action is not public: $controllerClass::$action().");
+        }
+
+        return $method;
+    }
+
     /**
      * @param list<string> $params
      * @return list<mixed>
      */
-    private function resolveArguments(ReflectionMethod $method, array $params): array
+    public static function resolveArguments(ReflectionMethod $method, array $params): array
     {
         $parameters = $method->getParameters();
 
@@ -86,7 +85,7 @@ final readonly class Dispatcher
         $arguments = [];
 
         foreach ($parameters as $index => $parameter) {
-            $arguments[] = $this->convert(
+            $arguments[] = self::convert(
                 $params[$index],
                 $parameter,
             );
@@ -103,7 +102,7 @@ final readonly class Dispatcher
      * @return mixed The converted value, matching the parameter's type hint.
      * @throws \App\Core\Exception\HttpException If the conversion fails due to an invalid value matching a built-in type.
      */
-    private function convert(string $value, ReflectionParameter $parameter): mixed
+    private static function convert(string $value, ReflectionParameter $parameter): mixed
     {
         $type = $parameter->getType();
         if (!$type instanceof ReflectionNamedType || !$type->isBuiltin()) {

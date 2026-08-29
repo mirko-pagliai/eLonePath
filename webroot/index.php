@@ -14,7 +14,6 @@ use App\Core\Routing\Router;
 use App\Core\View\View;
 use josegonzalez\Dotenv\Loader;
 
-
 if (PHP_SAPI === 'cli-server') {
     $url = $_SERVER['REQUEST_URI'] ?? '/';
     assert(is_string($url));

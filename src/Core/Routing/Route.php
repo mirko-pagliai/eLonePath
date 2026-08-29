@@ -4,10 +4,12 @@ declare(strict_types=1);
 namespace App\Core\Routing;
 
 use App\Core\Controller;
+use App\Core\Exception\ActionNotFoundException;
+use App\Core\Exception\ControllerNotFoundException;
 use App\Core\Exception\RouteNotFoundException;
 use ReflectionMethod;
 
-final readonly class Route
+readonly class Route
 {
     /**
      * @param list<string> $params
@@ -19,29 +21,21 @@ final readonly class Route
         }
 
         $controllerClass = $this->controllerClass();
-
         if (!class_exists($controllerClass)) {
-            throw new RouteNotFoundException("Controller not found: `$controllerClass`.");
+            throw new ControllerNotFoundException("Controller not found: `$controllerClass`.");
         }
 
         if (!is_subclass_of($controllerClass, Controller::class)) {
-            throw new RouteNotFoundException(
-                "$controllerClass must extend `" . Controller::class . '`.',
-            );
+            throw new RouteNotFoundException("$controllerClass must extend `" . Controller::class . '`.');
         }
 
         if (!method_exists($controllerClass, $action)) {
-            throw new RouteNotFoundException(
-                "Action not found: `$controllerClass::$action()`.",
-            );
+            throw new ActionNotFoundException("Action not found: `$controllerClass::$action()`.");
         }
 
         $method = new ReflectionMethod($controllerClass, $action);
-
         if (!$method->isPublic()) {
-            throw new RouteNotFoundException(
-                "Action is not public: `$controllerClass::$action()`.",
-            );
+            throw new RouteNotFoundException("Action is not public: `$controllerClass::$action()`.");
         }
     }
 

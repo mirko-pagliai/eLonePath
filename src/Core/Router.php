@@ -21,7 +21,7 @@ final class Router
             $controller = 'pages';
             $action = 'home';
         } else {
-            $controller = $segments[0] ?? 'pages';
+            $controller = $segments[0];
             $action = $segments[1] ?? 'index';
         }
 

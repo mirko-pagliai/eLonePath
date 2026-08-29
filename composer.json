@@ -6,15 +6,22 @@
 	"require": {
 		"php": "^8.4"
 	},
-    "require-dev": {
-		"squizlabs/php_codesniffer": "^4.0"
-    },
+	"require-dev": {
+		"squizlabs/php_codesniffer": "^4.0",
+		"slevomat/coding-standard": "^8.16",
+		"phpstan/phpstan": "^2.2"
+	},
 	"autoload": {
 		"psr-4": {
 		  "App\\": "src/"
 		}
 	},
 	"scripts": {
-		"run-server": "php -S localhost:9996 -t public public/index.php"
+		"run-server": "php -S localhost:9996 -t webroot webroot/index.php"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }

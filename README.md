@@ -1,5 +1,5 @@
 Run with:
 
 ```bash
-$ php -S localhost:9996 -t public
+$ composer run-script run-server
 ```

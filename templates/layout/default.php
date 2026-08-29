@@ -11,9 +11,13 @@ declare(strict_types=1);
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title>My App</title>
+        <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
+        <link rel="stylesheet" href="/css/default.css">
+        <title>Elone Path</title>
     </head>
-    <body>
-        <?= $content ?>
+    <body class="min-vh-100">
+        <main class="container py-5">
+            <?= $content ?>
+        </main>
     </body>
 </html>

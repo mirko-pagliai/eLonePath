@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Core;
 
 use ReflectionMethod;
+use ReflectionNamedType;
 use ReflectionParameter;
 use RuntimeException;
 
@@ -13,6 +14,9 @@ final readonly class Dispatcher
     {
     }
 
+    /**
+     * @param list<string> $params
+     */
     public function dispatch(string $controllerClass, string $action, array $params): Response
     {
         if (!class_exists($controllerClass)) {
@@ -48,6 +52,10 @@ final readonly class Dispatcher
         return new Response($content);
     }
 
+    /**
+     * @param list<string> $params
+     * @return list<mixed>
+     */
     private function resolveArguments(ReflectionMethod $method, array $params): array
     {
         $parameters = $method->getParameters();
@@ -77,8 +85,7 @@ final readonly class Dispatcher
     private function convert(string $value, ReflectionParameter $parameter): mixed
     {
         $type = $parameter->getType();
-
-        if ($type === null || $type->isBuiltin() === false) {
+        if (!$type instanceof ReflectionNamedType || !$type->isBuiltin()) {
             return $value;
         }
 
@@ -120,11 +127,7 @@ final readonly class Dispatcher
     {
         $shortName = basename(str_replace('\\', '/', $controllerClass));
 
-        $controller = preg_replace(
-            '/Controller$/',
-            '',
-            $shortName,
-        );
+        $controller = substr($shortName, 0, -10);
 
         return strtolower($controller) . '/' . $action;
     }

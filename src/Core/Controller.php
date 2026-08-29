@@ -9,6 +9,9 @@ abstract class Controller
     {
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     protected function set(array $data): void
     {
         $this->view->set($data);

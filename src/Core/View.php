@@ -7,12 +7,18 @@ use RuntimeException;
 
 final class View
 {
+    /**
+     * @var array<string, mixed>
+     */
     private array $data = [];
 
     public function __construct(private readonly string $templatesPath)
     {
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     public function set(array $data): void
     {
         $this->data = array_merge($this->data, $data);
@@ -44,6 +50,9 @@ final class View
         return $this->renderLayout($content, $data, $layout);
     }
 
+    /**
+     * @param array<string, mixed> $data
+     */
     private function renderLayout(
         string $content,
         array $data,

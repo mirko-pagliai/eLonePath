@@ -5,6 +5,9 @@ namespace App\Core;
 
 final class Router
 {
+    /**
+     * @return array{controller: string, action: string, params: list<string>}
+     */
     public function dispatch(Request $request): array
     {
         $segments = $this->segments($request->path());
@@ -20,6 +23,9 @@ final class Router
         ];
     }
 
+    /**
+     * @return list<string>
+     */
     private function segments(string $path): array
     {
         $path = trim($path, '/');

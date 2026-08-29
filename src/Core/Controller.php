@@ -15,6 +15,18 @@ abstract class Controller
     }
 
     /**
+     * Renders the specified template with an optional layout.
+     *
+     * @param string $template The name of the template to be rendered.
+     * @param string|null $layout The name of the layout to apply. Defaults to 'default'.
+     * @return string The rendered output as a string.
+     */
+    public function render(string $template, ?string $layout = 'default'): string
+    {
+        return $this->view->render($template, $layout);
+    }
+
+    /**
      * Sets the provided data into the view.
      *
      * @param array<string, mixed> $data The data to be set in the view.

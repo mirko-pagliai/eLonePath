@@ -39,8 +39,15 @@ final class Router
     {
         $segments = $this->segments($request->path());
 
-        $controller = $segments[0] ?? 'home';
-        $action = $segments[1] ?? 'index';
+        // Default behavior with unspecified controller and action.
+        if (!$segments[0] && !$segments[1]) {
+            $controller = 'pages';
+            $action = 'home';
+        } else {
+            $controller = $segments[0] ?? 'pages';
+            $action = $segments[1] ?? 'index';
+        }
+
         $params = array_slice($segments, 2);
 
         return ['controller' => $this->controllerClass($controller)] + compact('action', 'params');

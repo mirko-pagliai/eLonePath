@@ -5,10 +5,17 @@ namespace App\Controller;
 
 use App\Core\Controller;
 
+/**
+ * Handles the pages-related actions within the application.
+ */
 final class PagesController extends Controller
 {
-    public function view(int $id): void
+    /**
+     * Handles the logic for the home functionality.
+     *
+     * @return void
+     */
+    public function home(): void
     {
-        $this->set(compact('id'));
     }
 }

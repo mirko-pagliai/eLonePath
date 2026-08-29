@@ -1,14 +1,20 @@
 {
-  "name": "mirko-pagliai/elone-path",
-  "description": "eLonePath is a data‑driven engine for interactive gamebooks inspired by classic solo gamebooks of the 1980s, designed to bring the book‑centric experience into the digital space without losing its soul",
-  "type": "project",
-  "license": "MIT",
-  "require": {
-    "php": "^8.4"
-  },
-  "autoload": {
-    "psr-4": {
-      "App\\": "src/"
-    }
-  }
+	"name": "mirko-pagliai/elone-path",
+	"description": "eLonePath is a data‑driven engine for interactive gamebooks inspired by classic solo gamebooks of the 1980s, designed to bring the book‑centric experience into the digital space without losing its soul",
+	"type": "project",
+	"license": "MIT",
+	"require": {
+		"php": "^8.4"
+	},
+    "require-dev": {
+		"squizlabs/php_codesniffer": "^4.0"
+    },
+	"autoload": {
+		"psr-4": {
+		  "App\\": "src/"
+		}
+	},
+	"scripts": {
+		"run-server": "php -S localhost:9996 -t public public/index.php"
+	}
 }

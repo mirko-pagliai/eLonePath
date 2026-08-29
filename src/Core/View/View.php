@@ -26,10 +26,10 @@ final class View
 
     public function render(string $template, ?string $layout = 'default'): string
     {
-        $templateFile = $this->templatesPath . '/' . $template . '.php';
+        $templateFile = $this->templatesPath . "/$template.php";
 
         if (!is_file($templateFile)) {
-            throw new RuntimeException("Template not found: {$template}");
+            throw new RuntimeException("Template not found: $template");
         }
 
         $data = $this->data;
@@ -58,10 +58,10 @@ final class View
         array $data,
         string $layout,
     ): string {
-        $layoutFile = $this->templatesPath . '/layout/' . $layout . '.php';
+        $layoutFile = $this->templatesPath . "/layout/$layout.php";
 
         if (!is_file($layoutFile)) {
-            throw new RuntimeException("Layout not found: {$layout}");
+            throw new RuntimeException("Layout not found: $layout");
         }
 
         ob_start();

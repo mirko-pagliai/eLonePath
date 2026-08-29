@@ -37,11 +37,7 @@ if (file_exists($envFile)) {
 $config = require ROOT . '/config/config.php';
 
 $router = new Router();
+$errorHandler = new ErrorHandler(debug: $config['app']['debug']);
 
-$view = new View(ROOT . '/templates');
-
-$errorHandler = new ErrorHandler($view, debug: $config['app']['debug']);
-
-$app = new Application($router, new Dispatcher($view), $errorHandler);
-
+$app = new Application($router, new Dispatcher(), $errorHandler);
 $app->run();

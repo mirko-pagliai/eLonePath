@@ -10,8 +10,11 @@ use App\Core\View\View;
  */
 abstract class Controller
 {
-    public function __construct(protected readonly View $view)
+    protected readonly View $view;
+
+    public function __construct(?View $view = null)
     {
+        $this->view = $view ?? new View();
     }
 
     /**
@@ -29,7 +32,7 @@ abstract class Controller
     /**
      * Sets the provided data into the view.
      *
-     * @param array<string, mixed> $data The data to be set in the view.
+     * @param array<string, mixed> $data
      * @return void
      */
     protected function set(array $data): void

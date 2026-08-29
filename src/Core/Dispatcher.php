@@ -6,17 +6,12 @@ namespace App\Core;
 use App\Core\Exception\HttpException;
 use App\Core\Routing\Route;
 use App\Core\Server\Response;
-use App\Core\View\View;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
 final readonly class Dispatcher
 {
-    public function __construct(private View $view)
-    {
-    }
-
     /**
      * @param \App\Core\Routing\Route $route
      * @return \App\Core\Server\Response
@@ -27,7 +22,7 @@ final readonly class Dispatcher
 
         $method = new ReflectionMethod($route->controllerClass(), $route->action);
 
-        $controller = new ($controllerClass)($this->view);
+        $controller = new $controllerClass();
 
         $arguments = self::resolveArguments($method, $route->params);
 

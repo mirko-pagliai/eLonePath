@@ -10,8 +10,11 @@ use Throwable;
 
 final class ErrorHandler
 {
-    public function __construct(private readonly View $view, private readonly bool $debug = false)
+    private readonly View $view;
+
+    public function __construct(private readonly bool $debug = false)
     {
+        $this->view = new View();
     }
 
     public function handle(Throwable $exception): Response
@@ -21,22 +24,14 @@ final class ErrorHandler
             $message = $exception->getMessage();
         } else {
             $status = 500;
-            $message = $this->debug
-                ? $exception->getMessage()
-                : 'Internal Server Error';
+            $message = $this->debug ? $exception->getMessage() : 'Internal Server Error';
         }
 
         $this->view->set([
-            'status' => $status,
-            'message' => $message,
-            'exception' => $exception,
             'debug' => $this->debug,
-        ]);
+        ] + compact('status', 'message', 'exception'));
 
-        $content = $this->view->render(
-            "error/{$status}",
-            'error',
-        );
+        $content = $this->view->render("error/$status", 'error');
 
         return new Response($content, $status);
     }

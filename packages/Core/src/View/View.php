@@ -40,11 +40,9 @@ class View
 
     public function render(string $template, ?string $layout = 'default'): string
     {
-        $this->assertSafeName($template);
+        $templateFile = $this->resolve($this->configuration->templatesPath(), $template);
 
-        $templateFile = $this->configuration->templatesPath() . "/$template.php";
-
-        if (!is_file($templateFile)) {
+        if ($templateFile === false) {
             throw new TemplateNotFoundException("Template not found: `$template.php`.");
         }
 
@@ -79,12 +77,10 @@ class View
         array $data,
         string $layout,
     ): string {
-        $this->assertSafeName($layout);
+        $layoutFile = $this->resolve($this->configuration->templatesPath() . 'layout' . DIRECTORY_SEPARATOR, $layout);
 
-        $layoutFile = $this->configuration->templatesPath() . "/layout/$layout.php";
-
-        if (!is_file($layoutFile)) {
-            throw new LayoutNotFoundException("Layout not found: `$layout`.");
+        if ($layoutFile === false) {
+            throw new LayoutNotFoundException("Layout not found: `$layout.php`.");
         }
 
         // Always release the buffer, even on failure
@@ -105,12 +101,23 @@ class View
     }
 
     /**
-     * Rejects template/layout names that could escape the templates' directory.
+     * Resolves `$name` to a real file path inside `$basePath`, refusing anything that would resolve outside it —
+     * traversal or a symlink escaping the directory. Returns false when the file doesn't exist, isn't a regular file,
+     * or escapes the base directory.
      */
-    private function assertSafeName(string $name): void
+    protected function resolve(string $basePath, string $name): string|false
     {
-        if (!preg_match('/^[a-zA-Z0-9_\-\/]+$/', $name)) {
-            throw new TemplateNotFoundException("Invalid template name: `$name`.");
+        $realBasePath = realpath($basePath);
+        if ($realBasePath === false) {
+            return false;
         }
+
+        $file = realpath($realBasePath . DIRECTORY_SEPARATOR . "$name.php");
+
+        if ($file === false || !is_file($file) || !str_starts_with($file, $realBasePath . DIRECTORY_SEPARATOR)) {
+            return false;
+        }
+
+        return $file;
     }
 }

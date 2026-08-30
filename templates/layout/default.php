@@ -13,6 +13,7 @@ declare(strict_types=1);
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="/css/default.css">
+        <link rel="icon" type="image/png" href="/img/favicon.png">
         <title>Elone Path</title>
     </head>
     <body class="min-vh-100">

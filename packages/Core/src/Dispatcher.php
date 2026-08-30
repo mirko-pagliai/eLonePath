@@ -91,37 +91,47 @@ readonly class Dispatcher
             return $value;
         }
 
-        return match ($type->getName()) {
-            'int' => filter_var(
-                $value,
-                FILTER_VALIDATE_INT,
-                FILTER_NULL_ON_FAILURE,
-            ) ?? throw new HttpException(
-                "Invalid integer parameter '$value' for `\${$parameter->getName()}`.",
-            ),
+        $typeName = $type->getName();
 
-            'float' => filter_var(
-                $value,
-                FILTER_VALIDATE_FLOAT,
-                FILTER_NULL_ON_FAILURE,
-            ) ?? throw new HttpException(
-                "Invalid float parameter '$value' for `\${$parameter->getName()}`.",
-            ),
+        if ($typeName === 'string') {
+            return $value;
+        }
 
-            'bool' => match (strtolower($value)) {
-                '1', 'true', 'yes' => true,
-                '0', 'false', 'no' => false,
-                default => throw new HttpException(
-                    "Invalid boolean parameter '$value' for `\${$parameter->getName()}`.",
-                ),
-            },
+        if ($typeName === 'int') {
+            $converted = filter_var($value, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
 
-            'string' => $value,
+            if ($converted === null) {
+                throw new HttpException("Invalid integer parameter '$value' for `\${$parameter->getName()}`.");
+            }
 
-            default => throw new UnsupportedParameterTypeException(
-                "Unsupported parameter type '{$type->getName()}' for `\${$parameter->getName()}`.",
-            ),
-        };
+            return $converted;
+        }
+
+        if ($typeName === 'float') {
+            $converted = filter_var($value, FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
+
+            if ($converted === null) {
+                throw new HttpException("Invalid float parameter '$value' for `\${$parameter->getName()}`.");
+            }
+
+            return $converted;
+        }
+
+        if ($typeName === 'bool') {
+            $normalized = strtolower($value);
+
+            if (in_array($normalized, ['1', 'true', 'yes'], true)) {
+                return true;
+            }
+
+            if (in_array($normalized, ['0', 'false', 'no'], true)) {
+                return false;
+            }
+
+            throw new HttpException("Invalid boolean parameter '$value' for `\${$parameter->getName()}`.");
+        }
+
+        throw new UnsupportedParameterTypeException("Unsupported parameter type '$typeName' for `\${$parameter->getName()}`.");
     }
 
     protected function templateName(Route $route): string

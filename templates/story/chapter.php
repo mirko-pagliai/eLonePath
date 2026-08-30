@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * @var object $game
+ * @var \App\Story\Game $game
  * @var \App\Story\Node $node
  * @var \Elone\Core\View\View $this
  *
@@ -24,9 +24,36 @@ declare(strict_types=1);
     <?= $node->content ?>
 </section>
 
+<?php if ($node->choices) : ?>
+    <nav id="story-choices" class="d-flex flex-column gap-2">
+        <?php foreach ($node->choices as $choice) : ?>
+        <a href="<?= $choice->target ?>" class="elone-button text-decoration-none"><?= $choice->content ?></a>
+        <?php endforeach; ?>
+    </nav>
+<?php endif; ?>
 
-<nav id="story-choices" class="d-flex flex-column gap-2">
-    <?php foreach ($node->choices as $choice) : ?>
-    <a href="<?= $choice->target ?>" class="elone-button text-decoration-none"><?= $choice->content ?></a>
-    <?php endforeach; ?>
-</nav>
+<?php if ($node->type === 'ending') : ?>
+<div class="story-result" class="mt-5">
+    <?php if ($node->victory === true): ?>
+        <div id="story-victory" class="p-3">
+            <p class="fs-3 mb-4">Hai vinto!</p>
+
+            <a href="/" class="elone-button d-inline-block px-3 py-2 text-decoration-none">
+                Torna alla homepage
+            </a>
+        </div>
+    <?php else: ?>
+        <div id="story-defeat" class="p-3">
+            <p class="fs-2 fst-italic mb-3">La tua vita finisce qui.</p>
+
+            <p class="fs-3 mb-4">Hai perso!</p>
+
+            <a
+               href="<?= $this->Html->url(['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1]) ?>"
+               class="elone-button d-inline-block px-3 py-2 text-decoration-none">
+                Ricomincia da pagina 1
+            </a>
+        </div>
+    <?php endif; ?>
+</div>
+<?php endif; ?>

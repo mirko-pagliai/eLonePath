@@ -26,7 +26,8 @@ class Node
         protected readonly string $gameId,
         string $content,
         array $choices,
-        protected readonly string $type = 'story',
+        protected(set) readonly string $type,
+        protected(set) readonly ?bool $victory,
     ) {
         $this->content = Markdown::defaultTransform($content);
 

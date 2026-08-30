@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Story\Node;
 use Elone\Core\Controller;
 use RuntimeException;
 
@@ -28,30 +29,18 @@ class StoryController extends Controller
         }
 
         $game = $json->game;
-        $node = $json->nodes->{$nodeNumber};
+        $nodeFromJson = $json->nodes->{$nodeNumber};
 
-        $image = $dir . "img/$nodeNumber.jpg";
-        if (is_readable($image)) {
-            $image = "/assets/img/stories/$game->id/$nodeNumber.jpg";
-        } else {
-            $image = null;
-        }
-
-        $choices = $node->choices;
-        foreach ($choices as $k => $choice) {
-            $choices[$k]->text = str_replace(
-                search: '{{page}}',
-                replace: $choice->target,
-                subject: $choice->text,
-            );
-        }
+        $node = new Node(
+            id: $nodeNumber,
+            gameId: $game->id,
+            content: $nodeFromJson->content,
+            choices: $nodeFromJson->choices,
+        );
 
         $this->set([
-            'content' => $node->content,
-            'choices' => $choices,
+            'node' => $node,
             'game' => $game,
-            'image' => $image,
-            'page' => $nodeNumber,
         ]);
     }
 }

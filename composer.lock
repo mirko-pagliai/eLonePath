@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Core",
-                "reference": "43065799146372a40057fbb5ecf5b2bb9f45fec4"
+                "reference": "6ad77f16395de28f2ec004964b1586f8378f7c82"
             },
             "require": {
                 "php": "^8.4"
@@ -31,7 +31,7 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "TestCase\\": "tests/TestCase/"
+                    "Elone\\Core\\Test\\": "tests/TestCase/"
                 }
             },
             "license": [

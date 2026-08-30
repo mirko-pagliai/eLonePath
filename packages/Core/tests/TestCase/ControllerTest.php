@@ -17,6 +17,21 @@ use PHPUnit\Framework\TestCase;
 class ControllerTest extends TestCase
 {
     /**
+     * @link \Elone\Core\Controller::getConfiguration()
+     */
+    #[Test]
+    public function testGetConfiguration(): void
+    {
+        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
+
+        $controller = new class (configuration: $configuration) extends Controller {
+        };
+
+        $result = $controller->getConfiguration();
+        $this->assertSame($configuration, $result);
+    }
+
+    /**
      * @link \Elone\Core\Controller::getView()
      */
     #[Test]

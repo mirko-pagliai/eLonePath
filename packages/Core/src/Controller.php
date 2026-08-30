@@ -10,6 +10,8 @@ use Elone\Core\View\View;
  */
 abstract class Controller
 {
+    protected readonly Configuration $configuration;
+
     protected readonly View $view;
 
     /**
@@ -22,7 +24,18 @@ abstract class Controller
      */
     public function __construct(Configuration $configuration, ?View $view = null)
     {
+        $this->configuration = $configuration;
         $this->view = $view ?? new View($configuration);
+    }
+
+    /**
+     * Gets the `Configuration` instance.
+     *
+     * @return \Elone\Core\Configuration The current Configuration instance.
+     */
+    public function getConfiguration(): Configuration
+    {
+        return $this->configuration;
     }
 
     /**

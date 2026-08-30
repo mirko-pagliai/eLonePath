@@ -68,11 +68,6 @@ article {
 
 #story-choices a {
     color: var(--elone-ink);
-    background-color: transparent;
-    border: 1px solid var(--elone-accent);
-    font-size: 1.4rem;
-    padding: .2rem .4rem;
-    text-align: left;
 }
 
 #story-choices a:hover {
@@ -80,7 +75,7 @@ article {
 }
 
 .elone-button {
-    border: 1px solid var(--elone-accent);
+    border: 2px solid var(--elone-accent);
     border-radius: 0;
     color: var(--elone-ink);
     font-size: 1.5rem;

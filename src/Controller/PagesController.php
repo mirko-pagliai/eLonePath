@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Story\Game;
 use Elone\Core\Controller;
 use Symfony\Component\Finder\Finder;
 
@@ -40,17 +41,7 @@ final class PagesController extends Controller
         $stories = [];
 
         foreach ($files as $file) {
-            $contents = file_get_contents($file->getRealPath());
-            if ($contents === false) {
-                continue;
-            }
-
-            $json = json_decode($contents);
-            if (!is_object($json)) {
-                continue;
-            }
-
-            $stories[] = $json->game;
+            $stories[] = Game::createFromFile($file->getRealPath());
         }
 
         $this->set(compact('stories'));

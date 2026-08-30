@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Story;
 
+use RuntimeException;
+
 class Game
 {
     /**
@@ -21,7 +23,6 @@ class Game
         array $nodes,
     ) {
         foreach ($nodes as $nodeId => $node) {
-//            dd($node);
             $this->nodes[$nodeId] = new Node(
                 id: $nodeId,
                 gameId: $this->gameId,
@@ -56,5 +57,20 @@ class Game
             version: $data['game']['version'],
             nodes: $data['nodes'],
         );
+    }
+
+    public static function createFromFile(string $path): Game
+    {
+        $contents = file_get_contents($path);
+        if ($contents === false) {
+            throw new RuntimeException("Failed to read `$path`.");
+        }
+
+        $json = json_decode($contents, true);
+        if (!is_array($json)) {
+            throw new RuntimeException("Failed to parse `$path`.");
+        }
+
+        return self::createFromArray($json);
     }
 }

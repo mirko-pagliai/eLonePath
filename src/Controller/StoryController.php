@@ -5,7 +5,6 @@ namespace App\Controller;
 
 use App\Story\Game;
 use Elone\Core\Controller;
-use RuntimeException;
 
 class StoryController extends Controller
 {
@@ -19,17 +18,7 @@ class StoryController extends Controller
     {
         $file = $this->getConfiguration()->rootPath() . "resources/stories/$storyId/story.json";
 
-        $contents = file_get_contents($file);
-        if ($contents === false) {
-            throw new RuntimeException("Failed to read `$file`.");
-        }
-
-        $json = json_decode($contents, true);
-        if (!is_array($json)) {
-            throw new RuntimeException("Failed to parse `$file`.");
-        }
-
-        $game = Game::createFromArray($json);
+        $game = Game::createFromFile($file);
         $node = $game->getNode($nodeNumber);
 
         $this->set(compact('game', 'node'));

@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * @var array<object> $stories
+ * @var array<\App\Story\Game> $stories
  * @var \Elone\Core\View\View $this
  *
  * @link \App\Controller\PagesController::stories()
@@ -17,22 +17,32 @@ declare(strict_types=1);
     <?php foreach ($stories as $game) : ?>
     <li>
         <a
-            href="<?= $this->Html->url(['controller' => 'Story', 'action' => 'chapter', $game->id, 1]) ?>"
+            href="<?= $this->Html->url(['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1]) ?>"
             class="d-block p-3 text-decoration-none"
         >
-            <div class="story-item-title fs-3">
+            <div class="fs-3">
                 <?= $game->title ?>
             </div>
 
-            <div class="story-item-author text-body-secondary mt-1">
+            <div class="fs-5 mt-1 text-body-secondary">
                 <?= $game->author ?>
             </div>
 
+            <?php if ($game->translators) : ?>
+            <div class="fs-5 mt-1 text-body-secondary">
+                Tradotto da <?= $game->translators ?>
+            </div>
+            <?php endif; ?>
+
             <?php if ($game->description) : ?>
-            <div class="story-item-description mt-1">
+            <div class="mt-1 fs-5">
                 <?= $game->description ?>
             </div>
             <?php endif; ?>
+
+            <div class="mt-1">
+                (lingua <?= $game->language ?>, versione <?= $game->version ?>)
+            </div>
         </a>
     </li>
     <?php endforeach; ?>

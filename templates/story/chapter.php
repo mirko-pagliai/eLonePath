@@ -17,7 +17,7 @@ declare(strict_types=1);
 </header>
 
 <?php if ($node->image) : ?>
-    <img src="<?= $node->image ?>" class="img-fluid mx-auto mb-4 d-block" />
+    <img src="<?= $node->image ?>" class="img-fluid mx-auto mb-5 d-block" />
 <?php endif ?>
 
 <section id="story-content" class="fs-4 mb-4">
@@ -27,14 +27,19 @@ declare(strict_types=1);
 <?php if ($node->choices) : ?>
     <nav id="story-choices" class="d-flex flex-column gap-2">
         <?php foreach ($node->choices as $choice) : ?>
-        <a href="<?= $choice->target ?>" class="elone-button text-decoration-none"><?= $choice->content ?></a>
+        <a
+                href="<?= $choice->target ?>"
+                class="elone-button fw-medium p-2 fs-5 text-decoration-none"
+        >
+            <?= $choice->content ?>
+        </a>
         <?php endforeach; ?>
     </nav>
 <?php endif; ?>
 
 <?php if ($node->type === 'ending') : ?>
 <div class="story-result" class="mt-5">
-    <?php if ($node->victory === true): ?>
+    <?php if ($node->victory === true) : ?>
         <div id="story-victory" class="p-3">
             <p class="fs-3 mb-4">Hai vinto!</p>
 
@@ -42,7 +47,7 @@ declare(strict_types=1);
                 Torna alla homepage
             </a>
         </div>
-    <?php else: ?>
+    <?php else : ?>
         <div id="story-defeat" class="p-3">
             <p class="fs-2 fst-italic mb-3">La tua vita finisce qui.</p>
 

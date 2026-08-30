@@ -3,10 +3,15 @@ declare(strict_types=1);
 
 namespace Elone\Core\Routing;
 
+use Elone\Core\Configuration;
 use Elone\Core\Server\Request;
 
 final class Router
 {
+    public function __construct(private readonly Configuration $configuration)
+    {
+    }
+
     /**
      * Handles the routing of a given request by determining the controller, action, and parameters.
      *
@@ -36,7 +41,7 @@ final class Router
      */
     public function resolve(string $controller, string $action, array $params = []): Route
     {
-        return new Route($controller, $action, $params);
+        return new Route($controller, $action, $this->configuration->controllerNamespace(), $params);
     }
 
     /**

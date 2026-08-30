@@ -3,13 +3,13 @@ declare(strict_types=1);
 
 namespace Elone\Core\View;
 
+use Elone\Core\Configuration;
 use Elone\Core\Exception\LayoutNotFoundException;
 use Elone\Core\Exception\TemplateNotFoundException;
 use Elone\Core\View\Helper\HtmlHelper;
-use RuntimeException;
 use Throwable;
 
-final class View
+class View
 {
     public readonly HtmlHelper $Html;
 
@@ -18,22 +18,31 @@ final class View
      */
     private array $data = [];
 
-    public function __construct(private readonly string $templatesPath = ROOT . '/templates')
+    public function __construct(private readonly Configuration $configuration)
     {
-        $this->Html = new HtmlHelper();
+        $this->Html = new HtmlHelper($configuration);
+    }
+
+    public function get(string $name, mixed $default = null): mixed
+    {
+        return $this->data[$name] ?? $default;
     }
 
     /**
      * @param array<string, mixed> $data
      */
-    public function set(array $data): void
+    public function set(array $data): self
     {
         $this->data = array_merge($this->data, $data);
+
+        return $this;
     }
 
     public function render(string $template, ?string $layout = 'default'): string
     {
-        $templateFile = $this->templatesPath . "/$template.php";
+        $this->assertSafeName($template);
+
+        $templateFile = $this->configuration->templatesPath() . "/$template.php";
 
         if (!is_file($templateFile)) {
             throw new TemplateNotFoundException("Template not found: `$template.php`.");
@@ -70,10 +79,12 @@ final class View
         array $data,
         string $layout,
     ): string {
-        $layoutFile = $this->templatesPath . "/layout/$layout.php";
+        $this->assertSafeName($layout);
+
+        $layoutFile = $this->configuration->templatesPath() . "/layout/$layout.php";
 
         if (!is_file($layoutFile)) {
-            throw new LayoutNotFoundException("Layout not found: `$layout`");
+            throw new LayoutNotFoundException("Layout not found: `$layout`.");
         }
 
         // Always release the buffer, even on failure
@@ -91,5 +102,15 @@ final class View
         }
 
         return $content;
+    }
+
+    /**
+     * Rejects template/layout names that could escape the templates' directory.
+     */
+    private function assertSafeName(string $name): void
+    {
+        if (!preg_match('/^[a-zA-Z0-9_\-\/]+$/', $name)) {
+            throw new TemplateNotFoundException("Invalid template name: `$name`.");
+        }
     }
 }

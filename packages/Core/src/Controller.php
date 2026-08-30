@@ -12,9 +12,27 @@ abstract class Controller
 {
     protected readonly View $view;
 
-    public function __construct(?View $view = null)
+    /**
+     * Initializes a new instance of the class.
+     *
+     * @param \Elone\Core\Configuration $configuration The configuration instance required for initialization.
+     * @param \Elone\Core\View\View|null $view An optional `View` instance. If not provided, a new instance will be
+     * created using the configuration.
+     * @return void
+     */
+    public function __construct(Configuration $configuration, ?View $view = null)
     {
-        $this->view = $view ?? new View();
+        $this->view = $view ?? new View($configuration);
+    }
+
+    /**
+     * Gets the current `View` instance.
+     *
+     * @return \Elone\Core\View\View The current View instance.
+     */
+    public function getView(): View
+    {
+        return $this->view;
     }
 
     /**
@@ -26,17 +44,19 @@ abstract class Controller
      */
     public function render(string $template, ?string $layout = 'default'): string
     {
-        return $this->view->render($template, $layout);
+        return $this->getView()->render($template, $layout);
     }
 
     /**
      * Sets the provided data into the view.
      *
      * @param array<string, mixed> $data
-     * @return void
+     * @return self
      */
-    protected function set(array $data): void
+    protected function set(array $data): self
     {
-        $this->view->set($data);
+        $this->getView()->set($data);
+
+        return $this;
     }
 }

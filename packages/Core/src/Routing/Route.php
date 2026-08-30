@@ -14,8 +14,12 @@ readonly class Route
     /**
      * @param list<string> $params
      */
-    public function __construct(public string $controller, public string $action, public array $params = [])
-    {
+    public function __construct(
+        public string $controller,
+        public string $action,
+        private string $controllerNamespace,
+        public array $params = [],
+    ) {
         if (!preg_match('/^[a-zA-Z][a-zA-Z0-9_-]*$/', $controller)) {
             throw new RouteNotFoundException("Invalid controller name: `$controller`.");
         }
@@ -51,7 +55,7 @@ readonly class Route
         );
 
         /** @var class-string<\Elone\Core\Controller> $className */
-        $className = CONFIG['app']['name'] . "\\Controller\\{$name}Controller";
+        $className = $this->controllerNamespace . "\\Controller\\{$name}Controller";
 
         return $className;
     }

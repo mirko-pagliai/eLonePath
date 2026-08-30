@@ -10,8 +10,12 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
-final readonly class Dispatcher
+readonly class Dispatcher
 {
+    public function __construct(private Configuration $configuration)
+    {
+    }
+
     /**
      * @param \Elone\Core\Routing\Route $route
      * @return \Elone\Core\Server\Response
@@ -22,7 +26,7 @@ final readonly class Dispatcher
 
         $method = new ReflectionMethod($controllerClass, $route->action);
 
-        $controller = new $controllerClass();
+        $controller = new $controllerClass($this->configuration);
 
         $arguments = self::resolveArguments($method, $route->params);
 
@@ -32,7 +36,7 @@ final readonly class Dispatcher
             return $result;
         }
 
-        $template = $this->templateName($controllerClass, $route->action);
+        $template = $this->templateName($route);
         $content = $controller->render($template);
 
         return new Response($content);
@@ -42,7 +46,7 @@ final readonly class Dispatcher
      * @param list<string> $params
      * @return list<mixed>
      */
-    public static function resolveArguments(ReflectionMethod $method, array $params): array
+    protected static function resolveArguments(ReflectionMethod $method, array $params): array
     {
         $parameters = $method->getParameters();
 
@@ -114,12 +118,8 @@ final readonly class Dispatcher
         };
     }
 
-    private function templateName(string $controllerClass, string $action): string
+    protected function templateName(Route $route): string
     {
-        $shortName = basename(str_replace('\\', '/', $controllerClass));
-
-        $controller = substr($shortName, 0, -10);
-
-        return strtolower($controller) . '/' . $action;
+        return strtolower($route->controller) . '/' . $route->action;
     }
 }

@@ -12,9 +12,9 @@ final class ErrorHandler
 {
     private readonly View $view;
 
-    public function __construct(private readonly bool $debug = false)
+    public function __construct(private readonly Configuration $configuration)
     {
-        $this->view = new View();
+        $this->view = new View($configuration);
     }
 
     public function handle(Throwable $exception): Response
@@ -24,14 +24,29 @@ final class ErrorHandler
             $message = $exception->getMessage();
         } else {
             $status = 500;
-            $message = $this->debug ? $exception->getMessage() : 'Internal Server Error';
+            $message = $this->configuration->debug() ? $exception->getMessage() : 'Internal Server Error';
+        }
+
+        if (!$this->configuration->debug()) {
+            error_log((string)$exception);
         }
 
         $this->view->set([
-            'debug' => $this->debug,
-        ] + compact('status', 'message', 'exception'));
+            'debug' => $this->configuration->debug(),
+            'status' => $status,
+            'message' => $message,
+            'exception' => $exception,
+        ]);
 
-        $content = $this->view->render("error/$status", 'error');
+        try {
+            $content = $this->view->render('error/default', 'error');
+        } catch (Throwable) {
+            /**
+             * The error template itself failed to render: fall back to a bare response instead of letting the exception
+             * escape uncaught.
+             */
+            return new Response('Internal Server Error', 500);
+        }
 
         return new Response($content, $status);
     }

@@ -3,11 +3,16 @@ declare(strict_types=1);
 
 namespace Elone\Core\View\Helper;
 
+use Elone\Core\Configuration;
 use Elone\Core\Exception\RouteNotFoundException;
 use Elone\Core\Routing\Route;
 
 final class HtmlHelper
 {
+    public function __construct(private readonly Configuration $configuration)
+    {
+    }
+
     /**
      * @param array<string|int, string|int|float|bool> $route
      */
@@ -28,11 +33,15 @@ final class HtmlHelper
             }
 
             if (is_int($key)) {
+                if (!is_scalar($value)) {
+                    throw new RouteNotFoundException("Invalid route parameter value for position `$key`.");
+                }
+
                 $params[] = (string)$value;
             }
         }
 
-        return new Route($controller, $action, $params)->path();
+        return new Route($controller, $action, $this->configuration->controllerNamespace(), $params)->path();
     }
 
     /**

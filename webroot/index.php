@@ -8,6 +8,7 @@ declare(strict_types=1);
  */
 
 use Elone\Core\Application;
+use Elone\Core\Configuration;
 use Elone\Core\Dispatcher;
 use Elone\Core\ErrorHandler;
 use Elone\Core\Routing\Router;
@@ -33,9 +34,17 @@ if (file_exists($envFile)) {
         ->toEnv();
 }
 
-$router = new Router();
-$dispatcher = new Dispatcher();
-$errorHandler = new ErrorHandler(debug: CONFIG['app']['debug']);
+$appConfig = require ROOT . '/config/config.php';
+
+$configuration = new Configuration(
+    rootPath: ROOT,
+    controllerNamespace: $appConfig['app']['controller_namespace'],
+    debug: $appConfig['app']['debug'],
+);
+
+$router = new Router($configuration);
+$dispatcher = new Dispatcher($configuration);
+$errorHandler = new ErrorHandler($configuration);
 
 $app = new Application($router, $dispatcher, $errorHandler);
 $app->run();

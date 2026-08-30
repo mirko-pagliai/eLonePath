@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core\View\Helper;
+namespace Elone\Core\View\Helper;
 
-use App\Core\Exception\RouteNotFoundException;
-use App\Core\Routing\Route;
+use Elone\Core\Exception\RouteNotFoundException;
+use Elone\Core\Routing\Route;
 
 final class HtmlHelper
 {

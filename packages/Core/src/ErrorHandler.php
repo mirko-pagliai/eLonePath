@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core;
+namespace Elone\Core;
 
-use App\Core\Exception\HttpException;
-use App\Core\Server\Response;
-use App\Core\View\View;
+use Elone\Core\Exception\HttpException;
+use Elone\Core\Server\Response;
+use Elone\Core\View\View;
 use Throwable;
 
 final class ErrorHandler

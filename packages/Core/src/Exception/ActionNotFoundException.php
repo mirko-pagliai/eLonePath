@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core\Exception;
+namespace Elone\Core\Exception;
 
 /**
  * Exception thrown when a specified action cannot be found.

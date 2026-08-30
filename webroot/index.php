@@ -7,10 +7,10 @@ declare(strict_types=1);
  * It builds the necessary objects, then the application, and launches `Application::run()`.
  */
 
-use App\Core\Application;
-use App\Core\Dispatcher;
-use App\Core\ErrorHandler;
-use App\Core\Routing\Router;
+use Elone\Core\Application;
+use Elone\Core\Dispatcher;
+use Elone\Core\ErrorHandler;
+use Elone\Core\Routing\Router;
 use josegonzalez\Dotenv\Loader;
 
 if (PHP_SAPI === 'cli-server') {

@@ -1,0 +1,24 @@
+{
+	"name": "elone/core",
+	"type": "library",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"Elone\\Core\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"TestCase\\": "tests/TestCase/"
+		}
+	},
+	"require": {
+		"php": "^8.4"
+	},
+	"require-dev": {
+		"cakephp/cakephp-codesniffer": "^5.3.2",
+		"phpstan/phpstan": "^2.2",
+		"phpunit/phpunit": "^13.2",
+		"symfony/var-dumper": "^8.1"
+	}
+}

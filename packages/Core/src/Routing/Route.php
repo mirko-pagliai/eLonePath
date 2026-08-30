@@ -1,12 +1,12 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core\Routing;
+namespace Elone\Core\Routing;
 
-use App\Core\Controller;
-use App\Core\Exception\ActionNotFoundException;
-use App\Core\Exception\ControllerNotFoundException;
-use App\Core\Exception\RouteNotFoundException;
+use Elone\Core\Controller;
+use Elone\Core\Exception\ActionNotFoundException;
+use Elone\Core\Exception\ControllerNotFoundException;
+use Elone\Core\Exception\RouteNotFoundException;
 use ReflectionMethod;
 
 readonly class Route
@@ -40,7 +40,7 @@ readonly class Route
     }
 
     /**
-     * @return class-string<\App\Core\Controller>
+     * @return class-string<\Elone\Core\Controller>
      */
     public function controllerClass(): string
     {
@@ -50,7 +50,7 @@ readonly class Route
             ucwords(str_replace(['-', '_'], ' ', $this->controller)),
         );
 
-        /** @var class-string<\App\Core\Controller> $className */
+        /** @var class-string<\Elone\Core\Controller> $className */
         $className = "App\\Controller\\{$name}Controller";
 
         return $className;

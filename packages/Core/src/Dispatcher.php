@@ -1,11 +1,11 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core;
+namespace Elone\Core;
 
-use App\Core\Exception\HttpException;
-use App\Core\Routing\Route;
-use App\Core\Server\Response;
+use Elone\Core\Exception\HttpException;
+use Elone\Core\Routing\Route;
+use Elone\Core\Server\Response;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -13,8 +13,8 @@ use ReflectionParameter;
 final readonly class Dispatcher
 {
     /**
-     * @param \App\Core\Routing\Route $route
-     * @return \App\Core\Server\Response
+     * @param \Elone\Core\Routing\Route $route
+     * @return \Elone\Core\Server\Response
      */
     public function dispatch(Route $route): Response
     {
@@ -74,7 +74,7 @@ final readonly class Dispatcher
      * @param string $value The string value to be converted.
      * @param \ReflectionParameter $parameter The reflection parameter containing type information for the conversion.
      * @return mixed The converted value, matching the parameter's type hint.
-     * @throws \App\Core\Exception\HttpException If the conversion fails due to an invalid value matching a built-in type.
+     * @throws \Elone\Core\Exception\HttpException If the conversion fails due to an invalid value matching a built-in type.
      */
     private static function convert(string $value, ReflectionParameter $parameter): mixed
     {

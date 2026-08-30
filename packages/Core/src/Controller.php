@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core;
+namespace Elone\Core;
 
-use App\Core\View\View;
+use Elone\Core\View\View;
 
 /**
  * Represents the base controller class responsible for managing the interaction between the view and the data provided.

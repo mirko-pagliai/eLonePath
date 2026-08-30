@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Core\Controller;
+use Elone\Core\Controller;
 
 /**
  * Handles the pages-related actions within the application.

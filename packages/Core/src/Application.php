@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core;
+namespace Elone\Core;
 
-use App\Core\Routing\Router;
-use App\Core\Server\Request;
+use Elone\Core\Routing\Router;
+use Elone\Core\Server\Request;
 use Throwable;
 
 final readonly class Application

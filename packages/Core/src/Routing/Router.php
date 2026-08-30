@@ -1,17 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core\Routing;
+namespace Elone\Core\Routing;
 
-use App\Core\Server\Request;
+use Elone\Core\Server\Request;
 
 final class Router
 {
     /**
      * Handles the routing of a given request by determining the controller, action, and parameters.
      *
-     * @param \App\Core\Server\Request $request The incoming request containing the path to be dispatched.
-     * @return \App\Core\Routing\Route Returns the resolved route for the given request.
+     * @param \Elone\Core\Server\Request $request The incoming request containing the path to be dispatched.
+     * @return \Elone\Core\Routing\Route Returns the resolved route for the given request.
      */
     public function dispatch(Request $request): Route
     {

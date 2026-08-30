@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core\Server;
+namespace Elone\Core\Server;
 
 final class Request
 {

@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Core\View;
+namespace Elone\Core\View;
 
-use App\Core\Exception\TemplateNotFoundException;
-use App\Core\View\Helper\HtmlHelper;
+use Elone\Core\Exception\TemplateNotFoundException;
+use Elone\Core\View\Helper\HtmlHelper;
 use RuntimeException;
 
 final class View

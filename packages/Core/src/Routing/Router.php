@@ -24,7 +24,7 @@ final class Router
 
         // Default behavior with unspecified controller and action.
         if (empty($segments[0])) {
-            $controller = 'pages';
+            $controller = 'Pages';
             $action = 'home';
         } else {
             $controller = $segments[0];

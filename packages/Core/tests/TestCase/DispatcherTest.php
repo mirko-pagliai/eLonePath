@@ -26,7 +26,7 @@ class DispatcherTest extends TestCase
     #[TestWith(['users-settings/view', 'UsersSettings', 'view'])]
     public function testTemplateName(string $expectedTemplateName, string $controller, string $action): void
     {
-        $configuration = new Configuration('/tmp', 'TestApp');
+        $configuration = new Configuration(TEST_APP, 'TestApp');
 
         $dispatcher = new readonly class (configuration: $configuration) extends Dispatcher {
             public function templateName(Route $route): string

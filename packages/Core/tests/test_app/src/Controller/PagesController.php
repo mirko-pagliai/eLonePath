@@ -14,4 +14,13 @@ class PagesController extends Controller
     public function view(int $id): void
     {
     }
+
+    /**
+     * This is a bad action (is not public), useful for testing purposes only.
+     *
+     * @return void
+     */
+    protected function invalidAction(): void
+    {
+    }
 }

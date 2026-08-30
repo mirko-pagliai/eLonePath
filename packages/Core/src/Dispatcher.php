@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Elone\Core;
 
 use Elone\Core\Exception\HttpException;
+use Elone\Core\Routing\ControllerName;
 use Elone\Core\Routing\Route;
 use Elone\Core\Server\Response;
 use ReflectionMethod;
@@ -120,6 +121,6 @@ readonly class Dispatcher
 
     protected function templateName(Route $route): string
     {
-        return strtolower($route->controller) . '/' . $route->action;
+        return new ControllerName($route->controller)->kebabCase() . '/' . $route->action;
     }
 }

@@ -23,7 +23,7 @@ final class ErrorHandler
      */
     public function __construct(private readonly Configuration $configuration, ?Closure $logger = null)
     {
-        $this->view = new View($configuration);
+        $this->view = new View();
         $this->logger = $logger ?? error_log(...);
     }
 

@@ -50,7 +50,8 @@ class DispatcherTest extends TestCase
     public function testTemplateName(string $expectedTemplateName, string $controller, string $action): void
     {
         $route = new readonly class (controller: $controller, action: $action) extends Route {
-            public function __construct(public string $controller, public string $action, public array $params = []) {
+            public function __construct(public string $controller, public string $action, public array $params = [])
+            {
             }
         };
 

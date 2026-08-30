@@ -8,4 +8,9 @@ mb_internal_encoding('UTF-8');
 ini_set('intl.default_locale', 'en_US');
 
 define('ROOT', dirname(__DIR__));
-const TEST_APP = ROOT . '/tests/test_app/';
+
+const APP_NAMESPACE = 'TestApp';
+
+const TEMPLATES = ROOT . '/tests/test_app/templates/';
+
+require ROOT . '/config/bootstrap.php';

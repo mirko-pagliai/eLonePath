@@ -64,7 +64,7 @@ class NodeTest extends TestCase
     {
         $gameId = 'node-test-fixture';
         $id = 1;
-        $directory = "webroot/assets/img/stories/$gameId";
+        $directory = WEBROOT . "/assets/img/stories/$gameId";
 
         if (!is_dir($directory)) {
             mkdir($directory, 0777, true);

@@ -12,7 +12,6 @@ use Elone\Core\Configuration;
 use Elone\Core\Dispatcher;
 use Elone\Core\ErrorHandler;
 use Elone\Core\Routing\Router;
-use josegonzalez\Dotenv\Loader;
 
 if (PHP_SAPI === 'cli-server') {
     $url = $_SERVER['REQUEST_URI'] ?? '/';
@@ -25,27 +24,24 @@ if (PHP_SAPI === 'cli-server') {
     }
 }
 
-define('ROOT', dirname(__DIR__));
+require dirname(__DIR__) . '/vendor/autoload.php';
 
-require ROOT . '/vendor/autoload.php';
-
-$envFile = ROOT . '/.env';
-if (file_exists($envFile) && class_exists(Loader::class)) {
-    new Loader($envFile)
-        ->parse()
-        ->toEnv();
-}
+/**
+ * This order should not be changed.
+ *
+ * This way, the app bootstrap can set constants before the core bootstrap.
+ */
+require dirname(__DIR__) . '/config/bootstrap.php';
+require dirname(__DIR__) . '/packages/Core/config/bootstrap.php';
 
 $appConfig = require ROOT . '/config/config.php';
 
 $configuration = new Configuration(
-    rootPath: ROOT,
-    namespace: $appConfig['app']['namespace'],
     debug: $appConfig['app']['debug'],
 );
 
-$router = new Router($configuration);
-$dispatcher = new Dispatcher($configuration);
+$router = new Router();
+$dispatcher = new Dispatcher();
 $errorHandler = new ErrorHandler($configuration);
 
 $app = new Application($router, $dispatcher, $errorHandler);

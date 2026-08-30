@@ -13,54 +13,12 @@ final readonly class Configuration
     /**
      * Constructor method.
      *
-     * @param string $rootPath The root path for the application.
-     * @param string $namespace The namespace for the application.
      * @param bool $debug Whether the application is in debug mode. Defaults to `false`.
      *
      * @return void
      */
-    public function __construct(private string $rootPath, private string $namespace, private bool $debug = false)
+    public function __construct(private bool $debug = false)
     {
-    }
-
-    /**
-     * Retrieves the root path of the application.
-     *
-     * @return string The root path of the application.
-     */
-    public function rootPath(): string
-    {
-        return rtrim($this->rootPath, DIRECTORY_SEPARATOR) . DIRECTORY_SEPARATOR;
-    }
-
-    /**
-     * Retrieves the path to the templates' directory.
-     *
-     * @return string The full path to the templates directory.
-     */
-    public function templatesPath(): string
-    {
-        return $this->rootPath() . 'templates' . DIRECTORY_SEPARATOR;
-    }
-
-    /**
-     * Retrieves the path to the `webroot` directory.
-     *
-     * @return string The full path to the webroot directory.
-     */
-    public function webrootPath(): string
-    {
-        return $this->rootPath() . 'webroot' . DIRECTORY_SEPARATOR;
-    }
-
-    /**
-     * Retrieves the application's namespace.
-     *
-     * @return string The application's namespace.
-     */
-    public function namespace(): string
-    {
-        return $this->namespace;
     }
 
     /**

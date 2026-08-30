@@ -42,7 +42,7 @@ class ErrorHandlerTest extends TestCase
     #[Test]
     public function testHandleHttpException(): void
     {
-        $configuration = new Configuration(TEST_APP, 'TestApp');
+        $configuration = new Configuration();
         $errorHandler = new ErrorHandler($configuration, $this->logger);
 
         $response = $errorHandler->handle(new ActionNotFoundException('Action not found: `Foo::bar()`.'));
@@ -58,7 +58,7 @@ class ErrorHandlerTest extends TestCase
     #[Test]
     public function testHandleGenericExceptionWithoutDebug(): void
     {
-        $configuration = new Configuration(TEST_APP, 'TestApp', debug: false);
+        $configuration = new Configuration(debug: false);
         $errorHandler = new ErrorHandler($configuration, $this->logger);
 
         $response = $errorHandler->handle(new RuntimeException('Some internal detail.'));
@@ -76,7 +76,7 @@ class ErrorHandlerTest extends TestCase
     #[Test]
     public function testHandleGenericExceptionWithDebug(): void
     {
-        $configuration = new Configuration(TEST_APP, 'TestApp', debug: true);
+        $configuration = new Configuration(debug: true);
         $errorHandler = new ErrorHandler($configuration, $this->logger);
 
         $response = $errorHandler->handle(new RuntimeException('Some internal detail.'));
@@ -93,7 +93,7 @@ class ErrorHandlerTest extends TestCase
     #[Test]
     public function testHandleFallsBackWhenTemplatesPathIsMissing(): void
     {
-        $configuration = new Configuration('/path/does/not/exist', 'TestApp');
+        $configuration = new Configuration();
         $errorHandler = new ErrorHandler($configuration, $this->logger);
 
         $response = $errorHandler->handle(new RuntimeException('Anything.'));

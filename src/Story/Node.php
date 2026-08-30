@@ -36,7 +36,7 @@ class Node
     ) {
         $this->content = Markdown::defaultTransform($content);
 
-        if (file_exists("webroot/assets/img/stories/$gameId/$id.jpg")) {
+        if (file_exists(WEBROOT . "/assets/img/stories/$gameId/$id.jpg")) {
             $this->image = "/assets/img/stories/$gameId/$id.jpg";
         }
     }

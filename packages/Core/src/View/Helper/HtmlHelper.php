@@ -33,10 +33,6 @@ final class HtmlHelper
             }
 
             if (is_int($key)) {
-                if (!is_scalar($value)) {
-                    throw new RouteNotFoundException("Invalid route parameter value for position `$key`.");
-                }
-
                 $params[] = (string)$value;
             }
         }

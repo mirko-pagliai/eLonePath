@@ -24,7 +24,7 @@ readonly class Route
      *  Callers deriving it from raw, untrusted input — a URL segment — must normalize it (see `ControllerName`) before
      *  constructing a `Route`.
      * @param string $action The name of the action method within the controller to be executed.
-     * @param string $controllerNamespace The namespace of the controller class.
+     * @param string $namespace The namespace under which the controller class is expected to be found.
      * @param list<string> $params Optional parameters to be passed to the action method.
      *
      * @return void
@@ -39,7 +39,7 @@ readonly class Route
     public function __construct(
         public string $controller,
         public string $action,
-        private string $controllerNamespace,
+        private string $namespace,
         public array $params = [],
     ) {
         if (!ctype_alpha($controller) || !ctype_upper($controller[0])) {
@@ -69,15 +69,15 @@ readonly class Route
      * Constructs and returns the fully qualified class name of the controller based on the given namespace and
      * controller name.
      *
-     * Combines the `controllerNamespace` with the expected location and naming convention of the controller to generate
-     * the complete class name.
+     * Combines the `namespace` with the expected location and naming convention of the controller to generate the
+     * complete class name.
      *
      * @return class-string<\Elone\Core\Controller> The generated fully qualified class name for the controller.
      */
     public function controllerClass(): string
     {
         /** @var class-string<\Elone\Core\Controller> $className */
-        $className = $this->controllerNamespace . "\\Controller\\{$this->controller}Controller";
+        $className = $this->namespace . "\\Controller\\{$this->controller}Controller";
 
         return $className;
     }

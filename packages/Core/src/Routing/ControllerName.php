@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Elone\Core\Routing;
 
 /**
- * Splits a raw controller identifier — as it appears in a URL segment (kebab-case, snake_case) or as written in
- * code (PascalCase) — into words, and exposes the casings the rest of the framework needs.
+ * Responsible for processing and converting raw string inputs into various case formats (e.g., PascalCase, kebab-case)
+ * suitable for controller class naming and URL or template path generation.
  */
 final readonly class ControllerName
 {
@@ -20,7 +20,9 @@ final readonly class ControllerName
     }
 
     /**
-     * PascalCase, e.g. `UsersSettings` — used to build the controller's class name.
+     * studlyCase, e.g. `UsersSettings` — used for class names or variable naming conventions.
+     *
+     * @return string Returns the converted string in StudlyCase format.
      */
     public function studlyCase(): string
     {
@@ -31,7 +33,9 @@ final readonly class ControllerName
     }
 
     /**
-     * kebab-case, e.g. `users-settings` — used to build URLs and template paths.
+     * Converts the elements of an array into a kebab-case formatted string.
+     *
+     * @return string The kebab-case formatted string created by joining array elements with hyphens.
      */
     public function kebabCase(): string
     {
@@ -39,7 +43,11 @@ final readonly class ControllerName
     }
 
     /**
-     * @return list<string>
+     * Splits a raw string into an array of substrings based on delimiters such as dashes, underscores, or uppercase
+     * letter transitions.
+     *
+     * @param string $raw The input string to be split into substrings.
+     * @return list<string> An array of substrings obtained from the input string.
      */
     private static function split(string $raw): array
     {

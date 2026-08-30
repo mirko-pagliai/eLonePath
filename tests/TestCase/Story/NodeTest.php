@@ -5,6 +5,7 @@ namespace Test\Story;
 
 use App\Story\Choice;
 use App\Story\Node;
+use App\Story\NodeType;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -26,7 +27,7 @@ class NodeTest extends TestCase
             gameId: 'test-game',
             content: 'Some content.',
             choices: [],
-            type: 'story',
+            type: NodeType::STORY,
             victory: null,
         );
 
@@ -44,7 +45,7 @@ class NodeTest extends TestCase
             gameId: 'no-such-game-id-in-webroot',
             content: 'Some content.',
             choices: [],
-            type: 'story',
+            type: NodeType::STORY,
             victory: null,
         );
 
@@ -53,7 +54,7 @@ class NodeTest extends TestCase
 
     /**
      * Relies on `webroot/assets/img/stories/` resolving relative to the current working directory when the test
-     * runs — same assumption `Node::__construct()` itself makes via `file_exists()`. Creates and removes a
+     * runs — the same assumption `Node::__construct()` itself makes via `file_exists()`. Creates and removes a
      * throwaway image file under a game id that can't collide with real content.
      *
      * @link \App\Story\Node::__construct()
@@ -77,7 +78,7 @@ class NodeTest extends TestCase
                 gameId: $gameId,
                 content: 'Some content.',
                 choices: [],
-                type: 'story',
+                type: NodeType::STORY,
                 victory: null,
             );
 
@@ -106,7 +107,7 @@ class NodeTest extends TestCase
 
         $this->assertSame(3, $node->id);
         $this->assertStringContainsString('<p>Some content.</p>', $node->content);
-        $this->assertSame('story', $node->type);
+        $this->assertSame(NodeType::STORY, $node->type);
         $this->assertNull($node->victory);
 
         $this->assertCount(2, $node->choices);
@@ -128,7 +129,7 @@ class NodeTest extends TestCase
             'victory' => true,
         ]);
 
-        $this->assertSame('ending', $node->type);
+        $this->assertSame(NodeType::ENDING, $node->type);
         $this->assertTrue($node->victory);
     }
 }

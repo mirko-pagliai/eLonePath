@@ -31,7 +31,7 @@ class Node
         protected readonly string $gameId,
         string $content,
         protected(set) array $choices,
-        protected(set) readonly string $type,
+        protected(set) readonly NodeType $type,
         protected(set) readonly ?bool $victory,
     ) {
         $this->content = Markdown::defaultTransform($content);
@@ -54,7 +54,7 @@ class Node
                 callback: fn(array $choice): Choice => Choice::createFromArray($choice),
                 array: $data['choices'],
             ),
-            type: $data['type'],
+            type: NodeType::from($data['type']),
             victory: $data['victory'],
         );
     }

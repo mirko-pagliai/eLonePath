@@ -44,9 +44,9 @@ final readonly class Configuration
     }
 
     /**
-     * Retrieves the namespace for the controllers.
+     * Retrieves the application's namespace.
      *
-     * @return string The controller namespace.
+     * @return string The application's namespace.
      */
     public function namespace(): string
     {

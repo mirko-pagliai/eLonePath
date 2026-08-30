@@ -21,7 +21,7 @@ class ViewTest extends TestCase
     #[Test]
     public function testGet(): void
     {
-        $configuration = new Configuration(rootPath: TEST_APP, controllerNamespace: 'TestApp');
+        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
 
         $view = new View($configuration)
             ->set(['key1' => 'value1']);
@@ -45,7 +45,7 @@ class ViewTest extends TestCase
     #[Test]
     public function testSet(): void
     {
-        $configuration = new Configuration(rootPath: TEST_APP, controllerNamespace: 'TestApp');
+        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
 
         $view = new View($configuration);
 

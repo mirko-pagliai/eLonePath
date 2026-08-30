@@ -27,7 +27,7 @@ final class Router
             $controller = 'Pages';
             $action = 'home';
         } else {
-            $controller = $segments[0];
+            $controller = new ControllerName($segments[0])->studlyCase();
             $action = $segments[1] ?? 'index';
         }
 
@@ -41,7 +41,7 @@ final class Router
      */
     public function resolve(string $controller, string $action, array $params = []): Route
     {
-        return new Route($controller, $action, $this->configuration->controllerNamespace(), $params);
+        return new Route($controller, $action, $this->configuration->namespace(), $params);
     }
 
     /**

@@ -14,16 +14,13 @@ final readonly class Configuration
      * Constructor method.
      *
      * @param string $rootPath The root path for the application.
-     * @param string $controllerNamespace The namespace for the controllers.
-     * @param bool $debug Indicates whether the application is in debug mode.
+     * @param string $namespace The namespace for the application.
+     * @param bool $debug Whether the application is in debug mode. Defaults to `false`.
      *
      * @return void
      */
-    public function __construct(
-        private string $rootPath,
-        private string $controllerNamespace,
-        private bool $debug = false,
-    ) {
+    public function __construct(private string $rootPath, private string $namespace, private bool $debug = false)
+    {
     }
 
     /**
@@ -51,9 +48,9 @@ final readonly class Configuration
      *
      * @return string The controller namespace.
      */
-    public function controllerNamespace(): string
+    public function namespace(): string
     {
-        return $this->controllerNamespace;
+        return $this->namespace;
     }
 
     /**

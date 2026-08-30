@@ -41,7 +41,7 @@ final class HtmlHelper
             }
         }
 
-        return new Route($controller, $action, $this->configuration->controllerNamespace(), $params)->path();
+        return new Route($controller, $action, $this->configuration->namespace(), $params)->path();
     }
 
     /**

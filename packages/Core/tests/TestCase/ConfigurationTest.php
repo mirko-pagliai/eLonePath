@@ -23,7 +23,7 @@ class ConfigurationTest extends TestCase
     #[TestWith(['/tmp/'])]
     public function testRootPath(string $rootPath): void
     {
-        $configuration = new Configuration(rootPath: $rootPath, controllerNamespace: 'TestApp');
+        $configuration = new Configuration(rootPath: $rootPath, namespace: 'TestApp');
         $result = $configuration->rootPath();
         $this->assertSame('/tmp/', $result);
     }
@@ -34,19 +34,19 @@ class ConfigurationTest extends TestCase
     #[Test]
     public function testTemplatesPath(): void
     {
-        $configuration = new Configuration(rootPath: TEST_APP, controllerNamespace: 'TestApp');
+        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
         $result = $configuration->templatesPath();
-        $this->assertSame('/tmp/templates/', $result);
+        $this->assertSame(TEST_APP . 'templates/', $result);
     }
 
     /**
-     * @link \Elone\Core\Configuration::controllerNamespace()
+     * @link \Elone\Core\Configuration::namespace()
      */
     #[Test]
-    public function testControllerNamespace(): void
+    public function testNamespace(): void
     {
-        $configuration = new Configuration(rootPath: TEST_APP, controllerNamespace: 'TestApp');
-        $result = $configuration->controllerNamespace();
+        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
+        $result = $configuration->namespace();
         $this->assertSame('TestApp', $result);
     }
 
@@ -56,11 +56,11 @@ class ConfigurationTest extends TestCase
     #[Test]
     public function testDebug(): void
     {
-        $configuration = new Configuration(rootPath: TEST_APP, controllerNamespace: 'TestApp');
+        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
         $result = $configuration->debug();
         $this->assertSame(false, $result);
 
-        $configuration = new Configuration(rootPath: TEST_APP, controllerNamespace: 'TestApp', debug: true);
+        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp', debug: true);
         $result = $configuration->debug();
         $this->assertSame(true, $result);
     }

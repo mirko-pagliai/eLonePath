@@ -6,6 +6,7 @@ namespace TestCase\View;
 use Elone\Core\Configuration;
 use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**

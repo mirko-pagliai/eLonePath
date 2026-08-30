@@ -38,8 +38,10 @@ final class ErrorHandler
             'exception' => $exception,
         ]);
 
+        $template = intdiv($status, 100) === 4 ? 'error/400' : 'error/500';
+
         try {
-            $content = $this->view->render('error/default', 'error');
+            $content = $this->view->render($template, 'error');
         } catch (Throwable) {
             /**
              * The error template itself failed to render: fall back to a bare response instead of letting the exception

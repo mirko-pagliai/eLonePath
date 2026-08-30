@@ -5,12 +5,11 @@ declare(strict_types=1);
  * @var bool $debug
  * @var \Throwable $exception
  * @var string $message
+ * @var int $status
  */
 ?>
 
-<h1>500 Internal Server Error</h1>
-
-<p><?= htmlspecialchars($message) ?></p>
+<h1><?= $status ?> <?= htmlspecialchars($message) ?></h1>
 
 <?php if ($debug) : ?>
     <hr>

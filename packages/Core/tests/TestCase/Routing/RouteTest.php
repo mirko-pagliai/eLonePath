@@ -109,6 +109,6 @@ class RouteTest extends TestCase
     {
         $route = new Route(controller: 'Pages', action: 'home', controllerNamespace: 'TestApp');
         $result = $route->path();
-        $this->assertSame("/pages/home", $result);
+        $this->assertSame('/pages/home', $result);
     }
 }

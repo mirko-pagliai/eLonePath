@@ -9,6 +9,8 @@ use Composer\Script\Event;
  * Prepares the assets webroot needs to run: vendor CSS/JS copied into place, and each story's image folder made
  * available under `webroot/assets/img/stories/`. Registered as a Composer script, run automatically after
  * `composer install`/`composer update`.
+ *
+ * @codeCoverageIgnore
  */
 final class AssetsInstaller
 {

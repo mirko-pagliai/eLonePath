@@ -7,7 +7,7 @@
 			"Elone\\Core\\": "src/"
 		},
 		"files": [
-			"packages/Core/src/global_functions.php"
+			"src/global_functions.php"
 		]
 	},
 	"autoload-dev": {

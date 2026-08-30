@@ -9,7 +9,8 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"TestCase\\": "tests/TestCase/"
+			"Elone\\Core\\Test\\": "tests/TestCase/",
+			"TestApp\\": "tests/test_app/"
 		}
 	},
 	"require": {
@@ -20,5 +21,10 @@
 		"phpstan/phpstan": "^2.2",
 		"phpunit/phpunit": "^13.2",
 		"symfony/var-dumper": "^8.1"
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
 	}
 }

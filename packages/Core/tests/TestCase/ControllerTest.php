@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Test\Routing;
+namespace Elone\Core\Test;
 
 use Elone\Core\Configuration;
 use Elone\Core\Controller;

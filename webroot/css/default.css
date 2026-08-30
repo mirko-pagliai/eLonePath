@@ -36,7 +36,7 @@ body {
     color: var(--elone-ink);
 }
 
-.elone-page {
+article {
     /** max-width: 900px; */
     background: radial-gradient(
             ellipse at center,
@@ -46,8 +46,8 @@ body {
     );
 }
 
-.elone-title {
-    font-family: "Cinzel Variable", serif;
+.ff-cinzel {
+    font-family: 'Cinzel Variable', serif;
 }
 
 .story-page {

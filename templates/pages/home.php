@@ -8,22 +8,18 @@ declare(strict_types=1);
  */
 ?>
 
-<article class="elone-page mx-auto p-4 p-md-5">
+<h1 class="display-3 ff-cinzel fw-semibold mb-3 text-center">
+    Elone Path
+</h1>
 
-    <header class="text-center py-5">
-        <h1 class="elone-title display-3 fw-semibold mb-3">
-            Elone Path
-        </h1>
+<p class="fs-4 mb-4 text-center">
+    Librogame digitali
+</p>
 
-        <p class="fs-4 mb-4">
-            Librogame digitali
-        </p>
-
-        <?= $this->Html->link(
-            text: 'Le storie',
-            route: ['controller' => 'Pages', 'action' => 'stories'],
-            attributes: ['class' => 'btn elone-button px-4 py-2'],
-        ) ?>
-    </header>
-
-</article>
+<div class="text-center">
+    <?= $this->Html->link(
+        text: 'Le storie',
+        route: ['controller' => 'Pages', 'action' => 'stories'],
+        attributes: ['class' => 'btn fs-4 elone-button px-4 py-2'],
+    ) ?>
+</div>

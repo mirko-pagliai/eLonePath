@@ -17,7 +17,9 @@ declare(strict_types=1);
     </head>
     <body class="min-vh-100">
         <main class="container py-5">
-            <?= $content ?>
+            <article class="mx-auto p-4 p-md-5">
+                <?= $content ?>
+            </article>
         </main>
     </body>
 </html>

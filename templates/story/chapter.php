@@ -32,7 +32,7 @@ declare(strict_types=1);
         <?php
         foreach ($node->choices as $choice) {
             echo $this->Html->link(
-                text: htmlspecialchars($choice->content),
+                text: $choice->content,
                 route: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $choice->target],
                 attributes: ['class' => 'elone-button fw-medium p-2 fs-5 text-decoration-none'],
             );

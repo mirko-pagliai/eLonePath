@@ -9,7 +9,7 @@ declare(strict_types=1);
 ?>
 
 <?= $this->Html->image(
-    path: 'img/logo.png',
+    path: '/img/logo.png',
     attributes: [
         'class' => 'd-block img-fluid mx-auto',
         'style' => 'max-width: 600px',

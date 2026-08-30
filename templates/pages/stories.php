@@ -15,35 +15,35 @@ declare(strict_types=1);
 
 <ul id="stories-list" class="list-unstyled">
     <?php foreach ($stories as $game) : ?>
-    <li>
-        <a
-            href="<?= $this->Html->url(['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1]) ?>"
-            class="d-block p-3 text-decoration-none"
-        >
+        <li>
+            <a
+                href="<?= htmlspecialchars($this->Html->url(['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1])) ?>"
+                class="d-block p-3 text-decoration-none"
+            >
             <div class="fs-3">
-                <?= $game->title ?>
+                <?= htmlspecialchars($game->title) ?>
             </div>
 
             <div class="fs-5 mt-1 text-body-secondary">
-                <?= $game->author ?>
+                <?= htmlspecialchars($game->author) ?>
             </div>
 
             <?php if ($game->translators) : ?>
-            <div class="fs-5 mt-1 text-body-secondary">
-                Tradotto da <?= $game->translators ?>
-            </div>
+                <div class="fs-5 mt-1 text-body-secondary">
+                    Tradotto da <?= htmlspecialchars($game->translators) ?>
+                </div>
             <?php endif; ?>
 
             <?php if ($game->description) : ?>
-            <div class="mt-1 fs-5">
-                <?= $game->description ?>
-            </div>
+                <div class="mt-1 fs-5">
+                    <?= htmlspecialchars($game->description) ?>
+                </div>
             <?php endif; ?>
 
             <div class="mt-1">
-                (lingua <?= $game->language ?>, versione <?= $game->version ?>)
+                (lingua <?= htmlspecialchars($game->language) ?>, versione <?= htmlspecialchars($game->version) ?>)
             </div>
-        </a>
-    </li>
+            </a>
+        </li>
     <?php endforeach; ?>
 </ul>

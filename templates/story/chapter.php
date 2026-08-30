@@ -26,14 +26,15 @@ declare(strict_types=1);
 
 <?php if ($node->choices) : ?>
     <nav id="story-choices" class="d-flex flex-column gap-2">
-        <?php foreach ($node->choices as $choice) : ?>
-        <a
-                href="<?= $choice->target ?>"
-                class="elone-button fw-medium p-2 fs-5 text-decoration-none"
-        >
-            <?= $choice->content ?>
-        </a>
-        <?php endforeach; ?>
+        <?php
+        foreach ($node->choices as $choice) {
+            echo $this->Html->link(
+                text: $choice->content,
+                route: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $choice->target],
+                attributes: ['class' => 'elone-button fw-medium p-2 fs-5 text-decoration-none'],
+            );
+        }
+        ?>
     </nav>
 <?php endif; ?>
 
@@ -53,11 +54,11 @@ declare(strict_types=1);
 
             <p class="fs-3 mb-4">Hai perso!</p>
 
-            <a
-               href="<?= $this->Html->url(['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1]) ?>"
-               class="elone-button d-inline-block px-3 py-2 text-decoration-none">
-                Ricomincia da pagina 1
-            </a>
+            <?= $this->Html->link(
+                text: 'Ricomincia da pagina 1',
+                route: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
+                attributes: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],
+            ) ?>
         </div>
     <?php endif; ?>
 </div>

@@ -27,5 +27,14 @@
         <severity>0</severity>
     </rule>
 
+    <rule ref="SlevomatCodingStandard.Namespaces.FullyQualifiedClassNameInAnnotation">
+        <properties>
+            <property name="ignoredAnnotationNames" type="array">
+                <element value="@phpstan-type"/>
+                <element value="@phpstan-import-type"/>
+            </property>
+        </properties>
+    </rule>
+
     <exclude-pattern>/vendor</exclude-pattern>
 </ruleset>

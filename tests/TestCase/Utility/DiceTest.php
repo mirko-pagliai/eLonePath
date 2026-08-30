@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Test\Utility;
 
 use App\Utility\Dice;
-use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**

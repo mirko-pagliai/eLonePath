@@ -10,14 +10,14 @@ namespace App\Story;
  */
 class Choice
 {
-    public protected(set) readonly string $text;
+    public protected(set) readonly string $content;
 
-    public function __construct(string $text, protected(set) readonly int $target)
+    public function __construct(string $content, protected(set) readonly int $target)
     {
-        $this->text = str_replace(
+        $this->content = str_replace(
             search: '{{page}}',
             replace: (string)$target,
-            subject: $text,
+            subject: $content,
         );
     }
 }

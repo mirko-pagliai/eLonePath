@@ -21,12 +21,12 @@ declare(strict_types=1);
 <?php endif ?>
 
 <section id="story-content" class="fs-4 mb-4">
-    <?= $node->text ?>
+    <?= $node->content ?>
 </section>
 
 
 <nav id="story-choices" class="d-flex flex-column gap-2">
     <?php foreach ($node->choices as $choice) : ?>
-    <a href="<?= $choice->target ?>" class="elone-button text-decoration-none"><?= $choice->text ?></a>
+    <a href="<?= $choice->target ?>" class="elone-button text-decoration-none"><?= $choice->content ?></a>
     <?php endforeach; ?>
 </nav>

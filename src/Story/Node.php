@@ -19,7 +19,7 @@ class Node
      */
     public protected(set) ?string $image = null;
 
-    public protected(set) readonly string $text;
+    public protected(set) readonly string $content;
 
     public function __construct(
         protected(set) readonly int $id,
@@ -28,7 +28,7 @@ class Node
         array $choices,
         protected readonly string $type = 'story',
     ) {
-        $this->text = Markdown::defaultTransform($content);
+        $this->content = Markdown::defaultTransform($content);
 
         if (file_exists("webroot/assets/img/stories/$this->gameId/$this->id.jpg")) {
             $this->image = "/assets/img/stories/$this->gameId/$this->id.jpg";
@@ -37,7 +37,7 @@ class Node
         $this->choices = [];
         foreach ($choices as $choice) {
             $this->choices[] = new Choice(
-                text: $choice->text,
+                content: $choice->content,
                 target: (int)$choice->target,
             );
         }

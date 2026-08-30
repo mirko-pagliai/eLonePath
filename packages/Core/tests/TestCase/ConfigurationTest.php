@@ -25,7 +25,7 @@ class ConfigurationTest extends TestCase
     {
         $configuration = new Configuration(rootPath: $rootPath, namespace: 'TestApp');
         $result = $configuration->rootPath();
-        $this->assertSame('/tmp/', $result);
+        $this->assertSame($rootPath, $result);
     }
 
     /**

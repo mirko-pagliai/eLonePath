@@ -19,13 +19,14 @@ class ConfigurationTest extends TestCase
      * @link \Elone\Core\Configuration::rootPath()
      */
     #[Test]
-    #[TestWith([TEST_APP])]
-    #[TestWith(['/tmp/'])]
-    public function testRootPath(string $rootPath): void
+    #[TestWith([TEST_APP, TEST_APP])]
+    #[TestWith(['/tmp/', '/tmp'])]
+    #[TestWith(['/tmp/', '/tmp/'])]
+    public function testRootPath(string $expectedRootPath, string $rootPath): void
     {
         $configuration = new Configuration(rootPath: $rootPath, namespace: 'TestApp');
         $result = $configuration->rootPath();
-        $this->assertSame($rootPath, $result);
+        $this->assertSame($expectedRootPath, $result);
     }
 
     /**

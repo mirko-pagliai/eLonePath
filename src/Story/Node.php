@@ -5,17 +5,27 @@ namespace App\Story;
 
 use Michelf\Markdown;
 
+/**
+ * @phpstan-import-type ChoiceData from \App\Story\Choice
+ * @phpstan-type NodeData array{
+ *     content: string,
+ *     choices: list<ChoiceData>,
+ *     type: string,
+ *     victory: bool|null,
+ * }
+ */
 class Node
 {
     /**
      * Image related to `webroot/assets/img/stories` if it exists for this node, otherwise `null`.
-     *
-     * @var string|null
      */
     public protected(set) ?string $image = null;
 
     public protected(set) readonly string $content;
 
+    /**
+     * @param list<\App\Story\Choice> $choices
+     */
     public function __construct(
         protected(set) readonly int $id,
         protected readonly Game $game,
@@ -31,6 +41,9 @@ class Node
         }
     }
 
+    /**
+     * @param NodeData $data
+     */
     public static function createFromArray(int $id, Game $game, array $data): Node
     {
         return new self(

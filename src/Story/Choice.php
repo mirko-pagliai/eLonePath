@@ -4,9 +4,7 @@ declare(strict_types=1);
 namespace App\Story;
 
 /**
- * Represents a selectable choice with an associated target.
- *
- * The `Choice` class replaces placeholders within the provided text with a specified target string upon instantiation.
+ * @phpstan-type ChoiceData array{content: string, target: int}
  */
 class Choice
 {
@@ -21,6 +19,9 @@ class Choice
         );
     }
 
+    /**
+     * @param ChoiceData $data
+     */
     public static function createFromArray(array $data): Choice
     {
         return new self(

@@ -5,8 +5,31 @@ namespace App\Story;
 
 use RuntimeException;
 
+/**
+ * @phpstan-import-type NodeData from \App\Story\Node
+ * @phpstan-type GameData array{
+ *     game: array{
+ *         id: string,
+ *         title: string,
+ *         author: string,
+ *         translators: string,
+ *         description: string,
+ *         language: string,
+ *         version: string,
+ *     },
+ *     nodes: array<int, NodeData>,
+ * }
+ */
 class Game
 {
+    /**
+     * @var array<int, \App\Story\Node>
+     */
+    protected(set) array $nodes;
+
+    /**
+     * @param array<int, NodeData> $nodes
+     */
     public function __construct(
         protected(set) readonly string $gameId,
         protected(set) readonly string $title,
@@ -15,8 +38,9 @@ class Game
         protected(set) readonly string $description,
         protected(set) readonly string $language,
         protected(set) readonly string $version,
-        protected(set) array $nodes,
+        array $nodes,
     ) {
+        $this->nodes = [];
         foreach ($nodes as $nodeId => $node) {
             $this->nodes[$nodeId] = Node::createFromArray(id: $nodeId, game: $this, data: $node);
         }
@@ -33,6 +57,9 @@ class Game
         return $this->nodes[$nodeId];
     }
 
+    /**
+     * @param GameData $data
+     */
     public static function createFromArray(array $data): Game
     {
         return new self(
@@ -54,6 +81,7 @@ class Game
             throw new RuntimeException("Failed to read `$path`.");
         }
 
+        /** @var GameData|null $json */
         $json = json_decode($contents, true);
         if (!is_array($json)) {
             throw new RuntimeException("Failed to parse `$path`.");

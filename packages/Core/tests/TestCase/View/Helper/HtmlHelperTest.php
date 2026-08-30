@@ -65,6 +65,29 @@ class HtmlHelperTest extends TestCase
     }
 
     /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::icon()
+     */
+    #[Test]
+    #[TestWith(['github'])]
+    #[TestWith(['bi-github'])]
+    #[TestWith(['bi bi-github'])]
+    public function testIcon(string $name): void
+    {
+        $result = $this->htmlHelper->icon($name);
+        $this->assertSame('<i class="bi bi-github"></i>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::icon()
+     */
+    #[Test]
+    public function testIconWithAttributes(): void
+    {
+        $result = $this->htmlHelper->icon('github', ['class' => 'fs-3', 'aria-hidden' => 'true']);
+        $this->assertSame('<i class="bi bi-github fs-3" aria-hidden="true"></i>', $result);
+    }
+
+    /**
      * @link \Elone\Core\View\Helper\HtmlHelper::image()
      */
     #[Test]

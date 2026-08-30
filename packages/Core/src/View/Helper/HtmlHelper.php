@@ -40,6 +40,36 @@ final class HtmlHelper
         return new Route($controller, $action, $this->configuration->namespace(), $params)->path();
     }
 
+    public function icon(string $name, array $attributes = []): string
+    {
+        $name = trim($name);
+
+        if (str_starts_with($name, 'bi bi-')) {
+            $name = substr($name, strlen('bi bi-'));
+        } elseif (str_starts_with($name, 'bi-')) {
+            $name = substr($name, strlen('bi-'));
+        }
+
+        $class = "bi bi-$name";
+
+        if (isset($attributes['class'])) {
+            $class .= ' ' . $attributes['class'];
+            unset($attributes['class']);
+        }
+
+        $htmlAttributes = '';
+
+        foreach ($attributes as $attributeName => $value) {
+            $htmlAttributes .= sprintf(
+                ' %s="%s"',
+                htmlspecialchars($attributeName, ENT_QUOTES),
+                htmlspecialchars((string)$value, ENT_QUOTES),
+            );
+        }
+
+        return sprintf('<i class="%s"%s></i>', htmlspecialchars($class, ENT_QUOTES), $htmlAttributes);
+    }
+
     /**
      * Builds an `<img>` tag for the given source path. `$path` is not run through `url()` — pass it exactly as it
      * should appear in `src`, since images are served as static files rather than routed. Pass `alt` via

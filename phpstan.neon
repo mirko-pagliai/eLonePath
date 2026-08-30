@@ -1,11 +1,9 @@
 parameters:
     level: 9
 
-    bootstrapFiles:
-        - config/bootstrap.php
-
     paths:
         - config
         - src
+        - packages/Core/src
         - templates
         - webroot

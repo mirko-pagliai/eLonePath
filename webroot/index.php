@@ -25,7 +25,9 @@ if (PHP_SAPI === 'cli-server') {
     }
 }
 
-require dirname(__DIR__) . '/config/bootstrap.php';
+define('ROOT', dirname(__DIR__));
+
+require ROOT . '/vendor/autoload.php';
 
 $envFile = ROOT . '/.env';
 if (file_exists($envFile)) {

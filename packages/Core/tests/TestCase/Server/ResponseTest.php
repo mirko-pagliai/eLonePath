@@ -39,4 +39,20 @@ class ResponseTest extends TestCase
         $this->assertSame('', $response->content());
         $this->assertSame(200, $response->status());
     }
+
+    /**
+     * @link \Elone\Core\Server\Response::send()
+     */
+    #[Test]
+    public function testSend(): void
+    {
+        $response = new Response('Hello, world!', 201);
+
+        ob_start();
+        $response->send();
+        $output = ob_get_clean();
+
+        $this->assertSame('Hello, world!', $output);
+        $this->assertSame(201, http_response_code());
+    }
 }

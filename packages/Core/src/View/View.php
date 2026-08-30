@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Elone\Core\View;
 
+use Elone\Core\Exception\LayoutNotFoundException;
 use Elone\Core\Exception\TemplateNotFoundException;
 use Elone\Core\View\Helper\HtmlHelper;
 use RuntimeException;
+use Throwable;
 
 final class View
 {
@@ -40,13 +42,18 @@ final class View
         $data = $this->data;
         $this->data = [];
 
+        // Always release the buffer, even on failure
         ob_start();
 
-        extract($data, EXTR_SKIP);
+        try {
+            extract($data, EXTR_SKIP);
+            require $templateFile;
+            $content = ob_get_clean() ?: '';
+        } catch (Throwable $exception) {
+            ob_end_clean();
 
-        require $templateFile;
-
-        $content = ob_get_clean() ?: '';
+            throw $exception;
+        }
 
         if ($layout === null) {
             return $content;
@@ -66,15 +73,23 @@ final class View
         $layoutFile = $this->templatesPath . "/layout/$layout.php";
 
         if (!is_file($layoutFile)) {
-            throw new RuntimeException("Layout not found: $layout");
+            throw new LayoutNotFoundException("Layout not found: `$layout`");
         }
 
+        // Always release the buffer, even on failure
         ob_start();
 
-        extract($data, EXTR_SKIP);
+        try {
+            extract($data, EXTR_SKIP);
+            require $layoutFile;
 
-        require $layoutFile;
+            $content = ob_get_clean() ?: '';
+        } catch (Throwable $exception) {
+            ob_end_clean();
 
-        return ob_get_clean() ?: '';
+            throw $exception;
+        }
+
+        return $content;
     }
 }

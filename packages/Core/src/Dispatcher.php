@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Elone\Core;
 
 use Elone\Core\Exception\HttpException;
+use Elone\Core\Exception\UnsupportedParameterTypeException;
 use Elone\Core\Routing\ControllerName;
 use Elone\Core\Routing\Route;
 use Elone\Core\Server\Response;
@@ -80,6 +81,8 @@ readonly class Dispatcher
      * @param \ReflectionParameter $parameter The reflection parameter containing type information for the conversion.
      * @return mixed The converted value, matching the parameter's type hint.
      * @throws \Elone\Core\Exception\HttpException If the conversion fails due to an invalid value matching a built-in type.
+     * @throws \Elone\Core\Exception\UnsupportedParameterTypeException If the parameter's built-in type is not one this
+     * method knows how to build from a URL segment.
      */
     private static function convert(string $value, ReflectionParameter $parameter): mixed
     {
@@ -94,7 +97,7 @@ readonly class Dispatcher
                 FILTER_VALIDATE_INT,
                 FILTER_NULL_ON_FAILURE,
             ) ?? throw new HttpException(
-                "Invalid integer parameter '{$value}' for \${$parameter->getName()}.",
+                "Invalid integer parameter '$value' for `\${$parameter->getName()}`.",
             ),
 
             'float' => filter_var(
@@ -102,25 +105,27 @@ readonly class Dispatcher
                 FILTER_VALIDATE_FLOAT,
                 FILTER_NULL_ON_FAILURE,
             ) ?? throw new HttpException(
-                "Invalid float parameter '{$value}' for \${$parameter->getName()}.",
+                "Invalid float parameter '$value' for `\${$parameter->getName()}`.",
             ),
 
             'bool' => match (strtolower($value)) {
                 '1', 'true', 'yes' => true,
                 '0', 'false', 'no' => false,
                 default => throw new HttpException(
-                    "Invalid boolean parameter '{$value}' for \${$parameter->getName()}.",
+                    "Invalid boolean parameter '$value' for `\${$parameter->getName()}`.",
                 ),
             },
 
             'string' => $value,
 
-            default => $value,
+            default => throw new UnsupportedParameterTypeException(
+                "Unsupported parameter type '{$type->getName()}' for `\${$parameter->getName()}`.",
+            ),
         };
     }
 
     protected function templateName(Route $route): string
     {
-        return new ControllerName($route->controller)->kebabCase() . '/' . $route->action;
+        return new ControllerName($route->controller)->kebabCase() . "/$route->action";
     }
 }

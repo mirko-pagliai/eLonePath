@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Elone\Core\Test\View\Helper;
 
-use Elone\Core\Configuration;
 use Elone\Core\Exception\RouteNotFoundException;
 use Elone\Core\View\Helper\HtmlHelper;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -24,9 +23,7 @@ class HtmlHelperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $configuration = new Configuration(TEST_APP, 'TestApp');
-
-        $this->htmlHelper = new HtmlHelper($configuration);
+        $this->htmlHelper = new HtmlHelper();
     }
 
     /**

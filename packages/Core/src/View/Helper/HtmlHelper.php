@@ -3,16 +3,11 @@ declare(strict_types=1);
 
 namespace Elone\Core\View\Helper;
 
-use Elone\Core\Configuration;
 use Elone\Core\Exception\RouteNotFoundException;
 use Elone\Core\Routing\Route;
 
 final class HtmlHelper
 {
-    public function __construct(private readonly Configuration $configuration)
-    {
-    }
-
     /**
      * Converts an associative array of HTML attributes into a formatted string suitable for insertion into an HTML tag.
      * Keys in the array represent attribute names, and their corresponding values represent the attribute values.
@@ -143,8 +138,7 @@ final class HtmlHelper
         $route = new Route(
             controller: $controller,
             action: $action,
-            namespace: $this->configuration->namespace(),
-            params: $params
+            params: $params,
         );
 
         return $route->path();

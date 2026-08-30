@@ -20,14 +20,15 @@ final readonly class ControllerName
     }
 
     /**
-     * studlyCase, e.g. `UsersSettings` — used for class names or variable naming conventions.
+     * studlyCase, e.g. `UsersSettings` — used for class names or variable naming conventions. A word that is already
+     * entirely uppercase (an acronym, e.g. `API`) is kept as-is instead of being re-cased.
      *
      * @return string Returns the converted string in StudlyCase format.
      */
     public function studlyCase(): string
     {
         return implode('', array_map(
-            static fn(string $word): string => ucfirst(strtolower($word)),
+            static fn(string $word): string => ctype_upper($word) ? $word : ucfirst(strtolower($word)),
             $this->words,
         ));
     }
@@ -43,18 +44,23 @@ final readonly class ControllerName
     }
 
     /**
-     * Splits a raw string into an array of substrings based on delimiters such as dashes, underscores, or uppercase
-     * letter transitions.
+     * Splits a raw string into an array of words based on delimiters (dashes, underscores) or PascalCase/camelCase
+     * boundaries. A run of consecutive uppercase letters is kept together as a single word (e.g. `API`, `HTML`)
+     * unless it's immediately followed by a lowercase letter, in which case the last uppercase letter of the run
+     * starts the next word instead (e.g. `HTMLParser` splits into `HTML` and `Parser`).
      *
-     * @param string $raw The input string to be split into substrings.
-     * @return list<string> An array of substrings obtained from the input string.
+     * @param string $raw The input string to be split into words.
+     * @return list<string> An array of words obtained from the input string.
      */
     private static function split(string $raw): array
     {
         $words = [];
         $current = '';
+        $length = strlen($raw);
 
-        foreach (str_split($raw) as $char) {
+        for ($i = 0; $i < $length; $i++) {
+            $char = $raw[$i];
+
             if ($char === '-' || $char === '_') {
                 if ($current !== '') {
                     $words[] = $current;
@@ -64,7 +70,10 @@ final readonly class ControllerName
                 continue;
             }
 
-            if (ctype_upper($char) && $current !== '') {
+            $next = $i + 1 < $length ? $raw[$i + 1] : '';
+            $previousWasUpper = $current !== '' && ctype_upper($current[-1]);
+
+            if (ctype_upper($char) && $current !== '' && (!$previousWasUpper || ctype_lower($next))) {
                 $words[] = $current;
                 $current = '';
             }

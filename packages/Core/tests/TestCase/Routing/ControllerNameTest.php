@@ -24,6 +24,8 @@ class ControllerNameTest extends TestCase
     #[TestWith(['UsersSettings', 'UsersSettings'])]
     #[TestWith(['users-settings', 'UsersSettings'])]
     #[TestWith(['users_settings', 'UsersSettings'])]
+    #[TestWith(['API', 'API'])]
+    #[TestWith(['APIUsers', 'APIUsers'])]
     #[TestWith(['', ''])]
     public function testStudlyCase(string $raw, string $expected): void
     {
@@ -40,28 +42,12 @@ class ControllerNameTest extends TestCase
     #[TestWith(['UsersSettings', 'users-settings'])]
     #[TestWith(['users-settings', 'users-settings'])]
     #[TestWith(['users_settings', 'users-settings'])]
+    #[TestWith(['API', 'api'])]
+    #[TestWith(['APIUsers', 'api-users'])]
     #[TestWith(['', ''])]
     public function testKebabCase(string $raw, string $expected): void
     {
         $result = new ControllerName($raw)->kebabCase();
         $this->assertSame($expected, $result);
-    }
-
-    /**
-     * Documents a known limitation rather than fixing it: a run of consecutive uppercase letters (a fully
-     * upper-cased acronym) is split one letter at a time instead of being treated as a single word, affecting both
-     * `studlyCase()` and `kebabCase()`. Left as-is because this project's naming convention — matching CakePHP's own
-     * coding standard — always writes an acronym as a single capitalized word (`Api`, never `API`), so the ambiguous
-     * input never occurs in practice.
-     *
-     * @link \Elone\Core\Routing\ControllerName::studlyCase()
-     * @link \Elone\Core\Routing\ControllerName::kebabCase()
-     */
-    #[Test]
-    public function testDoesNotMergeAllCapsRuns(): void
-    {
-        $controllerName = new ControllerName('API');
-        $this->assertSame('API', $controllerName->studlyCase());
-        $this->assertSame('a-p-i', $controllerName->kebabCase());
     }
 }

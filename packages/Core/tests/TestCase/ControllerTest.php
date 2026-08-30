@@ -22,7 +22,7 @@ class ControllerTest extends TestCase
     #[Test]
     public function testGetView(): void
     {
-        $configuration = new Configuration(rootPath: '/tmp', controllerNamespace: 'TestApp');
+        $configuration = new Configuration(rootPath: TEST_APP, controllerNamespace: 'TestApp');
 
         $view = new class (configuration: $configuration) extends View {
             public array $data = [];
@@ -41,7 +41,7 @@ class ControllerTest extends TestCase
     #[Test]
     public function testSet(): void
     {
-        $configuration = new Configuration(rootPath: '/tmp', controllerNamespace: 'TestApp');
+        $configuration = new Configuration(rootPath: TEST_APP, controllerNamespace: 'TestApp');
 
         $view = new class (configuration: $configuration) extends View {
             public array $data = [];

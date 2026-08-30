@@ -19,7 +19,7 @@ class ConfigurationTest extends TestCase
      * @link \Elone\Core\Configuration::rootPath()
      */
     #[Test]
-    #[TestWith(['/tmp'])]
+    #[TestWith([TEST_APP])]
     #[TestWith(['/tmp/'])]
     public function testRootPath(string $rootPath): void
     {
@@ -34,7 +34,7 @@ class ConfigurationTest extends TestCase
     #[Test]
     public function testTemplatesPath(): void
     {
-        $configuration = new Configuration(rootPath: '/tmp', controllerNamespace: 'TestApp');
+        $configuration = new Configuration(rootPath: TEST_APP, controllerNamespace: 'TestApp');
         $result = $configuration->templatesPath();
         $this->assertSame('/tmp/templates/', $result);
     }
@@ -45,7 +45,7 @@ class ConfigurationTest extends TestCase
     #[Test]
     public function testControllerNamespace(): void
     {
-        $configuration = new Configuration(rootPath: '/tmp', controllerNamespace: 'TestApp');
+        $configuration = new Configuration(rootPath: TEST_APP, controllerNamespace: 'TestApp');
         $result = $configuration->controllerNamespace();
         $this->assertSame('TestApp', $result);
     }
@@ -56,11 +56,11 @@ class ConfigurationTest extends TestCase
     #[Test]
     public function testDebug(): void
     {
-        $configuration = new Configuration(rootPath: '/tmp', controllerNamespace: 'TestApp');
+        $configuration = new Configuration(rootPath: TEST_APP, controllerNamespace: 'TestApp');
         $result = $configuration->debug();
         $this->assertSame(false, $result);
 
-        $configuration = new Configuration(rootPath: '/tmp', controllerNamespace: 'TestApp', debug: true);
+        $configuration = new Configuration(rootPath: TEST_APP, controllerNamespace: 'TestApp', debug: true);
         $result = $configuration->debug();
         $this->assertSame(true, $result);
     }

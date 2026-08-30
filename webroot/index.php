@@ -33,10 +33,9 @@ if (file_exists($envFile)) {
         ->toEnv();
 }
 
-$config = require ROOT . '/config/config.php';
-
 $router = new Router();
-$errorHandler = new ErrorHandler(debug: $config['app']['debug']);
+$dispatcher = new Dispatcher();
+$errorHandler = new ErrorHandler(debug: CONFIG['app']['debug']);
 
-$app = new Application($router, new Dispatcher(), $errorHandler);
+$app = new Application($router, $dispatcher, $errorHandler);
 $app->run();

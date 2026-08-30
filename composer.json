@@ -29,6 +29,11 @@
 			"packages/Core/src/global_functions.php"
 		]
 	},
+	"autoload-dev": {
+		"psr-4": {
+			"\\Test\\": "tests/TestCase/"
+		}
+	},
 	"scripts": {
 		"run-server": "php -S localhost:9996 -t webroot webroot/index.php",
 		"assets": [

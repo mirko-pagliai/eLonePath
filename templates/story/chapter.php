@@ -33,7 +33,7 @@ declare(strict_types=1);
         foreach ($node->choices as $choice) {
             echo $this->Html->link(
                 text: $choice->content,
-                route: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $choice->target],
+                params: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $choice->target],
                 attributes: ['class' => 'elone-button fw-medium p-2 fs-5 text-decoration-none'],
             );
         }
@@ -57,12 +57,11 @@ declare(strict_types=1);
 
                 <p class="fs-3 mb-4">Hai perso!</p>
 
-                <a
-                    href="<?= $this->Html->url(['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1]) ?>"
-                    class="elone-button d-inline-block px-3 py-2 text-decoration-none"
-                >
-                Ricomincia da pagina 1
-                </a>
+                <?= $this->Html->link(
+                    text: 'Ricomincia da pagina 1',
+                    params: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
+                    attributes: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],
+                ) ?>
             </div>
         <?php endif; ?>
     </div>

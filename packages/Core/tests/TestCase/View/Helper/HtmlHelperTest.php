@@ -30,41 +30,6 @@ class HtmlHelperTest extends TestCase
     }
 
     /**
-     * @link \Elone\Core\View\Helper\HtmlHelper::url()
-     */
-    #[Test]
-    #[TestWith([['controller' => 'Pages', 'action' => 'home'], '/pages/home'])]
-    #[TestWith([['controller' => 'Pages', 'action' => 'view', '123'], '/pages/view/123'])]
-    #[TestWith([['controller' => 'UsersSettings'], '/users-settings/index'])]
-    public function testUrl(array $route, string $expected): void
-    {
-        $result = $this->htmlHelper->url($route);
-        $this->assertSame($expected, $result);
-    }
-
-    /**
-     * @link \Elone\Core\View\Helper\HtmlHelper::url()
-     */
-    #[Test]
-    public function testUrlWithMissingController(): void
-    {
-        $this->expectException(RouteNotFoundException::class);
-        $this->expectExceptionMessageIs('Invalid route.');
-        $this->htmlHelper->url([]);
-    }
-
-    /**
-     * @link \Elone\Core\View\Helper\HtmlHelper::url()
-     */
-    #[Test]
-    public function testUrlWithInvalidParameter(): void
-    {
-        $this->expectException(RouteNotFoundException::class);
-        $this->expectExceptionMessageIs('Invalid route parameter: `extra`.');
-        $this->htmlHelper->url(['controller' => 'Pages', 'action' => 'home', 'extra' => 'value']);
-    }
-
-    /**
      * @link \Elone\Core\View\Helper\HtmlHelper::icon()
      */
     #[Test]
@@ -129,5 +94,40 @@ class HtmlHelperTest extends TestCase
             ['class' => 'btn "special"'],
         );
         $this->assertSame('<a href="/pages/home" class="btn &quot;special&quot;">A &amp; B</a>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::url()
+     */
+    #[Test]
+    #[TestWith([['controller' => 'Pages', 'action' => 'home'], '/pages/home'])]
+    #[TestWith([['controller' => 'Pages', 'action' => 'view', '123'], '/pages/view/123'])]
+    #[TestWith([['controller' => 'UsersSettings'], '/users-settings/index'])]
+    public function testUrl(array $route, string $expected): void
+    {
+        $result = $this->htmlHelper->url($route);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::url()
+     */
+    #[Test]
+    public function testUrlWithMissingController(): void
+    {
+        $this->expectException(RouteNotFoundException::class);
+        $this->expectExceptionMessageIs('Invalid route.');
+        $this->htmlHelper->url([]);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::url()
+     */
+    #[Test]
+    public function testUrlWithInvalidParameter(): void
+    {
+        $this->expectException(RouteNotFoundException::class);
+        $this->expectExceptionMessageIs('Invalid route parameter: `extra`.');
+        $this->htmlHelper->url(['controller' => 'Pages', 'action' => 'home', 'extra' => 'value']);
     }
 }

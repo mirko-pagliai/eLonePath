@@ -8,7 +8,8 @@
 		"elone/core": "*",
 		"twbs/bootstrap": "5.3.8",
 		"symfony/finder": "^8.1",
-		"michelf/php-markdown": "^2.0"
+		"michelf/php-markdown": "^2.0",
+		"twbs/bootstrap-icons": "^1.13"
 	},
 	"require-dev": {
 		"cakephp/cakephp-codesniffer": "^5.3.2",

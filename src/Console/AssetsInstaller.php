@@ -10,6 +10,11 @@ use Composer\Script\Event;
  * available under `webroot/assets/img/stories/`. Registered as a Composer script, run automatically after
  * `composer install`/`composer update`.
  *
+ * Run with:
+ * ```
+ * $ composer assets
+ * ```
+ *
  * @codeCoverageIgnore
  */
 final class AssetsInstaller
@@ -20,6 +25,7 @@ final class AssetsInstaller
 
         self::ensureDirectories($root);
         self::copyBootstrap($root);
+        self::copyBootstrapIcons($root);
         self::linkStoryImages($root, $event);
     }
 
@@ -44,6 +50,30 @@ final class AssetsInstaller
         copy(
             "$root/vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js",
             "$root/webroot/assets/js/bootstrap.bundle.min.js",
+        );
+    }
+
+    private static function copyBootstrapIcons(string $root): void
+    {
+        copy(
+            "$root/vendor/twbs/bootstrap-icons/font/bootstrap-icons.min.css",
+            "$root/webroot/assets/css/bootstrap-icons.min.css",
+        );
+
+        $fontDirectory = "$root/webroot/assets/css/fonts";
+
+        if (!is_dir($fontDirectory)) {
+            mkdir($fontDirectory, 0777, true);
+        }
+
+        copy(
+            "$root/vendor/twbs/bootstrap-icons/font/fonts/bootstrap-icons.woff2",
+            "$fontDirectory/bootstrap-icons.woff2",
+        );
+
+        copy(
+            "$root/vendor/twbs/bootstrap-icons/font/fonts/bootstrap-icons.woff",
+            "$fontDirectory/bootstrap-icons.woff",
         );
     }
 

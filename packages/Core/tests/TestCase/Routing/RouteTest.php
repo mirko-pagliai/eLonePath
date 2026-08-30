@@ -33,7 +33,7 @@ class RouteTest extends TestCase
     {
         $this->expectException(ControllerNotFoundException::class);
         $this->expectExceptionMessageIs("Invalid controller name: `$controllerName`.");
-        new Route(controller: $controllerName, action: 'action', controllerNamespace: 'TestApp');
+        new Route(controller: $controllerName, action: 'action', namespace: 'TestApp');
     }
 
     /**
@@ -46,7 +46,7 @@ class RouteTest extends TestCase
     {
         $this->expectException(ControllerNotFoundException::class);
         $this->expectExceptionMessageIs("Controller not found: `TestApp\Controller\NoExistingController`.");
-        new Route(controller: 'NoExisting', action: 'action', controllerNamespace: 'TestApp');
+        new Route(controller: 'NoExisting', action: 'action', namespace: 'TestApp');
     }
 
     /**
@@ -59,7 +59,7 @@ class RouteTest extends TestCase
     {
         $this->expectException(RouteNotFoundException::class);
         $this->expectExceptionMessageIs('`TestApp\Controller\BadController` must extend `' . Controller::class . '`.');
-        new Route(controller: 'Bad', action: 'action', controllerNamespace: 'TestApp');
+        new Route(controller: 'Bad', action: 'action', namespace: 'TestApp');
     }
 
     /**
@@ -72,7 +72,7 @@ class RouteTest extends TestCase
     {
         $this->expectException(ActionNotFoundException::class);
         $this->expectExceptionMessageIs('Action not found: `TestApp\Controller\PagesController::noExistingMethod()`.');
-        new Route(controller: 'Pages', action: 'noExistingMethod', controllerNamespace: 'TestApp');
+        new Route(controller: 'Pages', action: 'noExistingMethod', namespace: 'TestApp');
     }
 
     /**
@@ -85,20 +85,18 @@ class RouteTest extends TestCase
     {
         $this->expectException(ActionNotFoundException::class);
         $this->expectExceptionMessageIs('Action is not public: `TestApp\Controller\PagesController::invalidAction()`.');
-        new Route(controller: 'Pages', action: 'invalidAction', controllerNamespace: 'TestApp');
+        new Route(controller: 'Pages', action: 'invalidAction', namespace: 'TestApp');
     }
 
     /**
      * @link \Elone\Core\Routing\Route::controllerClass()
      */
     #[Test]
-    #[TestWith(['App'])]
-    #[TestWith(['TestApp'])]
-    public function testControllerClass(string $namespace): void
+    public function testControllerClass(): void
     {
-        $route = new Route(controller: 'Pages', action: 'home', controllerNamespace: $namespace);
+        $route = new Route(controller: 'Pages', action: 'home', namespace: 'TestApp');
         $result = $route->controllerClass();
-        $this->assertSame("$namespace\Controller\PagesController", $result);
+        $this->assertSame('TestApp\Controller\PagesController', $result);
     }
 
     /**
@@ -107,7 +105,7 @@ class RouteTest extends TestCase
     #[Test]
     public function testPath(): void
     {
-        $route = new Route(controller: 'Pages', action: 'home', controllerNamespace: 'TestApp');
+        $route = new Route(controller: 'Pages', action: 'home', namespace: 'TestApp');
         $result = $route->path();
         $this->assertSame('/pages/home', $result);
     }

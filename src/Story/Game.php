@@ -23,12 +23,7 @@ use RuntimeException;
 class Game
 {
     /**
-     * @var array<int, \App\Story\Node>
-     */
-    protected(set) array $nodes;
-
-    /**
-     * @param array<int, NodeData> $nodes
+     * @param array<int, \App\Story\Node> $nodes
      */
     public function __construct(
         protected(set) readonly string $gameId,
@@ -38,12 +33,8 @@ class Game
         protected(set) readonly string $description,
         protected(set) readonly string $language,
         protected(set) readonly string $version,
-        array $nodes,
+        protected(set) array $nodes,
     ) {
-        $this->nodes = [];
-        foreach ($nodes as $nodeId => $node) {
-            $this->nodes[$nodeId] = Node::createFromArray(id: $nodeId, gameId: $gameId, data: $node);
-        }
     }
 
     /**
@@ -62,6 +53,11 @@ class Game
      */
     public static function createFromArray(array $data): Game
     {
+        $nodes = [];
+        foreach ($data['nodes'] as $nodeId => $node) {
+            $nodes[$nodeId] = Node::createFromArray(id: $nodeId, gameId: $data['game']['id'], data: $node);
+        }
+
         return new self(
             gameId: $data['game']['id'],
             title: $data['game']['title'],
@@ -70,7 +66,7 @@ class Game
             description: $data['game']['description'],
             language: $data['game']['language'],
             version: $data['game']['version'],
-            nodes: $data['nodes'],
+            nodes: $nodes,
         );
     }
 

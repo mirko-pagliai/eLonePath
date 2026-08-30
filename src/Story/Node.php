@@ -51,7 +51,7 @@ class Node
             gameId: $gameId,
             content: $data['content'],
             choices: array_map(
-                callback: fn (array $choice): Choice => Choice::createFromArray($choice),
+                callback: fn(array $choice): Choice => Choice::createFromArray($choice),
                 array: $data['choices'],
             ),
             type: $data['type'],

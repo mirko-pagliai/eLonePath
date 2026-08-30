@@ -5,7 +5,10 @@
 	"autoload": {
 		"psr-4": {
 			"Elone\\Core\\": "src/"
-		}
+		},
+		"files": [
+			"packages/Core/src/global_functions.php"
+		]
 	},
 	"autoload-dev": {
 		"psr-4": {

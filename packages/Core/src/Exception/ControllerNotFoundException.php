@@ -11,8 +11,8 @@ namespace Elone\Core\Exception;
  */
 final class ControllerNotFoundException extends HttpException
 {
-    public function __construct(string $message = 'Controller not found')
+    public function __construct(string $message = 'Controller not found', int $statusCode = 404)
     {
-        parent::__construct($message);
+        parent::__construct($message, $statusCode);
     }
 }

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Elone\Core;
 
+use Closure;
 use Elone\Core\Exception\HttpException;
 use Elone\Core\Server\Response;
 use Elone\Core\View\View;
@@ -12,9 +13,18 @@ final class ErrorHandler
 {
     private readonly View $view;
 
-    public function __construct(private readonly Configuration $configuration)
+    private readonly Closure $logger;
+
+    /**
+     * @param \Elone\Core\Configuration $configuration
+     * @param (\Closure(string): void)|null $logger Called with the string representation of an exception whenever
+     *  `debug` is off. Defaults to PHP's `error_log()`. Inject a no-op (or a spy) in tests to avoid writing to the
+     *  real error log.
+     */
+    public function __construct(private readonly Configuration $configuration, ?Closure $logger = null)
     {
         $this->view = new View($configuration);
+        $this->logger = $logger ?? error_log(...);
     }
 
     public function handle(Throwable $exception): Response
@@ -28,7 +38,7 @@ final class ErrorHandler
         }
 
         if (!$this->configuration->debug()) {
-            error_log((string)$exception);
+            ($this->logger)((string)$exception);
         }
 
         $this->view->set([

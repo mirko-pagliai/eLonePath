@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Elone\Core\Test\View;
 
-use Elone\Core\Configuration;
 use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -21,10 +20,7 @@ class ViewTest extends TestCase
     #[Test]
     public function testGet(): void
     {
-        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
-
-        $view = new View($configuration)
-            ->set(['key1' => 'value1']);
+        $view = new View()->set(['key1' => 'value1']);
 
         $result = $view->get(name: 'noExisting');
         $this->assertSame(null, $result);
@@ -45,9 +41,7 @@ class ViewTest extends TestCase
     #[Test]
     public function testSet(): void
     {
-        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
-
-        $view = new View($configuration);
+        $view = new View();
 
         $result = $view->set(['key1' => 'value1', 'key2' => 'value2']);
         $this->assertSame($result, $view);

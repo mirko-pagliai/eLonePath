@@ -32,9 +32,9 @@ class ApplicationTest extends TestCase
     {
         $this->originalServer = $_SERVER;
 
-        $configuration = new Configuration(TEST_APP, 'TestApp');
-        $router = new Router($configuration);
-        $dispatcher = new Dispatcher($configuration);
+        $configuration = new Configuration();
+        $router = new Router();
+        $dispatcher = new Dispatcher();
         $errorHandler = new ErrorHandler(
             configuration: $configuration,
             logger: function (string $message): void {

@@ -16,7 +16,7 @@ class StoryController extends Controller
      */
     public function chapter(string $storyId, int $nodeNumber): void
     {
-        $file = $this->getConfiguration()->rootPath() . "resources/stories/$storyId/story.json";
+        $file = ROOT . "/resources/stories/$storyId/story.json";
 
         $game = Game::createFromFile($file);
         $node = $game->getNode($nodeNumber);

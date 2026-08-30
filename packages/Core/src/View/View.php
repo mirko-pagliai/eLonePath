@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Elone\Core\View;
 
-use Elone\Core\Configuration;
 use Elone\Core\Exception\LayoutNotFoundException;
 use Elone\Core\Exception\TemplateNotFoundException;
 use Elone\Core\View\Helper\HtmlHelper;
@@ -18,9 +17,9 @@ class View
      */
     private array $data = [];
 
-    public function __construct(private readonly Configuration $configuration)
+    public function __construct()
     {
-        $this->Html = new HtmlHelper($configuration);
+        $this->Html = new HtmlHelper();
     }
 
     public function get(string $name, mixed $default = null): mixed
@@ -40,7 +39,7 @@ class View
 
     public function render(string $template, ?string $layout = 'default'): string
     {
-        $templateFile = $this->resolve($this->configuration->templatesPath(), $template);
+        $templateFile = $this->resolve(TEMPLATES, $template);
 
         if ($templateFile === false) {
             throw new TemplateNotFoundException("Template not found: `$template.php`.");
@@ -77,7 +76,7 @@ class View
         array $data,
         string $layout,
     ): string {
-        $layoutFile = $this->resolve($this->configuration->templatesPath() . 'layout' . DIRECTORY_SEPARATOR, $layout);
+        $layoutFile = $this->resolve(TEMPLATES . '/layout', $layout);
 
         if ($layoutFile === false) {
             throw new LayoutNotFoundException("Layout not found: `$layout.php`.");

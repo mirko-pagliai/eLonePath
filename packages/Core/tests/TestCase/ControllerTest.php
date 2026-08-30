@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Elone\Core\Test;
 
-use Elone\Core\Configuration;
 use Elone\Core\Controller;
 use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -17,33 +16,16 @@ use PHPUnit\Framework\TestCase;
 class ControllerTest extends TestCase
 {
     /**
-     * @link \Elone\Core\Controller::getConfiguration()
-     */
-    #[Test]
-    public function testGetConfiguration(): void
-    {
-        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
-
-        $controller = new class (configuration: $configuration) extends Controller {
-        };
-
-        $result = $controller->getConfiguration();
-        $this->assertSame($configuration, $result);
-    }
-
-    /**
      * @link \Elone\Core\Controller::set()
      */
     #[Test]
     public function testSet(): void
     {
-        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
-
-        $view = new class (configuration: $configuration) extends View {
+        $view = new class extends View {
             public array $data = [];
         };
 
-        $controller = new class (configuration: $configuration, view: $view) extends Controller {
+        $controller = new class (view: $view) extends Controller {
             public readonly View $view;
 
             public function set(array $data): self

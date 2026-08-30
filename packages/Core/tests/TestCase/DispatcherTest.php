@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Elone\Core\Test;
 
-use Elone\Core\Configuration;
 use Elone\Core\Dispatcher;
 use Elone\Core\Exception\HttpException;
 use Elone\Core\Exception\UnsupportedParameterTypeException;
@@ -28,9 +27,7 @@ class DispatcherTest extends TestCase
      */
     protected function setUp(): void
     {
-        $configuration = new Configuration(TEST_APP, 'TestApp');
-
-        $this->dispatcher = new readonly class (configuration: $configuration) extends Dispatcher {
+        $this->dispatcher = new readonly class extends Dispatcher {
             public function templateName(Route $route): string
             {
                 return parent::templateName($route);
@@ -52,13 +49,8 @@ class DispatcherTest extends TestCase
     #[TestWith(['users-settings/view', 'UsersSettings', 'view'])]
     public function testTemplateName(string $expectedTemplateName, string $controller, string $action): void
     {
-        $route = new readonly class (controller: $controller, action: $action, namespace: 'TestApp') extends Route {
-            public function __construct(
-                public string $controller,
-                public string $action,
-                private string $namespace,
-                public array $params = [],
-            ) {
+        $route = new readonly class (controller: $controller, action: $action) extends Route {
+            public function __construct(public string $controller, public string $action, public array $params = []) {
             }
         };
 

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Elone\Core\Test\Routing;
 
-use Elone\Core\Configuration;
 use Elone\Core\Routing\Router;
 use Elone\Core\Server\Request;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -31,9 +30,7 @@ class RouterTest extends TestCase
         string $expectedAction,
         array $expectedParams,
     ): void {
-        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
-        $router = new Router($configuration);
-
+        $router = new Router();
         $route = $router->dispatch(new Request('GET', $path));
 
         $this->assertSame($expectedController, $route->controller);

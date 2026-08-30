@@ -14,10 +14,6 @@ use ReflectionParameter;
 
 readonly class Dispatcher
 {
-    public function __construct(private Configuration $configuration)
-    {
-    }
-
     /**
      * @param \Elone\Core\Routing\Route $route
      * @return \Elone\Core\Server\Response
@@ -28,7 +24,7 @@ readonly class Dispatcher
 
         $method = new ReflectionMethod($controllerClass, $route->action);
 
-        $controller = new $controllerClass($this->configuration);
+        $controller = new $controllerClass();
 
         $arguments = self::resolveArguments($method, $route->params);
 

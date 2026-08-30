@@ -10,32 +10,18 @@ use Elone\Core\View\View;
  */
 abstract class Controller
 {
-    protected readonly Configuration $configuration;
-
     protected readonly View $view;
 
     /**
      * Initializes a new instance of the class.
      *
-     * @param \Elone\Core\Configuration $configuration The configuration instance required for initialization.
      * @param \Elone\Core\View\View|null $view An optional `View` instance. If not provided, a new instance will be
      * created using the configuration.
      * @return void
      */
-    public function __construct(Configuration $configuration, ?View $view = null)
+    public function __construct(?View $view = null)
     {
-        $this->configuration = $configuration;
-        $this->view = $view ?? new View($configuration);
-    }
-
-    /**
-     * Gets the `Configuration` instance.
-     *
-     * @return \Elone\Core\Configuration The current Configuration instance.
-     */
-    public function getConfiguration(): Configuration
-    {
-        return $this->configuration;
+        $this->view = $view ?? new View();
     }
 
     /**

@@ -42,7 +42,7 @@ class Game
         return $this->nodes[$nodeId];
     }
 
-    public static function createFromArray(array $data)
+    public static function createFromArray(array $data): Game
     {
         return new self(
             gameId: $data['game']['id'],

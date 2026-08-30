@@ -17,7 +17,7 @@ declare(strict_types=1);
     <?php foreach ($stories as $game) : ?>
     <li>
         <a
-            href="<?= $this->Html->url(['controller' => 'Pages', 'action' => 'story', $game->id]) ?>"
+            href="<?= $this->Html->url(['controller' => 'Story', 'action' => 'chapter', $game->id, 1]) ?>"
             class="d-block p-3 text-decoration-none"
         >
             <div class="story-item-title fs-3">

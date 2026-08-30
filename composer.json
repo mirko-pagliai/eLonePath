@@ -24,7 +24,10 @@
 	"autoload": {
 		"psr-4": {
 		  "App\\": "src/"
-		}
+		},
+		"files": [
+			"packages/Core/src/global_functions.php"
+		]
 	},
 	"scripts": {
 		"run-server": "php -S localhost:9996 -t webroot webroot/index.php",

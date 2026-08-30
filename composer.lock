@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Core",
-                "reference": "6ad77f16395de28f2ec004964b1586f8378f7c82"
+                "reference": "6c7ab64abbae88b66e56955d18ddd894d9db7d5d"
             },
             "require": {
                 "php": "^8.4"
@@ -27,11 +27,15 @@
             "autoload": {
                 "psr-4": {
                     "Elone\\Core\\": "src/"
-                }
+                },
+                "files": [
+                    "src/global_functions.php"
+                ]
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Elone\\Core\\Test\\": "tests/TestCase/"
+                    "Elone\\Core\\Test\\": "tests/TestCase/",
+                    "TestApp\\": "tests/test_app/src"
                 }
             },
             "license": [

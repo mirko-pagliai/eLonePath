@@ -35,11 +35,11 @@ class DispatcherTest extends TestCase
             }
         };
 
-        $route = new readonly class (controller: $controller, action: $action, controllerNamespace: 'TestApp') extends Route {
+        $route = new readonly class (controller: $controller, action: $action, namespace: 'TestApp') extends Route {
             public function __construct(
                 public string $controller,
                 public string $action,
-                private string $controllerNamespace,
+                private string $namespace,
                 public array $params = [],
             ) {
             }

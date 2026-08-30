@@ -9,6 +9,16 @@ final readonly class Response
     {
     }
 
+    public function content(): string
+    {
+        return $this->content;
+    }
+
+    public function status(): int
+    {
+        return $this->status;
+    }
+
     public function send(): void
     {
         http_response_code($this->status);

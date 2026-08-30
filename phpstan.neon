@@ -7,3 +7,6 @@ parameters:
         - packages/Core/src
         - templates
         - webroot
+
+    excludePaths:
+        - src/Console

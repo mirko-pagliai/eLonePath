@@ -19,9 +19,11 @@ declare(strict_types=1);
             Librogame digitali
         </p>
 
-        <?php
-        echo $this->Html->link('Le storie', ['controller' => 'Pages', 'action' => 'stories'], ['class' => 'btn elone-button px-4 py-2']);
-        ?>
+        <?= $this->Html->link(
+            text: 'Le storie',
+            route: ['controller' => 'Pages', 'action' => 'stories'],
+            attributes: ['class' => 'btn elone-button px-4 py-2'],
+        ) ?>
     </header>
 
 </article>

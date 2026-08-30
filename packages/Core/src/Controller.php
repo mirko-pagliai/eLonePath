@@ -39,16 +39,6 @@ abstract class Controller
     }
 
     /**
-     * Gets the current `View` instance.
-     *
-     * @return \Elone\Core\View\View The current View instance.
-     */
-    public function getView(): View
-    {
-        return $this->view;
-    }
-
-    /**
      * Renders the specified template with an optional layout.
      *
      * @param string $template The name of the template to be rendered.
@@ -57,7 +47,7 @@ abstract class Controller
      */
     public function render(string $template, ?string $layout = 'default'): string
     {
-        return $this->getView()->render($template, $layout);
+        return $this->view->render(template: $template, layout: $layout);
     }
 
     /**
@@ -68,7 +58,7 @@ abstract class Controller
      */
     protected function set(array $data): self
     {
-        $this->getView()->set($data);
+        $this->view->set(data: $data);
 
         return $this;
     }

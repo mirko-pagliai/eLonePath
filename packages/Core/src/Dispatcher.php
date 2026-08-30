@@ -33,7 +33,6 @@ readonly class Dispatcher
         $arguments = self::resolveArguments($method, $route->params);
 
         $result = $method->invokeArgs($controller, $arguments);
-
         if ($result instanceof Response) {
             return $result;
         }
@@ -99,7 +98,6 @@ readonly class Dispatcher
 
         if ($typeName === 'int') {
             $converted = filter_var($value, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
-
             if ($converted === null) {
                 throw new HttpException("Invalid integer parameter '$value' for `\${$parameter->getName()}`.");
             }
@@ -109,7 +107,6 @@ readonly class Dispatcher
 
         if ($typeName === 'float') {
             $converted = filter_var($value, FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
-
             if ($converted === null) {
                 throw new HttpException("Invalid float parameter '$value' for `\${$parameter->getName()}`.");
             }
@@ -119,7 +116,6 @@ readonly class Dispatcher
 
         if ($typeName === 'bool') {
             $normalized = strtolower($value);
-
             if (in_array($normalized, ['1', 'true', 'yes'], true)) {
                 return true;
             }
@@ -131,7 +127,9 @@ readonly class Dispatcher
             throw new HttpException("Invalid boolean parameter '$value' for `\${$parameter->getName()}`.");
         }
 
-        throw new UnsupportedParameterTypeException("Unsupported parameter type '$typeName' for `\${$parameter->getName()}`.");
+        throw new UnsupportedParameterTypeException(
+            "Unsupported parameter type '$typeName' for `\${$parameter->getName()}`.",
+        );
     }
 
     protected function templateName(Route $route): string

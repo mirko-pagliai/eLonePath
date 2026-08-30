@@ -32,25 +32,6 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * @link \Elone\Core\Controller::getView()
-     */
-    #[Test]
-    public function testGetView(): void
-    {
-        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
-
-        $view = new class (configuration: $configuration) extends View {
-            public array $data = [];
-        };
-
-        $controller = new class (configuration: $configuration, view: $view) extends Controller {
-        };
-
-        $result = $controller->getView();
-        $this->assertSame($view, $result);
-    }
-
-    /**
      * @link \Elone\Core\Controller::set()
      */
     #[Test]
@@ -63,6 +44,8 @@ class ControllerTest extends TestCase
         };
 
         $controller = new class (configuration: $configuration, view: $view) extends Controller {
+            public readonly View $view;
+
             public function set(array $data): self
             {
                 return parent::set($data);
@@ -72,6 +55,6 @@ class ControllerTest extends TestCase
         $result = $controller->set(['key' => 'value']);
         $this->assertSame($controller, $result);
 
-        $this->assertSame('value', $controller->getView()->get('key'));
+        $this->assertSame('value', $controller->view->get('key'));
     }
 }

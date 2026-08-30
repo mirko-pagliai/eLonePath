@@ -8,6 +8,8 @@ declare(strict_types=1);
  *
  * @link \App\Controller\StoryController::chapter()
  */
+
+use App\Story\NodeType;
 ?>
 
 <header class="mb-5 text-end">
@@ -41,7 +43,7 @@ declare(strict_types=1);
     </nav>
 <?php endif; ?>
 
-<?php if ($node->type === 'ending') : ?>
+<?php if ($node->type === NodeType::ENDING) : ?>
     <div class="story-result mt-5">
         <?php if ($node->victory === true) : ?>
             <div id="story-victory" class="p-3">

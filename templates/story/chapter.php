@@ -67,4 +67,3 @@ declare(strict_types=1);
         <?php endif; ?>
     </div>
 <?php endif; ?>
-

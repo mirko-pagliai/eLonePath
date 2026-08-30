@@ -8,9 +8,13 @@ declare(strict_types=1);
  */
 ?>
 
-<h1 class="display-3 ff-cinzel fw-semibold mb-3 text-center">
-    Elone Path
-</h1>
+<?= $this->Html->image(
+    path: 'img/logo.png',
+    attributes: [
+        'class' => 'd-block img-fluid mx-auto',
+        'style' => 'max-width: 600px',
+    ],
+) ?>
 
 <p class="fs-4 mb-4 text-center">
     Librogame digitali

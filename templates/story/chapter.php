@@ -11,13 +11,16 @@ declare(strict_types=1);
 ?>
 
 <header class="mb-5 text-end">
-    <h4 id="story-title" class="elone-title m-0"><?= $game->title ?></h4>
+    <h4 id="story-title" class="elone-title m-0"><?= htmlspecialchars($game->title) ?></h4>
 
     <div id="story-page" class="story-page fs-5">Pagina <?= $node->id ?></div>
 </header>
 
 <?php if ($node->image) : ?>
-    <img src="<?= $node->image ?>" class="img-fluid mx-auto mb-5 d-block" />
+    <?= $this->Html->image(
+        path: $node->image,
+        attributes: ['class' => 'img-fluid mx-auto mb-5 d-block'],
+    ) ?>
 <?php endif ?>
 
 <section id="story-content" class="fs-4 mb-4">
@@ -29,7 +32,7 @@ declare(strict_types=1);
         <?php
         foreach ($node->choices as $choice) {
             echo $this->Html->link(
-                text: $choice->content,
+                text: htmlspecialchars($choice->content),
                 route: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $choice->target],
                 attributes: ['class' => 'elone-button fw-medium p-2 fs-5 text-decoration-none'],
             );
@@ -39,27 +42,29 @@ declare(strict_types=1);
 <?php endif; ?>
 
 <?php if ($node->type === 'ending') : ?>
-<div class="story-result" class="mt-5">
-    <?php if ($node->victory === true) : ?>
-        <div id="story-victory" class="p-3">
-            <p class="fs-3 mb-4">Hai vinto!</p>
+    <div class="story-result mt-5">
+        <?php if ($node->victory === true) : ?>
+            <div id="story-victory" class="p-3">
+                <p class="fs-3 mb-4">Hai vinto!</p>
 
-            <a href="/" class="elone-button d-inline-block px-3 py-2 text-decoration-none">
-                Torna alla homepage
-            </a>
-        </div>
-    <?php else : ?>
-        <div id="story-defeat" class="p-3">
-            <p class="fs-2 fst-italic mb-3">La tua vita finisce qui.</p>
+                <a href="/" class="elone-button d-inline-block px-3 py-2 text-decoration-none">
+                    Torna alla homepage
+                </a>
+            </div>
+        <?php else : ?>
+            <div id="story-defeat" class="p-3">
+                <p class="fs-2 fst-italic mb-3">La tua vita finisce qui.</p>
 
-            <p class="fs-3 mb-4">Hai perso!</p>
+                <p class="fs-3 mb-4">Hai perso!</p>
 
-            <?= $this->Html->link(
-                text: 'Ricomincia da pagina 1',
-                route: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
-                attributes: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],
-            ) ?>
-        </div>
-    <?php endif; ?>
-</div>
+                <a
+                    href="<?= $this->Html->url(['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1]) ?>"
+                    class="elone-button d-inline-block px-3 py-2 text-decoration-none"
+                >
+                Ricomincia da pagina 1
+                </a>
+            </div>
+        <?php endif; ?>
+    </div>
 <?php endif; ?>
+

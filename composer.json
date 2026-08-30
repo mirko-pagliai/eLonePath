@@ -38,12 +38,7 @@
 	},
 	"scripts": {
 		"run-server": "php -S localhost:9996 -t webroot webroot/index.php",
-		"assets": [
-			"@php -r \"if (!is_dir('webroot/assets/css')) mkdir('webroot/assets/css', 0777, true); if (!is_dir('webroot/assets/js')) mkdir('webroot/assets/js', 0777, true); if (!is_dir('webroot/assets/img/stories')) mkdir('webroot/assets/img/stories', 0777, true);\"",
-			"@php -r \"copy('vendor/twbs/bootstrap/dist/css/bootstrap.min.css', 'webroot/assets/css/bootstrap.min.css');\"",
-			"@php -r \"copy('vendor/twbs/bootstrap/dist/js/bootstrap.bundle.min.js', 'webroot/assets/js/bootstrap.bundle.min.js');\"",
-			"@php -r \"foreach (glob('resources/stories/*/img', GLOB_ONLYDIR) as \\$source) { \\$target = 'webroot/assets/img/stories/' . basename(dirname(\\$source)); if (!file_exists(\\$target)) { if (PHP_OS_FAMILY === 'Windows') { exec('mklink /J \\\"' . \\$target . '\\\" \\\"' . realpath(\\$source) . '\\\"', \\$output, \\$result); if (\\$result !== 0) exit(\\$result); } else { symlink(realpath(\\$source), \\$target); } } }\""
-		],
+		"assets": "App\\Console\\AssetsInstaller::install",
 		"post-install-cmd": [
 			"@assets"
 		],

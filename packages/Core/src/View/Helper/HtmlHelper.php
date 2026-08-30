@@ -40,6 +40,15 @@ final class HtmlHelper
         return new Route($controller, $action, $this->configuration->namespace(), $params)->path();
     }
 
+    /**
+     * Generates an `<i>` tag with the appropriate classes for a Bootstrap icon. The method formats
+     * the icon name and merges it with additional class names provided in `$attributes`. All other
+     * attributes will be applied to the `<i>` tag.
+     *
+     * @param string $name The name of the icon, which can include or omit the "bi-" prefix.
+     * @param array<string, string|int|float|bool> $attributes
+     * @return string The generated `<i>` tag as a string, ready for inclusion in HTML.
+     */
     public function icon(string $name, array $attributes = []): string
     {
         $name = trim($name);

@@ -37,8 +37,8 @@ class Node
         $this->choices = [];
         foreach ($choices as $choice) {
             $this->choices[] = new Choice(
-                content: $choice->content,
-                target: $choice->target,
+                content: $choice['content'],
+                target: $choice['target'],
             );
         }
     }

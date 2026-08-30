@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Story\Game;
 use App\Story\Node;
 use Elone\Core\Controller;
 use RuntimeException;
@@ -28,19 +29,9 @@ class StoryController extends Controller
             throw new RuntimeException('Failed to parse story.json');
         }
 
-        $game = $json->game;
-        $nodeFromJson = $json->nodes->{$nodeNumber};
+        $game = Game::createFromArray(json_decode($contents, true));
+        $node = $game->getNode($nodeNumber);
 
-        $node = new Node(
-            id: $nodeNumber,
-            gameId: $game->id,
-            content: $nodeFromJson->content,
-            choices: $nodeFromJson->choices,
-        );
-
-        $this->set([
-            'node' => $node,
-            'game' => $game,
-        ]);
+        $this->set(compact('game', 'node'));
     }
 }

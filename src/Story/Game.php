@@ -72,6 +72,10 @@ class Game
 
     public static function createFromFile(string $path): Game
     {
+        if (!is_readable($path)) {
+            throw new RuntimeException("Failed to read `$path`.");
+        }
+
         $contents = file_get_contents($path);
         if ($contents === false) {
             throw new RuntimeException("Failed to read `$path`.");

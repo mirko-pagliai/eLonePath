@@ -3,11 +3,10 @@
         "id": "la_torre_oltre_il_bosco",
         "title": "La Torre oltre il Bosco",
         "author": "Mirko Pagliai - mirko.pagliai@gmail.com",
+        "translators": "",
         "description": "Solo una piccola storia per cominciare...",
-        "version": "1.0"
-    },
-    "settings": {
-        "language": "it"
+        "language": "it",
+        "version": "1.0-alpha"
     },
     "nodes": {
         "1": {
@@ -16,11 +15,11 @@
             "choices": [
                 {
                     "content": "Se vuoi attraversare il bosco, vai a pagina {{page}}",
-                    "target": "2"
+                    "target": 2
                 },
                 {
                     "content": "Se vuoi cercare qualcuno che possa aiutarti, vai a pagina {{page}}",
-                    "target": "3"
+                    "target": 3
                 }
             ]
         },
@@ -30,11 +29,11 @@
             "choices": [
                 {
                     "content": "Se vuoi chiedere chi è, vai a pagina {{page}}",
-                    "target": "4"
+                    "target": 4
                 },
                 {
                     "content": "Se vuoi proseguire senza fermarsi, vai a pagina {{page}}",
-                    "target": "5"
+                    "target": 5
                 }
             ]
         },
@@ -44,11 +43,11 @@
             "choices": [
                 {
                     "content": "Se vuoi chiederle di accompagnarti, vai a pagina {{page}}",
-                    "target": "6"
+                    "target": 6
                 },
                 {
                     "content": "Se vuoi partire immediatamente, vai a pagina {{page}}",
-                    "target": "2"
+                    "target": 2
                 }
             ]
         },
@@ -58,11 +57,11 @@
             "choices": [
                 {
                     "content": "Se vuoi accettare il suo aiuto, vai a pagina {{page}}",
-                    "target": "7"
+                    "target": 7
                 },
                 {
                     "content": "Se vuoi rifiutare e continuare da solo, vai a pagina {{page}}",
-                    "target": "5"
+                    "target": 5
                 }
             ]
         },
@@ -72,11 +71,11 @@
             "choices": [
                 {
                     "content": "Se vuoi seguire la luce, vai a pagina {{page}}",
-                    "target": "8"
+                    "target": 8
                 },
                 {
                     "content": "Se vuoi seguire il torrente, vai a pagina {{page}}",
-                    "target": "9"
+                    "target": 9
                 }
             ]
         },
@@ -86,7 +85,7 @@
             "choices": [
                 {
                     "content": "Se vuoi proseguire verso il bosco, vai a pagina {{page}}",
-                    "target": "2"
+                    "target": 2
                 }
             ]
         },
@@ -96,11 +95,11 @@
             "choices": [
                 {
                     "content": "Se vuoi entrare nella torre, vai a pagina {{page}}",
-                    "target": "10"
+                    "target": 10
                 },
                 {
                     "content": "Se vuoi cercare un'altra entrata, vai a pagina {{page}}",
-                    "target": "11"
+                    "target": 11
                 }
             ]
         },
@@ -110,11 +109,11 @@
             "choices": [
                 {
                     "content": "Se vuoi provare a uscire, vai a pagina {{page}}",
-                    "target": "12"
+                    "target": 12
                 },
                 {
                     "content": "Se vuoi suonare di nuovo la campana, vai a pagina {{page}}",
-                    "target": "13"
+                    "target": 13
                 }
             ]
         },
@@ -124,11 +123,11 @@
             "choices": [
                 {
                     "content": "Se vuoi attraversare il ponte, vai a pagina {{page}}",
-                    "target": "12"
+                    "target": 12
                 },
                 {
                     "content": "Se vuoi tornare indietro, vai a pagina {{page}}",
-                    "target": "5"
+                    "target": 5
                 }
             ]
         },
@@ -138,11 +137,11 @@
             "choices": [
                 {
                     "content": "Se vuoi salire la scala, vai a pagina {{page}}",
-                    "target": "14"
+                    "target": 14
                 },
                 {
                     "content": "Se vuoi toccare la statua, vai a pagina {{page}}",
-                    "target": "13"
+                    "target": 13
                 }
             ]
         },
@@ -152,11 +151,11 @@
             "choices": [
                 {
                     "content": "Se vuoi percorrere il corridoio, vai a pagina {{page}}",
-                    "target": "14"
+                    "target": 14
                 },
                 {
                     "content": "Se vuoi cercare di riaprire la porta, vai a pagina {{page}}",
-                    "target": "12"
+                    "target": 12
                 }
             ]
         },
@@ -178,11 +177,11 @@
             "choices": [
                 {
                     "content": "Se vuoi prendere la corona, vai a pagina {{page}}",
-                    "target": "15"
+                    "target": 15
                 },
                 {
                     "content": "Se vuoi rifiutare, vai a pagina {{page}}",
-                    "target": "16"
+                    "target": 16
                 }
             ]
         },

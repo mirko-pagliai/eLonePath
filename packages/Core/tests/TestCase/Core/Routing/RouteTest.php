@@ -1,18 +1,17 @@
 <?php
 declare(strict_types=1);
 
-namespace TestCase\Core\Routing;
+namespace Elone\Core\Test\Core\Routing;
 
-use App\Core\Controller;
-use App\Core\Exception\ActionNotFoundException;
-use App\Core\Exception\ControllerNotFoundException;
-use App\Core\Exception\RouteNotFoundException;
-use App\Core\Routing\Route;
+use Elone\Core\Controller;
+use Elone\Core\Exception\ActionNotFoundException;
+use Elone\Core\Exception\ControllerNotFoundException;
+use Elone\Core\Exception\RouteNotFoundException;
+use Elone\Core\Routing\Route;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
-use stdClass;
 
 /**
  * RouteTest.
@@ -20,10 +19,13 @@ use stdClass;
 #[CoversClass(Route::class)]
 class RouteTest extends TestCase
 {
+    /**
+     * @link \Elone\Core\Routing\Route::__construct()
+     */
     #[Test]
     #[TestWith([RouteNotFoundException::class, 'Invalid controller name: `2`.', '2'])]
-    #[TestWith([ControllerNotFoundException::class, 'Controller not found: `App\Controller\BadControllerController`.', 'badController'])]
-    #[TestWith([ControllerNotFoundException::class, 'Controller not found: `App\Controller\BadController`.', 'bad'])]
+    #[TestWith([ControllerNotFoundException::class, 'Controller not found: `TestApp\Controller\BadControllerController`.', 'badController'])]
+    #[TestWith([ControllerNotFoundException::class, 'Controller not found: `TestApp\Controller\NoExistingController`.', 'noExisting'])]
     public function testConstructWithInvalidControllers(string $exceptionClass, string $exceptionMessage, string $controllerName): void
     {
         $this->expectException($exceptionClass);
@@ -38,13 +40,8 @@ class RouteTest extends TestCase
     public function testConstructClassDoesNotExtendController(): void
     {
         $this->expectException(RouteNotFoundException::class);
-        $this->expectExceptionMessageIs('stdClass must extend `' . Controller::class . '`.');
-        new readonly class ('bad', 'action') extends Route {
-            public function controllerClass(): string
-            {
-                return stdclass::class;
-            }
-        };
+        $this->expectExceptionMessageIs('`TestApp\Controller\BadController` must extend `' . Controller::class . '`.');
+        new Route('bad', 'action');
     }
 
     /**
@@ -54,7 +51,7 @@ class RouteTest extends TestCase
     public function testConstructWithNoExistingActionMethod(): void
     {
         $this->expectException(ActionNotFoundException::class);
-        $this->expectExceptionMessageIs('Action not found: `App\Controller\PagesController::noExistingMethod()`.');
+        $this->expectExceptionMessageIs('Action not found: `TestApp\Controller\PagesController::noExistingMethod()`.');
         new Route('pages', 'noExistingMethod');
     }
 }

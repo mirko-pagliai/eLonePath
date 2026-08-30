@@ -26,7 +26,7 @@ readonly class Route
         }
 
         if (!is_subclass_of($controllerClass, Controller::class)) {
-            throw new RouteNotFoundException("$controllerClass must extend `" . Controller::class . '`.');
+            throw new RouteNotFoundException("`$controllerClass` must extend `" . Controller::class . '`.');
         }
 
         if (!method_exists($controllerClass, $action)) {
@@ -51,7 +51,7 @@ readonly class Route
         );
 
         /** @var class-string<\Elone\Core\Controller> $className */
-        $className = "App\\Controller\\{$name}Controller";
+        $className = CONFIG['app']['name'] . "\\Controller\\{$name}Controller";
 
         return $className;
     }

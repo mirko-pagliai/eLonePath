@@ -30,7 +30,7 @@ define('ROOT', dirname(__DIR__));
 require ROOT . '/vendor/autoload.php';
 
 $envFile = ROOT . '/.env';
-if (file_exists($envFile)) {
+if (file_exists($envFile) && class_exists(Loader::class)) {
     new Loader($envFile)
         ->parse()
         ->toEnv();

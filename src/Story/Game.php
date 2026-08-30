@@ -7,11 +7,6 @@ use RuntimeException;
 
 class Game
 {
-    /**
-     * @var array<\App\Story\Node>
-     */
-    public protected(set) array $nodes;
-
     public function __construct(
         protected(set) readonly string $gameId,
         protected(set) readonly string $title,
@@ -20,17 +15,10 @@ class Game
         protected(set) readonly string $description,
         protected(set) readonly string $language,
         protected(set) readonly string $version,
-        array $nodes,
+        protected(set) array $nodes,
     ) {
         foreach ($nodes as $nodeId => $node) {
-            $this->nodes[$nodeId] = new Node(
-                id: $nodeId,
-                gameId: $this->gameId,
-                content: $node['content'],
-                choices: $node['choices'],
-                type: $node['type'],
-                victory: $node['victory'],
-            );
+            $this->nodes[$nodeId] = Node::createFromArray(id: $nodeId, game: $this, data: $node);
         }
     }
 

@@ -8,11 +8,6 @@ use Michelf\Markdown;
 class Node
 {
     /**
-     * @var array<\App\Story\Choice>
-     */
-    public protected(set) array $choices;
-
-    /**
      * Image related to `webroot/assets/img/stories` if it exists for this node, otherwise `null`.
      *
      * @var string|null
@@ -23,24 +18,31 @@ class Node
 
     public function __construct(
         protected(set) readonly int $id,
-        protected readonly string $gameId,
+        protected readonly Game $game,
         string $content,
-        array $choices,
+        protected(set) array $choices,
         protected(set) readonly string $type,
         protected(set) readonly ?bool $victory,
     ) {
         $this->content = Markdown::defaultTransform($content);
 
-        if (file_exists("webroot/assets/img/stories/$this->gameId/$this->id.jpg")) {
-            $this->image = "/assets/img/stories/$this->gameId/$this->id.jpg";
+        if (file_exists("webroot/assets/img/stories/$game->gameId/$id.jpg")) {
+            $this->image = "/assets/img/stories/$game->gameId/$id.jpg";
         }
+    }
 
-        $this->choices = [];
-        foreach ($choices as $choice) {
-            $this->choices[] = new Choice(
-                content: $choice['content'],
-                target: $choice['target'],
-            );
-        }
+    public static function createFromArray(int $id, Game $game, array $data): Node
+    {
+        return new self(
+            id: $id,
+            game: $game,
+            content: $data['content'],
+            choices: array_map(
+                callback: fn (array $choice): Choice => Choice::createFromArray($choice),
+                array: $data['choices'],
+            ),
+            type: $data['type'],
+            victory: $data['victory'],
+        );
     }
 }

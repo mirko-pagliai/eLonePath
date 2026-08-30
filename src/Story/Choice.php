@@ -20,4 +20,12 @@ class Choice
             subject: $content,
         );
     }
+
+    public static function createFromArray(array $data): Choice
+    {
+        return new self(
+            content: $data['content'],
+            target: $data['target'],
+        );
+    }
 }

@@ -20,7 +20,7 @@ final readonly class Dispatcher
     {
         $controllerClass = $route->controllerClass();
 
-        $method = new ReflectionMethod($route->controllerClass(), $route->action);
+        $method = new ReflectionMethod($controllerClass, $route->action);
 
         $controller = new $controllerClass();
 

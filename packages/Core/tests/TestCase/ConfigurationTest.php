@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace TestCase;
+namespace Elone\Core\Test;
 
 use Elone\Core\Configuration;
 use PHPUnit\Framework\Attributes\CoversClass;

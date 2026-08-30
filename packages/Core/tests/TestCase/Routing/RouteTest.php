@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Test\Core\Routing;
+namespace Elone\Core\Test\Routing;
 
 use Elone\Core\Controller;
 use Elone\Core\Exception\ActionNotFoundException;
@@ -30,7 +30,7 @@ class RouteTest extends TestCase
     {
         $this->expectException($exceptionClass);
         $this->expectExceptionMessageIs($exceptionMessage);
-        new Route($controllerName, 'action');
+        new Route(controller: $controllerName, action: 'action', controllerNamespace: 'TestApp');
     }
 
     /**
@@ -41,7 +41,7 @@ class RouteTest extends TestCase
     {
         $this->expectException(RouteNotFoundException::class);
         $this->expectExceptionMessageIs('`TestApp\Controller\BadController` must extend `' . Controller::class . '`.');
-        new Route('bad', 'action');
+        new Route(controller: 'bad', action: 'action', controllerNamespace: 'TestApp');
     }
 
     /**
@@ -52,6 +52,6 @@ class RouteTest extends TestCase
     {
         $this->expectException(ActionNotFoundException::class);
         $this->expectExceptionMessageIs('Action not found: `TestApp\Controller\PagesController::noExistingMethod()`.');
-        new Route('pages', 'noExistingMethod');
+        new Route(controller: 'pages', action: 'noExistingMethod', controllerNamespace: 'TestApp');
     }
 }

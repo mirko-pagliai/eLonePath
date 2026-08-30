@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace TestCase\View;
+namespace Elone\Core\Test\View;
 
 use Elone\Core\Configuration;
 use Elone\Core\View\View;

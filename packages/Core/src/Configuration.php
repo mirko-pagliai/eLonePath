@@ -44,6 +44,16 @@ final readonly class Configuration
     }
 
     /**
+     * Retrieves the path to the `webroot` directory.
+     *
+     * @return string The full path to the webroot directory.
+     */
+    public function webrootPath(): string
+    {
+        return $this->rootPath() . 'webroot' . DIRECTORY_SEPARATOR;
+    }
+
+    /**
      * Retrieves the application's namespace.
      *
      * @return string The application's namespace.

@@ -41,6 +41,17 @@ class ConfigurationTest extends TestCase
     }
 
     /**
+     * @link \Elone\Core\Configuration::webrootPath()
+     */
+    #[Test]
+    public function testWebrootPath(): void
+    {
+        $configuration = new Configuration(rootPath: TEST_APP, namespace: 'TestApp');
+        $result = $configuration->webrootPath();
+        $this->assertSame(TEST_APP . 'webroot/', $result);
+    }
+
+    /**
      * @link \Elone\Core\Configuration::namespace()
      */
     #[Test]

@@ -40,7 +40,7 @@ $appConfig = require ROOT . '/config/config.php';
 
 $configuration = new Configuration(
     rootPath: ROOT,
-    controllerNamespace: $appConfig['app']['controller_namespace'],
+    namespace: $appConfig['app']['namespace'],
     debug: $appConfig['app']['debug'],
 );
 

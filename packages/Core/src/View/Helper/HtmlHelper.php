@@ -41,6 +41,32 @@ final class HtmlHelper
     }
 
     /**
+     * Builds an `<img>` tag for the given source path. `$path` is not run through `url()` — pass it exactly as it
+     * should appear in `src`, since images are served as static files rather than routed. Pass `alt` via
+     * `$attributes` whenever the image conveys meaning that isn't already in the surrounding text.
+     *
+     * @param array<string, string|int|float|bool> $attributes
+     */
+    public function image(string $path, array $attributes = []): string
+    {
+        $htmlAttributes = '';
+
+        foreach ($attributes as $name => $value) {
+            $htmlAttributes .= sprintf(
+                ' %s="%s"',
+                htmlspecialchars($name, ENT_QUOTES),
+                htmlspecialchars((string)$value, ENT_QUOTES),
+            );
+        }
+
+        return sprintf(
+            '<img src="%s"%s>',
+            htmlspecialchars($path, ENT_QUOTES),
+            $htmlAttributes,
+        );
+    }
+
+    /**
      * @param array<string|int, string|int|float|bool> $route
      * @param array<string, string|int|float|bool> $attributes
      */

@@ -65,6 +65,26 @@ class HtmlHelperTest extends TestCase
     }
 
     /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::image()
+     */
+    #[Test]
+    public function testImage(): void
+    {
+        $result = $this->htmlHelper->image('/assets/img/stories/example/1.jpg');
+        $this->assertSame('<img src="/assets/img/stories/example/1.jpg">', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::image()
+     */
+    #[Test]
+    public function testImageWithAttributes(): void
+    {
+        $result = $this->htmlHelper->image('/img.jpg', ['alt' => 'A "special" image', 'class' => 'img-fluid']);
+        $this->assertSame('<img src="/img.jpg" alt="A &quot;special&quot; image" class="img-fluid">', $result);
+    }
+
+    /**
      * @link \Elone\Core\View\Helper\HtmlHelper::link()
      */
     #[Test]

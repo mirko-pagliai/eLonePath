@@ -39,19 +39,19 @@ body {
 article {
     /** max-width: 900px; */
     background: radial-gradient(
-            ellipse at center,
-            var(--elone-paper) 0%,
-            #e8d9bb 75%,
-            var(--elone-paper-dark) 100%
+        ellipse at center,
+        var(--elone-paper) 0%,
+        #e8d9bb 75%,
+        var(--elone-paper-dark) 100%
     );
 }
 
 .ff-cinzel {
-    font-family: 'Cinzel Variable', serif;
+    font-family: "Cinzel", serif;
 }
 
 .story-page {
-    font-family: "Cinzel Variable", serif;
+    font-family: "Cinzel", serif;
     color: var(--elone-muted);
 }
 
@@ -85,7 +85,7 @@ article {
     color: var(--elone-ink);
     font-size: 1.5rem;
     background-color: transparent;
-    font-family: "Cinzel Variable", serif;
+    font-family: "Cinzel", serif;
 }
 
 .elone-button:hover {

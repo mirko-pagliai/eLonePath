@@ -42,7 +42,7 @@ class Game
     ) {
         $this->nodes = [];
         foreach ($nodes as $nodeId => $node) {
-            $this->nodes[$nodeId] = Node::createFromArray(id: $nodeId, game: $this, data: $node);
+            $this->nodes[$nodeId] = Node::createFromArray(id: $nodeId, gameId: $gameId, data: $node);
         }
     }
 

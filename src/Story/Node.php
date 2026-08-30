@@ -28,7 +28,7 @@ class Node
      */
     public function __construct(
         protected(set) readonly int $id,
-        protected readonly Game $game,
+        protected readonly string $gameId,
         string $content,
         protected(set) array $choices,
         protected(set) readonly string $type,
@@ -36,19 +36,19 @@ class Node
     ) {
         $this->content = Markdown::defaultTransform($content);
 
-        if (file_exists("webroot/assets/img/stories/$game->gameId/$id.jpg")) {
-            $this->image = "/assets/img/stories/$game->gameId/$id.jpg";
+        if (file_exists("webroot/assets/img/stories/$gameId/$id.jpg")) {
+            $this->image = "/assets/img/stories/$gameId/$id.jpg";
         }
     }
 
     /**
      * @param NodeData $data
      */
-    public static function createFromArray(int $id, Game $game, array $data): Node
+    public static function createFromArray(int $id, string $gameId, array $data): Node
     {
         return new self(
             id: $id,
-            game: $game,
+            gameId: $gameId,
             content: $data['content'],
             choices: array_map(
                 callback: fn (array $choice): Choice => Choice::createFromArray($choice),

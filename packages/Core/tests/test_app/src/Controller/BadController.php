@@ -8,5 +8,4 @@ namespace TestApp\Controller;
  */
 class BadController
 {
-
 }

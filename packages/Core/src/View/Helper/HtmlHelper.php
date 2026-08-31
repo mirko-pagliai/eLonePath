@@ -67,7 +67,7 @@ final class HtmlHelper
     /**
      * Builds a `<img>` tag for the given source path. `$path` is not run through `url()` — pass it exactly as it
      * should appear in `src`, since images are served as static files rather than routed. Pass `alt` via
-     * `$options` whenever the image conveys meaning that isn't already in the surrounding text.
+     * `$options` whenever the image conveys, meaning that it isn't already in the surrounding text.
      *
      * @param array<string, string|int|float|bool> $options
      */
@@ -83,7 +83,7 @@ final class HtmlHelper
     }
 
     /**
-     * Generates an `<a>` tag with the given text, URL parameters, and options. `$params` is used to construct
+     * Generates a `<a>` tag with the given text, URL parameters, and options. `$params` is used to construct
      * the `href` attribute via `url()`.
      *
      * `$options` accepts one known key, `escape` (bool, default `true`): whether `$text` is HTML-escaped before

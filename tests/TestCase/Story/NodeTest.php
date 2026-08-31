@@ -26,6 +26,7 @@ class NodeTest extends TestCase
             id: 1,
             gameId: 'test-game',
             content: 'Some content.',
+            image: null,
             choices: [],
             type: NodeType::STORY,
             victory: null,
@@ -38,55 +39,19 @@ class NodeTest extends TestCase
      * @link \App\Story\Node::__construct()
      */
     #[Test]
-    public function testConstructWithoutExistingImage(): void
+    public function testConstructStoresImage(): void
     {
         $node = new Node(
-            id: 999999,
-            gameId: 'no-such-game-id-in-webroot',
+            id: 1,
+            gameId: 'test-game',
             content: 'Some content.',
+            image: ['path' => 'img/cover.jpg', 'title' => 'Cover art'],
             choices: [],
             type: NodeType::STORY,
             victory: null,
         );
 
-        $this->assertNull($node->image);
-    }
-
-    /**
-     * Relies on `webroot/assets/img/stories/` resolving relative to the current working directory when the test
-     * runs — the same assumption `Node::__construct()` itself makes via `file_exists()`. Creates and removes a
-     * throwaway image file under a game id that can't collide with real content.
-     *
-     * @link \App\Story\Node::__construct()
-     */
-    #[Test]
-    public function testConstructWithExistingImage(): void
-    {
-        $gameId = 'node-test-fixture';
-        $id = 1;
-        $directory = WEBROOT . "/assets/img/stories/$gameId";
-
-        if (!is_dir($directory)) {
-            mkdir($directory, 0777, true);
-        }
-
-        file_put_contents("$directory/$id.jpg", '');
-
-        try {
-            $node = new Node(
-                id: $id,
-                gameId: $gameId,
-                content: 'Some content.',
-                choices: [],
-                type: NodeType::STORY,
-                victory: null,
-            );
-
-            $this->assertSame("/assets/img/stories/$gameId/$id.jpg", $node->image);
-        } finally {
-            unlink("$directory/$id.jpg");
-            rmdir($directory);
-        }
+        $this->assertSame(['path' => 'img/cover.jpg', 'title' => 'Cover art'], $node->image);
     }
 
     /**
@@ -97,6 +62,7 @@ class NodeTest extends TestCase
     {
         $node = Node::createFromArray(id: 3, gameId: 'test-game', data: [
             'content' => 'Some content.',
+            'image' => null,
             'choices' => [
                 ['content' => 'Go to page {{page}}', 'target' => 4],
                 ['content' => 'Or go here', 'target' => 5],
@@ -107,6 +73,7 @@ class NodeTest extends TestCase
 
         $this->assertSame(3, $node->id);
         $this->assertStringContainsString('<p>Some content.</p>', $node->content);
+        $this->assertNull($node->image);
         $this->assertSame(NodeType::STORY, $node->type);
         $this->assertNull($node->victory);
 
@@ -120,10 +87,27 @@ class NodeTest extends TestCase
      * @link \App\Story\Node::createFromArray()
      */
     #[Test]
+    public function testCreateFromArrayWithoutImageKey(): void
+    {
+        $node = Node::createFromArray(id: 3, gameId: 'test-game', data: [
+            'content' => 'Some content.',
+            'choices' => [],
+            'type' => 'story',
+            'victory' => null,
+        ]);
+
+        $this->assertNull($node->image);
+    }
+
+    /**
+     * @link \App\Story\Node::createFromArray()
+     */
+    #[Test]
     public function testCreateFromArrayWithVictory(): void
     {
         $node = Node::createFromArray(id: 10, gameId: 'test-game', data: [
             'content' => 'The end.',
+            'image' => null,
             'choices' => [],
             'type' => 'ending',
             'victory' => true,

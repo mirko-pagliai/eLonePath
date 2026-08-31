@@ -64,11 +64,7 @@ readonly class Route
     }
 
     /**
-     * Constructs and returns the fully qualified class name of the controller based on the given namespace and
-     * controller name.
-     *
-     * Combines the `namespace` with the expected location and naming convention of the controller to generate the
-     * complete class name.
+     * Generates the fully qualified class name of the controller based on the provided controller identifier.
      *
      * @return class-string<\Elone\Core\Controller> The generated fully qualified class name for the controller.
      */

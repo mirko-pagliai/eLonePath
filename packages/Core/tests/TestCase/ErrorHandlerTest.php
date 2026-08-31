@@ -4,9 +4,9 @@ declare(strict_types=1);
 namespace Elone\Core\Test;
 
 use Closure;
-use Elone\Core\Configuration;
 use Elone\Core\ErrorHandler;
 use Elone\Core\Exception\ActionNotFoundException;
+use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -25,9 +25,6 @@ class ErrorHandlerTest extends TestCase
 
     private Closure $logger;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
         $this->loggedMessages = [];
@@ -42,8 +39,7 @@ class ErrorHandlerTest extends TestCase
     #[Test]
     public function testHandleHttpException(): void
     {
-        $configuration = new Configuration();
-        $errorHandler = new ErrorHandler($configuration, $this->logger);
+        $errorHandler = new ErrorHandler(logger: $this->logger);
 
         $response = $errorHandler->handle(new ActionNotFoundException('Action not found: `Foo::bar()`.'));
 
@@ -58,8 +54,7 @@ class ErrorHandlerTest extends TestCase
     #[Test]
     public function testHandleGenericExceptionWithoutDebug(): void
     {
-        $configuration = new Configuration(debug: false);
-        $errorHandler = new ErrorHandler($configuration, $this->logger);
+        $errorHandler = new ErrorHandler(debug: false, logger: $this->logger);
 
         $response = $errorHandler->handle(new RuntimeException('Some internal detail.'));
 
@@ -76,8 +71,7 @@ class ErrorHandlerTest extends TestCase
     #[Test]
     public function testHandleGenericExceptionWithDebug(): void
     {
-        $configuration = new Configuration(debug: true);
-        $errorHandler = new ErrorHandler($configuration, $this->logger);
+        $errorHandler = new ErrorHandler(debug: true, logger: $this->logger);
 
         $response = $errorHandler->handle(new RuntimeException('Some internal detail.'));
 
@@ -91,10 +85,16 @@ class ErrorHandlerTest extends TestCase
      * @link \Elone\Core\ErrorHandler::handle()
      */
     #[Test]
-    public function testHandleFallsBackWhenTemplatesPathIsMissing(): void
+    public function testHandleFallsBackWhenViewRenderFails(): void
     {
-        $configuration = new Configuration();
-        $errorHandler = new ErrorHandler($configuration, $this->logger);
+        $view = new class extends View {
+            public function render(string $template, ?string $layout = 'default'): string
+            {
+                throw new RuntimeException('Boom.');
+            }
+        };
+
+        $errorHandler = new ErrorHandler(view: $view, logger: $this->logger);
 
         $response = $errorHandler->handle(new RuntimeException('Anything.'));
 

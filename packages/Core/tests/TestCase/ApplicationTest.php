@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Elone\Core\Test;
 
 use Elone\Core\Application;
-use Elone\Core\Configuration;
 use Elone\Core\Dispatcher;
 use Elone\Core\ErrorHandler;
 use Elone\Core\Routing\Router;
@@ -32,14 +31,10 @@ class ApplicationTest extends TestCase
     {
         $this->originalServer = $_SERVER;
 
-        $configuration = new Configuration();
         $router = new Router();
         $dispatcher = new Dispatcher();
-        $errorHandler = new ErrorHandler(
-            configuration: $configuration,
-            logger: function (string $message): void {
-            },
-        );
+        $errorHandler = new ErrorHandler(logger: function (string $message): void {
+        });
 
         $this->application = new Application($router, $dispatcher, $errorHandler);
     }

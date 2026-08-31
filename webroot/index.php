@@ -8,7 +8,6 @@ declare(strict_types=1);
  */
 
 use Elone\Core\Application;
-use Elone\Core\Configuration;
 use Elone\Core\Dispatcher;
 use Elone\Core\ErrorHandler;
 use Elone\Core\Routing\Router;
@@ -36,13 +35,9 @@ require dirname(__DIR__) . '/packages/Core/config/bootstrap.php';
 
 $appConfig = require ROOT . '/config/config.php';
 
-$configuration = new Configuration(
-    debug: $appConfig['app']['debug'],
-);
-
 $router = new Router();
 $dispatcher = new Dispatcher();
-$errorHandler = new ErrorHandler($configuration);
+$errorHandler = new ErrorHandler(debug: $appConfig['app']['debug']);
 
 $app = new Application($router, $dispatcher, $errorHandler);
 $app->run();

@@ -18,3 +18,5 @@ if (file_exists($envFile) && class_exists(Loader::class)) {
         ->parse()
         ->toEnv();
 }
+
+define('APP', require ROOT . '/config/config.php');

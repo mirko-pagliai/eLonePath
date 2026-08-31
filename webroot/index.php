@@ -26,11 +26,9 @@ if (PHP_SAPI === 'cli-server') {
 require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/config/bootstrap.php';
 
-$appConfig = require ROOT . '/config/config.php';
-
 $router = new Router();
 $dispatcher = new Dispatcher();
-$errorHandler = new ErrorHandler(debug: $appConfig['app']['debug']);
+$errorHandler = new ErrorHandler();
 
 $app = new Application($router, $dispatcher, $errorHandler);
 $app->run();

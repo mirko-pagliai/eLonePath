@@ -5,6 +5,10 @@ if (!defined('DS')) {
     define('DS', DIRECTORY_SEPARATOR);
 }
 
+if (!defined('APP')) {
+    define('APP', ['debug' => false]);
+}
+
 if (!defined('APP_NAMESPACE')) {
     define('APP_NAMESPACE', 'App');
 }

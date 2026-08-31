@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace TestCase\Story\Nodes;
+namespace Test\Story\Nodes;
 
 use App\Story\Nodes\DiceNode;
 use App\Story\Nodes\NodeType;
@@ -31,7 +31,7 @@ class DiceNodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\DiceNode::type()
+     * @link \App\Story\Nodes\DiceNode::type()
      */
     #[Test]
     public function testType(): void
@@ -40,7 +40,7 @@ class DiceNodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\DiceNode::isSuccess()
+     * @link \App\Story\Nodes\DiceNode::isSuccess()
      */
     #[Test]
     #[TestWith([8, true])]
@@ -54,7 +54,7 @@ class DiceNodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\DiceNode::targetFor()
+     * @link \App\Story\Nodes\DiceNode::targetFor()
      */
     #[Test]
     #[TestWith([8, 15])]
@@ -68,7 +68,7 @@ class DiceNodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\DiceNode::createFromArray()
+     * @link \App\Story\Nodes\DiceNode::createFromArray()
      */
     #[Test]
     public function testCreateFromArray(): void

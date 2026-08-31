@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace TestCase\Story\Nodes;
+namespace Test\Story\Nodes;
 
 use App\Story\Nodes\Choice;
 use App\Story\Nodes\NodeType;
@@ -51,7 +51,7 @@ class PassageNodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\PassageNode::type()
+     * @link \App\Story\Nodes\PassageNode::type()
      */
     #[Test]
     public function testType(): void
@@ -61,7 +61,7 @@ class PassageNodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\PassageNode::createFromArray()
+     * @link \App\Story\Nodes\PassageNode::createFromArray()
      */
     #[Test]
     public function testCreateFromArray(): void
@@ -87,7 +87,7 @@ class PassageNodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\PassageNode::createFromArray()
+     * @link \App\Story\Nodes\PassageNode::createFromArray()
      */
     #[Test]
     public function testCreateFromArrayWithoutImageKey(): void
@@ -102,7 +102,7 @@ class PassageNodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\PassageNode::createFromArray()
+     * @link \App\Story\Nodes\PassageNode::createFromArray()
      */
     #[Test]
     public function testCreateFromArrayWithoutChoicesKey(): void

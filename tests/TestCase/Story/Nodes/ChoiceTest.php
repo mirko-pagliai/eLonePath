@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace TestCase\Story\Nodes;
+namespace Test\Story\Nodes;
 
 use App\Story\Nodes\Choice;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class ChoiceTest extends TestCase
 {
     /**
-     * @link \App\Story\Choice::__construct()
+     * @link \App\Story\Nodes\Choice::__construct()
      */
     #[Test]
     #[TestWith(['Go to page {{page}}', 5, 'Go to page 5'])]
@@ -32,7 +32,7 @@ class ChoiceTest extends TestCase
     }
 
     /**
-     * @link \App\Story\Choice::createFromArray()
+     * @link \App\Story\Nodes\Choice::createFromArray()
      */
     #[Test]
     public function testCreateFromArray(): void

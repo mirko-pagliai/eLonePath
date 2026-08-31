@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace TestCase\Story\Nodes;
+namespace Test\Story\Nodes;
 
 use App\Story\Nodes\DefeatNode;
 use App\Story\Nodes\NodeType;
@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 class DefeatNodeTest extends TestCase
 {
     /**
-     * @link \App\Story\DefeatNode::type()
+     * @link \App\Story\Nodes\DefeatNode::type()
      */
     #[Test]
     public function testType(): void
@@ -26,7 +26,7 @@ class DefeatNodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\DefeatNode::createFromArray()
+     * @link \App\Story\Nodes\DefeatNode::createFromArray()
      */
     #[Test]
     public function testCreateFromArray(): void

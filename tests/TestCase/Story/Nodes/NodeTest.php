@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace TestCase\Story\Nodes;
+namespace Test\Story\Nodes;
 
 use App\Story\Nodes\DefeatNode;
 use App\Story\Nodes\DiceNode;
@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 class NodeTest extends TestCase
 {
     /**
-     * @link \App\Story\Node::createFromArray()
+     * @link \App\Story\Nodes\Node::createFromArray()
      */
     #[Test]
     public function testCreateFromArrayDispatchesToPassageNode(): void
@@ -34,7 +34,7 @@ class NodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\Node::createFromArray()
+     * @link \App\Story\Nodes\Node::createFromArray()
      */
     #[Test]
     public function testCreateFromArrayDispatchesToDiceNode(): void
@@ -54,7 +54,7 @@ class NodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\Node::createFromArray()
+     * @link \App\Story\Nodes\Node::createFromArray()
      */
     #[Test]
     public function testCreateFromArrayDispatchesToVictoryNode(): void
@@ -68,7 +68,7 @@ class NodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\Node::createFromArray()
+     * @link \App\Story\Nodes\Node::createFromArray()
      */
     #[Test]
     public function testCreateFromArrayDispatchesToDefeatNode(): void

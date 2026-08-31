@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Story;
 
 use App\Story\Nodes\Node;
+use Elone\Core\Exception\HttpException;
 use JsonException;
 use RuntimeException;
 
@@ -47,9 +48,14 @@ class Game
      *
      * @param int $nodeId The unique identifier of the node to retrieve.
      * @return \App\Story\Nodes\Node The node associated with the given identifier.
+     * @throws \Elone\Core\Exception\HttpException If no node with that identifier exists in this game.
      */
     public function getNode(int $nodeId): Node
     {
+        if (!isset($this->nodes[$nodeId])) {
+            throw new HttpException("Node `$nodeId` not found in `$this->gameId`.", statusCode: 404);
+        }
+
         return $this->nodes[$nodeId];
     }
 

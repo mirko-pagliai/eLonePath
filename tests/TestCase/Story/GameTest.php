@@ -5,6 +5,7 @@ namespace Test\Story;
 
 use App\Story\Game;
 use App\Story\Nodes\Node;
+use Elone\Core\Exception\HttpException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -77,6 +78,23 @@ class GameTest extends TestCase
         $this->assertInstanceOf(Node::class, $node);
         $this->assertSame(1, $node->id);
         $this->assertStringContainsString('<p>Start here.</p>', $node->content);
+    }
+
+    /**
+     * @link \App\Story\Game::getNode()
+     */
+    #[Test]
+    public function testGetNodeWithMissingNode(): void
+    {
+        $game = Game::createFromArray($this->sampleData());
+
+        try {
+            $game->getNode(99);
+            $this->fail('Expected an HttpException to be thrown.');
+        } catch (HttpException $exception) {
+            $this->assertSame('Node `99` not found in `test-game`.', $exception->getMessage());
+            $this->assertSame(404, $exception->statusCode());
+        }
     }
 
     /**

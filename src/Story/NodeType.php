@@ -14,6 +14,12 @@ enum NodeType: string
     case PASSAGE = 'passage';
 
     /**
+     * A dice check: the reader rolls, and the outcome (see `DiceCheck`) decides which node comes next — no choices
+     * are shown.
+     */
+    case DICE = 'dice';
+
+    /**
      * A winning ending. The story stops here — the reader has completed it successfully.
      */
     case VICTORY = 'victory';

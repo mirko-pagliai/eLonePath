@@ -197,7 +197,7 @@
             "choices": [
                 {
                     "content": "Se vuoi prendere la corona, vai a pagina {{page}}",
-                    "target": 15
+                    "target": 17
                 },
                 {
                     "content": "Se vuoi rifiutare, vai a pagina {{page}}",
@@ -220,6 +220,20 @@
                 "path": "16.jpg",
                 "title": "Il trono nella sala in rovina"
             }
+        },
+        "17": {
+            "type": "dice",
+            "content": "Il cavaliere si alza lentamente dal trono.\n\nNon estrae la spada. Si limita a indicare la porta alle tue spalle.\n\n«Se vuoi uscire da qui, dovrai dimostrare di esserne degno.»\n\nL'aria nella stanza diventa improvvisamente pesante.\n\nDavanti a te non c'è più la porta, ma soltanto una parete di pietra.",
+            "dice": {
+                "required_rolls": 2,
+                "minimum": 8,
+                "target_success": 15,
+                "target_failure": 18
+            }
+        },
+        "18": {
+            "type": "defeat",
+            "content": "Il cavaliere scuote lentamente la testa.\n\nLa stanza sprofonda nell'oscurità e senti il peso di qualcosa che ti afferra alle spalle.\n\nCerchi di reagire, ma è ormai troppo tardi.\n\nLa porta della torre non si aprirà più per te."
         }
     }
 }

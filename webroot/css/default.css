@@ -83,13 +83,16 @@ article {
     border-color: var(--elone-accent);
 }
 
-#stories-list a {
-    color: var(--elone-ink);
+#stories-list li {
     border-bottom: 1px solid var(--elone-accent);
 }
 
-#stories-list a:hover {
+#stories-list li:hover {
     background-color: rgba(105, 69, 47, 0.1);
+}
+
+#stories-list a {
+    color: var(--elone-ink);
 }
 
 #story-victory {

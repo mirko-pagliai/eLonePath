@@ -15,14 +15,12 @@ declare(strict_types=1);
 
 <ul id="stories-list" class="list-unstyled">
     <?php foreach ($stories as $game) : ?>
-        <li>
-            <a
-                href="<?= htmlspecialchars($this->Html->url(['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1])) ?>"
-                class="d-block p-3 text-decoration-none"
-            >
-            <div class="fs-3">
-                <?= htmlspecialchars($game->title) ?>
-            </div>
+        <li class="position-relative p-3">
+            <?= $this->Html->link(
+                text: $game->title,
+                url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
+                options: ['class' => 'd-block fs-3 stretched-link text-decoration-none'],
+            ) ?>
 
             <div class="fs-5 mt-1 text-body-secondary">
                 <?= htmlspecialchars($game->author) ?>
@@ -43,7 +41,6 @@ declare(strict_types=1);
             <div class="mt-1">
                 (lingua <?= htmlspecialchars($game->language) ?>, versione <?= htmlspecialchars($game->version) ?>)
             </div>
-            </a>
         </li>
     <?php endforeach; ?>
 </ul>

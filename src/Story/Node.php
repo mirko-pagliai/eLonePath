@@ -13,7 +13,6 @@ use Michelf\Markdown;
  *     image: NodeImage|null,
  *     choices: list<ChoiceData>,
  *     type: string,
- *     victory: bool|null,
  * }
  */
 class Node
@@ -32,7 +31,6 @@ class Node
         protected(set) ?array $image,
         protected(set) array $choices,
         protected(set) readonly NodeType $type,
-        protected(set) readonly ?bool $victory,
     ) {
         $this->content = Markdown::defaultTransform($content);
     }
@@ -52,7 +50,6 @@ class Node
                 array: $data['choices'],
             ),
             type: NodeType::from($data['type']),
-            victory: $data['victory'],
         );
     }
 }

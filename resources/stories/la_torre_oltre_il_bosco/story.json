@@ -184,14 +184,12 @@
             }
         },
         "12": {
-            "type": "ending",
-            "victory": false,
+            "type": "defeat",
             "content": "Corri.\n\nNon sai da cosa stai fuggendo, ma senti passi dietro di te.\n\nPrima lontani.\n\nPoi più vicini.\n\nIl rumore della tua corsa si confonde con quello di qualcosa che avanza alle tue spalle, senza fretta e senza mai inciampare.\n\nTi volti.\n\nLa figura del cavaliere arrugginito è ormai a pochi passi.\n\nCerchi di accelerare, ma il terreno cede sotto i tuoi piedi.\n\nQuando riapri gli occhi è mattina.\n\nGli abitanti di Valdombra trovano soltanto le tue impronte nel fango, che si interrompono improvvisamente ai margini del bosco.",
             "choices": []
         },
         "13": {
-            "type": "ending",
-            "victory": false,
+            "type": "defeat",
             "content": "Appena la campana suona per la seconda volta, tutte le fiamme della cappella si spengono.\n\nIl buio è assoluto.\n\nPer qualche secondo senti soltanto il tuo respiro.\n\nPoi una voce parla accanto a te.\n\n«Hai risposto alla chiamata.»\n\nNon riesci a capire da dove provenga.\n\nUna mano gelida si posa sulla tua spalla.\n\nCerchi di voltarti, ma qualcosa ti trattiene.\n\nQuando finalmente torna la luce, nella cappella non c'è più nessuno.\n\nL'altare è vuoto.\n\nLa porta è aperta.\n\nFuori, il bosco è immobile.\n\nNemmeno tu sei più nella cappella.",
             "choices": []
         },
@@ -210,8 +208,7 @@
             ]
         },
         "15": {
-            "type": "ending",
-            "victory": true,
+            "type": "victory",
             "content": "Afferri la corona.\n\nPer un istante non accade nulla.\n\nPoi l'armatura del cavaliere si sgretola in una nuvola di polvere. Il trono rimane vuoto e la stanza viene attraversata da un boato profondo.\n\nLa torre comincia a tremare.\n\nCorri verso la scala mentre le pietre cadono intorno a te. Una parte del soffitto crolla alle tue spalle e per un momento temi di rimanere intrappolato.\n\nRiesci a raggiungere l'uscita.\n\nQuando raggiungi il bosco, la torre crolla alle tue spalle con un fragore che fa volare gli uccelli dagli alberi.\n\nAll'alba torni a Valdombra.\n\nGli abitanti escono lentamente dalle loro case. Quando vedono la corona che porti tra le mani, nessuno dice una parola.\n\nPoi, una dopo l'altra, le porte del villaggio si aprono.\n\nLa maledizione è finita.",
             "choices": [],
             "image": {
@@ -220,8 +217,7 @@
             }
         },
         "16": {
-            "type": "ending",
-            "victory": false,
+            "type": "defeat",
             "content": "«Non voglio la tua corona.»\n\nIl cavaliere rimane immobile.\n\nPer qualche istante temi di aver commesso un errore.\n\nPoi sorride.\n\n«Allora resterai al suo posto.»\n\nLa porta alle tue spalle scompare.\n\nLa stanza diventa buia.\n\nCerchi di muoverti, ma le gambe non rispondono. Il freddo attraversa l'armatura e il silenzio della torre sembra diventare infinito.\n\nMolto tempo dopo, un viaggiatore entrerà nella torre e troverà un nuovo cavaliere seduto sul trono.\n\nIndossa la tua armatura.",
             "choices": [],
             "image": {

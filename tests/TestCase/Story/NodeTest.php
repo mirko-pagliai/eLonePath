@@ -29,7 +29,6 @@ class NodeTest extends TestCase
             image: null,
             choices: [],
             type: NodeType::STORY,
-            victory: null,
         );
 
         $this->assertStringContainsString('<p>Some content.</p>', $node->content);
@@ -48,7 +47,6 @@ class NodeTest extends TestCase
             image: ['path' => 'cover.jpg', 'title' => 'Cover art'],
             choices: [],
             type: NodeType::STORY,
-            victory: null,
         );
 
         $this->assertSame(['path' => 'cover.jpg', 'title' => 'Cover art'], $node->image);
@@ -68,14 +66,12 @@ class NodeTest extends TestCase
                 ['content' => 'Or go here', 'target' => 5],
             ],
             'type' => 'story',
-            'victory' => null,
         ]);
 
         $this->assertSame(3, $node->id);
         $this->assertStringContainsString('<p>Some content.</p>', $node->content);
         $this->assertNull($node->image);
         $this->assertSame(NodeType::STORY, $node->type);
-        $this->assertNull($node->victory);
 
         $this->assertCount(2, $node->choices);
         $this->assertInstanceOf(Choice::class, $node->choices[0]);
@@ -93,7 +89,6 @@ class NodeTest extends TestCase
             'content' => 'Some content.',
             'choices' => [],
             'type' => 'story',
-            'victory' => null,
         ]);
 
         $this->assertNull($node->image);
@@ -103,17 +98,31 @@ class NodeTest extends TestCase
      * @link \App\Story\Node::createFromArray()
      */
     #[Test]
-    public function testCreateFromArrayWithVictory(): void
+    public function testCreateFromArrayWithVictoryType(): void
     {
         $node = Node::createFromArray(id: 10, gameId: 'test-game', data: [
             'content' => 'The end.',
             'image' => null,
             'choices' => [],
-            'type' => 'ending',
-            'victory' => true,
+            'type' => 'victory',
         ]);
 
-        $this->assertSame(NodeType::ENDING, $node->type);
-        $this->assertTrue($node->victory);
+        $this->assertSame(NodeType::VICTORY, $node->type);
+    }
+
+    /**
+     * @link \App\Story\Node::createFromArray()
+     */
+    #[Test]
+    public function testCreateFromArrayWithDefeatType(): void
+    {
+        $node = Node::createFromArray(id: 11, gameId: 'test-game', data: [
+            'content' => 'The end.',
+            'image' => null,
+            'choices' => [],
+            'type' => 'defeat',
+        ]);
+
+        $this->assertSame(NodeType::DEFEAT, $node->type);
     }
 }

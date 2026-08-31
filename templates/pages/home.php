@@ -23,7 +23,7 @@ declare(strict_types=1);
 <div class="text-center">
     <?= $this->Html->link(
         text: 'Le storie',
-        params: ['controller' => 'Pages', 'action' => 'stories'],
+        url: ['controller' => 'Pages', 'action' => 'stories'],
         options: ['class' => 'btn fs-4 elone-button px-4 py-2'],
     ) ?>
 </div>

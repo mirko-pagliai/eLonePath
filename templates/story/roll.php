@@ -41,7 +41,7 @@ declare(strict_types=1);
 
     <?= $this->Html->link(
         text: 'Continua',
-        params: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $target],
+        url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $target],
         options: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],
     ) ?>
 </section>

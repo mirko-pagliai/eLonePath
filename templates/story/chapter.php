@@ -15,11 +15,11 @@ use App\Story\Nodes\PassageNode;
 use App\Story\Nodes\VictoryNode;
 ?>
 
-    <header class="mb-5 text-end">
-        <h4 id="story-title" class="elone-title m-0"><?= htmlspecialchars($game->title) ?></h4>
+<header class="mb-5 text-end">
+    <h4 id="story-title" class="elone-title m-0"><?= htmlspecialchars($game->title) ?></h4>
 
-        <div id="story-page" class="story-page fs-5">Pagina <?= $node->id ?></div>
-    </header>
+    <div id="story-page" class="story-page fs-5">Pagina <?= $node->id ?></div>
+</header>
 
 <?php if ($node->image !== null) : ?>
     <?= $this->Html->image(
@@ -41,7 +41,7 @@ use App\Story\Nodes\VictoryNode;
         foreach ($node->choices as $choice) {
             echo $this->Html->link(
                 text: $choice->content,
-                params: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $choice->target],
+                url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $choice->target],
                 options: [
                     'class' => 'elone-button fw-medium p-2 fs-5 text-decoration-none',
                     'escape' => false,
@@ -65,7 +65,7 @@ use App\Story\Nodes\VictoryNode;
                 $this->Html->icon('dice-6'),
                 $node->requiredRolls === 1 ? 'Lancia 1 dado' : "Lancia $node->requiredRolls dadi",
             ),
-            params: ['controller' => 'Story', 'action' => 'roll', $game->gameId, $node->id],
+            url: ['controller' => 'Story', 'action' => 'roll', $game->gameId, $node->id],
             options: [
                 'class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none',
                 'escape' => false,
@@ -80,9 +80,11 @@ use App\Story\Nodes\VictoryNode;
             <div id="story-victory" class="p-3">
                 <p class="fs-3 mb-4">Hai vinto!</p>
 
-                <a href="/" class="elone-button d-inline-block px-3 py-2 text-decoration-none">
-                    Torna alla homepage
-                </a>
+                <?= $this->Html->link(
+                    text: 'Torna alla homepage',
+                    url: '/',
+                    options: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],
+                ) ?>
             </div>
         <?php else : ?>
             <div id="story-defeat" class="p-3">
@@ -92,7 +94,7 @@ use App\Story\Nodes\VictoryNode;
 
                 <?= $this->Html->link(
                     text: 'Ricomincia da pagina 1',
-                    params: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
+                    url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
                     options: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],
                 ) ?>
             </div>

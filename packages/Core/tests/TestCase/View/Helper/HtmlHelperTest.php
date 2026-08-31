@@ -122,6 +122,26 @@ class HtmlHelperTest extends TestCase
     }
 
     /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::link()
+     */
+    #[Test]
+    public function testLinkWithStringUrl(): void
+    {
+        $result = $this->htmlHelper->link('Home', '/');
+        $this->assertSame('<a href="/">Home</a>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::link()
+     */
+    #[Test]
+    public function testLinkWithExternalUrlString(): void
+    {
+        $result = $this->htmlHelper->link('Example', 'https://example.com');
+        $this->assertSame('<a href="https://example.com">Example</a>', $result);
+    }
+
+    /**
      * @link \Elone\Core\View\Helper\HtmlHelper::url()
      */
     #[Test]
@@ -132,6 +152,19 @@ class HtmlHelperTest extends TestCase
     {
         $result = $this->htmlHelper->url($route);
         $this->assertSame($expected, $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::url()
+     */
+    #[Test]
+    #[TestWith(['/'])]
+    #[TestWith(['/img/logo.png'])]
+    #[TestWith(['https://example.com/path'])]
+    public function testUrlWithString(string $route): void
+    {
+        $result = $this->htmlHelper->url($route);
+        $this->assertSame($route, $result);
     }
 
     /**

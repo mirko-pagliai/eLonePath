@@ -83,8 +83,8 @@ final class HtmlHelper
     }
 
     /**
-     * Generates a `<a>` tag with the given text, URL parameters, and options. `$params` is used to construct
-     * the `href` attribute via `url()`.
+     * Generates a `<a>` tag with the given text, URL, and options. `$url` is resolved via `url()` — pass a
+     * literal path or external URL as a string (`/`, `https://example.com`), or a route array to build one.
      *
      * `$options` accepts one known key, `escape` (bool, default `true`): whether `$text` is HTML-escaped before
      * being inserted. Leave it on for anything that isn't fully trusted, developer-written markup — story
@@ -93,12 +93,14 @@ final class HtmlHelper
      * `target`, and so on).
      *
      * @param string $text The text (or, with `escape: false`, raw HTML) to display within the anchor tag.
-     * @param array<string|int, string|int|float|bool> $params The parameters used to build the URL.
+     * @param array<string|int, string|int|float|bool>|string $url A literal URL/path, or a route array (see
+     *  `url()`).
      * @param array<string, string|int|float|bool> $options
      * @return string The rendered HTML `<a>` tag.
-     * @throws \Elone\Core\Exception\RouteNotFoundException If the route contains invalid or missing parameters.
+     * @throws \Elone\Core\Exception\RouteNotFoundException If `$url` is an array route with invalid or missing
+     *  parameters.
      */
-    public function link(string $text, array $params, array $options = []): string
+    public function link(string $text, array|string $url, array $options = []): string
     {
         $escape = (bool)($options['escape'] ?? true);
         unset($options['escape']);
@@ -107,24 +109,29 @@ final class HtmlHelper
 
         return sprintf(
             '<a href="%s"%s>%s</a>',
-            htmlspecialchars($this->url($params), ENT_QUOTES),
+            htmlspecialchars($this->url($url), ENT_QUOTES),
             $htmlAttributes,
             $escape ? htmlspecialchars($text) : $text,
         );
     }
 
     /**
-     * Generates a URL path based on the specified route. The `$route` array must contain at least a
-     * `controller` key as a string and optionally an `action` key (defaulting to `index` if not provided).
-     * Additional parameters in the route are validated and converted.
+     * Resolves `$route` to a URL. A string is returned exactly as given — use it for a literal path (`/`) or an
+     * external URL (`https://example.com`). An array is treated as an internal route and built the same way as
+     * before: `controller` (required) and `action` (defaults to `index`) as string keys, with additional
+     * integer keys as route parameters.
      *
-     * @param array<string|int, string|int|float|bool> $route An associative array specifying the route. Keys
-     * `controller` and `action` are required. Additional integer keys may be used for route parameters.
-     * @return string The generated URL path based on the provided route.
-     * @throws \Elone\Core\Exception\RouteNotFoundException If the route contains invalid or missing parameters.
+     * @param array<string|int, string|int|float|bool>|string $route
+     * @return string The resolved URL.
+     * @throws \Elone\Core\Exception\RouteNotFoundException If given an array route with invalid or missing
+     *  parameters.
      */
-    public function url(array $route): string
+    public function url(array|string $route): string
     {
+        if (is_string($route)) {
+            return $route;
+        }
+
         $controller = $route['controller'] ?? null;
         $action = $route['action'] ?? 'index';
 

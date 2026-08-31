@@ -7,9 +7,10 @@ use Michelf\Markdown;
 
 /**
  * @phpstan-import-type ChoiceData from \App\Story\Choice
+ * @phpstan-type NodeImage array{path: string, title: string}
  * @phpstan-type NodeData array{
  *     content: string,
- *     image: array{path: string, title: string}|null,
+ *     image: NodeImage|null,
  *     choices: list<ChoiceData>,
  *     type: string,
  *     victory: bool|null,
@@ -20,6 +21,7 @@ class Node
     public protected(set) readonly string $content;
 
     /**
+     * @param NodeImage|null $image
      * @param list<\App\Story\Choice> $choices
      */
     public function __construct(

@@ -22,8 +22,8 @@ use App\Story\NodeType;
     <?= $this->Html->image(
         path: "/assets/stories/$game->gameId/" . $node->image['path'],
         attributes: [
+            'alt' => $node->image['title'],
             'class' => 'img-fluid mx-auto mb-5 d-block',
-            'title' => $node->image['title'],
         ],
     ) ?>
 <?php endif ?>

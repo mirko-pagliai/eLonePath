@@ -18,7 +18,7 @@ declare(strict_types=1);
         <title>Elone Path</title>
     </head>
     <body class="min-vh-100">
-        <main class="container py-5">
+        <main class="container py-5" style="max-width: 960px">
             <article class="mx-auto p-4 p-md-5">
                 <?= $content ?>
             </article>

@@ -120,7 +120,25 @@ class GameTest extends TestCase
 
         try {
             $this->expectException(RuntimeException::class);
-            $this->expectExceptionMessageIs("Failed to parse `$path`.");
+            $this->expectExceptionMessageMatches('/^Failed to parse `' . preg_quote($path, '/') . '`: .+\.$/');
+            Game::createFromFile($path);
+        } finally {
+            unlink($path);
+        }
+    }
+
+    /**
+     * @link \App\Story\Game::createFromFile()
+     */
+    #[Test]
+    public function testCreateFromFileWithValidJsonButWrongShape(): void
+    {
+        $path = tempnam(sys_get_temp_dir(), 'story');
+        file_put_contents($path, '"just a string"');
+
+        try {
+            $this->expectException(RuntimeException::class);
+            $this->expectExceptionMessageIs("Failed to parse `$path`: expected a JSON object at the top level.");
             Game::createFromFile($path);
         } finally {
             unlink($path);

@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Story;
 
+use JsonException;
 use RuntimeException;
 
 /**
@@ -81,12 +82,17 @@ class Game
             throw new RuntimeException("Failed to read `$path`.");
         }
 
-        /** @var GameData|null $json */
-        $json = json_decode($contents, true);
-        if (!is_array($json)) {
-            throw new RuntimeException("Failed to parse `$path`.");
+        try {
+            $json = json_decode($contents, associative: true, flags: JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new RuntimeException("Failed to parse `$path`: {$exception->getMessage()}.", previous: $exception);
         }
 
+        if (!is_array($json)) {
+            throw new RuntimeException("Failed to parse `$path`: expected a JSON object at the top level.");
+        }
+
+        /** @var GameData $json */
         return self::createFromArray($json);
     }
 }

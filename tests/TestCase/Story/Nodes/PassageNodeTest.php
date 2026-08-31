@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace TestCase\Story\Nodes;
 
-use App\Story\Choice;
+use App\Story\Nodes\Choice;
 use App\Story\Nodes\NodeType;
 use App\Story\Nodes\PassageNode;
 use PHPUnit\Framework\Attributes\CoversClass;

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Story;
+namespace App\Story\Nodes;
 
 /**
  * @phpstan-type ChoiceData array{content: string, target: int}

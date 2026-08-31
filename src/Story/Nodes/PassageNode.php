@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Story\Nodes;
 
 /**
- * @phpstan-import-type ChoiceData from \App\Story\Choice
+ * @phpstan-import-type ChoiceData from \App\Story\Nodes\Choice
  * @phpstan-type PassageNodeData array{
  *     content: string,
  *     image: array{path: string, title: string}|null,
@@ -15,7 +15,7 @@ namespace App\Story\Nodes;
 class PassageNode extends Node
 {
     /**
-     * @param list<\App\Story\Choice> $choices
+     * @param list<\App\Story\Nodes\Choice> $choices
      */
     public function __construct(
         int $id,

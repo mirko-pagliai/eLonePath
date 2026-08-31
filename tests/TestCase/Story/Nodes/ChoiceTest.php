@@ -1,9 +1,9 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Story;
+namespace TestCase\Story\Nodes;
 
-use App\Story\Choice;
+use App\Story\Nodes\Choice;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;

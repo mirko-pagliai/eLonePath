@@ -16,6 +16,7 @@
 		"josegonzalez/dotenv": "4.0.0",
 		"phpstan/phpstan": "^2.2",
 		"phpunit/phpunit": "^13.2",
+		"symfony/console": "^8.1",
 		"symfony/var-dumper": "^8.1"
 	},
 	"repositories": [

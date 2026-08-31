@@ -1,0 +1,12 @@
+#!/usr/bin/env php
+<?php
+// console
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+
+use App\Command\StoryTesterCommand;
+use Symfony\Component\Console\Application;
+
+$application = new Application();
+$application->addCommand(new StoryTesterCommand());
+$application->run();

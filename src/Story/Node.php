@@ -9,6 +9,7 @@ use Michelf\Markdown;
  * @phpstan-import-type ChoiceData from \App\Story\Choice
  * @phpstan-type NodeData array{
  *     content: string,
+ *     image: array{path: string, title: string}|null,
  *     choices: list<ChoiceData>,
  *     type: string,
  *     victory: bool|null,
@@ -16,11 +17,6 @@ use Michelf\Markdown;
  */
 class Node
 {
-    /**
-     * Image related to `webroot/assets/img/stories` if it exists for this node, otherwise `null`.
-     */
-    public protected(set) ?string $image = null;
-
     public protected(set) readonly string $content;
 
     /**
@@ -30,15 +26,12 @@ class Node
         protected(set) readonly int $id,
         protected readonly string $gameId,
         string $content,
+        protected(set) ?array $image,
         protected(set) array $choices,
         protected(set) readonly NodeType $type,
         protected(set) readonly ?bool $victory,
     ) {
         $this->content = Markdown::defaultTransform($content);
-
-        if (file_exists(WEBROOT . "/assets/img/stories/$gameId/$id.jpg")) {
-            $this->image = "/assets/img/stories/$gameId/$id.jpg";
-        }
     }
 
     /**
@@ -50,6 +43,7 @@ class Node
             id: $id,
             gameId: $gameId,
             content: $data['content'],
+            image: $data['image'] ?? null,
             choices: array_map(
                 callback: fn(array $choice): Choice => Choice::createFromArray($choice),
                 array: $data['choices'],

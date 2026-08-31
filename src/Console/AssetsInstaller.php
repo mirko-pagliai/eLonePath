@@ -26,7 +26,7 @@ final class AssetsInstaller
         self::ensureDirectories($root);
         self::copyBootstrap($root);
         self::copyBootstrapIcons($root);
-        self::linkStoryImages($root, $event);
+        self::linkStoryAssets($root, $event);
     }
 
     private static function ensureDirectories(string $root): void
@@ -77,13 +77,18 @@ final class AssetsInstaller
         );
     }
 
-    private static function linkStoryImages(string $root, Event $event): void
+    private static function linkStoryAssets(string $root, Event $event): void
     {
         $sources = glob("$root/resources/stories/*/img", GLOB_ONLYDIR) ?: [];
 
         foreach ($sources as $source) {
             $storyId = basename(dirname($source));
-            $target = "$root/webroot/assets/img/stories/$storyId";
+            $storyDirectory = "$root/webroot/assets/stories/$storyId";
+            $target = "$storyDirectory/img";
+
+            if (!is_dir($storyDirectory)) {
+                mkdir($storyDirectory, 0777, true);
+            }
 
             if (file_exists($target)) {
                 continue;

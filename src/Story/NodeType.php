@@ -11,7 +11,7 @@ enum NodeType: string
     /**
      * A regular passage: the reader reads the content and picks one of the listed choices to continue.
      */
-    case STORY = 'story';
+    case PASSAGE = 'passage';
 
     /**
      * A winning ending. The story stops here — the reader has completed it successfully.

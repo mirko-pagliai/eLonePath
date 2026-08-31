@@ -37,11 +37,10 @@ class GameTest extends TestCase
                     'choices' => [
                         ['content' => 'Go to page {{page}}', 'target' => 2],
                     ],
-                    'type' => 'story',
+                    'type' => 'passage',
                 ],
                 2 => [
                     'content' => 'The end.',
-                    'choices' => [],
                     'type' => 'victory',
                 ],
             ],

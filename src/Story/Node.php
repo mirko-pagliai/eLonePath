@@ -11,7 +11,7 @@ use Michelf\Markdown;
  * @phpstan-type NodeData array{
  *     content: string,
  *     image: NodeImage|null,
- *     choices: list<ChoiceData>,
+ *     choices?: list<ChoiceData>,
  *     type: string,
  * }
  */
@@ -47,7 +47,7 @@ class Node
             image: $data['image'] ?? null,
             choices: array_map(
                 callback: fn(array $choice): Choice => Choice::createFromArray($choice),
-                array: $data['choices'],
+                array: $data['choices'] ?? [],
             ),
             type: NodeType::from($data['type']),
         );

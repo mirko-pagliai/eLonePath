@@ -28,7 +28,7 @@ class NodeTest extends TestCase
             content: 'Some content.',
             image: null,
             choices: [],
-            type: NodeType::STORY,
+            type: NodeType::PASSAGE,
         );
 
         $this->assertStringContainsString('<p>Some content.</p>', $node->content);
@@ -46,7 +46,7 @@ class NodeTest extends TestCase
             content: 'Some content.',
             image: ['path' => 'cover.jpg', 'title' => 'Cover art'],
             choices: [],
-            type: NodeType::STORY,
+            type: NodeType::PASSAGE,
         );
 
         $this->assertSame(['path' => 'cover.jpg', 'title' => 'Cover art'], $node->image);
@@ -65,13 +65,13 @@ class NodeTest extends TestCase
                 ['content' => 'Go to page {{page}}', 'target' => 4],
                 ['content' => 'Or go here', 'target' => 5],
             ],
-            'type' => 'story',
+            'type' => 'passage',
         ]);
 
         $this->assertSame(3, $node->id);
         $this->assertStringContainsString('<p>Some content.</p>', $node->content);
         $this->assertNull($node->image);
-        $this->assertSame(NodeType::STORY, $node->type);
+        $this->assertSame(NodeType::PASSAGE, $node->type);
 
         $this->assertCount(2, $node->choices);
         $this->assertInstanceOf(Choice::class, $node->choices[0]);
@@ -88,10 +88,24 @@ class NodeTest extends TestCase
         $node = Node::createFromArray(id: 3, gameId: 'test-game', data: [
             'content' => 'Some content.',
             'choices' => [],
-            'type' => 'story',
+            'type' => 'passage',
         ]);
 
         $this->assertNull($node->image);
+    }
+
+    /**
+     * @link \App\Story\Node::createFromArray()
+     */
+    #[Test]
+    public function testCreateFromArrayWithoutChoicesKey(): void
+    {
+        $node = Node::createFromArray(id: 12, gameId: 'test-game', data: [
+            'content' => 'The end.',
+            'type' => 'defeat',
+        ]);
+
+        $this->assertSame([], $node->choices);
     }
 
     /**

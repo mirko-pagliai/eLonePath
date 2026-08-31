@@ -18,15 +18,26 @@ declare(strict_types=1);
 </header>
 
 <section id="dice-result" class="fs-4 mb-4 text-center">
-    <p class="fs-5">
-        Hai lanciato: <?= implode(', ', $rolls) ?> (totale <?= $total ?>)
+    <p class="mb-2">
+        <?php foreach ($rolls as $roll) : ?>
+            <?= $this->Html->icon(
+                name: "dice-$roll",
+                options: ['class' => 'mx-1', 'style' => 'font-size: 5rem'],
+            ) ?>
+        <?php endforeach; ?>
     </p>
 
+    <p class="fs-4">
+        Totale: <strong><?= $total ?></strong>
+    </p>
+
+    <p class="fs-3 mb-4">
     <?php if ($success) : ?>
-        <p class="fs-3 mb-4">Hai superato la prova!</p>
+        Hai superato la prova!
     <?php else : ?>
-        <p class="fs-3 mb-4">Non hai superato la prova.</p>
+        Non hai superato la prova.
     <?php endif; ?>
+    </p>
 
     <?= $this->Html->link(
         text: 'Continua',

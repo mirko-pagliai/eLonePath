@@ -5,8 +5,6 @@ use josegonzalez\Dotenv\Loader;
 
 define('ROOT', dirname(__DIR__));
 
-require ROOT . '/packages/Core/config/bootstrap.php';
-
 /**
  * It is only used if the `/.env` file is present and the `josegonzalez/dotenv` package is installed.
  *
@@ -20,3 +18,5 @@ if (file_exists($envFile) && class_exists(Loader::class)) {
 }
 
 define('APP', require ROOT . '/config/config.php');
+
+require ROOT . '/packages/Core/config/bootstrap.php';

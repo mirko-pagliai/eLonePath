@@ -13,7 +13,7 @@ declare(strict_types=1);
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
-        <title><?= $status ?> <?= htmlspecialchars($message) ?></title>
+        <title><?= $status ?> <?= h($message) ?></title>
     </head>
     <body>
         <?= $content ?>

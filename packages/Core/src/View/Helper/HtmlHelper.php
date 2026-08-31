@@ -25,7 +25,7 @@ final class HtmlHelper
         foreach ($attributes as $attributeName => $value) {
             $htmlAttributes .= sprintf(
                 ' %s="%s"',
-                htmlspecialchars($attributeName, ENT_QUOTES),
+                h($attributeName, ENT_QUOTES),
                 htmlspecialchars((string)$value, ENT_QUOTES),
             );
         }
@@ -61,7 +61,7 @@ final class HtmlHelper
 
         $htmlAttributes = $this->parseHtmlAttributes($options);
 
-        return sprintf('<i class="%s"%s></i>', htmlspecialchars($class, ENT_QUOTES), $htmlAttributes);
+        return sprintf('<i class="%s"%s></i>', h($class, ENT_QUOTES), $htmlAttributes);
     }
 
     /**
@@ -77,7 +77,7 @@ final class HtmlHelper
 
         return sprintf(
             '<img src="%s"%s>',
-            htmlspecialchars($path, ENT_QUOTES),
+            h($path, ENT_QUOTES),
             $htmlAttributes,
         );
     }
@@ -109,9 +109,9 @@ final class HtmlHelper
 
         return sprintf(
             '<a href="%s"%s>%s</a>',
-            htmlspecialchars($this->url($url), ENT_QUOTES),
+            h($this->url($url), ENT_QUOTES),
             $htmlAttributes,
-            $escape ? htmlspecialchars($text) : $text,
+            $escape ? h($text) : $text,
         );
     }
 

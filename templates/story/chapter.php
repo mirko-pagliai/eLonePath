@@ -16,7 +16,7 @@ use App\Story\Nodes\VictoryNode;
 ?>
 
 <header class="mb-5 text-end">
-    <h4 id="story-title" class="elone-title m-0"><?= htmlspecialchars($game->title) ?></h4>
+    <h4 id="story-title" class="elone-title m-0"><?= h($game->title) ?></h4>
 
     <div id="story-page" class="story-page fs-5">Pagina <?= $node->id ?></div>
 </header>

@@ -9,19 +9,19 @@ declare(strict_types=1);
  */
 ?>
 
-<h1><?= $status ?> <?= htmlspecialchars($message) ?></h1>
+<h1><?= $status ?> <?= h($message) ?></h1>
 
 <?php if ($debug) : ?>
     <hr>
 
     <p>
         <strong>Exception:</strong>
-        <?= htmlspecialchars($exception::class) ?>
+        <?= h($exception::class) ?>
     </p>
 
     <p>
         <strong>File:</strong>
-        <?= htmlspecialchars($exception->getFile()) ?>
+        <?= h($exception->getFile()) ?>
     </p>
 
     <p>
@@ -31,5 +31,5 @@ declare(strict_types=1);
 
     <h2>Stack trace</h2>
 
-    <pre><?= htmlspecialchars($exception->getTraceAsString()) ?></pre>
+    <pre><?= h($exception->getTraceAsString()) ?></pre>
 <?php endif; ?>

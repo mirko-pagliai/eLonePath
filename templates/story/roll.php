@@ -14,7 +14,7 @@ declare(strict_types=1);
 ?>
 
 <header class="mb-5 text-end">
-    <h4 id="story-title" class="elone-title m-0"><?= htmlspecialchars($game->title) ?></h4>
+    <h4 id="story-title" class="elone-title m-0"><?= h($game->title) ?></h4>
 </header>
 
 <section id="dice-result" class="fs-4 mb-4 text-center">

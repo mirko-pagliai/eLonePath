@@ -23,23 +23,23 @@ declare(strict_types=1);
             ) ?>
 
             <div class="fs-5 mt-1 text-body-secondary">
-                <?= htmlspecialchars($game->author) ?>
+                <?= h($game->author) ?>
             </div>
 
             <?php if ($game->translators) : ?>
                 <div class="fs-5 mt-1 text-body-secondary">
-                    Tradotto da <?= htmlspecialchars($game->translators) ?>
+                    Tradotto da <?= h($game->translators) ?>
                 </div>
             <?php endif; ?>
 
             <?php if ($game->description) : ?>
                 <div class="mt-1 fs-5">
-                    <?= htmlspecialchars($game->description) ?>
+                    <?= h($game->description) ?>
                 </div>
             <?php endif; ?>
 
             <div class="mt-1">
-                (lingua <?= htmlspecialchars($game->language) ?>, versione <?= htmlspecialchars($game->version) ?>)
+                (lingua <?= h($game->language) ?>, versione <?= h($game->version) ?>)
             </div>
         </li>
     <?php endforeach; ?>

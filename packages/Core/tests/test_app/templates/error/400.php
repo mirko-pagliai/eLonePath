@@ -9,9 +9,9 @@ declare(strict_types=1);
  */
 ?>
 
-<h1><?= $status ?> <?= htmlspecialchars($message) ?></h1>
+<h1><?= $status ?> <?= h($message) ?></h1>
 
 <?php if ($debug) : ?>
-    <p><?= htmlspecialchars($exception::class) ?></p>
+    <p><?= h($exception::class) ?></p>
 <?php endif; ?>
 

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Story;
+namespace App\Story\Nodes;
 
 /**
  * The type of story node — what kind of content it holds and how the reader should react.

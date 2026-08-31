@@ -3,13 +3,14 @@ declare(strict_types=1);
 
 namespace App\Story;
 
+use App\Story\Nodes\Node;
 use RuntimeException;
 
 /**
- * @phpstan-import-type PassageNodeData from \App\Story\PassageNode
- * @phpstan-import-type DiceNodeData from \App\Story\DiceNode
- * @phpstan-import-type VictoryNodeData from \App\Story\VictoryNode
- * @phpstan-import-type DefeatNodeData from \App\Story\DefeatNode
+ * @phpstan-import-type PassageNodeData from \App\Story\Nodes\PassageNode
+ * @phpstan-import-type DiceNodeData from \App\Story\Nodes\DiceNode
+ * @phpstan-import-type VictoryNodeData from \App\Story\Nodes\VictoryNode
+ * @phpstan-import-type DefeatNodeData from \App\Story\Nodes\DefeatNode
  * @phpstan-type GameData array{
  *     game: array{
  *         id: string,
@@ -26,7 +27,7 @@ use RuntimeException;
 class Game
 {
     /**
-     * @param array<int, \App\Story\Node> $nodes
+     * @param array<int, \App\Story\Nodes\Node> $nodes
      */
     public function __construct(
         protected(set) readonly string $gameId,
@@ -44,7 +45,7 @@ class Game
      * Retrieves a node by its unique identifier.
      *
      * @param int $nodeId The unique identifier of the node to retrieve.
-     * @return \App\Story\Node The node associated with the given identifier.
+     * @return \App\Story\Nodes\Node The node associated with the given identifier.
      */
     public function getNode(int $nodeId): Node
     {

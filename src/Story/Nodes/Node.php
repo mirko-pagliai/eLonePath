@@ -1,15 +1,15 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Story;
+namespace App\Story\Nodes;
 
 use Michelf\Markdown;
 
 /**
- * @phpstan-import-type PassageNodeData from \App\Story\PassageNode
- * @phpstan-import-type DiceNodeData from \App\Story\DiceNode
- * @phpstan-import-type VictoryNodeData from \App\Story\VictoryNode
- * @phpstan-import-type DefeatNodeData from \App\Story\DefeatNode
+ * @phpstan-import-type PassageNodeData from \App\Story\Nodes\PassageNode
+ * @phpstan-import-type DiceNodeData from \App\Story\Nodes\DiceNode
+ * @phpstan-import-type VictoryNodeData from \App\Story\Nodes\VictoryNode
+ * @phpstan-import-type DefeatNodeData from \App\Story\Nodes\DefeatNode
  */
 abstract class Node
 {

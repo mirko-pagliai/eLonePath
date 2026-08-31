@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace Test\Story;
 
 use App\Story\Choice;
-use App\Story\NodeType;
-use App\Story\PassageNode;
+use App\Story\Nodes\NodeType;
+use App\Story\Nodes\PassageNode;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -17,7 +17,7 @@ use PHPUnit\Framework\TestCase;
 class PassageNodeTest extends TestCase
 {
     /**
-     * @link \App\Story\Node::__construct()
+     * @link \App\Story\Nodes\Node::__construct()
      */
     #[Test]
     public function testConstructTransformsContentAsMarkdown(): void
@@ -34,7 +34,7 @@ class PassageNodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\Node::__construct()
+     * @link \App\Story\Nodes\Node::__construct()
      */
     #[Test]
     public function testConstructStoresImage(): void

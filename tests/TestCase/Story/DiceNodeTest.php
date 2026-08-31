@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace Test\Story;
 
-use App\Story\DiceNode;
-use App\Story\NodeType;
+use App\Story\Nodes\DiceNode;
+use App\Story\Nodes\NodeType;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;

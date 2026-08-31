@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace Test\Story;
 
 use App\Story\Game;
-use App\Story\Node;
+use App\Story\Nodes\Node;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;

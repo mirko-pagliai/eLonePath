@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
-use App\Story\DiceNode;
 use App\Story\Game;
+use App\Story\Nodes\DiceNode;
 use App\Utility\Dice;
 use Elone\Core\Controller;
 use RuntimeException;

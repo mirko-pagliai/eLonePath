@@ -3,16 +3,17 @@ declare(strict_types=1);
 
 /**
  * @var \App\Story\Game $game
- * @var \App\Story\Node $node
+ * @var \App\Story\Nodes\Node $node
  * @var \Elone\Core\View\View $this
  *
  * @link \App\Controller\StoryController::chapter()
  */
 
-use App\Story\DefeatNode;
-use App\Story\DiceNode;
-use App\Story\PassageNode;
-use App\Story\VictoryNode;
+use App\Story\Nodes\DefeatNode;
+use App\Story\Nodes\DiceNode;
+use App\Story\Nodes\PassageNode;
+use App\Story\Nodes\VictoryNode;
+
 ?>
 
     <header class="mb-5 text-end">

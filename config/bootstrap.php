@@ -20,3 +20,5 @@ if (file_exists($envFile) && class_exists(Loader::class)) {
 define('APP', require ROOT . '/config/config.php');
 
 require ROOT . '/packages/Core/config/bootstrap.php';
+
+const STORIES = ROOT . '/resources/stories';

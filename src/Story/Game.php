@@ -81,6 +81,14 @@ class Game
         );
     }
 
+    /**
+     * Creates a `Game` instance from a JSON file.
+     *
+     * @param string $path The file path to the JSON file.
+     * @return \App\Story\Game A Game instance created from the JSON data.
+     * @throws \RuntimeException If the file is not readable, the contents cannot be read, or the JSON cannot be parsed
+     * or does not match the expected structure.
+     */
     public static function createFromFile(string $path): Game
     {
         if (!is_readable($path)) {
@@ -95,7 +103,10 @@ class Game
         try {
             $json = json_decode($contents, associative: true, flags: JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
-            throw new RuntimeException("Failed to parse `$path`: {$exception->getMessage()}.", previous: $exception);
+            throw new RuntimeException(
+                "Failed to parse `$path`: {$exception->getMessage()}.",
+                previous: $exception,
+            );
         }
 
         if (!is_array($json)) {

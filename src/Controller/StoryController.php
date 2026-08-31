@@ -19,7 +19,7 @@ class StoryController extends Controller
      */
     public function chapter(string $storyId, int $nodeNumber): void
     {
-        $file = ROOT . "/resources/stories/$storyId/story.json";
+        $file = STORIES . "/$storyId/story.json";
 
         $game = Game::createFromFile($file);
         $node = $game->getNode($nodeNumber);
@@ -37,7 +37,7 @@ class StoryController extends Controller
      */
     public function roll(string $storyId, int $nodeNumber): void
     {
-        $file = ROOT . "/resources/stories/$storyId/story.json";
+        $file = STORIES . "/$storyId/story.json";
 
         $game = Game::createFromFile($file);
         $node = $game->getNode($nodeNumber);

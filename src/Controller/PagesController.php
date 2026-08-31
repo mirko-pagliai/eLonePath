@@ -31,7 +31,7 @@ final class PagesController extends Controller
     public function stories(): void
     {
         $finder = new Finder();
-        $finder->in(ROOT . '/resources/stories/')
+        $finder->in(STORIES)
             ->name('story.json')
             ->files();
 

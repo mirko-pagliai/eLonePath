@@ -3,11 +3,13 @@ declare(strict_types=1);
 
 namespace App\Story;
 
-use JsonException;
 use RuntimeException;
 
 /**
- * @phpstan-import-type NodeData from \App\Story\Node
+ * @phpstan-import-type PassageNodeData from \App\Story\PassageNode
+ * @phpstan-import-type DiceNodeData from \App\Story\DiceNode
+ * @phpstan-import-type VictoryNodeData from \App\Story\VictoryNode
+ * @phpstan-import-type DefeatNodeData from \App\Story\DefeatNode
  * @phpstan-type GameData array{
  *     game: array{
  *         id: string,
@@ -18,7 +20,7 @@ use RuntimeException;
  *         language: string,
  *         version: string,
  *     },
- *     nodes: array<int, NodeData>,
+ *     nodes: array<int, PassageNodeData|DiceNodeData|VictoryNodeData|DefeatNodeData>,
  * }
  */
 class Game
@@ -82,17 +84,12 @@ class Game
             throw new RuntimeException("Failed to read `$path`.");
         }
 
-        try {
-            $json = json_decode($contents, associative: true, flags: JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
-            throw new RuntimeException("Failed to parse `$path`: {$exception->getMessage()}.", previous: $exception);
-        }
-
+        /** @var GameData|null $json */
+        $json = json_decode($contents, true);
         if (!is_array($json)) {
-            throw new RuntimeException("Failed to parse `$path`: expected a JSON object at the top level.");
+            throw new RuntimeException("Failed to parse `$path`.");
         }
 
-        /** @var GameData $json */
         return self::createFromArray($json);
     }
 }

@@ -32,4 +32,21 @@ final class Dice
             $this->roll(),
         ];
     }
+
+    /**
+     * Rolls the dice `$count` times and returns every result, in order.
+     *
+     * @return list<int>
+     * @throws \Random\RandomException
+     */
+    public function rollMultiple(int $count): array
+    {
+        $rolls = [];
+
+        for ($i = 0; $i < $count; $i++) {
+            $rolls[] = $this->roll();
+        }
+
+        return $rolls;
+    }
 }

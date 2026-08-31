@@ -6,50 +6,58 @@ namespace App\Story;
 use Michelf\Markdown;
 
 /**
- * @phpstan-import-type ChoiceData from \App\Story\Choice
- * @phpstan-type NodeImage array{path: string, title: string}
- * @phpstan-type NodeData array{
- *     content: string,
- *     image: NodeImage|null,
- *     choices?: list<ChoiceData>,
- *     type: string,
- * }
+ * @phpstan-import-type PassageNodeData from \App\Story\PassageNode
+ * @phpstan-import-type DiceNodeData from \App\Story\DiceNode
+ * @phpstan-import-type VictoryNodeData from \App\Story\VictoryNode
+ * @phpstan-import-type DefeatNodeData from \App\Story\DefeatNode
  */
-class Node
+abstract class Node
 {
     public protected(set) readonly string $content;
 
     /**
-     * @param NodeImage|null $image `path` is the filename only (e.g. `11.jpg`), resolved by the template against
-     *  `webroot/assets/stories/{gameId}/img/`.
-     * @param list<\App\Story\Choice> $choices
+     * @param array{path: string, title: string}|null $image `path` is the filename only (e.g. `11.jpg`), resolved
+     *  by the template against `webroot/assets/stories/{gameId}/img/`.
      */
     public function __construct(
         protected(set) readonly int $id,
         protected readonly string $gameId,
         string $content,
         protected(set) ?array $image,
-        protected(set) array $choices,
-        protected(set) readonly NodeType $type,
     ) {
         $this->content = Markdown::defaultTransform($content);
     }
 
     /**
-     * @param NodeData $data
+     * The kind of node this is. Fixed per subclass.
+     */
+    abstract public function type(): NodeType;
+
+    /**
+     * Builds the concrete `Node` subclass matching `$data['type']`.
+     *
+     * @param array<string, mixed> $data
      */
     public static function createFromArray(int $id, string $gameId, array $data): Node
     {
-        return new self(
-            id: $id,
-            gameId: $gameId,
-            content: $data['content'],
-            image: $data['image'] ?? null,
-            choices: array_map(
-                callback: fn(array $choice): Choice => Choice::createFromArray($choice),
-                array: $data['choices'] ?? [],
-            ),
-            type: NodeType::from($data['type']),
-        );
+        $type = NodeType::from($data['type']);
+
+        if ($type === NodeType::PASSAGE) {
+            /** @var PassageNodeData $data */
+            return PassageNode::createFromArray($id, $gameId, $data);
+        }
+
+        if ($type === NodeType::DICE) {
+            /** @var DiceNodeData $data */
+            return DiceNode::createFromArray($id, $gameId, $data);
+        }
+
+        if ($type === NodeType::VICTORY) {
+            /** @var VictoryNodeData $data */
+            return VictoryNode::createFromArray($id, $gameId, $data);
+        }
+
+        /** @var DefeatNodeData $data */
+        return DefeatNode::createFromArray($id, $gameId, $data);
     }
 }

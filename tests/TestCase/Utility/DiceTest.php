@@ -6,6 +6,7 @@ namespace Test\Utility;
 use App\Utility\Dice;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -37,5 +38,33 @@ class DiceTest extends TestCase
             $this->assertGreaterThanOrEqual(1, $dice);
             $this->assertLessThanOrEqual(6, $dice);
         }
+    }
+
+    /**
+     * @link \App\Utility\Dice::rollMultiple()
+     */
+    #[Test]
+    #[TestWith([1])]
+    #[TestWith([2])]
+    #[TestWith([5])]
+    public function testRollMultiple(int $count): void
+    {
+        $result = new Dice()->rollMultiple($count);
+
+        $this->assertCount($count, $result);
+        foreach ($result as $roll) {
+            $this->assertGreaterThanOrEqual(1, $roll);
+            $this->assertLessThanOrEqual(6, $roll);
+        }
+    }
+
+    /**
+     * @link \App\Utility\Dice::rollMultiple()
+     */
+    #[Test]
+    public function testRollMultipleWithZero(): void
+    {
+        $result = new Dice()->rollMultiple(0);
+        $this->assertSame([], $result);
     }
 }

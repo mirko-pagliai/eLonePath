@@ -113,7 +113,7 @@ class View
 
         $file = realpath("$realBasePath/$name.php");
 
-        if ($file === false || !is_file($file) || !str_starts_with($file, $realBasePath . DIRECTORY_SEPARATOR)) {
+        if ($file === false || !is_file($file) || !str_starts_with($file, $realBasePath . DS)) {
             return false;
         }
 

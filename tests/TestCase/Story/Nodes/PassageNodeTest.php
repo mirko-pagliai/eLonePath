@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Story;
+namespace TestCase\Story\Nodes;
 
 use App\Story\Choice;
 use App\Story\Nodes\NodeType;

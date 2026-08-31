@@ -8,3 +8,11 @@ if (!defined('DS')) {
 if (!defined('APP_NAMESPACE')) {
     define('APP_NAMESPACE', 'App');
 }
+
+if (!defined('TEMPLATES')) {
+    define('TEMPLATES', ROOT . '/templates/');
+}
+
+if (!defined('WEBROOT')) {
+    define('WEBROOT', ROOT . '/webroot');
+}

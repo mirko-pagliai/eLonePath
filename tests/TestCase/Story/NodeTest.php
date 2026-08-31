@@ -45,13 +45,13 @@ class NodeTest extends TestCase
             id: 1,
             gameId: 'test-game',
             content: 'Some content.',
-            image: ['path' => 'img/cover.jpg', 'title' => 'Cover art'],
+            image: ['path' => 'cover.jpg', 'title' => 'Cover art'],
             choices: [],
             type: NodeType::STORY,
             victory: null,
         );
 
-        $this->assertSame(['path' => 'img/cover.jpg', 'title' => 'Cover art'], $node->image);
+        $this->assertSame(['path' => 'cover.jpg', 'title' => 'Cover art'], $node->image);
     }
 
     /**

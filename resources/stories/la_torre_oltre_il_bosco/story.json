@@ -23,7 +23,7 @@
                 }
             ],
             "image": {
-                "path": "img/01.jpg",
+                "path": "01.jpg",
                 "title": "Villaggio sotto la tempesta"
             }
         },
@@ -41,7 +41,7 @@
                 }
             ],
             "image": {
-                "path": "img/02.jpg",
+                "path": "02.jpg",
                 "title": "Viandante incappucciato nel bosco nebbioso"
             }
         },
@@ -59,7 +59,7 @@
                 }
             ],
             "image": {
-                "path": "img/03.jpg",
+                "path": "03.jpg",
                 "title": "Vecchia locandiera al focolare"
             }
         },
@@ -129,7 +129,7 @@
                 }
             ],
             "image": {
-                "path": "img/08.jpg",
+                "path": "08.jpg",
                 "title": "Cappella nella foresta nebbiosa"
             }
         },
@@ -161,7 +161,7 @@
                 }
             ],
             "image": {
-                "path": "img/10.jpg",
+                "path": "10.jpg",
                 "title": "Scriptorium illuminato dalle candele"
             }
         },
@@ -179,7 +179,7 @@
                 }
             ],
             "image": {
-                "path": "img/11.jpg",
+                "path": "11.jpg",
                 "title": "Scala illuminata dalle torce"
             }
         },
@@ -213,13 +213,21 @@
             "type": "ending",
             "victory": true,
             "content": "Afferri la corona.\n\nPer un istante non accade nulla.\n\nPoi l'armatura del cavaliere si sgretola in una nuvola di polvere. Il trono rimane vuoto e la stanza viene attraversata da un boato profondo.\n\nLa torre comincia a tremare.\n\nCorri verso la scala mentre le pietre cadono intorno a te. Una parte del soffitto crolla alle tue spalle e per un momento temi di rimanere intrappolato.\n\nRiesci a raggiungere l'uscita.\n\nQuando raggiungi il bosco, la torre crolla alle tue spalle con un fragore che fa volare gli uccelli dagli alberi.\n\nAll'alba torni a Valdombra.\n\nGli abitanti escono lentamente dalle loro case. Quando vedono la corona che porti tra le mani, nessuno dice una parola.\n\nPoi, una dopo l'altra, le porte del villaggio si aprono.\n\nLa maledizione è finita.",
-            "choices": []
+            "choices": [],
+            "image": {
+                "path": "15.jpg",
+                "title": "Il trionfo tra le rovine"
+            }
         },
         "16": {
             "type": "ending",
             "victory": false,
             "content": "«Non voglio la tua corona.»\n\nIl cavaliere rimane immobile.\n\nPer qualche istante temi di aver commesso un errore.\n\nPoi sorride.\n\n«Allora resterai al suo posto.»\n\nLa porta alle tue spalle scompare.\n\nLa stanza diventa buia.\n\nCerchi di muoverti, ma le gambe non rispondono. Il freddo attraversa l'armatura e il silenzio della torre sembra diventare infinito.\n\nMolto tempo dopo, un viaggiatore entrerà nella torre e troverà un nuovo cavaliere seduto sul trono.\n\nIndossa la tua armatura.",
-            "choices": []
+            "choices": [],
+            "image": {
+                "path": "16.jpg",
+                "title": "Il trono nella sala in rovina"
+            }
         }
     }
 }

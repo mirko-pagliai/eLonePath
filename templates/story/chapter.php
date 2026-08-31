@@ -18,9 +18,9 @@ use App\Story\NodeType;
     <div id="story-page" class="story-page fs-5">Pagina <?= $node->id ?></div>
 </header>
 
-<?php if ($node->image) : ?>
+<?php if ($node->image !== null) : ?>
     <?= $this->Html->image(
-        path: "/assets/stories/$game->gameId/" . $node->image['path'],
+        path: "/assets/stories/$game->gameId/img/{$node->image['path']}",
         attributes: [
             'alt' => $node->image['title'],
             'class' => 'img-fluid mx-auto mb-5 d-block',

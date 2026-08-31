@@ -21,7 +21,8 @@ class Node
     public protected(set) readonly string $content;
 
     /**
-     * @param NodeImage|null $image
+     * @param NodeImage|null $image `path` is the filename only (e.g. `11.jpg`), resolved by the template against
+     *  `webroot/assets/stories/{gameId}/img/`.
      * @param list<\App\Story\Choice> $choices
      */
     public function __construct(

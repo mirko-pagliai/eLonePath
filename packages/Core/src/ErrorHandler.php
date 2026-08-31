@@ -20,15 +20,18 @@ final class ErrorHandler
 
     /**
      * @param bool $debug Whether to include the exception's own message and class in the response, instead of a
-     *  generic one.
+     *  generic one. Defaults to `APP['debug']`.
      * @param \Elone\Core\View\View|null $view An optional `View` instance. If not provided, a new instance will be
      *  created. Inject a double in tests to simulate rendering failures.
      * @param (\Closure(string): void)|null $logger Called with the string representation of an exception whenever
      *  `debug` is off. Defaults to PHP's `error_log()`. Inject a no-op (or a spy) in tests to avoid writing to the
      *  real error log.
      */
-    public function __construct(private readonly bool $debug = false, ?View $view = null, ?Closure $logger = null)
-    {
+    public function __construct(
+        private readonly bool $debug = APP['debug'],
+        ?View $view = null,
+        ?Closure $logger = null,
+    ) {
         $this->view = $view ?? new View();
         $this->logger = $logger ?? error_log(...);
     }

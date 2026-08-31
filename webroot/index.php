@@ -24,14 +24,7 @@ if (PHP_SAPI === 'cli-server') {
 }
 
 require dirname(__DIR__) . '/vendor/autoload.php';
-
-/**
- * This order should not be changed.
- *
- * This way, the app bootstrap can set constants before the core bootstrap.
- */
 require dirname(__DIR__) . '/config/bootstrap.php';
-require dirname(__DIR__) . '/packages/Core/config/bootstrap.php';
 
 $appConfig = require ROOT . '/config/config.php';
 

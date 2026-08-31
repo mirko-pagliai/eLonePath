@@ -10,7 +10,7 @@ if (!defined('APP_NAMESPACE')) {
 }
 
 if (!defined('TEMPLATES')) {
-    define('TEMPLATES', ROOT . '/templates/');
+    define('TEMPLATES', ROOT . '/templates');
 }
 
 if (!defined('WEBROOT')) {

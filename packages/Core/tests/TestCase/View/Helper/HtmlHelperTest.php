@@ -43,7 +43,7 @@ class HtmlHelperTest extends TestCase
      * @link \Elone\Core\View\Helper\HtmlHelper::icon()
      */
     #[Test]
-    public function testIconWithAttributes(): void
+    public function testIconWithOptions(): void
     {
         $result = $this->htmlHelper->icon('github', ['class' => 'fs-3', 'aria-hidden' => 'true']);
         $this->assertSame('<i class="bi bi-github fs-3" aria-hidden="true"></i>', $result);
@@ -63,7 +63,7 @@ class HtmlHelperTest extends TestCase
      * @link \Elone\Core\View\Helper\HtmlHelper::image()
      */
     #[Test]
-    public function testImageWithAttributes(): void
+    public function testImageWithOptions(): void
     {
         $result = $this->htmlHelper->image('/img.jpg', ['alt' => 'A "special" image', 'class' => 'img-fluid']);
         $this->assertSame('<img src="/img.jpg" alt="A &quot;special&quot; image" class="img-fluid">', $result);
@@ -83,7 +83,7 @@ class HtmlHelperTest extends TestCase
      * @link \Elone\Core\View\Helper\HtmlHelper::link()
      */
     #[Test]
-    public function testLinkEscapesTextAndAttributes(): void
+    public function testLinkEscapesTextAndAttributesByDefault(): void
     {
         $result = $this->htmlHelper->link(
             'A & B',
@@ -91,6 +91,34 @@ class HtmlHelperTest extends TestCase
             ['class' => 'btn "special"'],
         );
         $this->assertSame('<a href="/pages/home" class="btn &quot;special&quot;">A &amp; B</a>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::link()
+     */
+    #[Test]
+    public function testLinkWithEscapeFalseRendersRawText(): void
+    {
+        $result = $this->htmlHelper->link(
+            '<strong>Bold</strong>',
+            ['controller' => 'Pages', 'action' => 'home'],
+            ['escape' => false],
+        );
+        $this->assertSame('<a href="/pages/home"><strong>Bold</strong></a>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::link()
+     */
+    #[Test]
+    public function testLinkEscapeOptionIsNotRenderedAsAttribute(): void
+    {
+        $result = $this->htmlHelper->link(
+            'Home',
+            ['controller' => 'Pages', 'action' => 'home'],
+            ['escape' => true, 'class' => 'btn'],
+        );
+        $this->assertSame('<a href="/pages/home" class="btn">Home</a>', $result);
     }
 
     /**

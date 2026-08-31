@@ -10,7 +10,7 @@ declare(strict_types=1);
 
 <?= $this->Html->image(
     path: '/img/logo.png',
-    attributes: [
+    options: [
         'class' => 'd-block img-fluid mx-auto',
         'style' => 'max-width: 600px',
     ],
@@ -24,6 +24,6 @@ declare(strict_types=1);
     <?= $this->Html->link(
         text: 'Le storie',
         params: ['controller' => 'Pages', 'action' => 'stories'],
-        attributes: ['class' => 'btn fs-4 elone-button px-4 py-2'],
+        options: ['class' => 'btn fs-4 elone-button px-4 py-2'],
     ) ?>
 </div>

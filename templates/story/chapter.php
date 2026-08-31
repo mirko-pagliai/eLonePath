@@ -13,7 +13,6 @@ use App\Story\Nodes\DefeatNode;
 use App\Story\Nodes\DiceNode;
 use App\Story\Nodes\PassageNode;
 use App\Story\Nodes\VictoryNode;
-
 ?>
 
     <header class="mb-5 text-end">
@@ -25,7 +24,7 @@ use App\Story\Nodes\VictoryNode;
 <?php if ($node->image !== null) : ?>
     <?= $this->Html->image(
         path: "/assets/stories/$game->gameId/img/{$node->image['path']}",
-        attributes: [
+        options: [
             'alt' => $node->image['title'],
             'class' => 'img-fluid mx-auto mb-5 d-block',
         ],
@@ -43,7 +42,10 @@ use App\Story\Nodes\VictoryNode;
             echo $this->Html->link(
                 text: $choice->content,
                 params: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $choice->target],
-                attributes: ['class' => 'elone-button fw-medium p-2 fs-5 text-decoration-none'],
+                options: [
+                    'class' => 'elone-button fw-medium p-2 fs-5 text-decoration-none',
+                    'escape' => false,
+                ],
             );
         }
         ?>
@@ -52,15 +54,22 @@ use App\Story\Nodes\VictoryNode;
 
 <?php if ($node instanceof DiceNode) : ?>
     <div id="story-dice" class="mt-4 text-center">
-        <p class="fs-5">
-            Lancia <?= $node->requiredRolls ?> <?= $node->requiredRolls === 1 ? 'dado' : 'dadi' ?>:
-            servono almeno <?= $node->minimum ?> per superare la prova.
+        <p class="fs-3">
+            Lancia <strong><?= $node->requiredRolls ?> <?= $node->requiredRolls === 1 ? 'dado' : 'dadi' ?></strong>:
+            serve almeno un <strong><?= $node->minimum ?></strong> per superare la prova.
         </p>
 
         <?= $this->Html->link(
-            text: 'Lancia i dadi',
+            text: sprintf(
+                '%s %s',
+                $this->Html->icon('dice-6'),
+                $node->requiredRolls === 1 ? 'Lancia 1 dado' : "Lancia $node->requiredRolls dadi",
+            ),
             params: ['controller' => 'Story', 'action' => 'roll', $game->gameId, $node->id],
-            attributes: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],
+            options: [
+                'class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none',
+                'escape' => false,
+            ],
         ) ?>
     </div>
 <?php endif; ?>
@@ -84,7 +93,7 @@ use App\Story\Nodes\VictoryNode;
                 <?= $this->Html->link(
                     text: 'Ricomincia da pagina 1',
                     params: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
-                    attributes: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],
+                    options: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],
                 ) ?>
             </div>
         <?php endif; ?>

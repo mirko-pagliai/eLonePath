@@ -35,14 +35,14 @@ final class HtmlHelper
 
     /**
      * Generates an `<i>` tag with the appropriate classes for a Bootstrap icon. The method formats
-     * the icon name and merges it with additional class names provided in `$attributes`. All other
-     * attributes will be applied to the `<i>` tag.
+     * the icon name and merges it with additional class names provided in `$options`. Every other
+     * entry in `$options` is applied as an attribute on the `<i>` tag.
      *
      * @param string $name The name of the icon, which can include or omit the "bi-" prefix.
-     * @param array<string, string|int|float|bool> $attributes
+     * @param array<string, string|int|float|bool> $options
      * @return string The generated `<i>` tag as a string, ready for inclusion in HTML.
      */
-    public function icon(string $name, array $attributes = []): string
+    public function icon(string $name, array $options = []): string
     {
         $name = trim($name);
 
@@ -54,12 +54,12 @@ final class HtmlHelper
 
         $class = "bi bi-$name";
 
-        if (isset($attributes['class'])) {
-            $class .= ' ' . $attributes['class'];
-            unset($attributes['class']);
+        if (isset($options['class'])) {
+            $class .= ' ' . $options['class'];
+            unset($options['class']);
         }
 
-        $htmlAttributes = $this->parseHtmlAttributes($attributes);
+        $htmlAttributes = $this->parseHtmlAttributes($options);
 
         return sprintf('<i class="%s"%s></i>', htmlspecialchars($class, ENT_QUOTES), $htmlAttributes);
     }
@@ -67,13 +67,13 @@ final class HtmlHelper
     /**
      * Builds a `<img>` tag for the given source path. `$path` is not run through `url()` — pass it exactly as it
      * should appear in `src`, since images are served as static files rather than routed. Pass `alt` via
-     * `$attributes` whenever the image conveys meaning that isn't already in the surrounding text.
+     * `$options` whenever the image conveys meaning that isn't already in the surrounding text.
      *
-     * @param array<string, string|int|float|bool> $attributes
+     * @param array<string, string|int|float|bool> $options
      */
-    public function image(string $path, array $attributes = []): string
+    public function image(string $path, array $options = []): string
     {
-        $htmlAttributes = $this->parseHtmlAttributes($attributes);
+        $htmlAttributes = $this->parseHtmlAttributes($options);
 
         return sprintf(
             '<img src="%s"%s>',
@@ -83,24 +83,33 @@ final class HtmlHelper
     }
 
     /**
-     * Generates a `<a>` tag with the given text, URL parameters, and HTML attributes. The `$params` array
-     * is used to construct the `href` attribute using the `url()` method. Provides a way to define additional
-     * attributes such as `class`, `id`, `target`, or others via `$attributes`.
+     * Generates an `<a>` tag with the given text, URL parameters, and options. `$params` is used to construct
+     * the `href` attribute via `url()`.
      *
-     * @param string $text The text to display within the anchor tag.
+     * `$options` accepts one known key, `escape` (bool, default `true`): whether `$text` is HTML-escaped before
+     * being inserted. Leave it on for anything that isn't fully trusted, developer-written markup — story
+     * content, anything sourced from data — and turn it off only to embed literal HTML you wrote yourself, such
+     * as an icon. Every other key in `$options` is applied as an HTML attribute on the `<a>` tag (`class`, `id`,
+     * `target`, and so on).
+     *
+     * @param string $text The text (or, with `escape: false`, raw HTML) to display within the anchor tag.
      * @param array<string|int, string|int|float|bool> $params The parameters used to build the URL.
-     * @param array<string, string|int|float|bool> $attributes Additional HTML attributes to apply to the anchor tag.
+     * @param array<string, string|int|float|bool> $options
      * @return string The rendered HTML `<a>` tag.
+     * @throws \Elone\Core\Exception\RouteNotFoundException If the route contains invalid or missing parameters.
      */
-    public function link(string $text, array $params, array $attributes = []): string
+    public function link(string $text, array $params, array $options = []): string
     {
-        $htmlAttributes = $this->parseHtmlAttributes($attributes);
+        $escape = (bool)($options['escape'] ?? true);
+        unset($options['escape']);
+
+        $htmlAttributes = $this->parseHtmlAttributes($options);
 
         return sprintf(
             '<a href="%s"%s>%s</a>',
             htmlspecialchars($this->url($params), ENT_QUOTES),
             $htmlAttributes,
-            htmlspecialchars($text),
+            $escape ? htmlspecialchars($text) : $text,
         );
     }
 

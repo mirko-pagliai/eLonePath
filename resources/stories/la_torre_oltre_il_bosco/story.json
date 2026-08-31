@@ -21,7 +21,11 @@
                     "content": "Se vuoi cercare qualcuno che possa aiutarti, vai a pagina {{page}}",
                     "target": 3
                 }
-            ]
+            ],
+            "image": {
+                "path": "img/01.png",
+                "title": "Villaggio sotto la tempesta"
+            }
         },
         "2": {
             "type": "story",
@@ -35,7 +39,11 @@
                     "content": "Se vuoi proseguire senza fermarsi, vai a pagina {{page}}",
                     "target": 5
                 }
-            ]
+            ],
+            "image": {
+                "path": "img/02.png",
+                "title": "Viandante incappucciato nel bosco nebbioso"
+            }
         },
         "3": {
             "type": "story",
@@ -49,7 +57,11 @@
                     "content": "Se vuoi partire immediatamente, vai a pagina {{page}}",
                     "target": 2
                 }
-            ]
+            ],
+            "image": {
+                "path": "img/03.png",
+                "title": "Vecchia locandiera al focolare"
+            }
         },
         "4": {
             "type": "story",
@@ -115,7 +127,11 @@
                     "content": "Se vuoi suonare di nuovo la campana, vai a pagina {{page}}",
                     "target": 13
                 }
-            ]
+            ],
+            "image": {
+                "path": "img/08.png",
+                "title": "Cappella nella foresta nebbiosa"
+            }
         },
         "9": {
             "type": "story",
@@ -143,7 +159,11 @@
                     "content": "Se vuoi toccare la statua, vai a pagina {{page}}",
                     "target": 13
                 }
-            ]
+            ],
+            "image": {
+                "path": "img/10.png",
+                "title": "Scriptorium illuminato dalle candele"
+            }
         },
         "11": {
             "type": "story",
@@ -157,7 +177,11 @@
                     "content": "Se vuoi cercare di riaprire la porta, vai a pagina {{page}}",
                     "target": 12
                 }
-            ]
+            ],
+            "image": {
+                "path": "img/11.png",
+                "title": "Scala illuminata dalle torce"
+            }
         },
         "12": {
             "type": "ending",

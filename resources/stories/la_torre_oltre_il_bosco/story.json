@@ -23,7 +23,7 @@
                 }
             ],
             "image": {
-                "path": "img/01.png",
+                "path": "img/01.jpg",
                 "title": "Villaggio sotto la tempesta"
             }
         },
@@ -41,7 +41,7 @@
                 }
             ],
             "image": {
-                "path": "img/02.png",
+                "path": "img/02.jpg",
                 "title": "Viandante incappucciato nel bosco nebbioso"
             }
         },
@@ -59,7 +59,7 @@
                 }
             ],
             "image": {
-                "path": "img/03.png",
+                "path": "img/03.jpg",
                 "title": "Vecchia locandiera al focolare"
             }
         },
@@ -129,7 +129,7 @@
                 }
             ],
             "image": {
-                "path": "img/08.png",
+                "path": "img/08.jpg",
                 "title": "Cappella nella foresta nebbiosa"
             }
         },
@@ -161,7 +161,7 @@
                 }
             ],
             "image": {
-                "path": "img/10.png",
+                "path": "img/10.jpg",
                 "title": "Scriptorium illuminato dalle candele"
             }
         },
@@ -179,7 +179,7 @@
                 }
             ],
             "image": {
-                "path": "img/11.png",
+                "path": "img/11.jpg",
                 "title": "Scala illuminata dalle torce"
             }
         },

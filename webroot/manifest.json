@@ -1,0 +1,25 @@
+{
+	"id": "/",
+	"name": "Elone Path",
+	"short_name": "Elone Path",
+	"description": "Librogame digitali interattivi, ispirati ai grandi classici degli anni '80.",
+	"lang": "it",
+	"start_url": "/",
+	"scope": "/",
+	"display": "standalone",
+	"background_color": "#eee2c8",
+	"theme_color": "#30271f",
+	"categories": ["games", "entertainment", "books"],
+	"icons": [
+		{
+			"src": "/img/icons/icon-192.png",
+			"sizes": "192x192",
+			"type": "image/png"
+		},
+		{
+			"src": "/img/icons/icon-512.png",
+			"sizes": "512x512",
+			"type": "image/png"
+		}
+	]
+}

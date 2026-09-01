@@ -24,6 +24,12 @@ class StoryTesterCommand extends Command
         #[Argument('The `story.json` file you want to test')] string $filename,
         SymfonyStyle $io,
     ): int {
+        if (!str_ends_with($filename, 'story.json')) {
+            $io->error('The file must be a `story.json` file');
+
+            return Command::FAILURE;
+        }
+
         $io->writeln([
             '============',
             'Story tester',
@@ -86,7 +92,7 @@ class StoryTesterCommand extends Command
         }
 
         if (!$hasErrors) {
-            $io->success("All images are valid!");
+            $io->success('All images are valid!');
         }
     }
 

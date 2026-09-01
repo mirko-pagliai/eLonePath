@@ -12,16 +12,20 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Core",
-                "reference": "6c7ab64abbae88b66e56955d18ddd894d9db7d5d"
+                "reference": "f9ffedb2e2e03b00ee58c9d8147d73ed2b0f27d7"
             },
             "require": {
                 "php": "^8.4"
             },
             "require-dev": {
                 "cakephp/cakephp-codesniffer": "^5.3.2",
+                "michelf/php-markdown": "^2.0",
                 "phpstan/phpstan": "^2.2",
                 "phpunit/phpunit": "^13.2",
                 "symfony/var-dumper": "^8.1"
+            },
+            "suggest": {
+                "michelf/php-markdown": "Markdown parser. Necessary if you want to use `HtmlHelper::markdown()`"
             },
             "type": "library",
             "autoload": {

@@ -12,7 +12,7 @@ use App\Story\Nodes\PassageNode;
 use App\Story\Nodes\VictoryNode;
 use LogicException;
 
-class NodesWalker
+class BranchesWalker
 {
     /**
      * @var array<\App\Story\Nodes\Node>

@@ -8,7 +8,7 @@ use App\Story\Nodes\DefeatNode;
 use App\Story\Nodes\DiceNode;
 use App\Story\Nodes\Node;
 use App\Story\Nodes\VictoryNode;
-use Elone\Debugger\NodesWalker;
+use Elone\Debugger\BranchesWalker;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -31,7 +31,7 @@ class StoryTesterCommand extends Command
     ): int {
         $game = Game::createFromFile(path: $filename);
 
-        $nodesWalker = new NodesWalker(game: $game);
+        $nodesWalker = new BranchesWalker(game: $game);
         $branches = $nodesWalker();
 
         // Extracts node IDs for comparison.

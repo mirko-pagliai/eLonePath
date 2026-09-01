@@ -11,11 +11,13 @@ declare(strict_types=1);
     <head>
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Elone Path</title>
         <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="/assets/css/bootstrap-icons.min.css">
         <link rel="stylesheet" href="/css/default.css">
-        <link rel="icon" type="image/png" href="/img/favicon.png">
-        <title>Elone Path</title>
+
+        <link rel="icon" href="/img/icons/favicon.ico">
+        <link rel="apple-touch-icon" sizes="180x180" href="/img/icons/apple-touch-icon.png">
     </head>
     <body class="min-vh-100">
         <main class="container py-5" style="max-width: 960px">

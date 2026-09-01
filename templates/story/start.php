@@ -25,7 +25,7 @@ declare(strict_types=1);
 </header>
 
 <section id="story-content" class="fs-4 mb-4">
-    <?= $this->Html->markdown(h($game->preface)) ?>
+    <?= $this->Html->markdown(markdown: $game->preface) ?>
 </section>
 
 <div class="text-center">

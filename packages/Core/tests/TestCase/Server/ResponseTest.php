@@ -71,6 +71,11 @@ class ResponseTest extends TestCase
     }
 
     /**
+     * `send()` calls PHP's own `header()`, but under the CLI SAPI (which is what PHPUnit runs under) `header()` never
+     * populates `headers_list()` — verified directly against a real PHP CLI process, not assumed — so there's no way
+     * to assert from here that the header was actually sent. This only re-confirms the status code still goes through
+     * when headers are present; `testHeaders()` already covers that `Response` holds the right header values.
+     *
      * @link \Elone\Core\Server\Response::send()
      */
     #[Test]
@@ -83,6 +88,5 @@ class ResponseTest extends TestCase
         ob_get_clean();
 
         $this->assertSame(302, http_response_code());
-        $this->assertContains('Location: /pages/home', headers_list());
     }
 }

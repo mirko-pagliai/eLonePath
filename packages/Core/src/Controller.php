@@ -63,7 +63,7 @@ abstract class Controller
     /**
      * Retrieves all query string parameters of the current request.
      *
-     * @return array<string, mixed> The query string parameters, as an associative array.
+     * @return array<array-key, mixed> The query string parameters, as an associative array.
      */
     protected function queryParams(): array
     {

@@ -30,11 +30,10 @@ final readonly class Application
      */
     public function run(): void
     {
-        $request = Request::fromGlobals();
-
         try {
-            $route = $this->router->dispatch(request: $request);
+            $request = Request::createFromGlobals();
 
+            $route = $this->router->dispatch(request: $request);
             $response = $this->dispatcher->dispatch(route: $route, request: $request);
         } catch (Throwable $exception) {
             $response = $this->errorHandler->handle(exception: $exception);

@@ -16,11 +16,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
 /**
  * Run with:
  * ```
- * $ bin/console debugger:branches-walker full/path/to/story.json
+ * $ bin/console debugger:check-branches full/path/to/story.json
  * ```
  */
-#[AsCommand(name: 'debugger:branches-walker')]
-class BranchesWalkerCommand extends Command
+#[AsCommand(name: 'debugger:check-branches')]
+class CheckBranchesCommand extends Command
 {
     public function __invoke(
         #[Argument('The `story.json` file you want to test')] string $filename,
@@ -36,7 +36,7 @@ class BranchesWalkerCommand extends Command
         $branches = $nodesWalker();
 
         if ($io->isVerbose()) {
-            $io->info('Check all the branches are walkable...');
+            $io->info('Check all branches...');
 
             // Extracts node IDs for comparison.
             $extractIdForCmp = fn(Node $node): string => $node->id < 10 ? "0$node->id" : "$node->id";
@@ -71,6 +71,10 @@ class BranchesWalkerCommand extends Command
             }
 
             $io->newLine();
+        }
+
+        if ($io->isVerbose()) {
+            $io->info('Check results...');
         }
 
         $defeatBranches = array_filter(

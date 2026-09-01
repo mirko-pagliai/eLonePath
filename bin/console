@@ -6,7 +6,7 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/config/bootstrap.php';
 
 use App\Command\StoryTesterCommand;
-use Elone\Debugger\Command\BranchesWalkerCommand;
+use Elone\Debugger\Command\CheckBranchesCommand;
 use Symfony\Component\Console\Application;
 
 /**
@@ -19,5 +19,5 @@ if (!class_exists(Application::class)) {
 
 $application = new Application();
 $application->addCommand(new StoryTesterCommand());
-$application->addCommand(new BranchesWalkerCommand());
+$application->addCommand(new CheckBranchesCommand());
 $application->run();

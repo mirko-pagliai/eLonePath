@@ -5,10 +5,10 @@ namespace Elone\Core;
 
 use Elone\Core\Exception\HttpException;
 use Elone\Core\Exception\UnsupportedParameterTypeException;
-use Elone\Core\Routing\ControllerName;
 use Elone\Core\Routing\Route;
 use Elone\Core\Server\Request;
 use Elone\Core\Server\Response;
+use Elone\Core\Utility\WordCase;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -139,6 +139,6 @@ readonly class Dispatcher
 
     protected function templateName(Route $route): string
     {
-        return new ControllerName($route->controller)->kebabCase() . "/$route->action";
+        return new WordCase($route->controller)->kebabCase() . "/$route->action";
     }
 }

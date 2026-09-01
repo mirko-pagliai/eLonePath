@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Elone\Core\Routing;
 
 use Elone\Core\Server\Request;
+use Elone\Core\Utility\WordCase;
 
 final class Router
 {
@@ -22,7 +23,7 @@ final class Router
             $controller = 'Pages';
             $action = 'home';
         } else {
-            $controller = new ControllerName($segments[0])->studlyCase();
+            $controller = new WordCase($segments[0])->studlyCase();
             $action = $segments[1] ?? 'index';
         }
 

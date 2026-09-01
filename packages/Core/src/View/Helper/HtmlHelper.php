@@ -3,9 +3,13 @@ declare(strict_types=1);
 
 namespace Elone\Core\View\Helper;
 
-use Elone\Core\Exception\RouteNotFoundException;
 use Elone\Core\Routing\Route;
+use Michelf\Markdown;
+use RuntimeException;
 
+/**
+ * Generates HTML tags for various purposes, such as images, links, and icons.
+ */
 final class HtmlHelper
 {
     /**
@@ -26,7 +30,7 @@ final class HtmlHelper
             $htmlAttributes .= sprintf(
                 ' %s="%s"',
                 h($attributeName, ENT_QUOTES),
-                htmlspecialchars((string)$value, ENT_QUOTES),
+                h((string)$value, ENT_QUOTES),
             );
         }
 
@@ -39,7 +43,8 @@ final class HtmlHelper
      * entry in `$options` is applied as an attribute on the `<i>` tag.
      *
      * @param string $name The name of the icon, which can include or omit the "bi-" prefix.
-     * @param array<string, string|int|float|bool> $options
+     * @param array<string, string|int|float|bool> $options Extra HTML attributes for the `<i>` tag; `class` is merged
+     * with the icon's own classes rather than overwritten.
      * @return string The generated `<i>` tag as a string, ready for inclusion in HTML.
      */
     public function icon(string $name, array $options = []): string
@@ -66,10 +71,12 @@ final class HtmlHelper
 
     /**
      * Builds a `<img>` tag for the given source path. `$path` is not run through `url()` — pass it exactly as it
-     * should appear in `src`, since images are served as static files rather than routed. Pass `alt` via
-     * `$options` whenever the image conveys, meaning that it isn't already in the surrounding text.
+     * should appear in `src`, since images are served as static files rather than routed. Pass `alt` via `$options`
+     * whenever the image conveys, meaning that it isn't already in the surrounding text.
      *
-     * @param array<string, string|int|float|bool> $options
+     * @param string $path The image's `src`, used exactly as given.
+     * @param array<string, string|int|float|bool> $options Extra HTML attributes for the `<img>` tag.
+     * @return string The generated `<img>` tag as a string.
      */
     public function image(string $path, array $options = []): string
     {
@@ -95,7 +102,7 @@ final class HtmlHelper
      * @param string $text The text (or, with `escape: false`, raw HTML) to display within the anchor tag.
      * @param array<string|int, string|int|float|bool>|string $url A literal URL/path, or a route array (see
      *  `url()`).
-     * @param array<string, string|int|float|bool> $options
+     * @param array<string, string|int|float|bool> $options See above — `escape`, plus any HTML attribute.
      * @return string The rendered HTML `<a>` tag.
      * @throws \Elone\Core\Exception\RouteNotFoundException If `$url` is an array route with invalid or missing
      *  parameters.
@@ -116,47 +123,31 @@ final class HtmlHelper
     }
 
     /**
-     * Resolves `$route` to a URL. A string is returned exactly as given — use it for a literal path (`/`) or an
-     * external URL (`https://example.com`). An array is treated as an internal route and built the same way as
-     * before: `controller` (required) and `action` (defaults to `index`) as string keys, with additional
-     * integer keys as route parameters.
+     * Converts a markdown string into HTML.
      *
-     * @param array<string|int, string|int|float|bool>|string $route
+     * @param string $markdown The markdown text to be converted.
+     * @return string The converted HTML string.
+     * @throws \RuntimeException If the `michelf/php-markdown` library is not installed.
+     */
+    public function markdown(string $markdown): string
+    {
+        if (!class_exists(Markdown::class)) {
+            throw new RuntimeException('`michelf/php-markdown` is required to use `markdown()`');
+        }
+
+        return Markdown::defaultTransform($markdown);
+    }
+
+    /**
+     * Resolves `$route` to a URL — see `Route::resolve()`.
+     *
+     * @param array<string|int, string|int|float|bool>|string $route A literal URL/path, or a route array.
      * @return string The resolved URL.
-     * @throws \Elone\Core\Exception\RouteNotFoundException If given an array route with invalid or missing
-     *  parameters.
+     * @throws \Elone\Core\Exception\RouteNotFoundException If given an array route with invalid or missing parameters.
+     * @see \Elone\Core\Routing\Route::resolve()
      */
     public function url(array|string $route): string
     {
-        if (is_string($route)) {
-            return $route;
-        }
-
-        $controller = $route['controller'] ?? null;
-        $action = $route['action'] ?? 'index';
-
-        if (!is_string($controller) || !is_string($action)) {
-            throw new RouteNotFoundException('Invalid route.');
-        }
-
-        $params = [];
-
-        foreach ($route as $key => $value) {
-            if (is_string($key) && !in_array($key, ['controller', 'action'], true)) {
-                throw new RouteNotFoundException("Invalid route parameter: `$key`.");
-            }
-
-            if (is_int($key)) {
-                $params[] = (string)$value;
-            }
-        }
-
-        $route = new Route(
-            controller: $controller,
-            action: $action,
-            params: $params,
-        );
-
-        return $route->path();
+        return Route::resolve($route);
     }
 }

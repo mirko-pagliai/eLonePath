@@ -58,7 +58,6 @@ jobs:
           token: ${{ secrets.CODECOV_TOKEN }}
 
   testsuite-windows:
-    if: github.event_name == 'pull_request'
     runs-on: windows-2022
     name: Windows - PHP 8.4
 

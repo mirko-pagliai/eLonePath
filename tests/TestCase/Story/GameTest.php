@@ -77,7 +77,7 @@ class GameTest extends TestCase
 
         $this->assertInstanceOf(Node::class, $node);
         $this->assertSame(1, $node->id);
-        $this->assertStringContainsString('<p>Start here.</p>', $node->content);
+        $this->assertStringContainsString('Start here.', $node->content);
     }
 
     /**

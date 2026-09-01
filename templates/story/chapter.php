@@ -15,10 +15,19 @@ use App\Story\Nodes\PassageNode;
 use App\Story\Nodes\VictoryNode;
 ?>
 
-<header class="mb-5 text-end">
-    <h4 id="story-title" class="elone-title m-0"><?= h($game->title) ?></h4>
+<header class="d-flex justify-content-end mb-5">
+    <div class="d-flex flex-column align-self-end text-end">
+        <h3 id="story-title" class="m-0"><?= h($game->title) ?></h3>
 
-    <div id="story-page" class="story-page fs-5">Pagina <?= $node->id ?></div>
+        <div id="story-page" class="story-page fs-4">Pagina <?= $node->id ?></div>
+    </div>
+
+    <div class="ms-1">
+        <?= $this->Html->image(
+            path: '/img/icons/icon-192.png',
+            options: ['style' => 'max-height: 70px'],
+        ) ?>
+    </div>
 </header>
 
 <?php
@@ -34,7 +43,7 @@ if ($node->image !== null) {
 ?>
 
 <section id="story-content" class="fs-4 mb-4">
-    <?= $node->content ?>
+    <?= $this->Html->markdown(markdown: $node->content) ?>
 </section>
 
 <?php if ($node instanceof PassageNode) : ?>
@@ -69,7 +78,7 @@ if ($node->image !== null) {
         }
 
         echo $this->Html->link(
-            text: $this->Html->icon('dice-6 me-1') . " $text",
+            text: $this->Html->icon('dice-6', ['class' => 'me-1']) . " $text",
             url: ['controller' => 'Story', 'action' => 'roll', $game->gameId, $node->id],
             options: [
                 'class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none',

@@ -109,4 +109,49 @@ class RouteTest extends TestCase
         $result = $route->path();
         $this->assertSame('/pages/home', $result);
     }
+
+    /**
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    #[TestWith(['/'])]
+    #[TestWith(['/img/logo.png'])]
+    #[TestWith(['https://example.com/path'])]
+    public function testResolveWithString(string $route): void
+    {
+        $result = Route::resolve($route);
+        $this->assertSame($route, $result);
+    }
+
+    /**
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithArray(): void
+    {
+        $result = Route::resolve(['controller' => 'Pages', 'action' => 'home']);
+        $this->assertSame('/pages/home', $result);
+    }
+
+    /**
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithMissingController(): void
+    {
+        $this->expectException(RouteNotFoundException::class);
+        $this->expectExceptionMessageIs('Invalid route.');
+        Route::resolve([]);
+    }
+
+    /**
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithInvalidParameter(): void
+    {
+        $this->expectException(RouteNotFoundException::class);
+        $this->expectExceptionMessageIs('Invalid route parameter: `extra`.');
+        Route::resolve(['controller' => 'Pages', 'action' => 'home', 'extra' => 'value']);
+    }
 }

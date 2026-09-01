@@ -35,11 +35,8 @@ readonly class Route
      * @throws \Elone\Core\Exception\ActionNotFoundException If the specified action is not found in the controller
      * class or is not public.
      */
-    public function __construct(
-        public string $controller,
-        public string $action,
-        public array $params = [],
-    ) {
+    public function __construct(public string $controller, public string $action, public array $params = [])
+    {
         if (!ctype_alpha($controller) || !ctype_upper($controller[0])) {
             throw new ControllerNotFoundException("Invalid controller name: `$controller`.");
         }
@@ -79,7 +76,7 @@ readonly class Route
     /**
      * Generates a URL path by combining the controller name, action, and additional parameters.
      *
-     * The controller name is converted to kebab-case, while all segments are URL-encoded to ensure safe inclusion in
+     * The controller name is converted to a kebab-case, while all segments are URL-encoded to ensure safe inclusion in
      * the URL. The segments are then concatenated using slashes to form the complete path.
      *
      * @return string The generated URL path, starting with a forward slash (`/`).
@@ -96,5 +93,47 @@ readonly class Route
             callback: static fn(string $value): string => rawurlencode($value),
             array: $segments,
         ));
+    }
+
+    /**
+     * Resolves `$route` to a URL. A string is returned exactly as given — use it for a literal path (`/`) or an
+     * external URL (`https://example.com`). An array is treated as a route and built into one: `controller`
+     * (required) and `action` (defaults to `index`) as string keys, with additional integer keys as route
+     * parameters.
+     *
+     * The one place this logic lives — `HtmlHelper::url()` and `Controller::redirect()` both delegate to this
+     * instead of each having their own copy of it.
+     *
+     * @param array<string|int, string|int|float|bool>|string $route
+     * @return string The resolved URL.
+     * @throws \Elone\Core\Exception\RouteNotFoundException If `$route` is an array with invalid or missing
+     *  parameters.
+     */
+    public static function resolve(array|string $route): string
+    {
+        if (is_string($route)) {
+            return $route;
+        }
+
+        $controller = $route['controller'] ?? null;
+        $action = $route['action'] ?? 'index';
+
+        if (!is_string($controller) || !is_string($action)) {
+            throw new RouteNotFoundException('Invalid route.');
+        }
+
+        $params = [];
+
+        foreach ($route as $key => $value) {
+            if (is_string($key) && !in_array($key, ['controller', 'action'], true)) {
+                throw new RouteNotFoundException("Invalid route parameter: `$key`.");
+            }
+
+            if (is_int($key)) {
+                $params[] = (string)$value;
+            }
+        }
+
+        return new self(controller: $controller, action: $action, params: $params)->path();
     }
 }

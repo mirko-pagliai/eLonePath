@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Debugger;
+namespace Elone\Debugger;
 
 use App\Story\Game;
 use App\Story\Nodes\Choice;

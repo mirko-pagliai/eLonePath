@@ -3,12 +3,12 @@ declare(strict_types=1);
 
 namespace App\Command;
 
-use App\Debugger\NodesWalker;
 use App\Story\Game;
 use App\Story\Nodes\DefeatNode;
 use App\Story\Nodes\DiceNode;
 use App\Story\Nodes\Node;
 use App\Story\Nodes\VictoryNode;
+use Elone\Debugger\NodesWalker;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;

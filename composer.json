@@ -6,6 +6,7 @@
 	"require": {
 		"php": "^8.4",
 		"elone/core": "*",
+		"elone/debugger": "*",
 		"twbs/bootstrap": "5.3.8",
 		"symfony/finder": "^8.1",
 		"michelf/php-markdown": "^2.0",
@@ -23,6 +24,10 @@
 		{
 			"type": "path",
 			"url": "packages/Core"
+		},
+		{
+			"type": "path",
+			"url": "packages/Debugger"
 		}
 	],
 	"autoload": {

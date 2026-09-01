@@ -1,6 +1,6 @@
 #!/usr/bin/env php
 <?php
-// console
+declare(strict_types=1);
 
 require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/config/bootstrap.php';
@@ -8,6 +8,9 @@ require dirname(__DIR__) . '/config/bootstrap.php';
 use App\Command\StoryTesterCommand;
 use Symfony\Component\Console\Application;
 
+/**
+ * @todo check if `symfony/console` is still as a dev dependency before publishing the package
+ */
 if (!class_exists(Application::class)) {
     die('Symfony Console is not installed.' . PHP_EOL .
         'You need to add `symfony/console` as a dependency to be able to use the console.' . PHP_EOL);

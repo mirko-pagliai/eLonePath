@@ -30,6 +30,7 @@ class ResponseTest extends TestCase
     /**
      * @link \Elone\Core\Server\Response::content()
      * @link \Elone\Core\Server\Response::status()
+     * @link \Elone\Core\Server\Response::headers()
      */
     #[Test]
     public function testDefaults(): void
@@ -38,6 +39,19 @@ class ResponseTest extends TestCase
 
         $this->assertSame('', $response->content());
         $this->assertSame(200, $response->status());
+        $this->assertSame([], $response->headers());
+    }
+
+    /**
+     * @link \Elone\Core\Server\Response::headers()
+     */
+    #[Test]
+    public function testHeaders(): void
+    {
+        $response = new Response(status: 302, headers: ['Location' => '/pages/home']);
+
+        $this->assertSame(302, $response->status());
+        $this->assertSame(['Location' => '/pages/home'], $response->headers());
     }
 
     /**
@@ -54,5 +68,21 @@ class ResponseTest extends TestCase
 
         $this->assertSame('Hello, world!', $output);
         $this->assertSame(201, http_response_code());
+    }
+
+    /**
+     * @link \Elone\Core\Server\Response::send()
+     */
+    #[Test]
+    public function testSendWithHeaders(): void
+    {
+        $response = new Response(status: 302, headers: ['Location' => '/pages/home']);
+
+        ob_start();
+        $response->send();
+        ob_get_clean();
+
+        $this->assertSame(302, http_response_code());
+        $this->assertContains('Location: /pages/home', headers_list());
     }
 }

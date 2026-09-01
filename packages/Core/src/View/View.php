@@ -43,19 +43,17 @@ class View
      *
      * Example:
      * ```
-     * <?= $this->element('story-title', ['game' => $game]) ?>`
+     * <?= $this->element('story-title', ['game' => $game]) ?>
      * ```
      *
-     * Unlike `render()`, an element never gets wrapped in a layout, and it only sees the data explicitly passed to it
-     * — nothing already `set()` on the view.
+     * Unlike `render()`, an element never gets wrapped in a layout, and it only sees the data explicitly passed to
+     * it — nothing already `set()` on the view.
      *
-     * @param string $name The name of the element to render, corresponding to the file name (without extension).
-     * @param array<string, mixed> $data An associative array of data to extract and make available within the element's scope.
-     *
-     * @return string The rendered content of the element as a string.
-     *
-     * @throws \Elone\Core\Exception\TemplateNotFoundException If the specified element file does not exist.
-     * @throws \Throwable If an error occurs during the rendering process.
+     * @param string $name The name of the element to render, relative to `templates/element/` (without extension).
+     * @param array<string, mixed> $data Data to extract and make available within the element's scope.
+     * @return string The rendered content of the element.
+     * @throws \Elone\Core\Exception\TemplateNotFoundException If `$name` doesn't resolve to an existing file.
+     * @throws \Throwable Whatever the element itself throws while rendering — re-thrown as-is.
      */
     public function element(string $name, array $data = []): string
     {
@@ -64,30 +62,19 @@ class View
             throw new TemplateNotFoundException("Element not found: `$name.php`.");
         }
 
-        ob_start();
-
-        try {
-            extract($data, EXTR_SKIP);
-            require $elementFile;
-            $content = ob_get_clean() ?: '';
-        } catch (Throwable $exception) {
-            ob_end_clean();
-
-            throw $exception;
-        }
-
-        return $content;
+        return $this->evaluate($elementFile, $data);
     }
 
     /**
-     * Renders a given template and optionally applies a layout to the rendered content.
+     * Renders `$template` and, unless `$layout` is `null`, wraps the result in the given layout.
      *
-     * @param string $template The name of the template to render.
-     * @param string|null $layout The name of the layout to apply to the rendered template. Defaults to `default`. If
-     * `null` is provided, no layout will be applied.
-     * @return string The fully rendered content, with or without the layout applied, depending on the parameters.
-     * @throws \Elone\Core\Exception\TemplateNotFoundException If the specified template file cannot be found.
-     * @throws \Throwable If an error occurs during template rendering.
+     * @param string $template The name of the template to render, relative to `TEMPLATES` (without extension).
+     * @param string|null $layout The name of the layout to wrap the content in. Defaults to `'default'`. Pass
+     *  `null` to render the template with no layout at all.
+     * @return string The rendered content.
+     * @throws \Elone\Core\Exception\TemplateNotFoundException If `$template` doesn't resolve to an existing file.
+     * @throws \Elone\Core\Exception\LayoutNotFoundException If `$layout` doesn't resolve to an existing file.
+     * @throws \Throwable Whatever the template (or layout) itself throws while rendering — re-thrown as-is.
      */
     public function render(string $template, ?string $layout = 'default'): string
     {
@@ -99,36 +86,22 @@ class View
         $data = $this->data;
         $this->data = [];
 
-        // Always release the buffer, even on failure
-        ob_start();
-
-        try {
-            extract($data, EXTR_SKIP);
-            require $templateFile;
-            $content = ob_get_clean() ?: '';
-        } catch (Throwable $exception) {
-            ob_end_clean();
-
-            throw $exception;
-        }
-
+        $content = $this->evaluate($templateFile, $data);
         if ($layout === null) {
             return $content;
         }
 
-        return $this->renderLayout(content: $content, data: $data, layout: $layout);
+        return $this->renderLayout($content, $data, $layout);
     }
 
     /**
-     * Renders a layout by wrapping the provided content with a specified layout file located in the templates'
-     * directory. The layout receives the provided data for rendering.
+     * Wraps `$content` in `$layout`.
      *
-     * @param string $content The main content to be embedded within the layout.
-     * @param array<string, mixed> $data Key-value pairs of data to be extracted and made available in the layout scope.
-     * @param string $layout The name of the layout file to be used for rendering.
-     * @return string The fully rendered layout, including the provided content.
-     * @throws \Elone\Core\Exception\LayoutNotFoundException If the specified layout file cannot be found.
-     * @throws \Throwable If an exception occurs during layout rendering.
+     * @param array<string, mixed> $data Data to extract and make available within the layout's scope, alongside
+     *  `$content`. If `$data` happens to have its own `content` key, it's overridden by the real `$content` —
+     *  the layout should never see anything else under that name.
+     * @throws \Elone\Core\Exception\LayoutNotFoundException If `$layout` doesn't resolve to an existing file.
+     * @throws \Throwable Whatever the layout itself throws while rendering — re-thrown as-is.
      */
     private function renderLayout(string $content, array $data, string $layout): string
     {
@@ -137,13 +110,31 @@ class View
             throw new LayoutNotFoundException("Layout not found: `$layout.php`.");
         }
 
-        // Always release the buffer, even on failure
+        return $this->evaluate($layoutFile, [...$data, 'content' => $content]);
+    }
+
+    /**
+     * Extracts `$__data` into a local scope and requires `$__file`, buffering and returning everything it echoes.
+     *
+     * Kept in its own method — rather than inline in `render()`, `element()`, and `renderLayout()` — specifically
+     * so the only local variables in scope when `extract()` runs are its own two parameters. `EXTR_SKIP` refuses
+     * to overwrite a variable that already exists in scope, so reusing a common name here (like `$data` or
+     * `$file`) would silently drop any view variable with that same key — which is exactly what happened before
+     * this method existed, with `element()`'s own `$name` parameter swallowing a data key also called `name`.
+     * The double-underscore names below aren't pretty, but nothing a template author would plausibly choose as a
+     * data key collides with them.
+     *
+     * @param array<string, mixed> $__data
+     * @throws \Throwable Whatever `require`-ing `$__file` throws — re-thrown as-is, after releasing the buffer.
+     */
+    private function evaluate(string $__file, array $__data): string
+    {
+        extract($__data, EXTR_SKIP);
+
         ob_start();
 
         try {
-            extract($data, EXTR_SKIP);
-            require $layoutFile;
-
+            require $__file;
             $content = ob_get_clean() ?: '';
         } catch (Throwable $exception) {
             ob_end_clean();
@@ -156,11 +147,8 @@ class View
 
     /**
      * Resolves `$name` to a real file path inside `$basePath`, refusing anything that would resolve outside it —
-     * traversal or a symlink escaping the directory. Returns false when the file doesn't exist, isn't a regular file,
-     * or escapes the base directory.
-     */
-    /**
-     * Resolves the full path of a specified file within a given base directory.
+     * traversal or a symlink escaping the directory. Returns false when the file doesn't exist, isn't a regular
+     * file, or escapes the base directory.
      *
      * @param string $basePath The base directory where the file is expected to be located.
      * @param string $name The name of the file to resolve, without the .php extension.

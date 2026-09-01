@@ -7,6 +7,10 @@ use Elone\Core\Routing\Router;
 use Elone\Core\Server\Request;
 use Throwable;
 
+/**
+ * The application's entry point: captures the current request, resolves and dispatches it to a controller action,
+ * and sends the resulting response — falling back to the error handler if anything along the way throws.
+ */
 final readonly class Application
 {
     public function __construct(
@@ -26,7 +30,7 @@ final readonly class Application
      */
     public function run(): void
     {
-        $request = Request::capture();
+        $request = Request::fromGlobals();
 
         try {
             $route = $this->router->dispatch(request: $request);

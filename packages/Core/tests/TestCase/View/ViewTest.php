@@ -57,6 +57,12 @@ class ViewTest extends TestCase
     }
 
     /**
+     * Test for the `element()` method.
+     *
+     * `greeting.php` deliberately passes `name` as a data key — the exact key that used to collide with
+     * `element()`'s own `$name` parameter before `evaluate()` isolated the extraction scope. This is a regression
+     * test for that bug, not just a happy-path check.
+     *
      * @link \Elone\Core\View\View::element()
      */
     #[Test]
@@ -66,7 +72,7 @@ class ViewTest extends TestCase
 
         $result = $view->element('greeting', ['name' => 'World']);
 
-        $this->assertSame('Hello, World!', $result);
+        $this->assertSame('Hello, World!', trim($result));
     }
 
     /**
@@ -79,7 +85,7 @@ class ViewTest extends TestCase
 
         $result = $view->element('greeting', ['name' => 'Explicit']);
 
-        $this->assertSame('Hello, Explicit!', $result);
+        $this->assertSame('Hello, Explicit!', trim($result));
     }
 
     /**

@@ -69,7 +69,7 @@ if ($node->image !== null) {
         }
 
         echo $this->Html->link(
-            text: $this->Html->icon('dice-6 me-1') . " $text",
+            text: $this->Html->icon('dice-6', ['class' => 'me-1']) . " $text",
             url: ['controller' => 'Story', 'action' => 'roll', $game->gameId, $node->id],
             options: [
                 'class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none',
@@ -105,3 +105,4 @@ if ($node->image !== null) {
         ) ?>
     </div>
 <?php endif; ?>
+

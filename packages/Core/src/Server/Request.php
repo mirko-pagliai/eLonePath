@@ -5,49 +5,40 @@ namespace Elone\Core\Server;
 
 final class Request
 {
-    /**
-     * @param array<string, mixed> $queryParams
-     */
-    public function __construct(
-        private readonly string $method,
-        private readonly string $path,
-        private readonly array $queryParams = [],
-    ) {
-    }
+    private readonly string $path;
 
     /**
-     * Captures the current HTTP request method, URI, and query string, then returns a new instance of the class.
-     *
-     * It receives:
-     * ```
-     * REQUEST_URI = /pages/view/123?foo=bar
-     * REQUEST_METHOD = GET
-     * ```
-     * and builds:
-     * ```
-     * new Request('GET', '/pages/view/123', ['foo' => 'bar'])
-     * ```
-     *
-     * @return self An instance of the class initialized with the HTTP method, URI, and query parameters.
+     * @var array<string, mixed>
      */
-    public static function capture(): self
+    private readonly array $queryParams;
+
+    public function __construct(private readonly string $method, string $uri)
     {
-        $url = $_SERVER['REQUEST_URI'] ?? '/';
-        assert(is_string($url));
+        $this->path = parse_url($uri, PHP_URL_PATH) ?: '/';
 
-        $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
-        assert(is_string($method));
-
-        $uri = parse_url($url, PHP_URL_PATH) ?: '/';
-
-        $query = parse_url($url, PHP_URL_QUERY);
+        $query = parse_url($uri, PHP_URL_QUERY);
 
         $queryParams = [];
         if (is_string($query)) {
             parse_str($query, $queryParams);
         }
 
-        return new self(method: strtoupper($method), path: $uri, queryParams: $queryParams);
+        $this->queryParams = $queryParams;
+    }
+
+    /**
+     * Builds a `Request` from PHP's own superglobals (`$_SERVER['REQUEST_METHOD']` and `['REQUEST_URI']`),
+     * defaulting to `GET /` if either is missing.
+     */
+    public static function fromGlobals(): self
+    {
+        $uri = $_SERVER['REQUEST_URI'] ?? '/';
+        assert(is_string($uri));
+
+        $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
+        assert(is_string($method));
+
+        return new self(method: strtoupper($method), uri: $uri);
     }
 
     public function method(): string

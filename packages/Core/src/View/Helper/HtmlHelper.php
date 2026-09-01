@@ -26,7 +26,7 @@ final class HtmlHelper
             $htmlAttributes .= sprintf(
                 ' %s="%s"',
                 h($attributeName, ENT_QUOTES),
-                htmlspecialchars((string)$value, ENT_QUOTES),
+                h((string)$value, ENT_QUOTES),
             );
         }
 

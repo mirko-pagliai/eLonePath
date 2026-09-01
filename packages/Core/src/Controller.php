@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Elone\Core;
 
 use Elone\Core\Server\Request;
+use Elone\Core\Server\Response;
 use Elone\Core\View\View;
 
 /**
@@ -26,7 +27,7 @@ abstract class Controller
      */
     public function __construct(?Request $request = null, ?View $view = null)
     {
-        $this->request = $request ?? Request::capture();
+        $this->request = $request ?? Request::fromGlobals();
         $this->view = $view ?? new View();
     }
 
@@ -36,6 +37,9 @@ abstract class Controller
      * @param string $template The name of the template to be rendered.
      * @param string|null $layout The name of the layout to apply. Defaults to 'default'.
      * @return string The rendered output as a string.
+     * @throws \Elone\Core\Exception\TemplateNotFoundException If `$template` doesn't resolve to an existing file.
+     * @throws \Elone\Core\Exception\LayoutNotFoundException If `$layout` doesn't resolve to an existing file.
+     * @throws \Throwable Whatever the template (or layout) itself throws while rendering.
      */
     public function render(string $template, ?string $layout = 'default'): string
     {
@@ -70,6 +74,25 @@ abstract class Controller
      */
     protected function queryParam(string $name, mixed $default = null): mixed
     {
-        return $this->request->queryParam(name: $name, default: $default);
+        return $this->request->queryParam($name, $default);
+    }
+
+    /**
+     * Builds a redirect `Response` to `$url` — resolved via `HtmlHelper::url()`, exactly like `HtmlHelper::link()`:
+     * a string is used as-is (a literal path such as `/`, or an external URL), an array is built into a route.
+     * Return it directly from an action to have `Dispatcher` send it as-is, bypassing the view entirely:
+     * ```
+     * return $this->redirect('/');
+     * return $this->redirect(['controller' => 'Pages', 'action' => 'home']);
+     * ```
+     *
+     * @param array<string|int, string|int|float|bool>|string $url
+     * @param int $status The HTTP status code for the redirect. Defaults to `302` (temporary).
+     * @throws \Elone\Core\Exception\RouteNotFoundException If `$url` is an array route with invalid or missing
+     *  parameters.
+     */
+    protected function redirect(array|string $url, int $status = 302): Response
+    {
+        return new Response(status: $status, headers: ['Location' => $this->view->Html->url($url)]);
     }
 }

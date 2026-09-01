@@ -49,14 +49,16 @@ class RequestTest extends TestCase
     }
 
     /**
+     * @link \Elone\Core\Server\Request::__construct()
      * @link \Elone\Core\Server\Request::queryParams()
      * @link \Elone\Core\Server\Request::queryParam()
      */
     #[Test]
     public function testQueryParams(): void
     {
-        $request = new Request('GET', '/', ['foo' => 'bar']);
+        $request = new Request('GET', '/pages/view/123?foo=bar');
 
+        $this->assertSame('/pages/view/123', $request->path());
         $this->assertSame(['foo' => 'bar'], $request->queryParams());
         $this->assertSame('bar', $request->queryParam('foo'));
         $this->assertNull($request->queryParam('missing'));
@@ -64,45 +66,41 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @link \Elone\Core\Server\Request::capture()
+     * @link \Elone\Core\Server\Request::__construct()
      */
     #[Test]
-    public function testCapture(): void
+    public function testWithoutQueryString(): void
     {
-        $_SERVER['REQUEST_METHOD'] = 'post';
-        $_SERVER['REQUEST_URI'] = '/pages/view/123?foo=bar';
-
-        $request = Request::capture();
-
-        $this->assertSame('POST', $request->method());
-        $this->assertSame('/pages/view/123', $request->path());
-        $this->assertSame(['foo' => 'bar'], $request->queryParams());
-        $this->assertSame('bar', $request->queryParam('foo'));
-    }
-
-    /**
-     * @link \Elone\Core\Server\Request::capture()
-     */
-    #[Test]
-    public function testCaptureWithoutQueryString(): void
-    {
-        $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/pages/home';
-
-        $request = Request::capture();
+        $request = new Request('GET', '/pages/home');
 
         $this->assertSame([], $request->queryParams());
     }
 
     /**
-     * @link \Elone\Core\Server\Request::capture()
+     * @link \Elone\Core\Server\Request::fromGlobals()
      */
     #[Test]
-    public function testCaptureWithMissingServerValues(): void
+    public function testFromGlobals(): void
+    {
+        $_SERVER['REQUEST_METHOD'] = 'post';
+        $_SERVER['REQUEST_URI'] = '/pages/view/123?foo=bar';
+
+        $request = Request::fromGlobals();
+
+        $this->assertSame('POST', $request->method());
+        $this->assertSame('/pages/view/123', $request->path());
+        $this->assertSame(['foo' => 'bar'], $request->queryParams());
+    }
+
+    /**
+     * @link \Elone\Core\Server\Request::fromGlobals()
+     */
+    #[Test]
+    public function testFromGlobalsWithMissingServerValues(): void
     {
         unset($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 
-        $request = Request::capture();
+        $request = Request::fromGlobals();
 
         $this->assertSame('GET', $request->method());
         $this->assertSame('/', $request->path());

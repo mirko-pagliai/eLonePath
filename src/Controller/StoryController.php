@@ -7,6 +7,7 @@ use App\Story\Game;
 use App\Story\Nodes\DiceNode;
 use App\Utility\Dice;
 use Elone\Core\Controller;
+use Elone\Core\Server\Response;
 use RuntimeException;
 
 class StoryController extends Controller
@@ -18,6 +19,27 @@ class StoryController extends Controller
     protected function getGame(string $storyId): Game
     {
         return Game::createFromFile(STORIES . "/$storyId/story.json");
+    }
+
+    /**
+     * Starts the game by checking for a preface and determining whether to redirect or set up the necessary game data.
+     *
+     * @param string $storyId The unique identifier of the story to start.
+     * @return \Elone\Core\Server\Response|null Returns a `Response` object if a redirection is performed; otherwise,
+     * returns `null`.
+     */
+    public function start(string $storyId): ?Response
+    {
+        $game = $this->getGame($storyId);
+
+        // If the game does not have a preface, redirects to the first chapter
+        if (!$game->preface) {
+            return $this->redirect(['controller' => 'Story', 'action' => 'chapter', $storyId, 1]);
+        }
+
+        $this->set(compact('game'));
+
+        return null;
     }
 
     /**

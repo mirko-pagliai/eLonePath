@@ -30,6 +30,7 @@ class GameTest extends TestCase
                 'description' => 'A game for testing.',
                 'language' => 'it',
                 'version' => '1.0',
+                'preface' => 'A short preface for testing.',
             ],
             'nodes' => [
                 1 => [
@@ -62,6 +63,22 @@ class GameTest extends TestCase
         $this->assertSame('A game for testing.', $game->description);
         $this->assertSame('it', $game->language);
         $this->assertSame('1.0', $game->version);
+        $this->assertSame('A short preface for testing.', $game->preface);
+    }
+
+    /**
+     * @link \App\Story\Game::createFromArray()
+     */
+    #[Test]
+    public function testCreateFromArrayWithoutOptionalKeys(): void
+    {
+        $data = $this->sampleData();
+        unset($data['game']['translators'], $data['game']['preface']);
+
+        $game = Game::createFromArray($data);
+
+        $this->assertSame('', $game->translators);
+        $this->assertSame('', $game->preface);
     }
 
     /**

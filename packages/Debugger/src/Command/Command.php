@@ -9,7 +9,7 @@ use Symfony\Component\Console\Helper\Table;
 use Symfony\Component\Console\Output\OutputInterface;
 
 /**
- * Base class for commands.
+ * Base class for Debugger commands.
  */
 abstract class Command extends SymfonyCommand
 {

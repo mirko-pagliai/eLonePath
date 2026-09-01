@@ -10,6 +10,8 @@ namespace Elone\Core\Server;
 final readonly class Response
 {
     /**
+     * Creates a new `Response`.
+     *
      * @param string $content The response body.
      * @param int $status The HTTP status code.
      * @param array<string, string> $headers Header name/value pairs, sent as-is by `send()`.
@@ -20,6 +22,8 @@ final readonly class Response
     }
 
     /**
+     * Returns the response body.
+     *
      * @return string The response body.
      */
     public function content(): string
@@ -28,6 +32,8 @@ final readonly class Response
     }
 
     /**
+     * Returns the HTTP status code.
+     *
      * @return int The HTTP status code.
      */
     public function status(): int
@@ -36,6 +42,8 @@ final readonly class Response
     }
 
     /**
+     * Returns the response headers.
+     *
      * @return array<string, string> Header name/value pairs.
      */
     public function headers(): array

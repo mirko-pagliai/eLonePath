@@ -5,9 +5,10 @@ namespace App\Story\Nodes;
 
 /**
  * @phpstan-import-type ChoiceData from \App\Story\Nodes\Choice
+ * @phpstan-import-type NodeImageData from \App\Story\Nodes\NodeImage
  * @phpstan-type PassageNodeData array{
  *     content: string,
- *     image: array{path: string, title: string}|null,
+ *     image: NodeImageData|null,
  *     choices?: list<ChoiceData>,
  *     type: string,
  * }
@@ -21,7 +22,7 @@ class PassageNode extends Node
         int $id,
         string $gameId,
         string $content,
-        ?array $image,
+        ?NodeImage $image,
         protected(set) readonly array $choices,
     ) {
         parent::__construct($id, $gameId, $content, $image);
@@ -41,7 +42,7 @@ class PassageNode extends Node
             id: $id,
             gameId: $gameId,
             content: $data['content'],
-            image: $data['image'] ?? null,
+            image: isset($data['image']) ? NodeImage::createFromArray($data['image']) : null,
             choices: array_map(
                 callback: fn(array $choice): Choice => Choice::createFromArray($choice),
                 array: $data['choices'] ?? [],

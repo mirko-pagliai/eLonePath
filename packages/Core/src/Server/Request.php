@@ -8,11 +8,13 @@ final class Request
     private readonly string $path;
 
     /**
-     * @var array<string, mixed>
+     * @var array<array-key, mixed>
      */
     private readonly array $queryParams;
 
     /**
+     * Creates a new `Request` from an HTTP method and a raw URI.
+     *
      * @param string $method The HTTP method, e.g. `GET`, `POST`. Stored exactly as given — normalizing it (e.g.
      *  to uppercase) is the caller's responsibility; `createFromGlobals()` does it before calling this.
      * @param string $uri The raw request URI — path and, optionally, query string together, e.g.
@@ -51,6 +53,8 @@ final class Request
     }
 
     /**
+     * Returns the HTTP method this request was made with.
+     *
      * @return string The HTTP method, e.g. `GET`, `POST`.
      */
     public function method(): string
@@ -59,6 +63,8 @@ final class Request
     }
 
     /**
+     * Returns the request's path, as parsed from the URI given to the constructor.
+     *
      * @return string The request path, without the query string.
      */
     public function path(): string
@@ -67,7 +73,11 @@ final class Request
     }
 
     /**
-     * @return array<string, mixed> The query string parameters, as an associative array.
+     * Returns every query string parameter parsed from the URI given to the constructor. Keys are usually strings, but
+     * PHP coerces a purely numeric key (e.g. from `?123=abc`) to an integer, so the array key type is `array-key`
+     * (`int|string`) rather than just `string`.
+     *
+     * @return array<array-key, mixed> The query string parameters, as an associative array.
      */
     public function queryParams(): array
     {
@@ -75,6 +85,8 @@ final class Request
     }
 
     /**
+     * Returns a single query string parameter by name.
+     *
      * @param string $name The parameter name to look up.
      * @param mixed $default The value to return if `$name` isn't present.
      * @return mixed The parameter's value, or `$default`.

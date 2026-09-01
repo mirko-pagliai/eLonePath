@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Test\Story\Nodes;
 
 use App\Story\Nodes\Choice;
+use App\Story\Nodes\NodeImage;
 use App\Story\Nodes\NodeType;
 use App\Story\Nodes\PassageNode;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -26,11 +27,13 @@ class PassageNodeTest extends TestCase
             id: 1,
             gameId: 'test-game',
             content: 'Some content.',
-            image: ['path' => 'cover.jpg', 'title' => 'Cover art'],
+            image: new NodeImage(path: 'cover.jpg', title: 'Cover art'),
             choices: [],
         );
 
-        $this->assertSame(['path' => 'cover.jpg', 'title' => 'Cover art'], $node->image);
+        $this->assertInstanceOf(NodeImage::class, $node->image);
+        $this->assertSame('cover.jpg', $node->image->path);
+        $this->assertSame('Cover art', $node->image->title);
     }
 
     /**

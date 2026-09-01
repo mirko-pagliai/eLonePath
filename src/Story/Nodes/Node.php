@@ -11,15 +11,11 @@ namespace App\Story\Nodes;
  */
 abstract class Node
 {
-    /**
-     * @param array{path: string, title: string}|null $image `path` is the filename only (e.g. `11.jpg`), resolved
-     *  by the template against `webroot/assets/stories/{gameId}/img/`.
-     */
     public function __construct(
         protected(set) readonly int $id,
         protected readonly string $gameId,
         protected(set) readonly string $content,
-        protected(set) ?array $image,
+        protected(set) ?NodeImage $image,
     ) {
     }
 
@@ -31,7 +27,7 @@ abstract class Node
     /**
      * Builds the concrete `Node` subclass matching `$data['type']`.
      *
-     * @param array<string, mixed> $data
+     * @param PassageNodeData|DiceNodeData|VictoryNodeData|DefeatNodeData $data
      */
     public static function createFromArray(int $id, string $gameId, array $data): Node
     {

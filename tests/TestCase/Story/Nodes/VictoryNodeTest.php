@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Test\Story\Nodes;
 
+use App\Story\Nodes\NodeImage;
 use App\Story\Nodes\NodeType;
 use App\Story\Nodes\VictoryNode;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -38,6 +39,8 @@ class VictoryNodeTest extends TestCase
         ]);
 
         $this->assertSame(15, $node->id);
-        $this->assertSame(['path' => 'win.jpg', 'title' => 'Victory'], $node->image);
+        $this->assertInstanceOf(NodeImage::class, $node->image);
+        $this->assertSame('win.jpg', $node->image->path);
+        $this->assertSame('Victory', $node->image->title);
     }
 }

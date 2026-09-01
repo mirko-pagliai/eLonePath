@@ -4,9 +4,10 @@ declare(strict_types=1);
 namespace App\Story\Nodes;
 
 /**
+ * @phpstan-import-type NodeImageData from \App\Story\Nodes\NodeImage
  * @phpstan-type DiceNodeData array{
  *     content: string,
- *     image: array{path: string, title: string}|null,
+ *     image: NodeImageData|null,
  *     type: string,
  *     dice: array{
  *         required_rolls: int,
@@ -22,7 +23,7 @@ class DiceNode extends Node
         int $id,
         string $gameId,
         string $content,
-        ?array $image,
+        ?NodeImage $image,
         protected(set) readonly int $requiredRolls,
         protected(set) readonly int $minimum,
         protected(set) readonly int $targetSuccess,
@@ -61,7 +62,7 @@ class DiceNode extends Node
             id: $id,
             gameId: $gameId,
             content: $data['content'],
-            image: $data['image'] ?? null,
+            image: isset($data['image']) ? NodeImage::createFromArray($data['image']) : null,
             requiredRolls: $data['dice']['required_rolls'],
             minimum: $data['dice']['minimum'],
             targetSuccess: $data['dice']['target_success'],

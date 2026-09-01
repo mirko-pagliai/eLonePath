@@ -8,6 +8,11 @@ require dirname(__DIR__) . '/config/bootstrap.php';
 use App\Command\StoryTesterCommand;
 use Symfony\Component\Console\Application;
 
+if (!class_exists(Application::class)) {
+    die('Symfony Console is not installed.' . PHP_EOL .
+        'You need to add `symfony/console` as a dependency to be able to use the console.' . PHP_EOL);
+}
+
 $application = new Application();
 $application->addCommand(new StoryTesterCommand());
 $application->run();

@@ -24,6 +24,10 @@ class CheckNodeImagesCommand extends Command
     ): int {
         $game = Game::createFromFile(path: $filename);
 
+        if ($io->isVerbose()) {
+            $this->printGameHeaders(output: $io, game: $game);
+        }
+
         $walker = new NodeImagesWalker($game);
         $errors = $walker();
 

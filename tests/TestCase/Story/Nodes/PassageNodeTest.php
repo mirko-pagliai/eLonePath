@@ -20,23 +20,6 @@ class PassageNodeTest extends TestCase
      * @link \App\Story\Nodes\Node::__construct()
      */
     #[Test]
-    public function testConstructTransformsContentAsMarkdown(): void
-    {
-        $node = new PassageNode(
-            id: 1,
-            gameId: 'test-game',
-            content: 'Some content.',
-            image: null,
-            choices: [],
-        );
-
-        $this->assertStringContainsString('<p>Some content.</p>', $node->content);
-    }
-
-    /**
-     * @link \App\Story\Nodes\Node::__construct()
-     */
-    #[Test]
     public function testConstructStoresImage(): void
     {
         $node = new PassageNode(
@@ -77,7 +60,7 @@ class PassageNodeTest extends TestCase
         ]);
 
         $this->assertSame(3, $node->id);
-        $this->assertStringContainsString('<p>Some content.</p>', $node->content);
+        $this->assertStringContainsString('Some content.', $node->content);
         $this->assertNull($node->image);
 
         $this->assertCount(2, $node->choices);

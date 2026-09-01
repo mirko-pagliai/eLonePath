@@ -3,8 +3,6 @@ declare(strict_types=1);
 
 namespace App\Story\Nodes;
 
-use Michelf\Markdown;
-
 /**
  * @phpstan-import-type PassageNodeData from \App\Story\Nodes\PassageNode
  * @phpstan-import-type DiceNodeData from \App\Story\Nodes\DiceNode
@@ -13,8 +11,6 @@ use Michelf\Markdown;
  */
 abstract class Node
 {
-    public protected(set) readonly string $content;
-
     /**
      * @param array{path: string, title: string}|null $image `path` is the filename only (e.g. `11.jpg`), resolved
      *  by the template against `webroot/assets/stories/{gameId}/img/`.
@@ -22,10 +18,9 @@ abstract class Node
     public function __construct(
         protected(set) readonly int $id,
         protected readonly string $gameId,
-        string $content,
+        protected(set) readonly string $content,
         protected(set) ?array $image,
     ) {
-        $this->content = Markdown::defaultTransform($content);
     }
 
     /**

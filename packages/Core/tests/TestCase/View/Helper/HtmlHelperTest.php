@@ -142,6 +142,18 @@ class HtmlHelperTest extends TestCase
     }
 
     /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::markdown()
+     */
+    #[Test]
+    #[TestWith(['This is a normal string', '<p>This is a normal string</p>'])]
+    #[TestWith(['This is a **bold** string', '<p>This is a <strong>bold</strong> string</p>'])]
+    public function testMarkdown($string, $expected): void
+    {
+        $result = $this->htmlHelper->markdown($string);
+        $this->assertSame($expected, trim($result));
+    }
+
+    /**
      * @link \Elone\Core\View\Helper\HtmlHelper::url()
      */
     #[Test]

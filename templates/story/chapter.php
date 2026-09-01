@@ -43,7 +43,7 @@ if ($node->image !== null) {
 ?>
 
 <section id="story-content" class="fs-4 mb-4">
-    <?= $node->content ?>
+    <?= $this->Html->markdown(markdown: $node->content) ?>
 </section>
 
 <?php if ($node instanceof PassageNode) : ?>

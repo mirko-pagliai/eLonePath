@@ -4,6 +4,8 @@ declare(strict_types=1);
 namespace Elone\Core\View\Helper;
 
 use Elone\Core\Routing\Route;
+use Michelf\Markdown;
+use RuntimeException;
 
 /**
  * Generates HTML tags for various purposes, such as images, links, and icons.
@@ -118,6 +120,22 @@ final class HtmlHelper
             $htmlAttributes,
             $escape ? h($text) : $text,
         );
+    }
+
+    /**
+     * Converts a markdown string into HTML.
+     *
+     * @param string $markdown The markdown text to be converted.
+     * @return string The converted HTML string.
+     * @throws \RuntimeException If the `michelf/php-markdown` library is not installed.
+     */
+    public function markdown(string $markdown): string
+    {
+        if (!class_exists(Markdown::class)) {
+            throw new RuntimeException('`michelf/php-markdown` is required to use `markdown()`');
+        }
+
+        return Markdown::defaultTransform($markdown);
     }
 
     /**

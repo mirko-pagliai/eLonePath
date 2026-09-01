@@ -18,7 +18,7 @@ declare(strict_types=1);
         <li class="position-relative py-3 px-4">
             <?= $this->Html->link(
                 text: $game->title,
-                url: ['controller' => 'Story', 'action' => 'start', $game->gameId],
+                url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
                 options: ['class' => 'd-block fs-2 stretched-link text-decoration-none'],
             ) ?>
 

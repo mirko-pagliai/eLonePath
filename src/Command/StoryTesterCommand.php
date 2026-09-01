@@ -24,27 +24,20 @@ class StoryTesterCommand extends Command
         #[Argument('The `story.json` file you want to test')] string $filename,
         SymfonyStyle $io,
     ): int {
+        // Checks if the file is a `story.json` file
         if (!str_ends_with($filename, 'story.json')) {
             $io->error('The file must be a `story.json` file');
 
             return Command::FAILURE;
         }
 
-        $io->writeln([
-            '============',
-            'Story tester',
-            '',
-            "Filename: `$filename`",
-            '============',
-            '',
-        ]);
-
         $game = Game::createFromFile(path: $filename);
 
         $io->writeln('Game headers');
         $this->printGameHeaders($io, $game);
 
-        $this->checkImagesSizes($io, $game);
+        // Checks if the images are valid
+        $this->checkImagesSizes(io: $io, game: $game);
 
         return Command::SUCCESS;
     }

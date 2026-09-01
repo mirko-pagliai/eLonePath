@@ -14,6 +14,8 @@ use LogicException;
 
 class BranchesWalker
 {
+    private array $cacheBranches = [];
+
     /**
      * @var array<\App\Story\Nodes\Node>
      */
@@ -26,14 +28,63 @@ class BranchesWalker
 
     public function __invoke(): array
     {
-        $branches = [];
+        $errors = [];
 
-        $this->walk(node: $this->game->getNode(1), branch: [], branches: $branches);
+        if ($this->getWinningBranches() < 0) {
+            $errors[] = 'No winning branches found';
+        }
 
-        return $branches;
+        if ($this->getDefeatBranches() < 0) {
+            $errors[] = 'No defeat branches found';
+        }
+
+        foreach ($this->getRemainingNodes() as $node) {
+            $errors[] = "Remaining node: $node->id";
+        }
+
+        return $errors;
     }
 
-    protected function walk(Node $node, array $branch, array &$branches): void
+    public function getDefeatBranches(): array
+    {
+        return array_filter(
+            array: $this->getAllBranches(),
+            callback: fn($branch): bool => array_last($branch) instanceof DefeatNode,
+        );
+    }
+
+    /**
+     * @return array<\App\Story\Nodes\Node>
+     */
+    public function getRemainingNodes(): array
+    {
+        return $this->remainingNodes;
+    }
+
+    public function getWinningBranches(): array
+    {
+        return array_filter(
+            array: $this->getAllBranches(),
+            callback: fn($branch): bool => array_last($branch) instanceof VictoryNode,
+        );
+    }
+
+    public function getAllBranches(): array
+    {
+        if ($this->cacheBranches) {
+            return $this->cacheBranches;
+        }
+
+        $branches = [];
+
+        $this->scanNode(node: $this->game->getNode(1), branch: [], branches: $branches);
+
+        $this->cacheBranches = $branches;
+
+        return $this->cacheBranches;
+    }
+
+    protected function scanNode(Node $node, array $branch, array &$branches): void
     {
         $branch[] = $node;
 
@@ -66,22 +117,10 @@ class BranchesWalker
         }
 
         foreach ($targetNodes as $targetNode) {
-            $this->walk(
-                node: $targetNode,
-                branch: $branch,
-                branches: $branches,
-            );
+            $this->scanNode(node: $targetNode, branch: $branch, branches: $branches);
 
             // This node has already been fully inspected.
             unset($this->remainingNodes[$node->id]);
         }
-    }
-
-    /**
-     * @return array<\App\Story\Nodes\Node>
-     */
-    public function getRemainingNodes(): array
-    {
-        return $this->remainingNodes;
     }
 }

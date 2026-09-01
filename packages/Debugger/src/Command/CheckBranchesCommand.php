@@ -32,11 +32,12 @@ class CheckBranchesCommand extends Command
             $this->printGameHeaders(output: $io, game: $game);
         }
 
-        $nodesWalker = new BranchesWalker(game: $game);
-        $branches = $nodesWalker();
+        $walker = new BranchesWalker(game: $game);
 
         if ($io->isVerbose()) {
-            $io->info('Check all branches...');
+            $io->newLine();
+
+            $branches = $walker->getAllBranches();
 
             // Extracts node IDs for comparison.
             $extractIdForCmp = fn(Node $node): string => $node->id < 10 ? "0$node->id" : "$node->id";
@@ -71,25 +72,26 @@ class CheckBranchesCommand extends Command
             }
 
             $io->newLine();
+
+            $io->writeln('Branches: ' . count($walker->getAllBranches()));
+            $io->writeln('Winning branches: ' . count($walker->getWinningBranches()));
+            $io->writeln('Defeat branches: ' . count($walker->getDefeatBranches()));
+            $io->writeln('Remaining nodes: ' . count($walker->getRemainingNodes()));
+        }
+
+        $errors = $walker();
+
+        if ($errors) {
+            foreach ($errors as $error) {
+                $io->error("<error>$error</error>");
+            }
+
+            return Command::FAILURE;
         }
 
         if ($io->isVerbose()) {
-            $io->info('Check results...');
+            $io->success('All branches are valid');
         }
-
-        $defeatBranches = array_filter(
-            array: $branches,
-            callback: fn($branch): bool => array_last($branch) instanceof DefeatNode,
-        );
-        $winningBranches = array_filter(
-            array: $branches,
-            callback: fn($branch): bool => array_last($branch) instanceof VictoryNode,
-        );
-
-        $io->writeln('Branches: ' . count($branches));
-        $io->writeln('Winning branches: ' . count($winningBranches));
-        $io->writeln('Defeat branches: ' . count($defeatBranches));
-        $io->writeln('Remaining nodes: ' . count($nodesWalker->getRemainingNodes()));
 
         return Command::SUCCESS;
     }

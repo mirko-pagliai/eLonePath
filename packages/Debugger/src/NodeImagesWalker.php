@@ -5,12 +5,15 @@ namespace Elone\Debugger;
 
 use App\Story\Game;
 
-class NodeImagesWalker
+readonly class NodeImagesWalker
 {
-    public function __construct(protected readonly Game $game)
+    public function __construct(protected Game $game)
     {
     }
 
+    /**
+     * @return array<string>
+     */
     public function __invoke(): array
     {
         $errors = [];

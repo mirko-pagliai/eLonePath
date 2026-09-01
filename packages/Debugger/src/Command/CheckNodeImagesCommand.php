@@ -29,6 +29,7 @@ class CheckNodeImagesCommand extends Command
         }
 
         $walker = new NodeImagesWalker($game);
+
         $errors = $walker();
 
         if ($errors) {

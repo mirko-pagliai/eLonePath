@@ -6,7 +6,8 @@
         "translators": "",
         "description": "A game for testing.",
         "language": "it",
-        "version": "1.0"
+        "version": "1.0",
+        "preface": "A short preface for testing."
     },
     "nodes": {
         "1": {

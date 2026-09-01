@@ -12,6 +12,7 @@ declare(strict_types=1);
         <meta charset="utf-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <title>Elone Path</title>
+        <link rel="manifest" href="/manifest.json">
         <link rel="stylesheet" href="/assets/css/bootstrap.min.css">
         <link rel="stylesheet" href="/assets/css/bootstrap-icons.min.css">
         <link rel="stylesheet" href="/css/default.css">

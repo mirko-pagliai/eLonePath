@@ -5,8 +5,8 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/config/bootstrap.php';
 
-use App\Command\StoryTesterCommand;
 use Elone\Debugger\Command\CheckBranchesCommand;
+use Elone\Debugger\Command\CheckNodeImagesCommand;
 use Symfony\Component\Console\Application;
 
 /**
@@ -18,6 +18,6 @@ if (!class_exists(Application::class)) {
 }
 
 $application = new Application();
-$application->addCommand(new StoryTesterCommand());
 $application->addCommand(new CheckBranchesCommand());
+$application->addCommand(new CheckNodeImagesCommand());
 $application->run();

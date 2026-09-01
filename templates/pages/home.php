@@ -9,11 +9,8 @@ declare(strict_types=1);
 ?>
 
 <?= $this->Html->image(
-    path: '/img/logo.png',
-    options: [
-        'class' => 'd-block img-fluid mx-auto',
-        'style' => 'max-width: 600px',
-    ],
+    path: '/img/logo-600.png',
+    options: ['class' => 'd-block img-fluid mb-5 mx-auto'],
 ) ?>
 
 <p class="fs-4 mb-4 text-center">

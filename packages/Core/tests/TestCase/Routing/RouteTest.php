@@ -115,7 +115,7 @@ class RouteTest extends TestCase
      */
     #[Test]
     #[TestWith(['/'])]
-    #[TestWith(['/img/logo.png'])]
+    #[TestWith(['/img/logo-1024.png'])]
     #[TestWith(['https://example.com/path'])]
     public function testResolveWithString(string $route): void
     {

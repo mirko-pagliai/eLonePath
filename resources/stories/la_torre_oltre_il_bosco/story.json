@@ -80,7 +80,7 @@
         },
         "5": {
             "type": "passage",
-            "content": "Ignori lo sconosciuto e continui lungo il sentiero.\n\nIl bosco diventa sempre più fitto. La luce della sera è ormai quasi scomparsa e procedi affidandoti soprattutto alla debole luminosità che filtra tra le nuvole.\n\nDopo qualche minuto il sentiero si divide in due.\n\nA sinistra senti il rumore di un torrente. L'acqua scorre con forza, anche se non riesci a vederla.\n\nA destra, invece, compare una debole luce tra gli alberi. È calda e tremolante, come quella di una lanterna, ma non riesci a capire da dove provenga.\n\nIl sentiero davanti a te è completamente deserto.\n\nPuoi scegliere una delle due direzioni.",
+            "content": "Ignori lo sconosciuto e continui lungo il sentiero.\n\nIl bosco diventa sempre più fitto. La luce della sera è ormai quasi scomparsa e procedi affidandoti soprattutto alla debole luminosità che filtra tra le nuvole.\n\nDopo qualche minuto **il sentiero si divide in tre**.\n\nA sinistra senti il rumore di un **torrente**. L'acqua scorre con forza tra le rocce, anche se non riesci a vederla.\n\nA destra, invece, compare una debole **luce tra gli alberi**. È calda e tremolante, come quella di una lanterna, ma non riesci a capire da dove provenga.\n\nAl centro, il sentiero sale ripidamente verso **la collina**. Tra gli alberi riesci finalmente a vedere la torre nera, stagliata contro il cielo scuro. È ancora lontana, ma questa strada sembra condurre direttamente verso di essa.\n\nTi fermi al bivio e osservi le tre possibilità davanti a te.",
             "choices": [
                 {
                     "content": "Se vuoi seguire la luce, vai a pagina {{page}}",
@@ -89,8 +89,16 @@
                 {
                     "content": "Se vuoi seguire il torrente, vai a pagina {{page}}",
                     "target": 9
+                },
+                {
+                    "content": "Se vuoi proseguire verso la collina, vai a pagina {{page}}",
+                    "target": 19
                 }
-            ]
+            ],
+            "image": {
+                "path": "05_09.jpg",
+                "title": "Bivio nel bosco verso il castello"
+            }
         },
         "6": {
             "type": "passage",
@@ -235,6 +243,38 @@
         "18": {
             "type": "defeat",
             "content": "Il cavaliere scuote lentamente la testa.\n\nLa stanza sprofonda nell'oscurità e senti il peso di qualcosa che ti afferra alle spalle.\n\nCerchi di reagire, ma è ormai troppo tardi.\n\nLa porta della torre non si aprirà più per te."
+        },
+        "19": {
+            "type": "passage",
+            "content": "Lasci il bivio e imbocchi un vecchio sentiero che sale verso la collina.\n\nIl terreno diventa sempre più ripido e gli alberi si fanno più radi. Dopo pochi minuti la nebbia si apre e intravedi la torre molto più in alto, stagliata contro il cielo scuro.\n\nPoi senti un rumore davanti a te.\n\nUn ramo si spezza.\n\nDal margine del sentiero emerge una creatura massiccia, con il corpo coperto da una rozza armatura di cuoio. Nella mano stringe una lunga mazza di ferro.\n\nTi vede.\n\nPer qualche secondo rimane immobile. Poi solleva lentamente la mazza.\n\nNon sembra intenzionata a lasciarti passare.\n\n**Devi affrontare il nemico, non hai altra scelta!**",
+            "choices": [
+                {
+                    "content": "Per affrontare il nemico, vai a pagina {{page}}",
+                    "target": 20
+                }
+            ],
+            "image": {
+                "path": "19.jpg",
+                "title": "Scontro nella foresta nebbiosa"
+            }
+        },
+        "20": {
+            "type": "passage",
+            "content": "Lo scontro è breve ma violento.\n\nQuando il nemico finalmente cade a terra, rimani per qualche istante immobile, cercando di riprendere fiato.\n\nLa strada verso la collina è libera, ma guardando davanti a te ti rendi conto che questo sentiero non conduce direttamente alla torre. Hai perso tempo e ti sei allontanato dal bivio nel bosco.\n\nDecidi che non vale la pena continuare lungo questa strada. È meglio tornare indietro e riprendere una delle due vie che avevi lasciato poco prima.\n\nRipercorri il sentiero a ritroso, lasciandoti alle spalle il nemico sconfitto. Dopo qualche minuto riconosci gli alberi e finalmente raggiungi di nuovo il bivio.\n\nDavanti a te le due strade sono ancora lì: a destra la debole **luce tra gli alberi**, a sinistra il rumore del **torrente**.",
+            "choices": [
+                {
+                    "content": "Se vuoi seguire la luce, vai a pagina {{page}}",
+                    "target": 8
+                },
+                {
+                    "content": "Se vuoi seguire il torrente, vai a pagina {{page}}",
+                    "target": 9
+                }
+            ],
+            "image": {
+                "path": "05_09.jpg",
+                "title": "Bivio nel bosco verso il castello"
+            }
         }
     }
 }

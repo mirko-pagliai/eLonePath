@@ -49,6 +49,9 @@ readonly class Dispatcher
     }
 
     /**
+     * Converts each URL segment in `$params` to the type its matching parameter in `$method` declares.
+     *
+     * @param \ReflectionMethod $method The action method whose parameters describe the expected types.
      * @param list<string> $params
      * @return list<mixed>
      */
@@ -137,6 +140,9 @@ readonly class Dispatcher
         );
     }
 
+    /**
+     * Builds the template path for `$route`: the controller name in kebab-case, followed by the action.
+     */
     protected function templateName(Route $route): string
     {
         return new WordCase($route->controller)->kebabCase() . "/$route->action";

@@ -102,16 +102,10 @@ class GameTest extends TestCase
     #[Test]
     public function testCreateFromFile(): void
     {
-        $path = sys_get_temp_dir() . '/story.json';
-        file_put_contents($path, json_encode($this->sampleData()));
+        $game = Game::createFromFile(STORIES . '/valid/story.json');
 
-        try {
-            $game = Game::createFromFile($path);
-            $this->assertSame('test-game', $game->gameId);
-            $this->assertInstanceOf(Node::class, $game->getNode(2));
-        } finally {
-            unlink($path);
-        }
+        $this->assertSame('test-game', $game->gameId);
+        $this->assertInstanceOf(Node::class, $game->getNode(2));
     }
 
     /**
@@ -120,29 +114,24 @@ class GameTest extends TestCase
      * @link \App\Story\Game::createFromFile()
      */
     #[Test]
-    public function testCreateFromFileWitNotReadableFile(): void
+    public function testCreateFromFileWithNotReadableFile(): void
     {
         $this->expectExceptionMessageIs('Failed to read `/path/does/not/story.json`.');
         Game::createFromFile('/path/does/not/story.json');
     }
 
     /**
-     * Test for the `createFromFile()` method with an invalid `story.json` file.
+     * Test for the `createFromFile()` method with a file not named `story.json`.
      *
      * @link \App\Story\Game::createFromFile()
      */
     #[Test]
     public function testCreateFromFileInvalidStoryJsonFile(): void
     {
-        $path = sys_get_temp_dir() . '/badNameStory.json';
-        file_put_contents($path, json_encode($this->sampleData()));
+        $path = STORIES . '/invalid-name/data.json';
 
-        try {
-            $this->expectExceptionMessageIs("Expected `$path` to be a `story.json` file.");
-            Game::createFromFile($path);
-        } finally {
-            unlink($path);
-        }
+        $this->expectExceptionMessageIs("Expected `$path` to be a `story.json` file.");
+        Game::createFromFile($path);
     }
 
     /**
@@ -153,15 +142,10 @@ class GameTest extends TestCase
     #[Test]
     public function testCreateFromFileFailedToParseJson(): void
     {
-        $path = sys_get_temp_dir() . '/story.json';
-        file_put_contents($path, 'not valid json');
+        $path = STORIES . '/invalid-json/story.json';
 
-        try {
-            $this->expectExceptionMessageMatches('#^Failed to parse `' . preg_quote($path) . '`: .+\.$#');
-            Game::createFromFile($path);
-        } finally {
-            unlink($path);
-        }
+        $this->expectExceptionMessageMatches('#^Failed to parse `' . preg_quote($path) . '`: .+\.$#');
+        Game::createFromFile($path);
     }
 
     /**
@@ -172,14 +156,9 @@ class GameTest extends TestCase
     #[Test]
     public function testCreateFromFileFailedToParseJsonDueToWrongShape(): void
     {
-        $path = sys_get_temp_dir() . '/story.json';
-        file_put_contents($path, '"just a string"');
+        $path = STORIES . '/wrong-shape/story.json';
 
-        try {
-            $this->expectExceptionMessageIs("Failed to parse `$path`: expected a JSON object at the top level.");
-            Game::createFromFile($path);
-        } finally {
-            unlink($path);
-        }
+        $this->expectExceptionMessageIs("Failed to parse `$path`: expected a JSON object at the top level.");
+        Game::createFromFile($path);
     }
 }

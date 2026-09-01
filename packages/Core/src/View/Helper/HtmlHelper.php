@@ -38,9 +38,9 @@ final class HtmlHelper
     }
 
     /**
-     * Generates an `<i>` tag with the appropriate classes for a Bootstrap icon. The method formats
-     * the icon name and merges it with additional class names provided in `$options`. Every other
-     * entry in `$options` is applied as an attribute on the `<i>` tag.
+     * Generates an `<i>` tag with the appropriate classes for a Bootstrap icon. The method formats the icon name and
+     * merges it with additional class names provided in `$options`. Every other entry in `$options` is applied as an
+     * attribute on the `<i>` tag.
      *
      * @param string $name The name of the icon, which can include or omit the "bi-" prefix.
      * @param array<string, string|int|float|bool> $options Extra HTML attributes for the `<i>` tag; `class` is merged
@@ -90,14 +90,13 @@ final class HtmlHelper
     }
 
     /**
-     * Generates a `<a>` tag with the given text, URL, and options. `$url` is resolved via `url()` — pass a
-     * literal path or external URL as a string (`/`, `https://example.com`), or a route array to build one.
+     * Generates a `<a>` tag with the given text, URL, and options. `$url` is resolved via `url()` — pass a literal path
+     * or external URL as a string (`/`, `https://example.com`), or a route array to build one.
      *
-     * `$options` accepts one known key, `escape` (bool, default `true`): whether `$text` is HTML-escaped before
-     * being inserted. Leave it on for anything that isn't fully trusted, developer-written markup — story
-     * content, anything sourced from data — and turn it off only to embed literal HTML you wrote yourself, such
-     * as an icon. Every other key in `$options` is applied as an HTML attribute on the `<a>` tag (`class`, `id`,
-     * `target`, and so on).
+     * `$options` accepts one known key, `escape` (bool, default `true`): whether `$text` is HTML-escaped before being
+     * inserted. Leave it on for anything that isn't fully trusted, developer-written markup — story content, anything
+     * sourced from data — and turn it off only to embed literal HTML you wrote yourself, such as an icon. Every other
+     * key in `$options` is applied as an HTML attribute on the `<a>` tag (`class`, `id`, `target`, and so on).
      *
      * @param string $text The text (or, with `escape: false`, raw HTML) to display within the anchor tag.
      * @param array<string|int, string|int|float|bool>|string $url A literal URL/path, or a route array (see
@@ -132,7 +131,7 @@ final class HtmlHelper
     public function markdown(string $markdown): string
     {
         if (!class_exists(Markdown::class)) {
-            throw new RuntimeException('`michelf/php-markdown` is required to use `markdown()`');
+            throw new RuntimeException('`michelf/php-markdown` is required to use `markdown()`.');
         }
 
         return Markdown::defaultTransform($markdown);

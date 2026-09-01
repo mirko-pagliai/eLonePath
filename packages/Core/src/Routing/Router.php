@@ -33,6 +33,9 @@ final class Router
     }
 
     /**
+     * Builds a `Route` from an already-resolved controller/action/params — the counterpart to `dispatch()`, which
+     * derives these from a `Request` first.
+     *
      * @param list<string> $params
      */
     public function resolve(string $controller, string $action, array $params = []): Route

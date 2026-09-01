@@ -12,6 +12,15 @@ use RuntimeException;
 class StoryController extends Controller
 {
     /**
+     * @param string $storyId The identifier of the story.
+     * @return \App\Story\Game The game instance created from the specified story file.
+     */
+    protected function getGame(string $storyId): Game
+    {
+        return Game::createFromFile(STORIES . "/$storyId/story.json");
+    }
+
+    /**
      * @param string $storyId
      * @param int $nodeNumber
      * @return void
@@ -19,9 +28,7 @@ class StoryController extends Controller
      */
     public function chapter(string $storyId, int $nodeNumber): void
     {
-        $file = STORIES . "/$storyId/story.json";
-
-        $game = Game::createFromFile($file);
+        $game = $this->getGame($storyId);
         $node = $game->getNode($nodeNumber);
 
         $this->set(compact('game', 'node'));
@@ -33,13 +40,12 @@ class StoryController extends Controller
      * @param string $storyId
      * @param int $nodeNumber
      * @return void
+     * @throws \Random\RandomException
      * @link templates/story/roll.php
      */
     public function roll(string $storyId, int $nodeNumber): void
     {
-        $file = STORIES . "/$storyId/story.json";
-
-        $game = Game::createFromFile($file);
+        $game = $this->getGame($storyId);
         $node = $game->getNode($nodeNumber);
 
         if (!$node instanceof DiceNode) {

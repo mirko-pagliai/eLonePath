@@ -13,7 +13,7 @@ namespace App\Story\Nodes;
  */
 class VictoryNode extends Node
 {
-    public function type(): NodeType
+    public function getType(): NodeType
     {
         return NodeType::VICTORY;
     }

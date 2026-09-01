@@ -17,6 +17,17 @@ declare(strict_types=1);
     Librogame digitali
 </p>
 
+<p class="fs-5 mb-2">
+    <em>Elone Path</em> porta l'esperienza dei librigame cartacei nel digitale, senza tradirne lo spirito: storie fatte
+    di pagine numerate, scelte, prove di abilità e finali diversi.
+</p>
+
+<p class="fs-5 mb-4">
+    Come su carta, sei libero di sfogliare come vuoi: puoi tornare indietro dopo una sconfitta, o saltare a una
+    pagina qualsiasi cambiando l'indirizzo. Nessuno stato nascosto tiene traccia di cosa hai fatto — quello che
+    vedi dipende solo dalla pagina in cui ti trovi.
+</p>
+
 <div class="text-center">
     <?= $this->Html->link(
         text: 'Le storie',

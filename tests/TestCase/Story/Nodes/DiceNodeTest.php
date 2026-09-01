@@ -31,12 +31,12 @@ class DiceNodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\Nodes\DiceNode::type()
+     * @link \App\Story\Nodes\DiceNode::getType()
      */
     #[Test]
     public function testType(): void
     {
-        $this->assertSame(NodeType::DICE, $this->sample()->type());
+        $this->assertSame(NodeType::DICE, $this->sample()->getType());
     }
 
     /**

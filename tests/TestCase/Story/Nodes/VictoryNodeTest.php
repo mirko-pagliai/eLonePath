@@ -17,13 +17,13 @@ use PHPUnit\Framework\TestCase;
 class VictoryNodeTest extends TestCase
 {
     /**
-     * @link \App\Story\Nodes\VictoryNode::type()
+     * @link \App\Story\Nodes\VictoryNode::getType()
      */
     #[Test]
     public function testType(): void
     {
         $node = new VictoryNode(id: 15, gameId: 'test-game', content: 'The end.', image: null);
-        $this->assertSame(NodeType::VICTORY, $node->type());
+        $this->assertSame(NodeType::VICTORY, $node->getType());
     }
 
     /**

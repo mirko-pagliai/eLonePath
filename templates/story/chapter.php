@@ -105,4 +105,3 @@ if ($node->image !== null) {
         ) ?>
     </div>
 <?php endif; ?>
-

@@ -8,6 +8,16 @@ use Elone\Core\Exception\TemplateNotFoundException;
 use Elone\Core\View\Helper\HtmlHelper;
 use Throwable;
 
+/**
+ * Renders PHP templates.
+ *
+ * `render()` renders a full page — a template file, optionally wrapped in a layout — using the data previously passed
+ * to `set()`. `element()` renders a smaller, reusable snippet from `templates/element/` for inclusion inside another
+ * template, taking its own data explicitly rather than whatever's been `set()` on the view.
+ *
+ * Inside any template, `$this` is the `View` instance rendering it — giving access to `Html` (this view's
+ * `HtmlHelper`) and to `element()` for including further snippets.
+ */
 class View
 {
     public readonly HtmlHelper $Html;
@@ -22,13 +32,23 @@ class View
         $this->Html = new HtmlHelper();
     }
 
+    /**
+     * Retrieves a previously `set()` value.
+     *
+     * @param string $name The key to look up.
+     * @param mixed $default The value to return if `$name` isn't present.
+     * @return mixed The value stored under `$name`, or `$default`.
+     */
     public function get(string $name, mixed $default = null): mixed
     {
         return $this->data[$name] ?? $default;
     }
 
     /**
-     * @param array<string, mixed> $data
+     * Merges `$data` into the values available to the next `render()` call.
+     *
+     * @param array<string, mixed> $data The data to make available in the rendered template.
+     * @return self
      */
     public function set(array $data): self
     {
@@ -114,15 +134,9 @@ class View
     }
 
     /**
-     * Extracts `$__data` into a local scope and requires `$__file`, buffering and returning everything it echoes.
-     *
-     * Kept in its own method — rather than inline in `render()`, `element()`, and `renderLayout()` — specifically
-     * so the only local variables in scope when `extract()` runs are its own two parameters. `EXTR_SKIP` refuses
-     * to overwrite a variable that already exists in scope, so reusing a common name here (like `$data` or
-     * `$file`) would silently drop any view variable with that same key — which is exactly what happened before
-     * this method existed, with `element()`'s own `$name` parameter swallowing a data key also called `name`.
-     * The double-underscore names below aren't pretty, but nothing a template author would plausibly choose as a
-     * data key collides with them.
+     * Extracts `$__data` and requires `$__file`, buffering and returning everything it echoes. Isolated in its
+     * own method so the only locals in scope during `extract()` are these two parameters — otherwise `EXTR_SKIP`
+     * would silently drop a data key that happens to match a variable already in scope.
      *
      * @param array<string, mixed> $__data
      * @throws \Throwable Whatever `require`-ing `$__file` throws — re-thrown as-is, after releasing the buffer.

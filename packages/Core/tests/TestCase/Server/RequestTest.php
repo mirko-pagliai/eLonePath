@@ -77,15 +77,15 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @link \Elone\Core\Server\Request::fromGlobals()
+     * @link \Elone\Core\Server\Request::createFromGlobals()
      */
     #[Test]
-    public function testFromGlobals(): void
+    public function testCreateFromGlobals(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'post';
         $_SERVER['REQUEST_URI'] = '/pages/view/123?foo=bar';
 
-        $request = Request::fromGlobals();
+        $request = Request::createFromGlobals();
 
         $this->assertSame('POST', $request->method());
         $this->assertSame('/pages/view/123', $request->path());
@@ -93,14 +93,14 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @link \Elone\Core\Server\Request::fromGlobals()
+     * @link \Elone\Core\Server\Request::createFromGlobals()
      */
     #[Test]
-    public function testFromGlobalsWithMissingServerValues(): void
+    public function testCreateFromGlobalsWithMissingServerValues(): void
     {
         unset($_SERVER['REQUEST_METHOD'], $_SERVER['REQUEST_URI']);
 
-        $request = Request::fromGlobals();
+        $request = Request::createFromGlobals();
 
         $this->assertSame('GET', $request->method());
         $this->assertSame('/', $request->path());

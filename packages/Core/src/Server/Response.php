@@ -10,30 +10,44 @@ namespace Elone\Core\Server;
 final readonly class Response
 {
     /**
-     * @param array<string, string> $headers
+     * @param string $content The response body.
+     * @param int $status The HTTP status code.
+     * @param array<string, string> $headers Header name/value pairs, sent as-is by `send()`.
+     * @return void
      */
     public function __construct(private string $content = '', private int $status = 200, private array $headers = [])
     {
     }
 
+    /**
+     * @return string The response body.
+     */
     public function content(): string
     {
         return $this->content;
     }
 
+    /**
+     * @return int The HTTP status code.
+     */
     public function status(): int
     {
         return $this->status;
     }
 
     /**
-     * @return array<string, string>
+     * @return array<string, string> Header name/value pairs.
      */
     public function headers(): array
     {
         return $this->headers;
     }
 
+    /**
+     * Sends the status code and headers, then echoes the body.
+     *
+     * @return void
+     */
     public function send(): void
     {
         http_response_code($this->status);

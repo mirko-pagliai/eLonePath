@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace App\Command;
 
+use App\Debugger\NodesWalker;
 use App\Story\Game;
+use App\Story\Nodes\PassageNode;
+use App\Story\Nodes\VictoryNode;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Command\Command;
@@ -32,6 +35,48 @@ class StoryTesterCommand extends Command
         }
 
         $game = Game::createFromFile(path: $filename);
+        $nodesWalker = new NodesWalker(game: $game);
+
+        $tree = $nodesWalker();
+        foreach ($tree as $branch) {
+            foreach ($branch as $node) {
+                $text = "$node->id ";
+
+                if (!$node instanceof PassageNode) {
+                    $text .= '(' . $node->type()->value . ')';
+                }
+
+                if (array_last($branch) !== $node) {
+                    $text .= ' > ';
+                }
+
+                $io->write($text);
+            }
+
+            $io->writeln('');
+        }
+
+        $winningBranches = array_filter(
+            array: $tree,
+            callback: function ($branch) {
+                $lastNode = array_last($branch);
+
+                return $lastNode instanceof VictoryNode;
+            },
+        );
+
+        $io->newLine();
+        $io->writeln('Branches: ' . count($tree));
+        $io->writeln('Winning branches: ' . count($winningBranches));
+        $io->writeln('Remaining nodes: ' . count($nodesWalker->getRemainingNodes()));
+        exit;
+
+        $io->writeln('Game headers');
+        $this->printGameHeaders($io, $game);
+
+        $io->write('Branches: ' . count($tree));
+        $io->write('Remaining nodes: ' . count($tree->getRemainingNodes()));
+        exit;
 
         $io->writeln('Game headers');
         $this->printGameHeaders($io, $game);

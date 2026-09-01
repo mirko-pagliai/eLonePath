@@ -5,7 +5,9 @@ namespace App\Command;
 
 use App\Debugger\NodesWalker;
 use App\Story\Game;
-use App\Story\Nodes\PassageNode;
+use App\Story\Nodes\DefeatNode;
+use App\Story\Nodes\DiceNode;
+use App\Story\Nodes\Node;
 use App\Story\Nodes\VictoryNode;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
@@ -27,55 +29,57 @@ class StoryTesterCommand extends Command
         #[Argument('The `story.json` file you want to test')] string $filename,
         SymfonyStyle $io,
     ): int {
-        // Checks if the file is a `story.json` file
-        if (!str_ends_with($filename, 'story.json')) {
-            $io->error('The file must be a `story.json` file');
-
-            return Command::FAILURE;
-        }
-
         $game = Game::createFromFile(path: $filename);
+
         $nodesWalker = new NodesWalker(game: $game);
+        $branches = $nodesWalker();
 
-        $tree = $nodesWalker();
-        foreach ($tree as $branch) {
-            foreach ($branch as $node) {
-                $text = "$node->id ";
+        // Extracts node IDs for comparison.
+        $extractIdForCmp = fn(Node $node): string => $node->id < 10 ? "0$node->id" : "$node->id";
+        usort(
+            array: $branches,
+            callback: fn(array $branch, array $anotherBranch): int => strcmp(
+                implode('', array_map(callback: $extractIdForCmp, array: $branch)),
+                implode('', array_map(callback: $extractIdForCmp, array: $anotherBranch)),
+            ),
+        );
 
-                if (!$node instanceof PassageNode) {
-                    $text .= '(' . $node->type()->value . ')';
+        foreach ($branches as $branch) {
+            foreach ($branch as $k => $node) {
+                $io->write("$node->id ");
+
+                if ($node instanceof VictoryNode) {
+                    $io->write('> <fg=green>victory</>');
+                } elseif ($node instanceof DefeatNode) {
+                    $io->write('> <fg=red>defeat</>');
+                } elseif ($node instanceof DiceNode) {
+                    $io->write('> <fg=blue>dice with ' . $node->requiredRolls . ' rolls</> ');
                 }
 
-                if (array_last($branch) !== $node) {
-                    $text .= ' > ';
+                if (array_key_last($branch) === $k) {
+                    continue;
                 }
 
-                $io->write($text);
+                $io->write('> ');
             }
 
             $io->writeln('');
         }
 
+        $defeatBranches = array_filter(
+            array: $branches,
+            callback: fn($branch): bool => array_last($branch) instanceof DefeatNode,
+        );
         $winningBranches = array_filter(
-            array: $tree,
-            callback: function ($branch) {
-                $lastNode = array_last($branch);
-
-                return $lastNode instanceof VictoryNode;
-            },
+            array: $branches,
+            callback: fn($branch): bool => array_last($branch) instanceof VictoryNode,
         );
 
         $io->newLine();
-        $io->writeln('Branches: ' . count($tree));
+        $io->writeln('Branches: ' . count($branches));
         $io->writeln('Winning branches: ' . count($winningBranches));
+        $io->writeln('Defeat branches: ' . count($defeatBranches));
         $io->writeln('Remaining nodes: ' . count($nodesWalker->getRemainingNodes()));
-        exit;
-
-        $io->writeln('Game headers');
-        $this->printGameHeaders($io, $game);
-
-        $io->write('Branches: ' . count($tree));
-        $io->write('Remaining nodes: ' . count($tree->getRemainingNodes()));
         exit;
 
         $io->writeln('Game headers');

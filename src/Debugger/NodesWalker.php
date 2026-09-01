@@ -10,7 +10,7 @@ use App\Story\Nodes\DiceNode;
 use App\Story\Nodes\Node;
 use App\Story\Nodes\PassageNode;
 use App\Story\Nodes\VictoryNode;
-use Exception;
+use LogicException;
 
 class NodesWalker
 {
@@ -28,37 +28,30 @@ class NodesWalker
     {
         $branches = [];
 
-        $this->walk(
-            node: $this->game->getNode(1),
-            branch: [],
-            branches: $branches,
-        );
+        $this->walk(node: $this->game->getNode(1), branch: [], branches: $branches);
 
         return $branches;
     }
 
-    protected function walk(
-        Node $node,
-        array $branch,
-        array &$branches,
-    ): void {
-        /*
-         * Questo nodo è già stato completamente analizzato
-         * da un altro ramo.
-         */
-        if (!isset($this->remainingNodes[$node->id])) {
-            return;
-        }
-
+    protected function walk(Node $node, array $branch, array &$branches): void
+    {
         $branch[] = $node;
 
-        if ($node instanceof DefeatNode || $node instanceof VictoryNode) {
+        // This node has already been inspected within another branch.
+        if (!isset($this->remainingNodes[$node->id])) {
             $branches[] = $branch;
 
             return;
         }
 
-        if ($node instanceof DiceNode) {
+        if ($node instanceof DefeatNode || $node instanceof VictoryNode) {
+            // This branch ends at this node.
+            $branches[] = $branch;
+
+            unset($this->remainingNodes[$node->id]);
+
+            return;
+        } elseif ($node instanceof DiceNode) {
             $targetNodes = [
                 $this->game->getNode($node->targetSuccess),
                 $this->game->getNode($node->targetFailure),
@@ -69,7 +62,7 @@ class NodesWalker
                 array: $node->choices,
             );
         } else {
-            throw new Exception('Unexpected node type');
+            throw new LogicException("Node `$node->id` has an unexpected type");
         }
 
         foreach ($targetNodes as $targetNode) {
@@ -79,9 +72,7 @@ class NodesWalker
                 branches: $branches,
             );
 
-            /*
-             * SOLO ADESSO il nodo è completamente esaurito.
-             */
+            // This node has already been fully inspected.
             unset($this->remainingNodes[$node->id]);
         }
     }

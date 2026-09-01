@@ -7,6 +7,7 @@ use Elone\Core\Controller;
 use Elone\Core\Exception\ActionNotFoundException;
 use Elone\Core\Exception\ControllerNotFoundException;
 use Elone\Core\Exception\RouteNotFoundException;
+use Elone\Core\Utility\WordCase;
 use ReflectionMethod;
 
 /**
@@ -21,7 +22,7 @@ readonly class Route
      * `Controller` class, and checks that the specified action is accessible.
      *
      * @param string $controller The controller identifier, already in PascalCase (e.g. `Pages`, `UsersSettings`).
-     *  Callers deriving it from raw, untrusted input — a URL segment — must normalize it (see `ControllerName`) before
+     *  Callers deriving it from raw, untrusted input — a URL segment — must normalize it (see `WordCase`) before
      *  constructing a `Route`.
      * @param string $action The name of the action method within the controller to be executed.
      * @param list<string> $params Optional parameters to be passed to the action method.
@@ -84,7 +85,7 @@ readonly class Route
     public function path(): string
     {
         $segments = [
-            new ControllerName($this->controller)->kebabCase(),
+            new WordCase($this->controller)->kebabCase(),
             $this->action,
             ...$this->params,
         ];

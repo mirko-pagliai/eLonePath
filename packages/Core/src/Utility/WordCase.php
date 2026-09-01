@@ -1,13 +1,14 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Routing;
+namespace Elone\Core\Utility;
 
 /**
- * Responsible for processing and converting raw string inputs into various case formats (e.g., PascalCase, kebab-case)
- * suitable for controller class naming and URL or template path generation.
+ * Splits a raw string into words (on `-`/`_`, or PascalCase/camelCase boundaries) and converts them into
+ * different case formats. Used by the routing layer to move between a URL segment, a controller class name, and
+ * a template path — but the conversion itself has nothing to do with controllers specifically.
  */
-final readonly class ControllerName
+final readonly class WordCase
 {
     /**
      * @var list<string>

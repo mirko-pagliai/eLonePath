@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Elone\Core\Routing;
 
 use Elone\Core\Server\Request;
+use Elone\Core\Utility\WordCase;
 
 final class Router
 {
@@ -22,7 +23,7 @@ final class Router
             $controller = 'Pages';
             $action = 'home';
         } else {
-            $controller = new ControllerName($segments[0])->studlyCase();
+            $controller = new WordCase($segments[0])->studlyCase();
             $action = $segments[1] ?? 'index';
         }
 
@@ -32,6 +33,9 @@ final class Router
     }
 
     /**
+     * Builds a `Route` from an already-resolved controller/action/params — the counterpart to `dispatch()`, which
+     * derives these from a `Request` first.
+     *
      * @param list<string> $params
      */
     public function resolve(string $controller, string $action, array $params = []): Route

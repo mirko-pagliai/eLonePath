@@ -1,22 +1,22 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Test\Routing;
+namespace Elone\Core\Test\Utility;
 
-use Elone\Core\Routing\ControllerName;
+use Elone\Core\Utility\WordCase;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 /**
- * ControllerNameTest.
+ * WordCaseTest.
  */
-#[CoversClass(ControllerName::class)]
-class ControllerNameTest extends TestCase
+#[CoversClass(WordCase::class)]
+class WordCaseTest extends TestCase
 {
     /**
-     * @link \Elone\Core\Routing\ControllerName::studlyCase()
+     * @link \Elone\Core\Utility\WordCase::studlyCase()
      */
     #[Test]
     #[TestWith(['Pages', 'Pages'])]
@@ -29,12 +29,12 @@ class ControllerNameTest extends TestCase
     #[TestWith(['', ''])]
     public function testStudlyCase(string $raw, string $expected): void
     {
-        $result = new ControllerName($raw)->studlyCase();
+        $result = new WordCase($raw)->studlyCase();
         $this->assertSame($expected, $result);
     }
 
     /**
-     * @link \Elone\Core\Routing\ControllerName::kebabCase()
+     * @link \Elone\Core\Utility\WordCase::kebabCase()
      */
     #[Test]
     #[TestWith(['Pages', 'pages'])]
@@ -47,7 +47,7 @@ class ControllerNameTest extends TestCase
     #[TestWith(['', ''])]
     public function testKebabCase(string $raw, string $expected): void
     {
-        $result = new ControllerName($raw)->kebabCase();
+        $result = new WordCase($raw)->kebabCase();
         $this->assertSame($expected, $result);
     }
 }

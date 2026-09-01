@@ -5,24 +5,30 @@ namespace Elone\Core\Server;
 
 final class Request
 {
-    public function __construct(private readonly string $method, private readonly string $path)
-    {
+    /**
+     * @param array<string, mixed> $queryParams
+     */
+    public function __construct(
+        private readonly string $method,
+        private readonly string $path,
+        private readonly array $queryParams = [],
+    ) {
     }
 
     /**
-     * Captures the current HTTP request method and URI, then returns a new instance of the class.
+     * Captures the current HTTP request method, URI, and query string, then returns a new instance of the class.
      *
      * It receives:
      * ```
-     * REQUEST_URI = /pages/view/123
+     * REQUEST_URI = /pages/view/123?foo=bar
      * REQUEST_METHOD = GET
      * ```
      * and builds:
      * ```
-     * new Request('GET', '/pages/view/123')
+     * new Request('GET', '/pages/view/123', ['foo' => 'bar'])
      * ```
      *
-     * @return self An instance of the class initialized with the HTTP method and URI.
+     * @return self An instance of the class initialized with the HTTP method, URI, and query parameters.
      */
     public static function capture(): self
     {
@@ -34,7 +40,14 @@ final class Request
 
         $uri = parse_url($url, PHP_URL_PATH) ?: '/';
 
-        return new self(strtoupper($method), $uri);
+        $query = parse_url($url, PHP_URL_QUERY);
+
+        $queryParams = [];
+        if (is_string($query)) {
+            parse_str($query, $queryParams);
+        }
+
+        return new self(method: strtoupper($method), path: $uri, queryParams: $queryParams);
     }
 
     public function method(): string
@@ -45,5 +58,18 @@ final class Request
     public function path(): string
     {
         return $this->path;
+    }
+
+    /**
+     * @return array<string, mixed>
+     */
+    public function queryParams(): array
+    {
+        return $this->queryParams;
+    }
+
+    public function queryParam(string $name, mixed $default = null): mixed
+    {
+        return $this->queryParams[$name] ?? $default;
     }
 }

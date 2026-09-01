@@ -49,6 +49,21 @@ class RequestTest extends TestCase
     }
 
     /**
+     * @link \Elone\Core\Server\Request::queryParams()
+     * @link \Elone\Core\Server\Request::queryParam()
+     */
+    #[Test]
+    public function testQueryParams(): void
+    {
+        $request = new Request('GET', '/', ['foo' => 'bar']);
+
+        $this->assertSame(['foo' => 'bar'], $request->queryParams());
+        $this->assertSame('bar', $request->queryParam('foo'));
+        $this->assertNull($request->queryParam('missing'));
+        $this->assertSame('default', $request->queryParam('missing', 'default'));
+    }
+
+    /**
      * @link \Elone\Core\Server\Request::capture()
      */
     #[Test]
@@ -61,6 +76,22 @@ class RequestTest extends TestCase
 
         $this->assertSame('POST', $request->method());
         $this->assertSame('/pages/view/123', $request->path());
+        $this->assertSame(['foo' => 'bar'], $request->queryParams());
+        $this->assertSame('bar', $request->queryParam('foo'));
+    }
+
+    /**
+     * @link \Elone\Core\Server\Request::capture()
+     */
+    #[Test]
+    public function testCaptureWithoutQueryString(): void
+    {
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['REQUEST_URI'] = '/pages/home';
+
+        $request = Request::capture();
+
+        $this->assertSame([], $request->queryParams());
     }
 
     /**
@@ -75,5 +106,6 @@ class RequestTest extends TestCase
 
         $this->assertSame('GET', $request->method());
         $this->assertSame('/', $request->path());
+        $this->assertSame([], $request->queryParams());
     }
 }

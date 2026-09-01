@@ -22,7 +22,7 @@ abstract class Node
     /**
      * The kind of node this is. Fixed per subclass.
      */
-    abstract public function type(): NodeType;
+    abstract public function getType(): NodeType;
 
     /**
      * Builds the concrete `Node` subclass matching `$data['type']`.

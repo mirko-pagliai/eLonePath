@@ -16,13 +16,13 @@ use PHPUnit\Framework\TestCase;
 class DefeatNodeTest extends TestCase
 {
     /**
-     * @link \App\Story\Nodes\DefeatNode::type()
+     * @link \App\Story\Nodes\DefeatNode::getType()
      */
     #[Test]
     public function testType(): void
     {
         $node = new DefeatNode(id: 12, gameId: 'test-game', content: 'The end.', image: null);
-        $this->assertSame(NodeType::DEFEAT, $node->type());
+        $this->assertSame(NodeType::DEFEAT, $node->getType());
     }
 
     /**

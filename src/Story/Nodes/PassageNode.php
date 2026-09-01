@@ -28,7 +28,7 @@ class PassageNode extends Node
         parent::__construct($id, $gameId, $content, $image);
     }
 
-    public function type(): NodeType
+    public function getType(): NodeType
     {
         return NodeType::PASSAGE;
     }

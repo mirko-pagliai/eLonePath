@@ -13,7 +13,7 @@ namespace App\Story\Nodes;
  */
 class DefeatNode extends Node
 {
-    public function type(): NodeType
+    public function getType(): NodeType
     {
         return NodeType::DEFEAT;
     }

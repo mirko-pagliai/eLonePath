@@ -1,0 +1,24 @@
+{
+    "game": {
+        "id": "test-game",
+        "title": "Test Game",
+        "author": "Test Author",
+        "translators": "",
+        "description": "A game for testing.",
+        "language": "it",
+        "version": "1.0"
+    },
+    "nodes": {
+        "1": {
+            "content": "Start here.",
+            "choices": [
+                {"content": "Go to page {{page}}", "target": 2}
+            ],
+            "type": "passage"
+        },
+        "2": {
+            "content": "The end.",
+            "type": "victory"
+        }
+    }
+}

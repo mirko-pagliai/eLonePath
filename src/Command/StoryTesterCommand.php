@@ -51,7 +51,7 @@ class StoryTesterCommand extends Command
 
     protected function checkImagesSizes(SymfonyStyle $io, Game $game): void
     {
-        $io->comment('I check the images...');
+        $io->comment('Image check...');
 
         $images = array_filter(array_column(array: $game->nodes, column_key: 'image'));
 

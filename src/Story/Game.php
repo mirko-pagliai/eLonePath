@@ -18,11 +18,11 @@ use RuntimeException;
  *         id: string,
  *         title: string,
  *         author: string,
- *         translators: string,
+ *         translators?: string,
  *         description: string,
  *         language: string,
  *         version: string,
- *         preface: string,
+ *         preface?: string,
  *     },
  *     nodes: array<int, PassageNodeData|DiceNodeData|VictoryNodeData|DefeatNodeData>,
  * }
@@ -75,11 +75,11 @@ class Game
             gameId: $data['game']['id'],
             title: $data['game']['title'],
             author: $data['game']['author'],
-            translators: $data['game']['translators'],
+            translators: $data['game']['translators'] ?? '',
             description: $data['game']['description'],
             language: $data['game']['language'],
             version: $data['game']['version'],
-            preface: $data['game']['preface'],
+            preface: $data['game']['preface'] ?? '',
             nodes: $nodes,
         );
     }

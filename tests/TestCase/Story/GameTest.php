@@ -67,6 +67,21 @@ class GameTest extends TestCase
     }
 
     /**
+     * @link \App\Story\Game::createFromArray()
+     */
+    #[Test]
+    public function testCreateFromArrayWithoutOptionalKeys(): void
+    {
+        $data = $this->sampleData();
+        unset($data['game']['translators'], $data['game']['preface']);
+
+        $game = Game::createFromArray($data);
+
+        $this->assertSame('', $game->translators);
+        $this->assertSame('', $game->preface);
+    }
+
+    /**
      * @link \App\Story\Game::getNode()
      */
     #[Test]

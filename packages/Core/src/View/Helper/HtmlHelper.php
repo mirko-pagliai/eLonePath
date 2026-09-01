@@ -132,7 +132,7 @@ final class HtmlHelper
     public function markdown(string $markdown): string
     {
         if (!class_exists(Markdown::class)) {
-            throw new RuntimeException('`michelf/php-markdown` is required to use `markdown()`');
+            throw new RuntimeException('`michelf/php-markdown` is required to use `markdown()`.');
         }
 
         return Markdown::defaultTransform($markdown);

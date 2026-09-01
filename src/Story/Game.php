@@ -95,6 +95,11 @@ class Game
             throw new RuntimeException("Failed to read `$path`.");
         }
 
+        // Checks if the file is a `story.json` file
+        if (!str_ends_with($path, 'story.json')) {
+            throw new RuntimeException("Expected `$path` to be a `story.json` file.");
+        }
+
         $contents = file_get_contents($path);
         if ($contents === false) {
             throw new RuntimeException("Failed to read `$path`.");

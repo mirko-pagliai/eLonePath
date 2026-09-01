@@ -15,30 +15,30 @@ declare(strict_types=1);
 
 <ul id="stories-list" class="list-unstyled">
     <?php foreach ($stories as $game) : ?>
-        <li class="position-relative p-3">
+        <li class="position-relative py-3 px-4">
             <?= $this->Html->link(
                 text: $game->title,
-                url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
-                options: ['class' => 'd-block fs-3 stretched-link text-decoration-none'],
+                url: ['controller' => 'Story', 'action' => 'start', $game->gameId],
+                options: ['class' => 'd-block fs-2 stretched-link text-decoration-none'],
             ) ?>
 
-            <div class="fs-5 mt-1 text-body-secondary">
-                <?= h($game->author) ?>
-            </div>
-
-            <?php if ($game->translators) : ?>
-                <div class="fs-5 mt-1 text-body-secondary">
-                    Tradotto da <?= h($game->translators) ?>
-                </div>
-            <?php endif; ?>
-
             <?php if ($game->description) : ?>
-                <div class="mt-1 fs-5">
+                <div class="mt-1 fs-4">
                     <?= h($game->description) ?>
                 </div>
             <?php endif; ?>
 
-            <div class="mt-1">
+            <div class="fs-5 mt-1 text-body-secondary">
+                Autori: <?= h($game->author) ?>
+            </div>
+
+            <?php if ($game->translators) : ?>
+                <div class="fs-5 mt-1 text-body-secondary">
+                    Traduttori: <?= h($game->translators) ?>
+                </div>
+            <?php endif; ?>
+
+            <div class="fs-5">
                 (lingua <?= h($game->language) ?>, versione <?= h($game->version) ?>)
             </div>
         </li>

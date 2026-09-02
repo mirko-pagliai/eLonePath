@@ -14,4 +14,3 @@ declare(strict_types=1);
 <?php if ($debug) : ?>
     <p><?= h($exception::class) ?></p>
 <?php endif; ?>
-

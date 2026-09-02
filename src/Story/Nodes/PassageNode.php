@@ -34,6 +34,20 @@ class PassageNode extends Node
     }
 
     /**
+     * @return PassageNodeData
+     */
+    public function toArray(): array
+    {
+        return [
+            ...$this->baseArray(),
+            'choices' => array_map(
+                callback: fn(Choice $choice): array => $choice->toArray(),
+                array: $this->choices,
+            ),
+        ];
+    }
+
+    /**
      * @param PassageNodeData $data
      */
     public static function createFromArray(int $id, string $gameId, array $data): PassageNode

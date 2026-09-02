@@ -83,7 +83,7 @@ class CheckBranchesCommand extends Command
 
         if ($errors) {
             foreach ($errors as $error) {
-                $io->error("<error>$error</error>");
+                $io->error($error);
             }
 
             return Command::FAILURE;

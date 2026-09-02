@@ -19,6 +19,14 @@ class DefeatNode extends Node
     }
 
     /**
+     * @return DefeatNodeData
+     */
+    public function toArray(): array
+    {
+        return $this->baseArray();
+    }
+
+    /**
      * @param DefeatNodeData $data
      */
     public static function createFromArray(int $id, string $gameId, array $data): DefeatNode

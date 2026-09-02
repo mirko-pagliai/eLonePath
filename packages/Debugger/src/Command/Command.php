@@ -22,16 +22,7 @@ abstract class Command extends SymfonyCommand
      */
     protected function printGameHeaders(OutputInterface $output, Game $game): void
     {
-        $gameAsArray = array_filter([
-            'gameId' => $game->gameId,
-            'title' => $game->title,
-            'author' => $game->author,
-            'translators' => $game->translators,
-            'description' => $game->description,
-            'language' => $game->language,
-            'version' => $game->version,
-            'preface' => $game->preface,
-        ]);
+        $gameAsArray = array_filter($game->toArray()['game']);
 
         $table = new Table($output);
         array_walk($gameAsArray, fn($value, $key) => $table->addRow([$key, $value]));

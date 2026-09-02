@@ -3,10 +3,12 @@ declare(strict_types=1);
 
 namespace App\Story\Nodes;
 
+use Elone\Core\Contract\Arrayable;
+
 /**
  * @phpstan-type ChoiceData array{content: string, target: int}
  */
-class Choice
+class Choice implements Arrayable
 {
     public protected(set) readonly string $content;
 
@@ -28,5 +30,16 @@ class Choice
             content: $data['content'],
             target: $data['target'],
         );
+    }
+
+    /**
+     * @return ChoiceData
+     */
+    public function toArray(): array
+    {
+        return [
+            'content' => $this->content,
+            'target' => $this->target,
+        ];
     }
 }

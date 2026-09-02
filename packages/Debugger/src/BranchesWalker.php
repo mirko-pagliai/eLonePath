@@ -138,15 +138,21 @@ class BranchesWalker
      */
     protected function scanNode(Node $node, array $branch): void
     {
-        // Already reached via another branch: this branch merges here, nothing more to record.
+        $branch[] = $node;
+
+        /**
+         * This node had already been reached via another branch.
+         *
+         * The current branch is still added, but no further traversal is made.
+         */
         if (!isset($this->remainingNodes[$node->id])) {
+            $this->branches[] = $branch;
+
             return;
         }
 
         // Marked as visited immediately, before recursing into targets — this is what makes merges and cycles safe.
         unset($this->remainingNodes[$node->id]);
-
-        $branch[] = $node;
 
         if ($node instanceof VictoryNode || $node instanceof DefeatNode) {
             $this->branches[] = $branch;

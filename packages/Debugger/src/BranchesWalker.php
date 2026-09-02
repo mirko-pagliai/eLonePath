@@ -116,7 +116,7 @@ class BranchesWalker
     }
 
     /**
-     * Runs the walk exactly once, however many of the getters above are called.
+     * Runs the walk exactly once; however, many of the getters above are called.
      */
     protected function walk(): void
     {

@@ -292,7 +292,11 @@
         },
         "22": {
             "type": "victory",
-            "content": "Attraversi il ponte senza fermarti.\n\nIl cavaliere rimane immobile alle tue spalle. Quando ti volti, non c'è più nessuno.\n\nDall'altra parte del torrente trovi un vecchio sentiero nascosto tra gli alberi. Lo segui e, dopo pochi minuti, sbuchi ai piedi della collina, proprio davanti alla torre.\n\nLa porta è aperta.\n\nEntri.\n\nRiconosci subito la sala circolare che avevi visto entrando nella torre. È vuota, ad eccezione della statua del cavaliere. La spada che stringeva nella mano è ancora spezzata.\n\nAi piedi della statua trovi una lama spezzata identica a quella che avevi visto tra le sue mani. L'elsa porta lo stesso simbolo che avevi notato sulla statua.\n\nQuando raccogli la spada, la lama emette un breve lampo di luce.\n\nLa statua si incrina. La torre trema. Poi tutto torna immobile.\n\nAll'alba lasci la collina. La nebbia si è dissolta e, per la prima volta dopo molti anni, la torre non sembra più incombere sul bosco.\n\nQuando torni a Valdombra, gli abitanti capiscono subito che qualcosa è cambiato.\n\nLa maledizione è spezzata."
+            "content": "Attraversi il ponte senza fermarti.\n\nIl cavaliere rimane immobile alle tue spalle. Quando ti volti, non c'è più nessuno.\n\nDall'altra parte del torrente trovi un vecchio sentiero nascosto tra gli alberi. Lo segui e, dopo pochi minuti, sbuchi ai piedi della collina, proprio davanti alla torre.\n\nLa porta è aperta.\n\nEntri.\n\nRiconosci subito la sala circolare che avevi visto entrando nella torre. È vuota, ad eccezione della statua del cavaliere. La spada che stringeva nella mano è ancora spezzata.\n\nAi piedi della statua trovi una lama spezzata identica a quella che avevi visto tra le sue mani. L'elsa porta lo stesso simbolo che avevi notato sulla statua.\n\nQuando raccogli la spada, la lama emette un breve lampo di luce.\n\nLa statua si incrina. La torre trema. Poi tutto torna immobile.\n\nAll'alba lasci la collina. La nebbia si è dissolta e, per la prima volta dopo molti anni, la torre non sembra più incombere sul bosco.\n\nQuando torni a Valdombra, gli abitanti capiscono subito che qualcosa è cambiato.\n\nLa maledizione è spezzata.",
+            "image": {
+                "path": "22.jpg",
+                "title": "Cavaliere in rovina e spada spezzata"
+            }
         },
         "24": {
             "type": "passage",

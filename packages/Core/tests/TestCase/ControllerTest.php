@@ -24,22 +24,28 @@ class ControllerTest extends TestCase
     public function testSet(): void
     {
         $view = new class extends View {
+            /**
+             * @var array<string, mixed>
+             */
             public array $data = [];
         };
 
         $controller = new class (view: $view) extends Controller {
-            public readonly View $view;
-
-            public function set(array $data): self
+            public function set(array $data): static
             {
                 return parent::set($data);
+            }
+
+            public function getView(): View
+            {
+                return $this->view;
             }
         };
 
         $result = $controller->set(['key' => 'value']);
         $this->assertSame($controller, $result);
 
-        $this->assertSame('value', $controller->view->get('key'));
+        $this->assertSame('value', $controller->getView()->get('key'));
     }
 
     /**

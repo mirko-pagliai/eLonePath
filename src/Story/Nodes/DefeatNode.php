@@ -23,7 +23,11 @@ class DefeatNode extends Node
      */
     public function toArray(): array
     {
-        return $this->baseArray();
+        return [
+            'content' => $this->content,
+            'image' => $this->image?->toArray(),
+            'type' => $this->getType()->value,
+        ];
     }
 
     /**

@@ -63,7 +63,22 @@ class Game implements Arrayable
     }
 
     /**
-     * @return GameData
+     * `Game` can only promise as much precision about `nodes` as `Node::toArray()` itself promises — which, per
+     * design, is just `array<string, mixed>` (see `Node::toArray()`'s own docblock for why).
+     *
+     * @return array{
+     *     game: array{
+     *         id: string,
+     *         title: string,
+     *         author: string,
+     *         translators: string,
+     *         description: string,
+     *         language: string,
+     *         version: string,
+     *         preface: string,
+     *     },
+     *     nodes: array<int, array<string, mixed>>,
+     * }
      */
     public function toArray(): array
     {
@@ -109,6 +124,27 @@ class Game implements Arrayable
     }
 
     /**
+     * Creates a `Game` instance from a JSON string.
+     *
+     * @param string $json The JSON string.
+     * @return \App\Story\Game A Game instance created from the JSON data.
+     * @throws \RuntimeException If the JSON cannot be parsed or does not match the expected structure.
+     */
+    public static function createFromString(string $json): Game
+    {
+        try {
+            $data = self::decode($json);
+        } catch (RuntimeException $exception) {
+            throw new RuntimeException(
+                "Failed to parse JSON: {$exception->getMessage()}.",
+                previous: $exception,
+            );
+        }
+
+        return self::createFromArray($data);
+    }
+
+    /**
      * Creates a `Game` instance from a JSON file.
      *
      * @param string $path The file path to the JSON file.
@@ -133,19 +169,39 @@ class Game implements Arrayable
         }
 
         try {
-            $json = json_decode($contents, associative: true, flags: JSON_THROW_ON_ERROR);
-        } catch (JsonException $exception) {
+            $data = self::decode($contents);
+        } catch (RuntimeException $exception) {
             throw new RuntimeException(
                 "Failed to parse `$path`: {$exception->getMessage()}.",
                 previous: $exception,
             );
         }
 
-        if (!is_array($json)) {
-            throw new RuntimeException("Failed to parse `$path`: expected a JSON object at the top level.");
+        return self::createFromArray($data);
+    }
+
+    /**
+     * Decodes a JSON string and validates it has the shape `createFromArray()` expects.
+     *
+     * The message on the exception it throws is the bare reason only — `createFromString()` and `createFromFile()`
+     * each wrap it with their own context (a file path, or none) before it reaches the caller.
+     *
+     * @return GameData
+     * @throws \RuntimeException If the JSON cannot be parsed or does not match the expected structure.
+     */
+    private static function decode(string $json): array
+    {
+        try {
+            $data = json_decode($json, associative: true, flags: JSON_THROW_ON_ERROR);
+        } catch (JsonException $exception) {
+            throw new RuntimeException($exception->getMessage(), previous: $exception);
         }
 
-        /** @var GameData $json */
-        return self::createFromArray($json);
+        if (!is_array($data)) {
+            throw new RuntimeException('expected a JSON object at the top level.');
+        }
+
+        /** @var GameData $data */
+        return $data;
     }
 }

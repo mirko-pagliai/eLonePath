@@ -147,13 +147,15 @@ class HtmlHelperTest extends TestCase
     #[Test]
     #[TestWith(['This is a normal string', '<p>This is a normal string</p>'])]
     #[TestWith(['This is a **bold** string', '<p>This is a <strong>bold</strong> string</p>'])]
-    public function testMarkdown($string, $expected): void
+    public function testMarkdown(string $string, string $expected): void
     {
         $result = $this->htmlHelper->markdown($string);
         $this->assertSame($expected, trim($result));
     }
 
     /**
+     * @param array<string|int, string|int|float|bool> $route
+     *
      * @link \Elone\Core\View\Helper\HtmlHelper::url()
      */
     #[Test]

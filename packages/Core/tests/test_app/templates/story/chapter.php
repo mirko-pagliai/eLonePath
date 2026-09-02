@@ -23,9 +23,9 @@ use App\Story\Nodes\VictoryNode;
 
 <?php if ($node->image !== null) : ?>
     <?= $this->Html->image(
-        path: "/assets/stories/$game->gameId/img/{$node->image['path']}",
+        path: "/assets/stories/$game->gameId/img/{$node->image->path}",
         options: [
-            'alt' => $node->image['title'],
+            'alt' => $node->image->title,
             'class' => 'img-fluid mx-auto mb-5 d-block',
         ],
     ) ?>

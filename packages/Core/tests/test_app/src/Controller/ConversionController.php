@@ -27,6 +27,9 @@ class ConversionController extends Controller
     {
     }
 
+    /**
+     * @param array<mixed> $value
+     */
     public function withArray(array $value): void
     {
     }

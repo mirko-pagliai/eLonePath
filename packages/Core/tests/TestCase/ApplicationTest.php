@@ -58,7 +58,7 @@ class ApplicationTest extends TestCase
 
         ob_start();
         $this->application->run();
-        $output = ob_get_clean();
+        $output = ob_get_clean() ?: '';
 
         $this->assertSame('Hello from ResponseController.', $output);
         $this->assertSame(200, http_response_code());
@@ -75,7 +75,7 @@ class ApplicationTest extends TestCase
 
         ob_start();
         $this->application->run();
-        $output = ob_get_clean();
+        $output = ob_get_clean() ?: '';
 
         $this->assertSame(404, http_response_code());
         $this->assertStringContainsString('404', $output);

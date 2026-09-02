@@ -51,9 +51,9 @@ abstract class Controller
      * Sets the provided data into the view.
      *
      * @param array<string, mixed> $data The data to make available in the rendered template.
-     * @return self
+     * @return static
      */
-    protected function set(array $data): self
+    protected function set(array $data): static
     {
         $this->view->set(data: $data);
 

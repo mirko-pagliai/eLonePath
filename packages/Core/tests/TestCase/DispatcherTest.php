@@ -20,26 +20,6 @@ use TestApp\Controller\ConversionController;
 #[CoversClass(Dispatcher::class)]
 class DispatcherTest extends TestCase
 {
-    public Dispatcher $dispatcher;
-
-    /**
-     * @inheritDoc
-     */
-    protected function setUp(): void
-    {
-        $this->dispatcher = new readonly class extends Dispatcher {
-            public function templateName(Route $route): string
-            {
-                return parent::templateName($route);
-            }
-
-            public static function resolveArguments(ReflectionMethod $method, array $params): array
-            {
-                return parent::resolveArguments($method, $params);
-            }
-        };
-    }
-
     /**
      * @link \Elone\Core\Dispatcher::templateName()
      */
@@ -49,17 +29,27 @@ class DispatcherTest extends TestCase
     #[TestWith(['users-settings/view', 'UsersSettings', 'view'])]
     public function testTemplateName(string $expectedTemplateName, string $controller, string $action): void
     {
+        $dispatcher = new readonly class extends Dispatcher {
+            public function templateName(Route $route): string
+            {
+                return parent::templateName($route);
+            }
+        };
+
         $route = new readonly class (controller: $controller, action: $action) extends Route {
             public function __construct(public string $controller, public string $action, public array $params = [])
             {
             }
         };
 
-        $result = $this->dispatcher->templateName($route);
+        $result = $dispatcher->templateName($route);
         $this->assertSame($expectedTemplateName, $result);
     }
 
     /**
+     * @param list<string> $params
+     * @param list<mixed> $expected
+     *
      * @link \Elone\Core\Dispatcher::resolveArguments()
      */
     #[Test]
@@ -70,9 +60,16 @@ class DispatcherTest extends TestCase
     #[TestWith(['withString', ['hello'], ['hello']])]
     public function testResolveArguments(string $action, array $params, array $expected): void
     {
+        $dispatcher = new readonly class extends Dispatcher {
+            public static function resolveArguments(ReflectionMethod $method, array $params): array
+            {
+                return parent::resolveArguments($method, $params);
+            }
+        };
+
         $method = new ReflectionMethod(ConversionController::class, $action);
 
-        $result = $this->dispatcher::resolveArguments($method, $params);
+        $result = $dispatcher::resolveArguments($method, $params);
         $this->assertSame($expected, $result);
     }
 
@@ -85,11 +82,18 @@ class DispatcherTest extends TestCase
     #[TestWith(['withBool', 'maybe', "Invalid boolean parameter 'maybe' for `\$value`."])]
     public function testResolveArgumentsWithInvalidValue(string $action, string $value, string $expectedMessage): void
     {
+        $dispatcher = new readonly class extends Dispatcher {
+            public static function resolveArguments(ReflectionMethod $method, array $params): array
+            {
+                return parent::resolveArguments($method, $params);
+            }
+        };
+
         $method = new ReflectionMethod(ConversionController::class, $action);
 
         $this->expectException(HttpException::class);
         $this->expectExceptionMessageIs($expectedMessage);
-        $this->dispatcher::resolveArguments($method, [$value]);
+        $dispatcher::resolveArguments($method, [$value]);
     }
 
     /**
@@ -98,11 +102,18 @@ class DispatcherTest extends TestCase
     #[Test]
     public function testResolveArgumentsWithUnsupportedType(): void
     {
+        $dispatcher = new readonly class extends Dispatcher {
+            public static function resolveArguments(ReflectionMethod $method, array $params): array
+            {
+                return parent::resolveArguments($method, $params);
+            }
+        };
+
         $method = new ReflectionMethod(ConversionController::class, 'withArray');
 
         $this->expectException(UnsupportedParameterTypeException::class);
         $this->expectExceptionMessageIs("Unsupported parameter type 'array' for `\$value`.");
-        $this->dispatcher::resolveArguments($method, ['irrelevant']);
+        $dispatcher::resolveArguments($method, ['irrelevant']);
     }
 
     /**
@@ -111,12 +122,19 @@ class DispatcherTest extends TestCase
     #[Test]
     public function testResolveArgumentsWithWrongParameterCount(): void
     {
+        $dispatcher = new readonly class extends Dispatcher {
+            public static function resolveArguments(ReflectionMethod $method, array $params): array
+            {
+                return parent::resolveArguments($method, $params);
+            }
+        };
+
         $method = new ReflectionMethod(ConversionController::class, 'withInt');
 
         $this->expectException(HttpException::class);
         $this->expectExceptionMessageIs(
             'Invalid number of parameters for TestApp\Controller\ConversionController::withInt(). Expected 1, received 0.',
         );
-        $this->dispatcher::resolveArguments($method, []);
+        $dispatcher::resolveArguments($method, []);
     }
 }

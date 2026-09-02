@@ -30,11 +30,11 @@ class BranchesWalker
     {
         $errors = [];
 
-        if ($this->getWinningBranches() < 0) {
+        if (!count($this->getWinningBranches())) {
             $errors[] = 'No winning branches found';
         }
 
-        if ($this->getDefeatBranches() < 0) {
+        if (!count($this->getDefeatBranches())) {
             $errors[] = 'No defeat branches found';
         }
 

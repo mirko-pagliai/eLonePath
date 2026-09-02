@@ -41,6 +41,8 @@ readonly class NodeImagesWalker
 
             if ($info === false || $info['mime'] !== 'image/jpeg') {
                 $errors[] = "Node image path `$fullPath` for node $nodeId is not a valid jpeg file";
+
+                continue;
             }
 
             if ($info[0] !== 960) {

@@ -38,7 +38,7 @@ class View
 
     public function __construct()
     {
-        $this->Html = new HtmlHelper();
+        $this->loadHelper(name: 'Html', helper: new HtmlHelper());
     }
 
     /**

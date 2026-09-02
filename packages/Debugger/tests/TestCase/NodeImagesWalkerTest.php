@@ -49,12 +49,31 @@ class NodeImagesWalkerTest extends TestCase
     }
 
     /**
+     * A genuinely empty file is checked for explicitly, before `getimagesize()` — calling that on a 0-byte file
+     * triggers a PHP notice as a side effect, which this avoids by never making the call in the first place.
+     *
      * @link \Elone\Debugger\NodeImagesWalker::__invoke()
      */
     #[Test]
-    public function testInvokeWithNotAnImage(): void
+    public function testInvokeWithEmptyFile(): void
     {
         $walker = new NodeImagesWalker($this->gameWithNodeImage('not-an-image.txt'));
+
+        $errors = $walker();
+        $this->assertCount(1, $errors);
+        $this->assertStringContainsString('is an empty file', $errors[0]);
+    }
+
+    /**
+     * A non-empty file that still isn't a valid image — distinct from the empty-file case above, which is caught
+     * earlier and never reaches this check.
+     *
+     * @link \Elone\Debugger\NodeImagesWalker::__invoke()
+     */
+    #[Test]
+    public function testInvokeWithNonEmptyNonImageFile(): void
+    {
+        $walker = new NodeImagesWalker($this->gameWithNodeImage('wrong-content.txt'));
 
         $errors = $walker();
         $this->assertCount(1, $errors);

@@ -43,7 +43,7 @@ class NodeImagesWalkerTest extends TestCase
     #[Test]
     public function testInvokeWithValidImage(): void
     {
-        $walker = new NodeImagesWalker($this->gameWithNodeImage('correct.jpg'));
+        $walker = new NodeImagesWalker($this->gameWithNodeImage('correct_960x600.jpg'));
 
         $this->assertSame([], $walker());
     }
@@ -84,7 +84,7 @@ class NodeImagesWalkerTest extends TestCase
     #[Test]
     public function testInvokeWithWrongWidth(): void
     {
-        $walker = new NodeImagesWalker($this->gameWithNodeImage('wrong-width.jpg'));
+        $walker = new NodeImagesWalker($this->gameWithNodeImage('wrong-width_700x600.jpg'));
 
         $errors = $walker();
         $this->assertCount(1, $errors);
@@ -97,7 +97,7 @@ class NodeImagesWalkerTest extends TestCase
     #[Test]
     public function testInvokeWithTooTall(): void
     {
-        $walker = new NodeImagesWalker($this->gameWithNodeImage('too-tall.jpg'));
+        $walker = new NodeImagesWalker($this->gameWithNodeImage('too-tall_960x1200.jpg'));
 
         $errors = $walker();
         $this->assertCount(1, $errors);
@@ -113,7 +113,7 @@ class NodeImagesWalkerTest extends TestCase
     #[Test]
     public function testInvokeWithShorterImage(): void
     {
-        $walker = new NodeImagesWalker($this->gameWithNodeImage('short.jpg'));
+        $walker = new NodeImagesWalker($this->gameWithNodeImage('short_960x400.jpg'));
 
         $this->assertSame([], $walker());
     }
@@ -156,7 +156,10 @@ class NodeImagesWalkerTest extends TestCase
     {
         $game = Game::createFromString('{' . self::GAME_HEADER . ', "nodes": {
             "1": {"content": "no image here", "type": "passage", "choices": [{"content": "go", "target": 2}]},
-            "2": {"content": "c", "type": "victory", "image": {"path": "correct.jpg", "title": "An illustration"}}
+            "2": {
+                "content": "c", "type": "victory",
+                "image": {"path": "correct_960x600.jpg", "title": "An illustration"}
+            }
         }}');
 
         $walker = new NodeImagesWalker($game);

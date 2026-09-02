@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Elone\Core\View;
 
+use Elone\Core\Exception\HelperNotFoundException;
 use Elone\Core\Exception\LayoutNotFoundException;
 use Elone\Core\Exception\TemplateNotFoundException;
 use Elone\Core\View\Helper\HtmlHelper;
@@ -16,11 +17,19 @@ use Throwable;
  * template, taking its own data explicitly rather than whatever's been `set()` on the view.
  *
  * Inside any template, `$this` is the `View` instance rendering it — giving access to `Html` (this view's
- * `HtmlHelper`) and to `element()` for including further snippets.
+ * `HtmlHelper`, always available), to any further helper registered via `loadHelper()` (e.g. `$this->Story`), and to
+ * `element()` for including further snippets. `Html` covers what's generic enough to belong in this distributable core;
+ * anything specific to a particular app's own domain is loaded as its own helper instead, by that app — `View` itself
+ * doesn't know what those are.
  */
 class View
 {
     public readonly HtmlHelper $Html;
+
+    /**
+     * @var array<string, object>
+     */
+    private array $helpers = [];
 
     /**
      * @var array<string, mixed>
@@ -30,6 +39,32 @@ class View
     public function __construct()
     {
         $this->Html = new HtmlHelper();
+    }
+
+    /**
+     * Registers `$helper` under `$name`, making it available in templates as `$this->$name`.
+     *
+     * @param string $name The name templates will use to access this helper — e.g. `'Story'` for `$this->Story`.
+     * @param object $helper The helper instance.
+     * @return void
+     */
+    public function loadHelper(string $name, object $helper): void
+    {
+        $this->helpers[$name] = $helper;
+    }
+
+    /**
+     * Gives templates access to a helper registered via `loadHelper()`, as `$this->$name`.
+     *
+     * @throws \Elone\Core\Exception\HelperNotFoundException If no helper was registered under `$name`.
+     */
+    public function __get(string $name): object
+    {
+        if (!isset($this->helpers[$name])) {
+            throw new HelperNotFoundException("Helper not loaded: `$name`.");
+        }
+
+        return $this->helpers[$name];
     }
 
     /**

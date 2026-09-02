@@ -7,9 +7,10 @@ declare(strict_types=1);
  *
  * @link \App\Controller\StoryController::start()
  */
-?>
 
-<?= $this->element(name: 'chapter_header', data: ['title' => h($game->title), 'subtitle' => 'Introduzione']) ?>
+/** @link templates/element/chapter_header.php */
+echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'subtitle' => 'Introduzione']);
+?>
 
 <section id="story-content" class="fs-4 mb-4">
     <?= $this->Html->markdown(markdown: $game->preface) ?>

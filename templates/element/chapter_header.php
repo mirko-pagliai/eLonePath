@@ -16,10 +16,10 @@ if (!$title) {
 
 <header class="d-flex justify-content-end mb-5">
     <div class="d-flex flex-column align-self-center text-end">
-        <h3 id="story-title" class="m-0"><?= $title ?></h3>
+        <h3 id="story-title" class="m-0"><?= h($title) ?></h3>
 
         <?php if ($subtitle) : ?>
-        <div id="story-page" class="story-page fs-4"><?= $subtitle ?></div>
+        <div id="story-page" class="story-page fs-4"><?= h($subtitle) ?></div>
         <?php endif; ?>
     </div>
 

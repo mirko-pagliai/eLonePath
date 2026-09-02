@@ -11,9 +11,10 @@ declare(strict_types=1);
  *
  * @link \App\Controller\StoryController::roll()
  */
-?>
 
-<?= $this->element(name: 'chapter_header', data: ['title' => h($game->title), 'subtitle' => 'Lancio dei dadi']) ?>
+/** @link templates/element/chapter_header.php */
+echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'subtitle' => 'Lancio dei dadi']);
+?>
 
 <section id="dice-result" class="fs-4 mb-4 text-center">
     <p class="mb-2">

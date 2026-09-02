@@ -84,7 +84,7 @@
             "choices": [
                 {
                     "content": "Se vuoi seguire la luce, vai a pagina {{page}}",
-                    "target": 8
+                    "target": 25
                 },
                 {
                     "content": "Se vuoi seguire il torrente, vai a pagina {{page}}",
@@ -311,6 +311,38 @@
                     "target": 21
                 }
             ]
+        },
+        "25": {
+            "type": "passage",
+            "content": "Raggiungi la cappella. L'edificio appare ancora più isolato da vicino: le pietre sono annerite dal tempo e l'edera ricopre buona parte delle pareti.\n\nLa porta principale è socchiusa. Una vecchia lanterna brucia accanto all'ingresso, anche se non riesci a capire chi possa averla accesa.\n\nPrima di entrare, noti una piccola porta laterale quasi completamente nascosta dalla vegetazione.",
+            "choices": [
+                {
+                    "content": "Se vuoi entrare nella cappella, vai a pagina {{page}}",
+                    "target": 8
+                },
+                {
+                    "content": "Se vuoi controllare la porta laterale, vai a pagina {{page}}",
+                    "target": 26
+                }
+            ],
+            "image": {
+                "path": "25.jpg",
+                "title": "La cappella nella foresta"
+            }
+        },
+        "26": {
+            "type": "passage",
+            "content": "La porta laterale conduce a una piccola stanza che sembra essere appartenuta al custode della cappella.\n\nUn vecchio tavolo occupa quasi tutto lo spazio. Sopra sono rimasti alcuni libri, candele consumate e fogli ingialliti. La polvere ricopre ogni cosa e nessuno sembra essere entrato qui da molto tempo.\n\nNon trovi nulla che possa spiegare chi abbia acceso la lanterna o perché la cappella sia ancora illuminata.\n\nTorni verso la porta principale.",
+            "choices": [
+                {
+                    "content": "Torna davanti alla cappella, vai a pagina {{page}}",
+                    "target": 25
+                }
+            ],
+            "image": {
+                "path": "26.jpg",
+                "title": "La stanza del custode"
+            }
         }
     }
 }

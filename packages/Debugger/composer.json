@@ -23,6 +23,12 @@
 		"phpunit/phpunit": "^13.2",
 		"symfony/var-dumper": "^8.1"
 	},
+	"extra": {
+		"elone/console-commands": [
+			"Elone\\Debugger\\Command\\CheckBranchesCommand",
+			"Elone\\Debugger\\Command\\CheckNodeImagesCommand"
+		]
+	},
 	"config": {
 		"allow-plugins": {
 			"dealerdirect/phpcodesniffer-composer-installer": true

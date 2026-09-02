@@ -246,7 +246,11 @@
         },
         "18": {
             "type": "defeat",
-            "content": "Il cavaliere scuote lentamente la testa.\n\nLa stanza sprofonda nell'oscurità e senti il peso di qualcosa che ti afferra alle spalle.\n\nCerchi di reagire, ma è ormai troppo tardi.\n\nLa porta della torre non si aprirà più per te."
+            "content": "Il cavaliere scuote lentamente la testa.\n\nLa stanza sprofonda nell'oscurità e senti il peso di qualcosa che ti afferra alle spalle.\n\nCerchi di reagire, ma è ormai troppo tardi.\n\nLa porta della torre non si aprirà più per te.",
+            "image": {
+                "path": "generic_death.jpg",
+                "title": "Teschio antico tra le Ragnatele"
+            }
         },
         "19": {
             "type": "passage",

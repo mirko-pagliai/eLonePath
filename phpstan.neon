@@ -7,7 +7,11 @@ parameters:
     paths:
         - config
         - src
+        - packages/Core/config
         - packages/Core/src
+        - packages/Core/tests
+        - packages/Debugger/src
+        - packages/Debugger/tests
         - templates
         - webroot
 

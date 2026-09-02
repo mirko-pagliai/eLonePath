@@ -13,6 +13,7 @@
 	},
 	"require-dev": {
 		"cakephp/cakephp-codesniffer": "^5.3.2",
+		"elone/debugger": "*",
 		"josegonzalez/dotenv": "4.0.0",
 		"phpstan/phpstan": "^2.2",
 		"phpunit/phpunit": "^13.2",
@@ -22,6 +23,10 @@
 		{
 			"type": "path",
 			"url": "packages/Core"
+		},
+		{
+			"type": "path",
+			"url": "packages/Debugger"
 		}
 	],
 	"autoload": {

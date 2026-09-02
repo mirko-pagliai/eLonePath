@@ -19,6 +19,14 @@ class VictoryNode extends Node
     }
 
     /**
+     * @return VictoryNodeData
+     */
+    public function toArray(): array
+    {
+        return $this->baseArray();
+    }
+
+    /**
      * @param VictoryNodeData $data
      */
     public static function createFromArray(int $id, string $gameId, array $data): VictoryNode

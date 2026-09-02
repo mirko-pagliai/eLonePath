@@ -114,6 +114,49 @@ class GameTest extends TestCase
     }
 
     /**
+     * `sampleData()` deliberately omits the optional `image` key on its nodes and doesn't order keys the way
+     * `toArray()` does — this is the complete shape `toArray()` actually produces, `image: null` and all, used to
+     * verify the round trip precisely rather than comparing against `sampleData()` itself.
+     *
+     * @link \App\Story\Game::toArray()
+     */
+    #[Test]
+    public function testToArray(): void
+    {
+        $game = Game::createFromArray($this->sampleData());
+
+        $result = $game->toArray();
+
+        $this->assertSame([
+            'game' => [
+                'id' => 'test-game',
+                'title' => 'Test Game',
+                'author' => 'Test Author',
+                'translators' => '',
+                'description' => 'A game for testing.',
+                'language' => 'it',
+                'version' => '1.0',
+                'preface' => 'A short preface for testing.',
+            ],
+            'nodes' => [
+                1 => [
+                    'content' => 'Start here.',
+                    'image' => null,
+                    'type' => 'passage',
+                    'choices' => [
+                        ['content' => 'Go to page 2', 'target' => 2],
+                    ],
+                ],
+                2 => [
+                    'content' => 'The end.',
+                    'image' => null,
+                    'type' => 'victory',
+                ],
+            ],
+        ], $result);
+    }
+
+    /**
      * @link \App\Story\Game::createFromFile()
      */
     #[Test]

@@ -15,11 +15,11 @@ use App\Story\Nodes\PassageNode;
 use App\Story\Nodes\VictoryNode;
 ?>
 
-    <header class="mb-5 text-end">
-        <?= $this->element('story-title', ['game' => $game]) ?>
+<header class="mb-5 text-end">
+    <?= $this->element('story-title', ['game' => $game]) ?>
 
-        <div id="story-page" class="story-page fs-5">Pagina <?= $node->id ?></div>
-    </header>
+    <div id="story-page" class="story-page fs-5">Pagina <?= $node->id ?></div>
+</header>
 
 <?php if ($node->image !== null) : ?>
     <?= $this->Html->image(
@@ -94,4 +94,3 @@ use App\Story\Nodes\VictoryNode;
         <?php endif; ?>
     </div>
 <?php endif; ?>
-

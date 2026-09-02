@@ -54,6 +54,22 @@ class DiceNode extends Node
     }
 
     /**
+     * @return DiceNodeData
+     */
+    public function toArray(): array
+    {
+        return [
+            ...$this->baseArray(),
+            'dice' => [
+                'required_rolls' => $this->requiredRolls,
+                'minimum' => $this->minimum,
+                'target_success' => $this->targetSuccess,
+                'target_failure' => $this->targetFailure,
+            ],
+        ];
+    }
+
+    /**
      * @param DiceNodeData $data
      */
     public static function createFromArray(int $id, string $gameId, array $data): DiceNode

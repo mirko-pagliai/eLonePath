@@ -1,0 +1,37 @@
+{
+	"name": "elone/debugger",
+	"type": "library",
+	"license": "MIT",
+	"autoload": {
+		"psr-4": {
+			"Elone\\Debugger\\": "src/"
+		}
+	},
+	"autoload-dev": {
+		"psr-4": {
+			"Elone\\Debugger\\Test\\": "tests/TestCase/",
+			"TestApp\\": "tests/test_app/src"
+		}
+	},
+	"require": {
+		"php": "^8.4",
+		"symfony/console": "^8.1"
+	},
+	"require-dev": {
+		"cakephp/cakephp-codesniffer": "^5.3.2",
+		"phpstan/phpstan": "^2.2",
+		"phpunit/phpunit": "^13.2",
+		"symfony/var-dumper": "^8.1"
+	},
+	"extra": {
+		"elone/console-commands": [
+			"Elone\\Debugger\\Command\\CheckBranchesCommand",
+			"Elone\\Debugger\\Command\\CheckNodeImagesCommand"
+		]
+	},
+	"config": {
+		"allow-plugins": {
+			"dealerdirect/phpcodesniffer-composer-installer": true
+		}
+	}
+}

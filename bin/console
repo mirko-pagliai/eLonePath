@@ -1,0 +1,70 @@
+#!/usr/bin/env php
+<?php
+declare(strict_types=1);
+
+require dirname(__DIR__) . '/vendor/autoload.php';
+require dirname(__DIR__) . '/config/bootstrap.php';
+
+use Symfony\Component\Console\Application;
+
+if (!class_exists(Application::class)) {
+    die(
+        'Symfony Console is not installed.' . PHP_EOL .
+        'Install a package that provides console commands (e.g. `composer require --dev elone/debugger`) to use the console.' . PHP_EOL
+    );
+}
+
+/**
+ * Reads `extra["elone/console-commands"]` from every installed package's own `composer.json` — as recorded by
+ * Composer in `vendor/composer/installed.json` — and returns every command class name found there. A package
+ * registers its own commands by declaring that key; nothing here needs to know about any specific package, so a
+ * future plugin only needs to be installed to show up.
+ *
+ * @return list<class-string>
+ */
+function discoverConsoleCommands(): array
+{
+    $installedFile = dirname(__DIR__) . '/vendor/composer/installed.json';
+
+    if (!is_readable($installedFile)) {
+        return [];
+    }
+
+    $contents = file_get_contents($installedFile);
+    if ($contents === false) {
+        return [];
+    }
+
+    $data = json_decode($contents, associative: true);
+    if (!is_array($data) || !is_array($data['packages'] ?? null)) {
+        return [];
+    }
+
+    $commandClasses = [];
+
+    foreach ($data['packages'] as $package) {
+        $declared = $package['extra']['elone/console-commands'] ?? null;
+        if (!is_array($declared)) {
+            continue;
+        }
+
+        foreach ($declared as $commandClass) {
+            if (is_string($commandClass)) {
+                $commandClasses[] = $commandClass;
+            }
+        }
+    }
+
+    return $commandClasses;
+}
+
+$application = new Application();
+
+foreach (discoverConsoleCommands() as $commandClass) {
+    if (class_exists($commandClass)) {
+        $application->addCommand(new $commandClass());
+    }
+}
+
+$application->run();
+

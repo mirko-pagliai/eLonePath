@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Story;
 
 use App\Story\Nodes\Node;
+use Elone\Core\Contract\Arrayable;
 use Elone\Core\Exception\HttpException;
 use JsonException;
 use RuntimeException;
@@ -27,7 +28,7 @@ use RuntimeException;
  *     nodes: array<int, PassageNodeData|DiceNodeData|VictoryNodeData|DefeatNodeData>,
  * }
  */
-class Game
+class Game implements Arrayable
 {
     /**
      * @param array<int, \App\Story\Nodes\Node> $nodes
@@ -59,6 +60,29 @@ class Game
         }
 
         return $this->nodes[$nodeId];
+    }
+
+    /**
+     * @return GameData
+     */
+    public function toArray(): array
+    {
+        return [
+            'game' => [
+                'id' => $this->gameId,
+                'title' => $this->title,
+                'author' => $this->author,
+                'translators' => $this->translators,
+                'description' => $this->description,
+                'language' => $this->language,
+                'version' => $this->version,
+                'preface' => $this->preface,
+            ],
+            'nodes' => array_map(
+                callback: fn(Node $node): array => $node->toArray(),
+                array: $this->nodes,
+            ),
+        ];
     }
 
     /**

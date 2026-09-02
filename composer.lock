@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "c12a7f0cd6f27e58922a2aac21b167ea",
+    "content-hash": "955587bf8674cb23d1f72b7de077ca8c",
     "packages": [
         {
             "name": "elone/core",
@@ -39,42 +39,6 @@
             "autoload-dev": {
                 "psr-4": {
                     "Elone\\Core\\Test\\": "tests/TestCase/",
-                    "TestApp\\": "tests/test_app/src"
-                }
-            },
-            "license": [
-                "MIT"
-            ],
-            "transport-options": {
-                "relative": true
-            }
-        },
-        {
-            "name": "elone/debugger",
-            "version": "dev-main-with-console",
-            "dist": {
-                "type": "path",
-                "url": "packages/Debugger",
-                "reference": "186b6a26530b7642716609034f7d5e4a3ea17b6d"
-            },
-            "require": {
-                "php": "^8.4"
-            },
-            "require-dev": {
-                "cakephp/cakephp-codesniffer": "^5.3.2",
-                "phpstan/phpstan": "^2.2",
-                "phpunit/phpunit": "^13.2",
-                "symfony/var-dumper": "^8.1"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-4": {
-                    "Elone\\Debugger\\": "src/"
-                }
-            },
-            "autoload-dev": {
-                "psr-4": {
-                    "Elone\\Debugger\\Test\\": "tests/TestCase/",
                     "TestApp\\": "tests/test_app/src"
                 }
             },
@@ -449,6 +413,43 @@
                 }
             ],
             "time": "2026-05-06T08:26:05+00:00"
+        },
+        {
+            "name": "elone/debugger",
+            "version": "dev-main-with-console",
+            "dist": {
+                "type": "path",
+                "url": "packages/Debugger",
+                "reference": "0ff377423fde401c236b2becb4b4ec7dd81f5387"
+            },
+            "require": {
+                "php": "^8.4",
+                "symfony/console": "^8.1"
+            },
+            "require-dev": {
+                "cakephp/cakephp-codesniffer": "^5.3.2",
+                "phpstan/phpstan": "^2.2",
+                "phpunit/phpunit": "^13.2",
+                "symfony/var-dumper": "^8.1"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Elone\\Debugger\\": "src/"
+                }
+            },
+            "autoload-dev": {
+                "psr-4": {
+                    "Elone\\Debugger\\Test\\": "tests/TestCase/",
+                    "TestApp\\": "tests/test_app/src"
+                }
+            },
+            "license": [
+                "MIT"
+            ],
+            "transport-options": {
+                "relative": true
+            }
         },
         {
             "name": "josegonzalez/dotenv",

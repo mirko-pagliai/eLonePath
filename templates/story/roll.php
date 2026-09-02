@@ -13,8 +13,19 @@ declare(strict_types=1);
  */
 ?>
 
-<header class="mb-5 text-end">
-    <h4 id="story-title" class="elone-title m-0"><?= h($game->title) ?></h4>
+<header class="d-flex justify-content-end mb-5">
+    <div class="d-flex flex-column align-self-end text-end">
+        <h3 id="story-title" class="m-0"><?= h($game->title) ?></h3>
+
+        <div id="story-page" class="story-page fs-4">Lancio dei dadi</div>
+    </div>
+
+    <div class="ms-1">
+        <?= $this->Html->image(
+            path: '/img/icons/icon-192.png',
+            options: ['style' => 'max-height: 70px'],
+        ) ?>
+    </div>
 </header>
 
 <section id="dice-result" class="fs-4 mb-4 text-center">

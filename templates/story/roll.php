@@ -13,20 +13,7 @@ declare(strict_types=1);
  */
 ?>
 
-<header class="d-flex justify-content-end mb-5">
-    <div class="d-flex flex-column align-self-end text-end">
-        <h3 id="story-title" class="m-0"><?= h($game->title) ?></h3>
-
-        <div id="story-page" class="story-page fs-4">Lancio dei dadi</div>
-    </div>
-
-    <div class="ms-1">
-        <?= $this->Html->image(
-            path: '/img/icons/icon-192.png',
-            options: ['style' => 'max-height: 70px'],
-        ) ?>
-    </div>
-</header>
+<?= $this->element(name: 'chapter_header', data: ['title' => h($game->title), 'subtitle' => 'Lancio dei dadi']) ?>
 
 <section id="dice-result" class="fs-4 mb-4 text-center">
     <p class="mb-2">
@@ -38,11 +25,11 @@ declare(strict_types=1);
         <?php endforeach; ?>
     </p>
 
-    <p class="fs-4">
+    <p class="fs-2">
         Totale: <strong><?= $total ?></strong>
     </p>
 
-    <p class="fs-3 mb-4">
+    <p class="fs-2 fst-italic mb-4">
     <?php if ($success) : ?>
         Hai superato la prova!
     <?php else : ?>

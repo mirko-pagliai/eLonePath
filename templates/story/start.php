@@ -9,20 +9,7 @@ declare(strict_types=1);
  */
 ?>
 
-<header class="d-flex justify-content-end mb-5">
-    <div class="d-flex flex-column align-self-end text-end">
-        <h3 id="story-title" class="m-0"><?= h($game->title) ?></h3>
-
-        <div id="story-page" class="story-page fs-4">Introduzione</div>
-    </div>
-
-    <div class="ms-1">
-        <?= $this->Html->image(
-            path: '/img/icons/icon-192.png',
-            options: ['style' => 'max-height: 70px'],
-        ) ?>
-    </div>
-</header>
+<?= $this->element(name: 'chapter_header', data: ['title' => h($game->title), 'subtitle' => 'Introduzione']) ?>
 
 <section id="story-content" class="fs-4 mb-4">
     <?= $this->Html->markdown(markdown: $game->preface) ?>

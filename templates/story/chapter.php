@@ -15,20 +15,7 @@ use App\Story\Nodes\PassageNode;
 use App\Story\Nodes\VictoryNode;
 ?>
 
-<header class="d-flex justify-content-end mb-5">
-    <div class="d-flex flex-column align-self-end text-end">
-        <h3 id="story-title" class="m-0"><?= h($game->title) ?></h3>
-
-        <div id="story-page" class="story-page fs-4">Pagina <?= $node->id ?></div>
-    </div>
-
-    <div class="ms-1">
-        <?= $this->Html->image(
-            path: '/img/icons/icon-192.png',
-            options: ['style' => 'max-height: 70px'],
-        ) ?>
-    </div>
-</header>
+<?= $this->element(name: 'chapter_header', data: ['title' => h($game->title), 'subtitle' => "Pagina $node->id"]) ?>
 
 <?php
 if ($node->image !== null) {

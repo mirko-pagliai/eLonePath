@@ -58,8 +58,11 @@ class BranchesWalker
             $errors[] = 'No defeat branches found';
         }
 
-        foreach ($this->getRemainingNodes() as $node) {
-            $errors[] = "Remaining node: $node->id";
+        if ($this->getRemainingNodes()) {
+            $errors[] = 'Remaining nodes: ' . implode(', ', array_map(
+                callback: fn(Node $node): int => $node->id,
+                array: $this->getRemainingNodes(),
+            ));
         }
 
         return $errors;

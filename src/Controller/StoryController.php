@@ -6,11 +6,13 @@ namespace App\Controller;
 use App\Story\Game;
 use App\Story\Nodes\DiceNode;
 use App\Utility\Dice;
-use Elone\Core\Controller;
 use Elone\Core\Server\Response;
 use RuntimeException;
 
-class StoryController extends Controller
+/**
+ * Manages the gameplay of interactive stories, handling game initialization, progression, and dice-based events.
+ */
+class StoryController extends AppController
 {
     /**
      * @param string $storyId The identifier of the story.

@@ -4,13 +4,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Story\Game;
-use Elone\Core\Controller;
 use Symfony\Component\Finder\Finder;
 
 /**
  * Handles the pages-related actions within the application.
  */
-final class PagesController extends Controller
+final class PagesController extends AppController
 {
     /**
      * Handles the logic for the home functionality.

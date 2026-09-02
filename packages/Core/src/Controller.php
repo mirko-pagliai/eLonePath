@@ -22,14 +22,32 @@ abstract class Controller
      *
      * @param \Elone\Core\Server\Request|null $request An optional `Request` instance. If not provided, the current
      * request is built via `Request::createFromGlobals()`.
-     * @param \Elone\Core\View\View|null $view An optional `View` instance. If not provided, a new instance will be
-     * created using the configuration.
+     * @param \Elone\Core\View\View|null $view An optional `View` instance. If not provided, a new instance of
+     * `viewClass()` will be created.
      * @return void
      */
     public function __construct(?Request $request = null, ?View $view = null)
     {
         $this->request = $request ?? Request::createFromGlobals();
-        $this->view = $view ?? new View();
+
+        if ($view !== null) {
+            $this->view = $view;
+        } else {
+            $viewClass = static::viewClass();
+            $this->view = new $viewClass();
+        }
+    }
+
+    /**
+     * The `View` class to instantiate when none is explicitly given to the constructor. Override this in a subclass —
+     * the app's own `AppController`, typically — to use a `View` subclass that loads additional helpers; `Controller`
+     * itself only knows the base `View`, not any app-specific one.
+     *
+     * @return class-string<\Elone\Core\View\View>
+     */
+    protected static function viewClass(): string
+    {
+        return View::class;
     }
 
     /**

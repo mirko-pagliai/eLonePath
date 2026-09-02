@@ -50,6 +50,21 @@ class RouteTest extends TestCase
     }
 
     /**
+     * An abstract controller (the app's own `AppController` is the real-world example) is rejected exactly like a
+     * missing one — the same exception, the same message shape — rather than reaching `Dispatcher`, which would
+     * fail trying to instantiate it.
+     *
+     * @link \Elone\Core\Routing\Route::__construct()
+     */
+    #[Test]
+    public function testConstructWithAbstractController(): void
+    {
+        $this->expectException(ControllerNotFoundException::class);
+        $this->expectExceptionMessageIs('Controller not found: `TestApp\Controller\AbstractController`.');
+        new Route(controller: 'Abstract', action: 'index');
+    }
+
+    /**
      * Test for the `__construct()` method with a class that does not extend `Controller`.
      *
      * @link \Elone\Core\Routing\Route::__construct()

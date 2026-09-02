@@ -4,28 +4,27 @@ declare(strict_types=1);
 namespace App\Story;
 
 use App\Story\Nodes\Node;
+use App\Story\Nodes\NodeFactory;
 use Elone\Core\Contract\Arrayable;
 use Elone\Core\Exception\HttpException;
 use JsonException;
 use RuntimeException;
 
 /**
- * @phpstan-import-type PassageNodeData from \App\Story\Nodes\PassageNode
- * @phpstan-import-type DiceNodeData from \App\Story\Nodes\DiceNode
- * @phpstan-import-type VictoryNodeData from \App\Story\Nodes\VictoryNode
- * @phpstan-import-type DefeatNodeData from \App\Story\Nodes\DefeatNode
+ * @phpstan-import-type NodeData from \App\Story\Nodes\NodeFactory
+ * @phpstan-type GameHeaderData array{
+ *     id: string,
+ *     title: string,
+ *     author: string,
+ *     translators?: string,
+ *     description: string,
+ *     language: string,
+ *     version: string,
+ *     preface?: string,
+ * }
  * @phpstan-type GameData array{
- *     game: array{
- *         id: string,
- *         title: string,
- *         author: string,
- *         translators?: string,
- *         description: string,
- *         language: string,
- *         version: string,
- *         preface?: string,
- *     },
- *     nodes: array<int, PassageNodeData|DiceNodeData|VictoryNodeData|DefeatNodeData>,
+ *     game: GameHeaderData,
+ *     nodes: array<int, NodeData>,
  * }
  */
 class Game implements Arrayable
@@ -63,22 +62,15 @@ class Game implements Arrayable
     }
 
     /**
-     * `Game` can only promise as much precision about `nodes` as `Node::toArray()` itself promises — which, per
-     * design, is just `array<string, mixed>` (see `Node::toArray()`'s own docblock for why).
+     * Exports this game — its own metadata plus every node — as a plain array; the reverse of `createFromArray()`.
      *
-     * @return array{
-     *     game: array{
-     *         id: string,
-     *         title: string,
-     *         author: string,
-     *         translators: string,
-     *         description: string,
-     *         language: string,
-     *         version: string,
-     *         preface: string,
-     *     },
-     *     nodes: array<int, array<string, mixed>>,
-     * }
+     * The `game` portion reuses `GameHeaderData`, the same shape `createFromArray()` reads. The `nodes` portion
+     * can't reuse `GameData`'s own `nodes` type the same way: each entry comes from that node's own `toArray()`,
+     * which — per `Node`'s own contract — only promises the generic `array<string, mixed>`, not the specific shape
+     * for its concrete type. That precision loss is a direct, accepted consequence of `Node` not knowing about its
+     * subclasses; `Game` can't promise more than what `Node` itself promises.
+     *
+     * @return array{game: GameHeaderData, nodes: array<int, array<string, mixed>>}
      */
     public function toArray(): array
     {
@@ -107,7 +99,7 @@ class Game implements Arrayable
     {
         $nodes = [];
         foreach ($data['nodes'] as $nodeId => $node) {
-            $nodes[$nodeId] = Node::createFromArray(id: $nodeId, gameId: $data['game']['id'], data: $node);
+            $nodes[$nodeId] = NodeFactory::createFromArray(id: $nodeId, gameId: $data['game']['id'], data: $node);
         }
 
         return new self(
@@ -135,10 +127,7 @@ class Game implements Arrayable
         try {
             $data = self::decode($json);
         } catch (RuntimeException $exception) {
-            throw new RuntimeException(
-                "Failed to parse JSON: {$exception->getMessage()}.",
-                previous: $exception,
-            );
+            throw new RuntimeException("Failed to parse JSON: {$exception->getMessage()}.", previous: $exception);
         }
 
         return self::createFromArray($data);
@@ -171,20 +160,16 @@ class Game implements Arrayable
         try {
             $data = self::decode($contents);
         } catch (RuntimeException $exception) {
-            throw new RuntimeException(
-                "Failed to parse `$path`: {$exception->getMessage()}.",
-                previous: $exception,
-            );
+            throw new RuntimeException("Failed to parse `$path`: {$exception->getMessage()}.", previous: $exception);
         }
 
         return self::createFromArray($data);
     }
 
     /**
-     * Decodes a JSON string and validates it has the shape `createFromArray()` expects.
-     *
-     * The message on the exception it throws is the bare reason only — `createFromString()` and `createFromFile()`
-     * each wrap it with their own context (a file path, or none) before it reaches the caller.
+     * Decodes a JSON string and validates it has the shape `createFromArray()` expects. The message on the
+     * exception it throws is the bare reason only, without a trailing period — `createFromString()` and
+     * `createFromFile()` each wrap it with their own context (a file path, or none) and add the period themselves.
      *
      * @return GameData
      * @throws \RuntimeException If the JSON cannot be parsed or does not match the expected structure.
@@ -198,7 +183,7 @@ class Game implements Arrayable
         }
 
         if (!is_array($data)) {
-            throw new RuntimeException('expected a JSON object at the top level.');
+            throw new RuntimeException('expected a JSON object at the top level');
         }
 
         /** @var GameData $data */

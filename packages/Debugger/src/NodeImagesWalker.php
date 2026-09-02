@@ -37,6 +37,13 @@ readonly class NodeImagesWalker
                 continue;
             }
 
+            // Checked explicitly, before getimagesize()
+            if (filesize($fullPath) === 0) {
+                $errors[] = "Node image path `$fullPath` for node $nodeId is an empty file";
+
+                continue;
+            }
+
             $info = getimagesize($fullPath);
 
             if ($info === false || $info['mime'] !== 'image/jpeg') {

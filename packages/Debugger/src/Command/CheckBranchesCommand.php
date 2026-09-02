@@ -19,7 +19,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * $ bin/console debugger:check-branches full/path/to/story.json
  * ```
  */
-#[AsCommand(name: 'debugger:check-branches')]
+#[AsCommand(
+    name: 'debugger:check-branches',
+    // this short description is shown when running "php bin/console list"
+    description: 'Checks all narrative branches, crossing them all',
+)]
 class CheckBranchesCommand extends Command
 {
     public function __invoke(
@@ -53,6 +57,7 @@ class CheckBranchesCommand extends Command
                 foreach ($branch as $k => $node) {
                     $io->write("$node->id ");
 
+                    // Style for some node types
                     if ($node instanceof VictoryNode) {
                         $io->write('> <fg=green>victory</>');
                     } elseif ($node instanceof DefeatNode) {
@@ -61,8 +66,9 @@ class CheckBranchesCommand extends Command
                         $io->write('> <fg=blue>dice with ' . $node->requiredRolls . ' rolls</> ');
                     }
 
+                    // Style for image nodes
                     if ($node->image) {
-                        $io->write("> image <fg=yellow>{$node->image->path}</> ");
+                        $io->write("> image `<fg=yellow>{$node->image->path}</>` ");
                     }
 
                     if (array_key_last($branch) === $k) {

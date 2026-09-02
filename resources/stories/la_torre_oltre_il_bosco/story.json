@@ -202,7 +202,11 @@
         },
         "13": {
             "type": "defeat",
-            "content": "Il suono si interrompe.\n\nTutte le fiamme si spengono.\n\nIl buio è assoluto.\n\nPer qualche secondo senti soltanto il tuo respiro.\n\nPoi una voce parla accanto a te.\n\n«Hai risposto alla chiamata.»\n\nNon riesci a capire da dove provenga.\n\nUna mano gelida si posa sulla tua spalla.\n\nCerchi di voltarti, ma qualcosa ti trattiene.\n\nQuando finalmente torna la luce, non sei più dove eri prima.\n\nIl luogo è vuoto.\n\nAnche la voce è scomparsa.\n\nNon sai quanto tempo sia passato.\n\nQuando esci, il bosco è immobile.\n\nNemmeno tu sei più lo stesso."
+            "content": "Il suono si interrompe.\n\nTutte le fiamme si spengono.\n\nIl buio è assoluto.\n\nPer qualche secondo senti soltanto il tuo respiro, sempre più rapido, mentre cerchi di capire cosa stia accadendo.\n\nPoi una voce parla accanto a te.\n\n«Hai risposto alla chiamata.»\n\nUna mano gelida si posa sulla tua spalla.\n\nCerchi di voltarti, ma qualcosa ti trattiene. Provi a liberarti, ma la presa diventa sempre più forte.\n\nIl buio sembra stringersi intorno a te.\n\nFai un ultimo tentativo di reagire, ma le forze ti abbandonano.\n\nPoi non senti più nulla.\n\nQuando gli abitanti di Valdombra torneranno a cercarti, troveranno soltanto la cappella vuota.\n\nLa lanterna sarà ancora accesa accanto all'ingresso e la campana, immobile sull'altare, sembrerà non essere mai stata toccata.\n\nDi te non rimarrà alcuna traccia.",
+            "image": {
+                "path": "generic_death.jpg",
+                "title": "Teschio antico tra le Ragnatele"
+            }
         },
         "14": {
             "type": "passage",

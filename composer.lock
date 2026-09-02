@@ -8,7 +8,7 @@
     "packages": [
         {
             "name": "elone/core",
-            "version": "dev-main-with-console",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/Core",
@@ -416,7 +416,7 @@
         },
         {
             "name": "elone/debugger",
-            "version": "dev-main-with-console",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/Debugger",

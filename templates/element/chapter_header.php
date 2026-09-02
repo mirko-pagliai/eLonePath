@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
  * Common element for the various story templates, adds a header.
  *
- * @var \Elone\Core\View\View $this
+ * @var \App\View\AppView $this
  * @var string $subtitle
  * @var string $title
  */

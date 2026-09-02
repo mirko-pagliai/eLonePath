@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
  * @var \App\Story\Game $game
  * @var \App\Story\Nodes\Node $node
- * @var \Elone\Core\View\View $this
+ * @var \App\View\AppView $this
  *
  * @link \App\Controller\StoryController::chapter()
  */

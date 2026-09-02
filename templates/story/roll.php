@@ -7,7 +7,7 @@ declare(strict_types=1);
  * @var bool $success
  * @var int $target
  * @var int $total
- * @var \Elone\Core\View\View $this
+ * @var \App\View\AppView $this
  *
  * @link \App\Controller\StoryController::roll()
  */

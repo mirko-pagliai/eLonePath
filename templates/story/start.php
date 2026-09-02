@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /**
  * @var \App\Story\Game $game
- * @var \Elone\Core\View\View $this
+ * @var \App\View\AppView $this
  *
  * @link \App\Controller\StoryController::start()
  */

@@ -420,7 +420,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Debugger",
-                "reference": "0ff377423fde401c236b2becb4b4ec7dd81f5387"
+                "reference": "046876aba4f52a8ecbc97b84e04d85e971ff4f3f"
             },
             "require": {
                 "php": "^8.4",
@@ -433,6 +433,12 @@
                 "symfony/var-dumper": "^8.1"
             },
             "type": "library",
+            "extra": {
+                "elone/console-commands": [
+                    "Elone\\Debugger\\Command\\CheckBranchesCommand",
+                    "Elone\\Debugger\\Command\\CheckNodeImagesCommand"
+                ]
+            },
             "autoload": {
                 "psr-4": {
                     "Elone\\Debugger\\": "src/"

@@ -61,6 +61,10 @@ class CheckBranchesCommand extends Command
                         $io->write('> <fg=blue>dice with ' . $node->requiredRolls . ' rolls</> ');
                     }
 
+                    if ($node->image) {
+                        $io->write("> image <fg=yellow>{$node->image->path}</> ");
+                    }
+
                     if (array_key_last($branch) === $k) {
                         continue;
                     }

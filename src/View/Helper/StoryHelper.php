@@ -10,15 +10,16 @@ namespace App\View\Helper;
  * a template can render it separately from the markdown-rendered text that follows it — a styled image above the
  * passage, not inline within it.
  *
- * This only recognizes the image when it's the very first thing in `content`; an image markdown appearing anywhere else
- * is left untouched here — validating that the rule was actually followed is the debugger's job, not this helper's.
+ * This only recognizes the image when it's the very first thing in `content`; an image markdown appearing anywhere
+ * else is left untouched here — validating that the rule was actually followed is the debugger's job, not this
+ * helper's.
  */
 final class StoryHelper
 {
     /**
      * @return array{path: string|null, alt: string|null, content: string}
      */
-    public function extractLeadingImage(string $content, string $gameId): array
+    public function image(string $content, string $gameId): array
     {
         if (!preg_match('/^!\[([^\]]*)\]\(([^)]+)\)\s*/', $content, $matches)) {
             return [

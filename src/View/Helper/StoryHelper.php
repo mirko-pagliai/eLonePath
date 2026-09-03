@@ -13,7 +13,7 @@ use Elone\Core\View\Helper\Helper;
  * gets back ready-made `<img>` markup for the image (if there was one) plus whatever markdown text follows it,
  * rather than raw pieces it would have to assemble itself.
  *
- * @property \App\View\AppView $view
+ * @property-read \Elone\Core\View\Helper\HtmlHelper $Html
  */
 final class StoryHelper extends Helper
 {
@@ -43,10 +43,10 @@ final class StoryHelper extends Helper
             ];
         }
 
-        $html = $this->view->Html->image(
+        $html = $this->Html->image(
             path: "/assets/stories/$gameId/img/{$extracted['path']}",
             options: [
-                'alt' => $extracted['alt'],
+                'alt' => $extracted['alt'] ?? '',
                 'class' => self::IMAGE_CLASS,
             ],
         );

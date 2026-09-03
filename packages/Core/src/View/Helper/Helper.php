@@ -21,4 +21,15 @@ abstract class Helper
     public function __construct(protected readonly View $view)
     {
     }
+
+    /**
+     * Gives helper access to another helper loaded on the same view, as `$this->{$name}` — the same magic
+     * `View::__get()` gives templates, just reached one level down.
+     *
+     * @throws \Elone\Core\Exception\HelperNotFoundException If no helper was registered under `$name`.
+     */
+    public function __get(string $name): Helper
+    {
+        return $this->view->{$name};
+    }
 }

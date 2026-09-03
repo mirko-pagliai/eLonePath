@@ -17,7 +17,7 @@ use Elone\Core\View\Helper\Helper;
  * anywhere else is left untouched here — validating that the rule was actually followed is the debugger's job,
  * not this helper's.
  *
- * @property \App\View\AppView $view
+ * @property-read \App\View\AppView $view
  */
 final class StoryHelper extends Helper
 {

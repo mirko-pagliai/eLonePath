@@ -7,32 +7,36 @@ declare(strict_types=1);
  * @var bool $success
  * @var int $target
  * @var int $total
- * @var \Elone\Core\View\View $this
+ * @var \App\View\AppView $this
  *
  * @link \App\Controller\StoryController::roll()
  */
+
+/** @link templates/element/chapter_header.php */
+echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'subtitle' => 'Lancio dei dadi']);
 ?>
 
-<header class="mb-5 text-end">
-    <?= $this->element('story-title', ['game' => $game]) ?>
-</header>
-
 <section id="dice-result" class="fs-4 mb-4 text-center">
-    <p class="fs-1 mb-2">
+    <p class="mb-2">
         <?php foreach ($rolls as $roll) : ?>
-            <?= $this->Html->icon("dice-$roll", ['class' => 'mx-1']) ?>
+            <?= $this->Html->icon(
+                name: "dice-$roll",
+                options: ['class' => 'mx-1', 'style' => 'font-size: 5rem'],
+            ) ?>
         <?php endforeach; ?>
     </p>
 
-    <p class="fs-5">
-        Totale: <?= $total ?>
+    <p class="fs-2">
+        Totale: <strong><?= $total ?></strong>
     </p>
 
+    <p class="fs-2 fst-italic mb-4">
     <?php if ($success) : ?>
-        <p class="fs-3 mb-4">Hai superato la prova!</p>
+        Hai superato la prova!
     <?php else : ?>
-        <p class="fs-3 mb-4">Non hai superato la prova.</p>
+        Non hai superato la prova.
     <?php endif; ?>
+    </p>
 
     <?= $this->Html->link(
         text: 'Continua',

@@ -12,6 +12,9 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
+use TestApp\Controller\AbstractController;
+use TestApp\Controller\BadController;
+use TestApp\Controller\PagesController;
 
 /**
  * RouteTest.
@@ -45,8 +48,23 @@ class RouteTest extends TestCase
     public function testConstructControllerNotFound(): void
     {
         $this->expectException(ControllerNotFoundException::class);
-        $this->expectExceptionMessageIs("Controller not found: `TestApp\Controller\NoExistingController`.");
+        $this->expectExceptionMessageIs('Controller not found: `TestApp\Controller\NoExistingController`.');
         new Route(controller: 'NoExisting', action: 'action');
+    }
+
+    /**
+     * An abstract controller (the app's own `AppController` is the real-world example) is rejected exactly like a
+     * missing one — the same exception, the same message shape — rather than reaching `Dispatcher`, which would
+     * fail trying to instantiate it.
+     *
+     * @link \Elone\Core\Routing\Route::__construct()
+     */
+    #[Test]
+    public function testConstructWithAbstractController(): void
+    {
+        $this->expectException(ControllerNotFoundException::class);
+        $this->expectExceptionMessageIs('Controller not found: `' . AbstractController::class . '`.');
+        new Route(controller: 'Abstract', action: 'index');
     }
 
     /**
@@ -58,7 +76,7 @@ class RouteTest extends TestCase
     public function testConstructClassDoesNotExtendController(): void
     {
         $this->expectException(RouteNotFoundException::class);
-        $this->expectExceptionMessageIs('`TestApp\Controller\BadController` must extend `' . Controller::class . '`.');
+        $this->expectExceptionMessageIs('`' . BadController::class . '` must extend `' . Controller::class . '`.');
         new Route(controller: 'Bad', action: 'action');
     }
 
@@ -71,7 +89,7 @@ class RouteTest extends TestCase
     public function testConstructActionNotFound(): void
     {
         $this->expectException(ActionNotFoundException::class);
-        $this->expectExceptionMessageIs('Action not found: `TestApp\Controller\PagesController::noExistingMethod()`.');
+        $this->expectExceptionMessageIs('Action not found: `' . PagesController::class . '::noExistingMethod()`.');
         new Route(controller: 'Pages', action: 'noExistingMethod');
     }
 
@@ -84,7 +102,7 @@ class RouteTest extends TestCase
     public function testConstructActionIsNotPublic(): void
     {
         $this->expectException(ActionNotFoundException::class);
-        $this->expectExceptionMessageIs('Action is not public: `TestApp\Controller\PagesController::invalidAction()`.');
+        $this->expectExceptionMessageIs('Action is not public: `' . PagesController::class . '::invalidAction()`.');
         new Route(controller: 'Pages', action: 'invalidAction');
     }
 
@@ -96,7 +114,7 @@ class RouteTest extends TestCase
     {
         $route = new Route(controller: 'Pages', action: 'home');
         $result = $route->controllerClass();
-        $this->assertSame('TestApp\Controller\PagesController', $result);
+        $this->assertSame(PagesController::class, $result);
     }
 
     /**
@@ -111,6 +129,8 @@ class RouteTest extends TestCase
     }
 
     /**
+     * Tests for the `resolve()` method, using strings.
+     *
      * @link \Elone\Core\Routing\Route::resolve()
      */
     #[Test]
@@ -124,6 +144,8 @@ class RouteTest extends TestCase
     }
 
     /**
+     * Tests for the `resolve()` method, using an array.
+     *
      * @link \Elone\Core\Routing\Route::resolve()
      */
     #[Test]

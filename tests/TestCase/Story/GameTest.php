@@ -67,6 +67,34 @@ class GameTest extends TestCase
     }
 
     /**
+     * `sampleData()` never sets `requires_combat` — this is what every existing story, written before the key
+     * existed, gets: no character required, exactly like before.
+     *
+     * @link \App\Story\Game::createFromArray()
+     */
+    #[Test]
+    public function testCreateFromArrayDefaultsRequiresCombatToFalse(): void
+    {
+        $game = Game::createFromArray($this->sampleData());
+
+        $this->assertFalse($game->requiresCombat);
+    }
+
+    /**
+     * @link \App\Story\Game::createFromArray()
+     */
+    #[Test]
+    public function testCreateFromArrayWithRequiresCombatTrue(): void
+    {
+        $data = $this->sampleData();
+        $data['game']['requires_combat'] = true;
+
+        $game = Game::createFromArray($data);
+
+        $this->assertTrue($game->requiresCombat);
+    }
+
+    /**
      * @link \App\Story\Game::createFromArray()
      */
     #[Test]
@@ -137,6 +165,7 @@ class GameTest extends TestCase
                 'language' => 'it',
                 'version' => '1.0',
                 'preface' => 'A short preface for testing.',
+                'requires_combat' => false,
             ],
             'nodes' => [
                 1 => [

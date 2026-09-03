@@ -13,13 +13,17 @@ use App\Story\Nodes\VictoryNode;
 use LogicException;
 
 /**
- * Walks a game's node graph from node 1, collecting every complete branch (a path ending in a `VictoryNode` or a
- * `DefeatNode`) and every node never reached along the way.
+ * Walks a game's node graph from node 1, collecting every branch and every node never reached along the way.
  *
- * A node is marked as visited the moment it's entered, before recursing into its targets. This is what keeps the
- * walk correct when two different choices lead to the same later node — the second branch simply stops there
- * instead of being recorded as an incomplete, dead-end branch — and safe against an accidental cycle in the story
- * data (a choice that loops back to an earlier node), which would otherwise recurse forever.
+ * A branch is either a complete path from node 1 to a `VictoryNode` or a `DefeatNode`, or a path that stops early
+ * because it re-converges with a node some other branch already reached first — in that case, the branch is still
+ * recorded (up to and including that shared node), but the walk doesn't continue past it a second time. This means
+ * `getAllBranches()` can return branches that don't end in a `VictoryNode`/`DefeatNode` at all: `getWinningBranches()`
+ * and `getDefeatBranches()` are the ones that filter for a genuine ending.
+ *
+ * A node is marked as visited the moment it's entered, before recursing into its targets — this, combined with
+ * recording the branch even when it re-converges, is what keeps an accidental cycle in the story data (a choice that
+ * loops back to an earlier node) from recursing forever.
  */
 class BranchesWalker
 {
@@ -41,8 +45,8 @@ class BranchesWalker
     }
 
     /**
-     * Runs the walk and returns one message per problem found: no winning branch, no defeat branch, or a node
-     * never reached from node 1.
+     * Runs the walk and returns one message per problem found: no winning branch, no defeat branch, or nodes never
+     * reached from node 1.
      *
      * @return list<string>
      */
@@ -58,15 +62,19 @@ class BranchesWalker
             $errors[] = 'No defeat branches found';
         }
 
-        foreach ($this->getRemainingNodes() as $node) {
-            $errors[] = "Remaining node: $node->id";
+        if ($this->getRemainingNodes()) {
+            $errors[] = 'Remaining nodes: ' . implode(', ', array_map(
+                callback: fn(Node $node): int => $node->id,
+                array: $this->getRemainingNodes(),
+            ));
         }
 
         return $errors;
     }
 
     /**
-     * Every complete branch from node 1 to a `VictoryNode` or a `DefeatNode`.
+     * Every branch found by the walk — see the class docblock for what "branch" means here, including the
+     * re-convergence case.
      *
      * @return list<list<\App\Story\Nodes\Node>>
      */
@@ -135,15 +143,20 @@ class BranchesWalker
      */
     protected function scanNode(Node $node, array $branch): void
     {
-        // Already reached via another branch: this branch merges here, nothing more to record.
+        $branch[] = $node;
+
+        /**
+         * This node has already been visited via another branch, so this branch is recorded as-is, ending here, and
+         * the walk doesn't continue past it a second time.
+         */
         if (!isset($this->remainingNodes[$node->id])) {
+            $this->branches[] = $branch;
+
             return;
         }
 
-        // Marked as visited immediately, before recursing into targets — this is what makes merges and cycles safe.
+        // Marked as visited immediately, before recursing into targets — this is what makes cycles safe.
         unset($this->remainingNodes[$node->id]);
-
-        $branch[] = $node;
 
         if ($node instanceof VictoryNode || $node instanceof DefeatNode) {
             $this->branches[] = $branch;

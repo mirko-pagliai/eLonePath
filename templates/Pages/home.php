@@ -2,7 +2,7 @@
 declare(strict_types=1);
 
 /**
- * @var \Elone\Core\View\View $this
+ * @var \App\View\AppView $this
  *
  * @link \App\Controller\PagesController::home()
  */

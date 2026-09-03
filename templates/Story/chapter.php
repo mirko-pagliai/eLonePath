@@ -4,7 +4,7 @@ declare(strict_types=1);
 /**
  * @var \App\Story\Game $game
  * @var \App\Story\Nodes\Node $node
- * @var \Elone\Core\View\View $this
+ * @var \App\View\AppView $this
  *
  * @link \App\Controller\StoryController::chapter()
  */
@@ -13,9 +13,10 @@ use App\Story\Nodes\DefeatNode;
 use App\Story\Nodes\DiceNode;
 use App\Story\Nodes\PassageNode;
 use App\Story\Nodes\VictoryNode;
-?>
 
-<?= $this->element(name: 'chapter_header', data: ['title' => h($game->title), 'subtitle' => "Pagina $node->id"]) ?>
+/** @link templates/element/chapter_header.php */
+echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'subtitle' => "Pagina $node->id"]);
+?>
 
 <?php
 if ($node->image !== null) {

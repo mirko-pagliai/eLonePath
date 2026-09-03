@@ -59,7 +59,9 @@ class DiceNode extends Node
     public function toArray(): array
     {
         return [
-            ...$this->baseArray(),
+            'content' => $this->content,
+            'image' => $this->image?->toArray(),
+            'type' => $this->getType()->value,
             'dice' => [
                 'required_rolls' => $this->requiredRolls,
                 'minimum' => $this->minimum,

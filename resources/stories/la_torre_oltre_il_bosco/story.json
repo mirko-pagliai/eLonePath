@@ -48,7 +48,7 @@
         },
         "3": {
             "type": "passage",
-            "content": "Nella locanda trovi una vecchia donna seduta accanto al fuoco. Tiene le mani raccolte intorno a una tazza e osserva le fiamme senza parlare. Quando nomini la torre, il suo volto cambia: per un istante sembra più stanca e molto più vecchia.\n\n«Quella torre non appartiene più a questo mondo.»\n\nLa frase viene pronunciata a bassa voce, come se anche il fuoco potesse ascoltarla.\n\nTi racconta che, molti anni prima, un cavaliere entrò nella torre per affrontare il signore che vi abitava. Nessuno seppe mai cosa accadde al suo interno. Il cavaliere non tornò e, da allora, la torre è rimasta chiusa.\n\nSecondo la donna, però, alcune notti si può vedere una luce muoversi dietro le finestre più alte.\n\nPrima che tu possa fare altre domande, la donna ti indica la porta.\n\n«Se vuoi andare lassù, almeno non andarci dopo mezzanotte.»\n\nFuori, il cielo è ormai completamente buio.",
+            "content": "Nella locanda trovi una vecchia donna seduta accanto al fuoco. Tiene le mani raccolte intorno a una tazza e osserva le fiamme senza parlare. Quando nomini la torre, il suo volto cambia: per un istante sembra più stanca e molto più vecchia.\n\n«Quella torre non appartiene più a questo mondo.»\n\nLa frase viene pronunciata a bassa voce, come se anche il fuoco potesse ascoltarla.\n\nTi racconta che, molti anni prima, un cavaliere entrò nella torre per affrontare il signore che vi abitava. Nessuno seppe mai cosa accadde al suo interno. Il cavaliere non tornò e, da allora, la torre è rimasta chiusa.\n\nLa donna abbassa lo sguardo sulla sua tazza.\n\n«Ma da allora, qualcuno ha continuato a vederlo.»\n\nAlzi un sopracciglio.\n\n«Un cavaliere. Nel bosco. Sempre di notte.»\n\nPrima che tu possa fare altre domande, la donna ti indica la porta.\n\n«Se vuoi andare lassù, almeno non andarci dopo mezzanotte.»\n\nIstintivamente guardi l'orologio. Non è ancora mezzanotte, ma non manca molto. Se vuoi raggiungere la torre prima di quell'ora, dovrai affrettarti.\n\nFuori, il cielo è ormai completamente buio.",
             "choices": [
                 {
                     "content": "Se vuoi chiederle di accompagnarti, vai a pagina {{page}}",
@@ -80,11 +80,11 @@
         },
         "5": {
             "type": "passage",
-            "content": "Ignori lo sconosciuto e continui lungo il sentiero.\n\nIl bosco diventa sempre più fitto. La luce della sera è ormai quasi scomparsa e procedi affidandoti soprattutto alla debole luminosità che filtra tra le nuvole.\n\nDopo qualche minuto **il sentiero si divide in tre**.\n\nA sinistra senti il rumore di un **torrente**. L'acqua scorre con forza tra le rocce, anche se non riesci a vederla.\n\nA destra, invece, compare una debole **luce tra gli alberi**. È calda e tremolante, come quella di una lanterna, ma non riesci a capire da dove provenga.\n\nAl centro, il sentiero sale ripidamente verso **la collina**. Tra gli alberi riesci finalmente a vedere la torre nera, stagliata contro il cielo scuro. È ancora lontana, ma questa strada sembra condurre direttamente verso di essa.\n\nTi fermi al bivio e osservi le tre possibilità davanti a te.",
+            "content": "Ignori lo sconosciuto e continui lungo il sentiero.\n\nIl bosco diventa sempre più fitto. La luce della sera è ormai quasi scomparsa e procedi affidandoti soprattutto alla debole luminosità che filtra tra le nuvole.\n\nDopo qualche minuto **il sentiero si divide in tre**.\n\nA sinistra senti il rumore di un **torrente**. L'acqua scorre con forza tra le rocce, anche se non riesci a vederla.\n\nA destra, invece, compare una debole **luce tra gli alberi**. È calda e tremolante, come quella di una lanterna, ma non riesci a capire da dove provenga.\n\nAl centro, il sentiero sale ripidamente verso **la collina**. Tra gli alberi riesci finalmente a vedere la torre nera, stagliata contro il cielo scuro. È ancora lontana e non riesci a capire se il sentiero conduca davvero fin lassù.\n\nTi fermi al bivio e osservi le tre possibilità davanti a te.",
             "choices": [
                 {
                     "content": "Se vuoi seguire la luce, vai a pagina {{page}}",
-                    "target": 8
+                    "target": 25
                 },
                 {
                     "content": "Se vuoi seguire il torrente, vai a pagina {{page}}",
@@ -96,13 +96,13 @@
                 }
             ],
             "image": {
-                "path": "05_09.jpg",
-                "title": "Bivio nel bosco verso il castello"
+                "path": "05_20.jpg",
+                "title": "Bivio nel bosco verso la torre"
             }
         },
         "6": {
             "type": "passage",
-            "content": "La vecchia scuote lentamente la testa.\n\n«No. Io sono già stata abbastanza vicina a quella torre.»\n\nPer un momento guarda verso la finestra della locanda. Fuori è ormai buio e, attraverso il vetro, la collina non è quasi più visibile.\n\nPoi apre una piccola tasca del suo mantello e ne estrae una candela sottile, consumata e macchiata di cera scura.\n\nTe la porge.\n\n«Portala con te.»\n\nQuando la prendi, aggiunge:\n\n«Quando la fiamma diventerà blu, non guardare dietro di te.»\n\nNon capisci cosa significhi e lei non sembra intenzionata a spiegartelo.\n\n«E qualunque cosa tu senta, continua a camminare.»\n\nAccetti il dono e lasci la locanda.",
+            "content": "La vecchia scuote lentamente la testa.\n\n«No. Io sono già stata abbastanza vicina a quella torre.»\n\nPer un momento guarda verso la finestra della locanda. Fuori è ormai buio e, attraverso il vetro, la collina non è quasi più visibile.\n\nPoi apre una piccola tasca del suo mantello e ne estrae una candela sottile, consumata e macchiata di cera scura.\n\nTe la porge.\n\n«Portala con te.»\n\nQuando la prendi, aggiunge:\n\n«Quando la fiamma diventerà blu, non guardare dietro di te.»\n\nLa osservi per qualche istante.\n\n«Perché?»\n\nLa vecchia scuote la testa.\n\n«Perché, se la vedrai diventare blu, significa che qualcosa ti ha già trovato.»\n\nNon capisci cosa significhi e lei non sembra intenzionata a spiegartelo.\n\n«E qualunque cosa tu senta, continua a camminare.»\n\nAccetti il dono e lasci la locanda.",
             "choices": [
                 {
                     "content": "Se vuoi proseguire verso il bosco, vai a pagina {{page}}",
@@ -126,7 +126,7 @@
         },
         "8": {
             "type": "passage",
-            "content": "La luce proviene da una piccola cappella abbandonata.\n\nIl tetto è in parte crollato e l'edera ha invaso le pareti, ma una vecchia lanterna continua a bruciare accanto all'ingresso. Non sai chi possa averla accesa.\n\nAll'interno trovi un altare coperto di polvere. Sopra di esso è appoggiata una vecchia campana d'argento, annerita dal tempo ma stranamente intatta.\n\nTi avvicini e la sfiori.\n\nLa campana suona da sola.\n\nIl rintocco è limpido e sembra attraversare il bosco intero.\n\nDalla torre, in lontananza, arriva una risposta.\n\nUn rintocco.\n\nPoi un secondo.\n\nPoi un terzo.\n\nLa fiamma della lanterna vacilla.\n\nLa porta della cappella si chiude violentemente alle tue spalle.",
+            "content": "La luce proviene da una piccola cappella abbandonata.\n\nIl tetto è in parte crollato e l'edera ha invaso le pareti, ma una vecchia lanterna continua a bruciare accanto all'ingresso. Non sai chi possa averla accesa.\n\nAll'interno trovi un altare coperto di polvere. Sopra di esso è appoggiata una vecchia campana d'argento, annerita dal tempo ma stranamente intatta.\n\nTi avvicini e la sfiori.\n\nLa campana suona da sola.\n\nIl rintocco è limpido e sembra attraversare il bosco intero.\n\nDalla torre, in lontananza, arriva una risposta.\n\nUn rintocco.\n\nPoi un secondo.\n\nPoi un terzo.\n\nLa fiamma della lanterna vacilla.\n\nLa porta della cappella si chiude violentemente alle tue spalle.\n\nProvi ad aprirla.\n\nLa porta non si muove.\n\nPoi senti qualcosa dall'altra parte.\n\nUn passo.\n\nPoi un altro.\n\nTi allontani dalla porta.\n\nQualcuno — o qualcosa — sta camminando nel bosco.",
             "choices": [
                 {
                     "content": "Se vuoi provare a uscire, vai a pagina {{page}}",
@@ -144,7 +144,7 @@
         },
         "9": {
             "type": "passage",
-            "content": "Segui il torrente, lasciandoti guidare dal rumore dell'acqua.\n\nDopo un lungo tratto raggiungi un piccolo ponte di pietra. Le pietre sono scivolose e ricoperte di muschio, e sotto di te il torrente scorre nero nell'oscurità.\n\nA metà del ponte trovi un cavaliere immobile.\n\nLa sua armatura è completamente ricoperta di ruggine. Non sembra esserci alcun punto in cui il metallo sia ancora lucido. Il cavaliere tiene la testa abbassata e le mani appoggiate sull'elsa di una spada.\n\nQuando ti avvicini, solleva lentamente la testa.\n\nNon riesci a vedere il suo volto attraverso l'elmo.\n\nEppure hai la netta sensazione che ti stia guardando.",
+            "content": "Segui il torrente, lasciandoti guidare dal rumore dell'acqua.\n\nDopo un lungo tratto raggiungi un piccolo ponte di pietra. Le pietre sono scivolose e ricoperte di muschio, e sotto di te il torrente scorre nero nell'oscurità.\n\nA metà del ponte trovi un cavaliere immobile.\n\nLa sua armatura è completamente ricoperta di ruggine. Non sembra esserci alcun punto in cui il metallo sia ancora lucido. Il cavaliere tiene la testa abbassata e le mani appoggiate sull'elsa di una spada.\n\nQuando ti avvicini, solleva lentamente la testa.\n\nNon riesci a vedere il suo volto attraverso l'elmo.\n\nEppure hai la netta sensazione che ti stia guardando.\n\nLa sua armatura emette un leggero scricchiolio.\n\nTi viene in mente il racconto della vecchia locandiera.\n\nUn cavaliere che non era mai tornato dalla torre.\n\nE che qualcuno continuava a vedere nel bosco.\n\nIl cavaliere non si sposta. Se vuoi proseguire, dovrai passargli accanto.",
             "choices": [
                 {
                     "content": "Se vuoi attraversare il ponte, vai a pagina {{page}}",
@@ -153,12 +153,16 @@
                 {
                     "content": "Se vuoi tornare indietro, vai a pagina {{page}}",
                     "target": 5
+                },
+                {
+                    "content": "Se vuoi avvicinarti al cavaliere, vai a pagina {{page}}",
+                    "target": 21
                 }
             ]
         },
         "10": {
             "type": "passage",
-            "content": "La porta della torre si apre senza che tu la tocchi.\n\nAll'interno non c'è alcun corridoio. Solo una grande sala circolare, fredda e completamente vuota, attraversata da una scala che sale verso l'alto.\n\nL'aria odora di pietra umida.\n\nAl centro della sala trovi una statua di pietra raffigurante un cavaliere. È consumata dal tempo, ma l'armatura è ancora riconoscibile. Una mano stringe una spada spezzata; l'altra è appoggiata sul petto.\n\nQuando passi accanto alla statua, senti una voce.\n\n«Finalmente.»\n\nTi fermi.\n\nLa voce non sembra provenire da nessun punto preciso della stanza.\n\nPoi torna il silenzio.\n\nLa scala davanti a te sale nell'oscurità.",
+            "content": "La porta della torre si apre senza che tu la tocchi.\n\nAll'interno non c'è alcun corridoio. Solo una grande sala circolare, fredda e completamente vuota, attraversata da una scala che sale verso l'alto.\n\nL'aria odora di pietra umida.\n\nAl centro della sala trovi una statua di pietra raffigurante un cavaliere. È consumata dal tempo, ma l'armatura è ancora riconoscibile. Una mano stringe una spada spezzata; l'altra è appoggiata sul petto. L'elsa è finemente lavorata, con un simbolo che non riconosci.\n\nQuando passi accanto alla statua, senti una voce.\n\n«Finalmente.»\n\nTi fermi.\n\nLa voce non sembra provenire da nessun punto preciso della stanza.\n\nPoi torna il silenzio.\n\nLa scala davanti a te sale nell'oscurità.",
             "choices": [
                 {
                     "content": "Se vuoi salire la scala, vai a pagina {{page}}",
@@ -171,7 +175,7 @@
             ],
             "image": {
                 "path": "10.jpg",
-                "title": "Scriptorium illuminato dalle candele"
+                "title": "Sala circolare della torre"
             }
         },
         "11": {
@@ -189,20 +193,24 @@
             ],
             "image": {
                 "path": "11.jpg",
-                "title": "Scala illuminata dalle torce"
+                "title": "Corridoio sotterraneo nella roccia"
             }
         },
         "12": {
             "type": "defeat",
-            "content": "Corri.\n\nNon sai da cosa stai fuggendo, ma senti passi dietro di te.\n\nPrima lontani.\n\nPoi più vicini.\n\nIl rumore della tua corsa si confonde con quello di qualcosa che avanza alle tue spalle, senza fretta e senza mai inciampare.\n\nTi volti.\n\nLa figura del cavaliere arrugginito è ormai a pochi passi.\n\nCerchi di accelerare, ma il terreno cede sotto i tuoi piedi.\n\nQuando riapri gli occhi è mattina.\n\nGli abitanti di Valdombra trovano soltanto le tue impronte nel fango, che si interrompono improvvisamente ai margini del bosco."
+            "content": "Corri.\n\nNon sai da cosa stai fuggendo, ma senti passi dietro di te.\n\nPrima lontani.\n\nPoi più vicini.\n\nIl rumore della tua corsa si confonde con quello di qualcosa che avanza alle tue spalle, senza fretta e senza mai inciampare.\n\nTi volti.\n\nUna figura corazzata emerge dalla nebbia.\n\nPer un istante riconosci l'armatura arrugginita del cavaliere che hai incontrato nel bosco.\n\nCerchi di accelerare, ma il terreno cede sotto i tuoi piedi.\n\nQuando riapri gli occhi è mattina.\n\nGli abitanti di Valdombra trovano soltanto le tue impronte nel fango, che si interrompono improvvisamente ai margini del bosco."
         },
         "13": {
             "type": "defeat",
-            "content": "Appena la campana suona per la seconda volta, tutte le fiamme della cappella si spengono.\n\nIl buio è assoluto.\n\nPer qualche secondo senti soltanto il tuo respiro.\n\nPoi una voce parla accanto a te.\n\n«Hai risposto alla chiamata.»\n\nNon riesci a capire da dove provenga.\n\nUna mano gelida si posa sulla tua spalla.\n\nCerchi di voltarti, ma qualcosa ti trattiene.\n\nQuando finalmente torna la luce, nella cappella non c'è più nessuno.\n\nL'altare è vuoto.\n\nLa porta è aperta.\n\nFuori, il bosco è immobile.\n\nNemmeno tu sei più nella cappella."
+            "content": "Il suono si interrompe.\n\nTutte le fiamme si spengono.\n\nIl buio è assoluto.\n\nPer qualche secondo senti soltanto il tuo respiro, sempre più rapido, mentre cerchi di capire cosa stia accadendo.\n\nPoi una voce parla accanto a te.\n\n«Hai risposto alla chiamata.»\n\nUna mano gelida si posa sulla tua spalla.\n\nCerchi di voltarti, ma qualcosa ti trattiene. Provi a liberarti, ma la presa diventa sempre più forte.\n\nIl buio sembra stringersi intorno a te.\n\nFai un ultimo tentativo di reagire, ma le forze ti abbandonano.\n\nPoi non senti più nulla.\n\nQuando gli abitanti di Valdombra torneranno a cercarti, troveranno soltanto la cappella vuota.\n\nLa lanterna sarà ancora accesa accanto all'ingresso e la campana, immobile sull'altare, sembrerà non essere mai stata toccata.\n\nDi te non rimarrà alcuna traccia.",
+            "image": {
+                "path": "generic_death.jpg",
+                "title": "Teschio antico tra le Ragnatele"
+            }
         },
         "14": {
             "type": "passage",
-            "content": "La scala termina in una stanza circolare.\n\nNon ci sono finestre e nessuna torcia illumina le pareti. Eppure riesci a vedere tutto con una chiarezza innaturale.\n\nAl centro della stanza si trova un trono di pietra.\n\nSeduto sul trono c'è un cavaliere in armatura nera. Non si muove, ma sai che è cosciente della tua presenza.\n\nDopo un lungo silenzio parla.\n\n«Sono morto cento anni fa.»\n\nLa voce è calma, quasi stanca.\n\n«Ma qualcuno deve ancora portare la mia corona fuori da questa torre.»\n\nIndica una corona d'argento appoggiata ai suoi piedi.\n\n«Prendila e sarai libero di andartene.»\n\nLa corona riflette una luce che non sai da dove provenga.\n\nIl cavaliere non aggiunge altro.",
+            "content": "La scala termina in una stanza circolare.\n\nNon ci sono finestre e nessuna torcia illumina le pareti. Eppure riesci a vedere tutto con una chiarezza innaturale.\n\nAl centro della stanza si trova un trono di pietra.\n\nSeduto sul trono c'è un cavaliere in armatura nera. Non si muove, ma sai che è cosciente della tua presenza.\n\nDopo un lungo silenzio parla.\n\n«Sono morto cento anni fa.»\n\nLa voce è calma, quasi stanca.\n\n«Ma qualcuno deve ancora portare la mia corona fuori da questa torre.»\n\nIndica una corona d'argento appoggiata ai suoi piedi.\n\n«Prendila, se pensi di esserne degno. Solo allora sarai libero di andartene.»\n\nLa corona riflette una luce che non sai da dove provenga.\n\nIl cavaliere non aggiunge altro.",
             "choices": [
                 {
                     "content": "Se vuoi prendere la corona, vai a pagina {{page}}",
@@ -242,7 +250,11 @@
         },
         "18": {
             "type": "defeat",
-            "content": "Il cavaliere scuote lentamente la testa.\n\nLa stanza sprofonda nell'oscurità e senti il peso di qualcosa che ti afferra alle spalle.\n\nCerchi di reagire, ma è ormai troppo tardi.\n\nLa porta della torre non si aprirà più per te."
+            "content": "Il cavaliere scuote lentamente la testa.\n\nLa stanza sprofonda nell'oscurità e senti il peso di qualcosa che ti afferra alle spalle.\n\nCerchi di reagire, ma è ormai troppo tardi.\n\nLa porta della torre non si aprirà più per te.",
+            "image": {
+                "path": "generic_death.jpg",
+                "title": "Teschio antico tra le Ragnatele"
+            }
         },
         "19": {
             "type": "passage",
@@ -260,7 +272,7 @@
         },
         "20": {
             "type": "passage",
-            "content": "Lo scontro è breve ma violento.\n\nQuando il nemico finalmente cade a terra, rimani per qualche istante immobile, cercando di riprendere fiato.\n\nLa strada verso la collina è libera, ma guardando davanti a te ti rendi conto che questo sentiero non conduce direttamente alla torre. Hai perso tempo e ti sei allontanato dal bivio nel bosco.\n\nDecidi che non vale la pena continuare lungo questa strada. È meglio tornare indietro e riprendere una delle due vie che avevi lasciato poco prima.\n\nRipercorri il sentiero a ritroso, lasciandoti alle spalle il nemico sconfitto. Dopo qualche minuto riconosci gli alberi e finalmente raggiungi di nuovo il bivio.\n\nDavanti a te le due strade sono ancora lì: a destra la debole **luce tra gli alberi**, a sinistra il rumore del **torrente**.",
+            "content": "Lo scontro è breve ma violento.\n\nQuando il nemico finalmente cade a terra, rimani per qualche istante immobile, cercando di riprendere fiato.\n\nLa strada verso la collina è libera, ma guardando davanti a te ti rendi conto che questo sentiero non conduce direttamente alla torre. Hai perso tempo e ti sei allontanato dal bivio nel bosco.\n\nDecidi che non vale la pena continuare lungo questa strada. È meglio tornare indietro e riprendere una delle due vie che avevi lasciato poco prima.\n\nRipercorri il sentiero a ritroso, lasciandoti alle spalle il nemico sconfitto. Dopo qualche minuto riconosci gli alberi e finalmente raggiungi di nuovo il bivio.\n\nDavanti a te riconosci le due strade che avevi lasciato poco prima: a destra la debole **luce tra gli alberi**, a sinistra il rumore del **torrente**. Il sentiero che sale verso la collina, invece, è alle tue spalle e non hai intenzione di ripercorrerlo.",
             "choices": [
                 {
                     "content": "Se vuoi seguire la luce, vai a pagina {{page}}",
@@ -268,12 +280,72 @@
                 },
                 {
                     "content": "Se vuoi seguire il torrente, vai a pagina {{page}}",
-                    "target": 9
+                    "target": 24
                 }
             ],
             "image": {
-                "path": "05_09.jpg",
-                "title": "Bivio nel bosco verso il castello"
+                "path": "05_20.jpg",
+                "title": "Bivio nel bosco verso la torre"
+            }
+        },
+        "21": {
+            "type": "dice",
+            "content": "Fai un passo verso il cavaliere.\n\nPer un istante non accade nulla. Poi la sua mano si stringe lentamente intorno all'elsa della spada.\n\nIl cavaliere non si sposta, ma occupa completamente il passaggio. Il ponte sembra improvvisamente molto più stretto: dovrai passargli accanto prima che decida di muoversi.\n\n**Lancia un dado.**",
+            "dice": {
+                "required_rolls": 1,
+                "minimum": 4,
+                "target_success": 22,
+                "target_failure": 12
+            }
+        },
+        "22": {
+            "type": "victory",
+            "content": "Attraversi il ponte senza fermarti.\n\nIl cavaliere rimane immobile alle tue spalle. Quando ti volti, non c'è più nessuno.\n\nDall'altra parte del torrente trovi un vecchio sentiero nascosto tra gli alberi. Lo segui e, dopo pochi minuti, sbuchi ai piedi della collina, proprio davanti alla torre.\n\nLa porta è aperta.\n\nEntri.\n\nRiconosci subito la sala circolare che avevi visto entrando nella torre. È vuota, ad eccezione della statua del cavaliere. La spada che stringeva nella mano è ancora spezzata.\n\nAi piedi della statua trovi una lama spezzata identica a quella che avevi visto tra le sue mani. L'elsa porta lo stesso simbolo che avevi notato sulla statua.\n\nQuando raccogli la spada, la lama emette un breve lampo di luce.\n\nLa statua si incrina. La torre trema. Poi tutto torna immobile.\n\nAll'alba lasci la collina. La nebbia si è dissolta e, per la prima volta dopo molti anni, la torre non sembra più incombere sul bosco.\n\nQuando torni a Valdombra, gli abitanti capiscono subito che qualcosa è cambiato.\n\nLa maledizione è spezzata.",
+            "image": {
+                "path": "22.jpg",
+                "title": "Cavaliere in rovina e spada spezzata"
+            }
+        },
+        "24": {
+            "type": "passage",
+            "content": "Segui il torrente lungo un tratto di sentiero che conosci già.\n\nDopo poco raggiungi il piccolo ponte di pietra. Le pietre sono scivolose e ricoperte di muschio, e sotto di te il torrente scorre nero nell'oscurità.\n\nA metà del ponte trovi di nuovo il cavaliere immobile. La sua armatura è ricoperta di ruggine e le mani sono appoggiate sull'elsa della spada.\n\nQuesta volta sai già che non puoi tornare indietro lungo il sentiero che porta al bivio. Se vuoi proseguire, dovrai passargli accanto.",
+            "choices": [
+                {
+                    "content": "Se vuoi affrontare il cavaliere, vai a pagina {{page}}",
+                    "target": 21
+                }
+            ]
+        },
+        "25": {
+            "type": "passage",
+            "content": "Raggiungi la cappella. L'edificio appare ancora più isolato da vicino: le pietre sono annerite dal tempo e l'edera ricopre buona parte delle pareti.\n\nLa porta principale è socchiusa. Una vecchia lanterna brucia accanto all'ingresso, anche se non riesci a capire chi possa averla accesa.\n\nPrima di entrare, noti una piccola porta laterale quasi completamente nascosta dalla vegetazione.",
+            "choices": [
+                {
+                    "content": "Se vuoi entrare nella cappella, vai a pagina {{page}}",
+                    "target": 8
+                },
+                {
+                    "content": "Se vuoi controllare la porta laterale, vai a pagina {{page}}",
+                    "target": 26
+                }
+            ],
+            "image": {
+                "path": "25.jpg",
+                "title": "La cappella nella foresta"
+            }
+        },
+        "26": {
+            "type": "passage",
+            "content": "La porta laterale conduce a una piccola stanza che sembra essere appartenuta al custode della cappella.\n\nUn vecchio tavolo occupa quasi tutto lo spazio. Sopra sono rimasti alcuni libri, candele consumate e fogli ingialliti. La polvere ricopre ogni cosa e nessuno sembra essere entrato qui da molto tempo.\n\nNon trovi nulla che possa spiegare chi abbia acceso la lanterna o perché la cappella sia ancora illuminata.\n\nTorni verso la porta principale.",
+            "choices": [
+                {
+                    "content": "Torna davanti alla cappella, vai a pagina {{page}}",
+                    "target": 25
+                }
+            ],
+            "image": {
+                "path": "26.jpg",
+                "title": "La stanza del custode"
             }
         }
     }

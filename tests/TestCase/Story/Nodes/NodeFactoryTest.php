@@ -5,7 +5,7 @@ namespace Test\Story\Nodes;
 
 use App\Story\Nodes\DefeatNode;
 use App\Story\Nodes\DiceNode;
-use App\Story\Nodes\Node;
+use App\Story\Nodes\NodeFactory;
 use App\Story\Nodes\PassageNode;
 use App\Story\Nodes\VictoryNode;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -13,18 +13,18 @@ use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
 
 /**
- * NodeTest.
+ * NodeFactoryTest.
  */
-#[CoversClass(Node::class)]
-class NodeTest extends TestCase
+#[CoversClass(NodeFactory::class)]
+class NodeFactoryTest extends TestCase
 {
     /**
-     * @link \App\Story\Nodes\Node::createFromArray()
+     * @link \App\Story\Nodes\NodeFactory::createFromArray()
      */
     #[Test]
     public function testCreateFromArrayDispatchesToPassageNode(): void
     {
-        $node = Node::createFromArray(id: 1, gameId: 'test-game', data: [
+        $node = NodeFactory::createFromArray(id: 1, gameId: 'test-game', data: [
             'content' => 'Some content.',
             'type' => 'passage',
             'choices' => [],
@@ -34,12 +34,12 @@ class NodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\Nodes\Node::createFromArray()
+     * @link \App\Story\Nodes\NodeFactory::createFromArray()
      */
     #[Test]
     public function testCreateFromArrayDispatchesToDiceNode(): void
     {
-        $node = Node::createFromArray(id: 17, gameId: 'test-game', data: [
+        $node = NodeFactory::createFromArray(id: 17, gameId: 'test-game', data: [
             'content' => 'Some content.',
             'type' => 'dice',
             'dice' => [
@@ -54,12 +54,12 @@ class NodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\Nodes\Node::createFromArray()
+     * @link \App\Story\Nodes\NodeFactory::createFromArray()
      */
     #[Test]
     public function testCreateFromArrayDispatchesToVictoryNode(): void
     {
-        $node = Node::createFromArray(id: 15, gameId: 'test-game', data: [
+        $node = NodeFactory::createFromArray(id: 15, gameId: 'test-game', data: [
             'content' => 'The end.',
             'type' => 'victory',
         ]);
@@ -68,12 +68,12 @@ class NodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\Nodes\Node::createFromArray()
+     * @link \App\Story\Nodes\NodeFactory::createFromArray()
      */
     #[Test]
     public function testCreateFromArrayDispatchesToDefeatNode(): void
     {
-        $node = Node::createFromArray(id: 12, gameId: 'test-game', data: [
+        $node = NodeFactory::createFromArray(id: 12, gameId: 'test-game', data: [
             'content' => 'The end.',
             'type' => 'defeat',
         ]);

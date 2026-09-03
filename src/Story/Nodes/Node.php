@@ -6,11 +6,12 @@ namespace App\Story\Nodes;
 use Elone\Core\Contract\Arrayable;
 
 /**
- * @phpstan-import-type PassageNodeData from \App\Story\Nodes\PassageNode
- * @phpstan-import-type DiceNodeData from \App\Story\Nodes\DiceNode
- * @phpstan-import-type VictoryNodeData from \App\Story\Nodes\VictoryNode
- * @phpstan-import-type DefeatNodeData from \App\Story\Nodes\DefeatNode
- * @phpstan-import-type NodeImageData from \App\Story\Nodes\NodeImage
+ * A single node — a "page" — in a game's story graph: some content, an optional illustration, and either a way to
+ * continue (a passage's choices, a dice check's two outcomes) or an ending (victory, defeat). Every concrete node
+ * type extends this.
+ *
+ * Built from raw story data via `NodeFactory::createFromArray()`, not through `Node` itself — `Node` only knows
+ * the shape every node shares, not which concrete types exist or how to choose between them.
  */
 abstract class Node implements Arrayable
 {
@@ -28,50 +29,10 @@ abstract class Node implements Arrayable
     abstract public function getType(): NodeType;
 
     /**
-     * @return PassageNodeData|DiceNodeData|VictoryNodeData|DefeatNodeData
+     * Every subclass narrows this to its own specific data shape (e.g. `PassageNodeData`) in its own docblock —
+     * `Node` itself only knows the generic shape every `Arrayable` promises, not the details of any one subclass.
+     *
+     * @return array<string, mixed>
      */
     abstract public function toArray(): array;
-
-    /**
-     * Builds the concrete `Node` subclass matching `$data['type']`.
-     *
-     * @param PassageNodeData|DiceNodeData|VictoryNodeData|DefeatNodeData $data
-     */
-    public static function createFromArray(int $id, string $gameId, array $data): Node
-    {
-        $type = NodeType::from($data['type']);
-
-        if ($type === NodeType::PASSAGE) {
-            /** @var PassageNodeData $data */
-            return PassageNode::createFromArray($id, $gameId, $data);
-        }
-
-        if ($type === NodeType::DICE) {
-            /** @var DiceNodeData $data */
-            return DiceNode::createFromArray($id, $gameId, $data);
-        }
-
-        if ($type === NodeType::VICTORY) {
-            /** @var VictoryNodeData $data */
-            return VictoryNode::createFromArray($id, $gameId, $data);
-        }
-
-        /** @var DefeatNodeData $data */
-        return DefeatNode::createFromArray($id, $gameId, $data);
-    }
-
-    /**
-     * The portion of the array representation shared by every node type — `content`, `image`, and `type` (derived
-     * from `getType()`). Each subclass's `toArray()` merges this with whatever else it adds.
-     *
-     * @return array{content: string, image: NodeImageData|null, type: string}
-     */
-    protected function baseArray(): array
-    {
-        return [
-            'content' => $this->content,
-            'image' => $this->image?->toArray(),
-            'type' => $this->getType()->value,
-        ];
-    }
 }

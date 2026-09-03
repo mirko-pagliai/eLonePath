@@ -4,28 +4,28 @@ declare(strict_types=1);
 namespace App\Story;
 
 use App\Story\Nodes\Node;
+use App\Story\Nodes\NodeFactory;
 use Elone\Core\Contract\Arrayable;
 use Elone\Core\Exception\HttpException;
 use JsonException;
 use RuntimeException;
 
 /**
- * @phpstan-import-type PassageNodeData from \App\Story\Nodes\PassageNode
- * @phpstan-import-type DiceNodeData from \App\Story\Nodes\DiceNode
- * @phpstan-import-type VictoryNodeData from \App\Story\Nodes\VictoryNode
- * @phpstan-import-type DefeatNodeData from \App\Story\Nodes\DefeatNode
+ * @phpstan-import-type NodeData from \App\Story\Nodes\NodeFactory
+ * @phpstan-type GameHeaderData array{
+ *     id: string,
+ *     title: string,
+ *     author: string,
+ *     translators?: string,
+ *     description: string,
+ *     language: string,
+ *     version: string,
+ *     preface?: string,
+ *     requires_combat?: bool,
+ * }
  * @phpstan-type GameData array{
- *     game: array{
- *         id: string,
- *         title: string,
- *         author: string,
- *         translators?: string,
- *         description: string,
- *         language: string,
- *         version: string,
- *         preface?: string,
- *     },
- *     nodes: array<int, PassageNodeData|DiceNodeData|VictoryNodeData|DefeatNodeData>,
+ *     game: GameHeaderData,
+ *     nodes: array<int, NodeData>,
  * }
  */
 class Game implements Arrayable
@@ -42,6 +42,7 @@ class Game implements Arrayable
         protected(set) readonly string $language,
         protected(set) readonly string $version,
         protected(set) readonly string $preface,
+        protected(set) readonly bool $requiresCombat,
         protected(set) array $nodes,
     ) {
     }
@@ -63,7 +64,15 @@ class Game implements Arrayable
     }
 
     /**
-     * @return GameData
+     * Exports this game — its own metadata plus every node — as a plain array; the reverse of `createFromArray()`.
+     *
+     * The `game` portion reuses `GameHeaderData`, the same shape `createFromArray()` reads. The `nodes` portion
+     * can't reuse `GameData`'s own `nodes` type the same way: each entry comes from that node's own `toArray()`,
+     * which — per `Node`'s own contract — only promises the generic `array<string, mixed>`, not the specific shape
+     * for its concrete type. That precision loss is a direct, accepted consequence of `Node` not knowing about its
+     * subclasses; `Game` can't promise more than what `Node` itself promises.
+     *
+     * @return array{game: GameHeaderData, nodes: array<int, array<string, mixed>>}
      */
     public function toArray(): array
     {
@@ -77,6 +86,7 @@ class Game implements Arrayable
                 'language' => $this->language,
                 'version' => $this->version,
                 'preface' => $this->preface,
+                'requires_combat' => $this->requiresCombat,
             ],
             'nodes' => array_map(
                 callback: fn(Node $node): array => $node->toArray(),
@@ -92,7 +102,7 @@ class Game implements Arrayable
     {
         $nodes = [];
         foreach ($data['nodes'] as $nodeId => $node) {
-            $nodes[$nodeId] = Node::createFromArray(id: $nodeId, gameId: $data['game']['id'], data: $node);
+            $nodes[$nodeId] = NodeFactory::createFromArray(id: $nodeId, gameId: $data['game']['id'], data: $node);
         }
 
         return new self(
@@ -104,8 +114,29 @@ class Game implements Arrayable
             language: $data['game']['language'],
             version: $data['game']['version'],
             preface: $data['game']['preface'] ?? '',
+            // Defaults to false: a story that doesn't declare this key is treated as pure narration, needing no
+            // character before it starts — the same way every story already worked before this key existed.
+            requiresCombat: $data['game']['requires_combat'] ?? false,
             nodes: $nodes,
         );
+    }
+
+    /**
+     * Creates a `Game` instance from a JSON string.
+     *
+     * @param string $json The JSON string.
+     * @return \App\Story\Game A Game instance created from the JSON data.
+     * @throws \RuntimeException If the JSON cannot be parsed or does not match the expected structure.
+     */
+    public static function createFromString(string $json): Game
+    {
+        try {
+            $data = self::decode($json);
+        } catch (RuntimeException $exception) {
+            throw new RuntimeException("Failed to parse JSON: {$exception->getMessage()}.", previous: $exception);
+        }
+
+        return self::createFromArray($data);
     }
 
     /**
@@ -133,19 +164,35 @@ class Game implements Arrayable
         }
 
         try {
-            $json = json_decode($contents, associative: true, flags: JSON_THROW_ON_ERROR);
+            $data = self::decode($contents);
+        } catch (RuntimeException $exception) {
+            throw new RuntimeException("Failed to parse `$path`: {$exception->getMessage()}.", previous: $exception);
+        }
+
+        return self::createFromArray($data);
+    }
+
+    /**
+     * Decodes a JSON string and validates it has the shape `createFromArray()` expects. The message on the
+     * exception it throws is the bare reason only, without a trailing period — `createFromString()` and
+     * `createFromFile()` each wrap it with their own context (a file path, or none) and add the period themselves.
+     *
+     * @return GameData
+     * @throws \RuntimeException If the JSON cannot be parsed or does not match the expected structure.
+     */
+    private static function decode(string $json): array
+    {
+        try {
+            $data = json_decode($json, associative: true, flags: JSON_THROW_ON_ERROR);
         } catch (JsonException $exception) {
-            throw new RuntimeException(
-                "Failed to parse `$path`: {$exception->getMessage()}.",
-                previous: $exception,
-            );
+            throw new RuntimeException($exception->getMessage(), previous: $exception);
         }
 
-        if (!is_array($json)) {
-            throw new RuntimeException("Failed to parse `$path`: expected a JSON object at the top level.");
+        if (!is_array($data)) {
+            throw new RuntimeException('expected a JSON object at the top level');
         }
 
-        /** @var GameData $json */
-        return self::createFromArray($json);
+        /** @var GameData $data */
+        return $data;
     }
 }

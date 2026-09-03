@@ -45,6 +45,14 @@
 	"scripts": {
 		"run-server": "php -S localhost:9996 -t webroot webroot/index.php",
 		"assets": "App\\Console\\AssetsInstaller::install",
+		"test": "vendor/bin/phpunit --display-all-issues",
+		"test-core": "cd packages/Core && vendor/bin/phpunit --display-all-issues",
+		"test-debugger": "cd packages/Debugger && vendor/bin/phpunit --display-all-issues",
+		"tests": [
+			"@test",
+			"@test-core",
+			"@test-debugger"
+		],
 		"post-install-cmd": [
 			"@assets"
 		],

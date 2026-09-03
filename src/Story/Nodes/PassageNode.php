@@ -39,7 +39,9 @@ class PassageNode extends Node
     public function toArray(): array
     {
         return [
-            ...$this->baseArray(),
+            'content' => $this->content,
+            'image' => $this->image?->toArray(),
+            'type' => $this->getType()->value,
             'choices' => array_map(
                 callback: fn(Choice $choice): array => $choice->toArray(),
                 array: $this->choices,

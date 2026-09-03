@@ -4,19 +4,18 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Story\Game;
-use Elone\Core\Controller;
 use Symfony\Component\Finder\Finder;
 
 /**
  * Handles the pages-related actions within the application.
  */
-final class PagesController extends Controller
+final class PagesController extends AppController
 {
     /**
      * Handles the logic for the home functionality.
      *
      * @return void
-     * @link templates/pages/home.php
+     * @link templates/Pages/home.php
      */
     public function home(): void
     {
@@ -26,7 +25,7 @@ final class PagesController extends Controller
      * Retrieves and processes stories.
      *
      * @return void
-     * @link templates/pages/stories.php
+     * @link templates/Pages/stories.php
      */
     public function stories(): void
     {

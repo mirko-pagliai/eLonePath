@@ -17,6 +17,8 @@ use PHPUnit\Framework\TestCase;
 class RouterTest extends TestCase
 {
     /**
+     * @param list<string> $expectedParams
+     *
      * @link \Elone\Core\Routing\Router::dispatch()
      */
     #[Test]

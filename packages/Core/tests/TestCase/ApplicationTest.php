@@ -10,6 +10,7 @@ use Elone\Core\Routing\Router;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use TestApp\Controller\PagesController;
 
 /**
  * ApplicationTest.
@@ -54,13 +55,13 @@ class ApplicationTest extends TestCase
     public function testRunDispatchesToController(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'GET';
-        $_SERVER['REQUEST_URI'] = '/response/ok';
+        $_SERVER['REQUEST_URI'] = '/pages/printResponse';
 
         ob_start();
         $this->application->run();
-        $output = ob_get_clean();
+        $output = ob_get_clean() ?: '';
 
-        $this->assertSame('Hello from ResponseController.', $output);
+        $this->assertSame('Hello from `' . PagesController::class . '::printResponse()`.', $output);
         $this->assertSame(200, http_response_code());
     }
 
@@ -75,7 +76,7 @@ class ApplicationTest extends TestCase
 
         ob_start();
         $this->application->run();
-        $output = ob_get_clean();
+        $output = ob_get_clean() ?: '';
 
         $this->assertSame(404, http_response_code());
         $this->assertStringContainsString('404', $output);

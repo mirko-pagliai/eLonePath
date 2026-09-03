@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 /**
  * @var array<\App\Story\Game> $stories
- * @var \Elone\Core\View\View $this
+ * @var \App\View\AppView $this
  *
  * @link \App\Controller\PagesController::stories()
  */

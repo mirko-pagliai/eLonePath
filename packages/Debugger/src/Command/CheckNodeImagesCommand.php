@@ -15,7 +15,11 @@ use Symfony\Component\Console\Style\SymfonyStyle;
  * $ bin/console debugger:check-node-images full/path/to/story.json
  * ```
  */
-#[AsCommand(name: 'debugger:check-node-images')]
+#[AsCommand(
+    name: 'debugger:check-node-images',
+    // this short description is shown when running "php bin/console list"
+    description: 'Checks all images, to verify their requirements',
+)]
 class CheckNodeImagesCommand extends Command
 {
     public function __invoke(

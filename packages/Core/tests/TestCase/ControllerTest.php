@@ -10,6 +10,7 @@ use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use TestApp\View\CustomView;
 
 /**
  * ControllerTest.
@@ -18,28 +19,108 @@ use PHPUnit\Framework\TestCase;
 class ControllerTest extends TestCase
 {
     /**
+     * With no `View` given and no `viewClass()` override, the base `View` is used — the existing, unchanged
+     * default behavior.
+     *
+     * @link \Elone\Core\Controller::__construct()
+     */
+    #[Test]
+    public function testConstructBuildsBaseViewByDefault(): void
+    {
+        $controller = new class extends Controller {
+            public function getView(): View
+            {
+                return $this->view;
+            }
+        };
+
+        $this->assertInstanceOf(View::class, $controller->getView());
+    }
+
+    /**
+     * A subclass overriding `viewClass()` — the app's own `AppController`, in practice — gets an instance of that
+     * class, not the base `View`, when no `View` is given explicitly.
+     *
+     * @link \Elone\Core\Controller::__construct()
+     * @link \Elone\Core\Controller::viewClass()
+     */
+    #[Test]
+    public function testConstructRespectsViewClassOverride(): void
+    {
+        $controller = new class extends Controller {
+            protected static function viewClass(): string
+            {
+                return CustomView::class;
+            }
+
+            public function getView(): View
+            {
+                return $this->view;
+            }
+        };
+
+        $this->assertInstanceOf(CustomView::class, $controller->getView());
+    }
+
+    /**
+     * An explicitly given `View` is used as-is, regardless of `viewClass()`.
+     *
+     * @link \Elone\Core\Controller::__construct()
+     */
+    #[Test]
+    public function testConstructWithExplicitViewIgnoresViewClass(): void
+    {
+        $view = new View();
+
+        $controller = new class ($view) extends Controller {
+            public function __construct(View $view)
+            {
+                parent::__construct(view: $view);
+            }
+
+            protected static function viewClass(): string
+            {
+                return CustomView::class;
+            }
+
+            public function getView(): View
+            {
+                return $this->view;
+            }
+        };
+
+        $this->assertSame($view, $controller->getView());
+    }
+
+    /**
      * @link \Elone\Core\Controller::set()
      */
     #[Test]
     public function testSet(): void
     {
         $view = new class extends View {
+            /**
+             * @var array<string, mixed>
+             */
             public array $data = [];
         };
 
         $controller = new class (view: $view) extends Controller {
-            public readonly View $view;
-
-            public function set(array $data): self
+            public function set(array $data): static
             {
                 return parent::set($data);
+            }
+
+            public function getView(): View
+            {
+                return $this->view;
             }
         };
 
         $result = $controller->set(['key' => 'value']);
         $this->assertSame($controller, $result);
 
-        $this->assertSame('value', $controller->view->get('key'));
+        $this->assertSame('value', $controller->getView()->get('key'));
     }
 
     /**

@@ -8,6 +8,7 @@ use Elone\Core\Exception\ActionNotFoundException;
 use Elone\Core\Exception\ControllerNotFoundException;
 use Elone\Core\Exception\RouteNotFoundException;
 use Elone\Core\Utility\WordCase;
+use ReflectionClass;
 use ReflectionMethod;
 
 /**
@@ -29,8 +30,9 @@ readonly class Route
      *
      * @return void
      *
-     * @throws \Elone\Core\Exception\ControllerNotFoundException If the controller name is invalid or the specified
-     * controller class is not found.
+     * @throws \Elone\Core\Exception\ControllerNotFoundException If the controller name is invalid, the specified
+     * controller class is not found, or the class is abstract (e.g. the app's own `AppController`) and so can
+     * never actually be dispatched to.
      * @throws \Elone\Core\Exception\RouteNotFoundException If the controller class does not extend the base
      * `Controller` class.
      * @throws \Elone\Core\Exception\ActionNotFoundException If the specified action is not found in the controller
@@ -49,6 +51,13 @@ readonly class Route
 
         if (!is_subclass_of($controllerClass, Controller::class)) {
             throw new RouteNotFoundException("`$controllerClass` must extend `" . Controller::class . '`.');
+        }
+
+        // An abstract class (the app's own AppController, or any other abstract base) is never a real, dispatchable
+        // controller — treated the same as "not found" rather than a distinct case, so a probing request can't tell
+        // the two apart.
+        if (new ReflectionClass($controllerClass)->isAbstract()) {
+            throw new ControllerNotFoundException("Controller not found: `$controllerClass`.");
         }
 
         if (!method_exists($controllerClass, $action)) {

@@ -32,6 +32,10 @@ class ViewTest extends TestCase
     }
 
     /**
+     * Calls `__get()` explicitly rather than through the magic `$view->Greeting` syntax — the two are identical at
+     * runtime, but `Greeting` isn't a real helper this app ever loads, so there's no `@property` declaring it;
+     * going through the method directly is what PHPStan can actually verify against `__get()`'s own signature.
+     *
      * @link \Elone\Core\View\View::loadHelper()
      */
     #[Test]
@@ -47,8 +51,7 @@ class ViewTest extends TestCase
 
         $view->loadHelper('Greeting', $helper);
 
-        $this->assertSame($helper, $view->Greeting);
-        $this->assertSame('hi', $view->Greeting->greet());
+        $this->assertSame($helper, $view->__get('Greeting'));
     }
 
     /**
@@ -61,7 +64,7 @@ class ViewTest extends TestCase
 
         $this->expectException(HelperNotFoundException::class);
         $this->expectExceptionMessageIs('Helper not loaded: `NotLoaded`.');
-        $view->NotLoaded;
+        $view->__get('NotLoaded');
     }
 
     /**
@@ -118,7 +121,7 @@ class ViewTest extends TestCase
     {
         $view = new View();
 
-        $result = $view->render('pages/home');
+        $result = $view->render('Pages/home');
 
         $this->assertStringContainsString('Home page.', $result);
         $this->assertStringContainsString('<div id="test-layout">', $result);
@@ -135,7 +138,7 @@ class ViewTest extends TestCase
     {
         $view = new View();
 
-        $result = $view->render('pages/home', null);
+        $result = $view->render('Pages/home', null);
 
         $this->assertStringContainsString('Home page.', $result);
         $this->assertStringNotContainsString('test-layout', $result);

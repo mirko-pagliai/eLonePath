@@ -46,9 +46,9 @@ class DispatcherTest extends TestCase
      * @link \Elone\Core\Dispatcher::templateName()
      */
     #[Test]
-    #[TestWith(['pages/index', 'Pages', 'index'])]
-    #[TestWith(['pages/view', 'Pages', 'view'])]
-    #[TestWith(['users-settings/view', 'UsersSettings', 'view'])]
+    #[TestWith(['Pages/index', 'Pages', 'index'])]
+    #[TestWith(['Pages/view', 'Pages', 'view'])]
+    #[TestWith(['UsersSettings/view', 'UsersSettings', 'view'])]
     public function testTemplateName(string $expectedTemplateName, string $controller, string $action): void
     {
         $dispatcher = new readonly class extends Dispatcher {

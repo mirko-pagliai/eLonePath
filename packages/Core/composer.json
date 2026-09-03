@@ -2,6 +2,19 @@
 	"name": "elone/core",
 	"type": "library",
 	"license": "MIT",
+	"require": {
+		"php": "^8.4"
+	},
+	"suggest": {
+		"michelf/php-markdown": "Markdown parser. Necessary if you want to use `HtmlHelper::markdown()`"
+	},
+	"require-dev": {
+		"cakephp/cakephp-codesniffer": "^5.3.2",
+		"michelf/php-markdown": "^2.0",
+		"phpstan/phpstan": "^2.2",
+		"phpunit/phpunit": "^13.2",
+		"symfony/var-dumper": "^8.1"
+	},
 	"autoload": {
 		"psr-4": {
 			"Elone\\Core\\": "src/"
@@ -15,19 +28,6 @@
 			"Elone\\Core\\Test\\": "tests/TestCase/",
 			"TestApp\\": "tests/test_app/src"
 		}
-	},
-	"require": {
-		"php": "^8.4"
-	},
-	"suggest": {
-		"michelf/php-markdown": "Markdown parser. Necessary if you want to use `HtmlHelper::markdown()`"
-	},
-	"require-dev": {
-		"cakephp/cakephp-codesniffer": "^5.3.2",
-		"michelf/php-markdown": "^2.0",
-		"phpstan/phpstan": "^2.2",
-		"phpunit/phpunit": "^13.2",
-		"symfony/var-dumper": "^8.1"
 	},
 	"config": {
 		"allow-plugins": {

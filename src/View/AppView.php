@@ -8,6 +8,8 @@ use Elone\Core\View\View;
 
 /**
  * The `View` every template in this app is rendered through — built by `AppController`.
+ *
+ * @property-read \App\View\Helper\StoryHelper $Story
  */
 class AppView extends View
 {
@@ -15,6 +17,6 @@ class AppView extends View
     {
         parent::__construct();
 
-        $this->loadHelper('Story', new StoryHelper());
+        $this->loadHelper(name: 'Story', helper: new StoryHelper());
     }
 }

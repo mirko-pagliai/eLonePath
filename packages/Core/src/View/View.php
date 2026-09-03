@@ -16,16 +16,16 @@ use Throwable;
  * to `set()`. `element()` renders a smaller, reusable snippet from `templates/element/` for inclusion inside another
  * template, taking its own data explicitly rather than whatever's been `set()` on the view.
  *
- * Inside any template, `$this` is the `View` instance rendering it — giving access to `Html` (this view's
- * `HtmlHelper`, always available), to any further helper registered via `loadHelper()` (e.g. `$this->Story`), and to
- * `element()` for including further snippets. `Html` covers what's generic enough to belong in this distributable core;
- * anything specific to a particular app's own domain is loaded as its own helper instead, by that app — `View` itself
- * doesn't know what those are.
+ * Inside any template, `$this` is the `View` instance rendering it — giving access to every helper registered via
+ * `loadHelper()` (e.g. `$this->Html`), and to `element()` for including further snippets. `Html` is loaded here,
+ * in the base `View`, because it's generic enough to belong in this distributable core; anything specific to a
+ * particular app's own domain is loaded as its own helper instead, by that app's own `View` subclass — `View`
+ * itself doesn't know what those are.
+ *
+ * @property-read \Elone\Core\View\Helper\HtmlHelper $Html
  */
 class View
 {
-    public readonly HtmlHelper $Html;
-
     /**
      * @var array<string, object>
      */

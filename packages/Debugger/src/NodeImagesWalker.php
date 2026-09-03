@@ -4,7 +4,13 @@ declare(strict_types=1);
 namespace Elone\Debugger;
 
 use App\Story\Game;
+use App\Story\Nodes\Node;
 
+/**
+ * Validates every node's leading image (see `App\Story\Nodes\Node::extractLeadingImage()`) against the fixed
+ * requirements every story image must meet: readable, non-empty, a valid JPEG, exactly 960px wide, at most 960px
+ * tall.
+ */
 readonly class NodeImagesWalker
 {
     public function __construct(protected Game $game)
@@ -18,19 +24,14 @@ readonly class NodeImagesWalker
     {
         $errors = [];
 
-        $nodesWithNodeImage = $this->getAllNodesWithNodeImages();
+        $nodesWithImages = $this->getAllNodesWithImages();
 
-        foreach ($nodesWithNodeImage as $nodeId => $nodeImage) {
-            if (trim($nodeImage->path) === '') {
-                $errors[] = "Node image path for node $nodeId is empty";
-
-                continue;
-            }
-            if (trim($nodeImage->title) === '') {
-                $errors[] = "Node image title for node $nodeId is empty";
+        foreach ($nodesWithImages as $nodeId => $image) {
+            if (trim($image['alt']) === '') {
+                $errors[] = "Node image alt text for node $nodeId is empty";
             }
 
-            $fullPath = STORIES . "/{$this->game->gameId}/img/$nodeImage->path";
+            $fullPath = STORIES . "/{$this->game->gameId}/img/{$image['path']}";
             if (!is_readable($fullPath)) {
                 $errors[] = "Node image path `$fullPath` for node $nodeId is not readable";
 
@@ -64,18 +65,25 @@ readonly class NodeImagesWalker
     }
 
     /**
-     * @return array<\App\Story\Nodes\NodeImage>
+     * Every node whose `content` starts with an image, with the image's filename and alt text.
+     *
+     * @return array<int, array{path: string, alt: string}>
      */
-    public function getAllNodesWithNodeImages(): array
+    public function getAllNodesWithImages(): array
     {
         $nodes = [];
 
         foreach ($this->game->nodes as $node) {
-            if (!isset($node->image)) {
+            $extracted = Node::extractLeadingImage($node->content);
+
+            if ($extracted['path'] === null) {
                 continue;
             }
 
-            $nodes[$node->id] = $node->image;
+            $nodes[$node->id] = [
+                'alt' => $extracted['alt'] ?? '',
+                'path' => $extracted['path'],
+            ];
         }
 
         return $nodes;

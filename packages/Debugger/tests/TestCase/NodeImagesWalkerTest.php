@@ -24,16 +24,13 @@ class NodeImagesWalkerTest extends TestCase
     }';
 
     /**
-     * Builds a single-node `Game` whose one node carries an image with the given path, resolved against
+     * Builds a single-node `Game` whose one node's `content` starts with a leading image, resolved against
      * `STORIES . '/test-game/img/'` by `NodeImagesWalker`.
      */
-    private function gameWithNodeImage(string $path): Game
+    private function gameWithNodeImage(string $path, string $alt = 'An illustration'): Game
     {
         return Game::createFromString('{' . self::GAME_HEADER . ', "nodes": {
-            "1": {
-                "content": "c", "type": "victory",
-                "image": {"path": "' . $path . '", "title": "An illustration"}
-            }
+            "1": {"content": "![' . $alt . '](' . $path . ')\nSome text.", "type": "victory"}
         }}');
     }
 
@@ -154,35 +151,28 @@ class NodeImagesWalkerTest extends TestCase
      * @link \Elone\Debugger\NodeImagesWalker::__invoke()
      */
     #[Test]
-    public function testInvokeWithEmptyPath(): void
+    public function testInvokeWithEmptyAltText(): void
     {
-        $game = Game::createFromString('{' . self::GAME_HEADER . ', "nodes": {
-            "1": {"content": "c", "type": "victory", "image": {"path": "", "title": "An illustration"}}
-        }}');
-
-        $walker = new NodeImagesWalker($game);
+        $walker = new NodeImagesWalker($this->gameWithNodeImage('correct_960x600.jpg', alt: ''));
 
         $errors = $walker();
         $this->assertCount(1, $errors);
-        $this->assertStringContainsString('is empty', $errors[0]);
+        $this->assertStringContainsString('alt text for node 1 is empty', $errors[0]);
     }
 
     /**
-     * @link \Elone\Debugger\NodeImagesWalker::getAllNodesWithNodeImages()
+     * @link \Elone\Debugger\NodeImagesWalker::getAllNodesWithImages()
      */
     #[Test]
-    public function testGetAllNodesWithNodeImagesSkipsNodesWithoutImages(): void
+    public function testGetAllNodesWithImagesSkipsNodesWithoutImages(): void
     {
         $game = Game::createFromString('{' . self::GAME_HEADER . ', "nodes": {
             "1": {"content": "no image here", "type": "passage", "choices": [{"content": "go", "target": 2}]},
-            "2": {
-                "content": "c", "type": "victory",
-                "image": {"path": "correct_960x600.jpg", "title": "An illustration"}
-            }
+            "2": {"content": "![An illustration](correct_960x600.jpg)\nSome text.", "type": "victory"}
         }}');
 
         $walker = new NodeImagesWalker($game);
 
-        $this->assertSame([2], array_keys($walker->getAllNodesWithNodeImages()));
+        $this->assertSame([2], array_keys($walker->getAllNodesWithImages()));
     }
 }

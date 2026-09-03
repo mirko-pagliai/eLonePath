@@ -4,10 +4,8 @@ declare(strict_types=1);
 namespace App\Story\Nodes;
 
 /**
- * @phpstan-import-type NodeImageData from \App\Story\Nodes\NodeImage
  * @phpstan-type DiceNodeData array{
  *     content: string,
- *     image: NodeImageData|null,
  *     type: string,
  *     dice: array{
  *         required_rolls: int,
@@ -23,13 +21,12 @@ class DiceNode extends Node
         int $id,
         string $gameId,
         string $content,
-        ?NodeImage $image,
         protected(set) readonly int $requiredRolls,
         protected(set) readonly int $minimum,
         protected(set) readonly int $targetSuccess,
         protected(set) readonly int $targetFailure,
     ) {
-        parent::__construct($id, $gameId, $content, $image);
+        parent::__construct($id, $gameId, $content);
     }
 
     public function getType(): NodeType
@@ -60,7 +57,6 @@ class DiceNode extends Node
     {
         return [
             'content' => $this->content,
-            'image' => $this->image?->toArray(),
             'type' => $this->getType()->value,
             'dice' => [
                 'required_rolls' => $this->requiredRolls,
@@ -80,7 +76,6 @@ class DiceNode extends Node
             id: $id,
             gameId: $gameId,
             content: $data['content'],
-            image: isset($data['image']) ? NodeImage::createFromArray($data['image']) : null,
             requiredRolls: $data['dice']['required_rolls'],
             minimum: $data['dice']['minimum'],
             targetSuccess: $data['dice']['target_success'],

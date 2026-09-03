@@ -3,21 +3,17 @@ declare(strict_types=1);
 
 namespace App\View\Helper;
 
+use App\Story\Nodes\Node;
 use Elone\Core\View\Helper\Helper;
 
 /**
- * A node's `content` may optionally start with a single image, written as ordinary Markdown
- * (`![alt text](filename.jpg)`) — exactly one, at the very beginning, or none at all. This helper pulls that
- * leading image apart from the rest of the content, resolving its filename against
- * `webroot/assets/stories/{gameId}/img/` and rendering it via `Html->image()`, so a template gets back ready-made
- * `<img>` markup for the image (if there was one) plus whatever markdown text follows it, rather than raw pieces
- * it would have to assemble itself.
+ * A node's `content` may optionally start with a single image — see `App\Story\Nodes\Node::extractLeadingImage()`
+ * for the exact rule. This helper pulls that leading image apart from the rest of the content, resolving its
+ * filename against `webroot/assets/stories/{gameId}/img/` and rendering it via `Html->image()`, so a template
+ * gets back ready-made `<img>` markup for the image (if there was one) plus whatever markdown text follows it,
+ * rather than raw pieces it would have to assemble itself.
  *
- * This only recognizes the image when it's the very first thing in `content`; an image Markdown appearing
- * anywhere else is left untouched here — validating that the rule was actually followed is the debugger's job,
- * not this helper's.
- *
- * @property-read \App\View\AppView $view
+ * @property \App\View\AppView $view
  */
 final class StoryHelper extends Helper
 {
@@ -32,25 +28,32 @@ final class StoryHelper extends Helper
      * its filename against `webroot/assets/stories/{gameId}/img/` and applying the fixed styling every story
      * image shares.
      *
+     * @param string $content The node's raw content.
+     * @param string $gameId The game's identifier, used to resolve the image's filename into a full asset path.
      * @return array{html: string|null, content: string}
      */
     public function image(string $content, string $gameId): array
     {
-        if (!preg_match('/^!\[([^\]]*)\]\(([^)]+)\)\s*/', $content, $matches)) {
+        $extracted = Node::extractLeadingImage($content);
+
+        if ($extracted['path'] === null) {
             return [
                 'html' => null,
-                'content' => $content,
+                'content' => $extracted['content'],
             ];
         }
 
         $html = $this->view->Html->image(
-            path: "/assets/stories/$gameId/img/{$matches[2]}",
-            options: ['alt' => $matches[1], 'class' => self::IMAGE_CLASS],
+            path: "/assets/stories/$gameId/img/{$extracted['path']}",
+            options: [
+                'alt' => $extracted['alt'],
+                'class' => self::IMAGE_CLASS,
+            ],
         );
 
         return [
             'html' => $html,
-            'content' => substr($content, strlen($matches[0])),
+            'content' => $extracted['content'],
         ];
     }
 }

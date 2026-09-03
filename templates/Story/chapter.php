@@ -16,22 +16,16 @@ use App\Story\Nodes\VictoryNode;
 
 /** @link templates/element/chapter_header.php */
 echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'subtitle' => "Pagina $node->id"]);
+
+$image = $this->Story->image($node->content, $game->gameId);
 ?>
 
-<?php
-if ($node->image !== null) {
-    echo $this->Html->image(
-        path: "/assets/stories/$game->gameId/img/{$node->image->path}",
-        options: [
-            'alt' => $node->image->title,
-            'class' => 'img-fluid mx-auto mb-5 d-block',
-        ],
-    );
-}
-?>
+<?php if ($image['html'] !== null) : ?>
+    <?= $image['html'] ?>
+<?php endif; ?>
 
 <section id="story-content" class="fs-4 mb-4">
-    <?= $this->Html->markdown(markdown: $node->content) ?>
+    <?= $this->Html->markdown(markdown: $image['content']) ?>
 </section>
 
 <?php if ($node instanceof PassageNode) : ?>
@@ -102,3 +96,4 @@ if ($node->image !== null) {
         ) ?>
     </div>
 <?php endif; ?>
+

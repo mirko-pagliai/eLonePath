@@ -4,10 +4,8 @@ declare(strict_types=1);
 namespace App\Story\Nodes;
 
 /**
- * @phpstan-import-type NodeImageData from \App\Story\Nodes\NodeImage
  * @phpstan-type VictoryNodeData array{
  *     content: string,
- *     image: NodeImageData|null,
  *     type: string,
  * }
  */
@@ -25,7 +23,6 @@ class VictoryNode extends Node
     {
         return [
             'content' => $this->content,
-            'image' => $this->image?->toArray(),
             'type' => $this->getType()->value,
         ];
     }
@@ -39,7 +36,6 @@ class VictoryNode extends Node
             id: $id,
             gameId: $gameId,
             content: $data['content'],
-            image: isset($data['image']) ? NodeImage::createFromArray($data['image']) : null,
         );
     }
 }

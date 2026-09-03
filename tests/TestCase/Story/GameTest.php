@@ -142,9 +142,9 @@ class GameTest extends TestCase
     }
 
     /**
-     * `sampleData()` deliberately omits the optional `image` key on its nodes and doesn't order keys the way
-     * `toArray()` does — this is the complete shape `toArray()` actually produces, `image: null` and all, used to
-     * verify the round trip precisely rather than comparing against `sampleData()` itself.
+     * `sampleData()` deliberately doesn't order keys the way `toArray()` does — this is the complete shape
+     * `toArray()` actually produces, used to verify the round trip precisely rather than comparing against
+     * `sampleData()` itself.
      *
      * @link \App\Story\Game::toArray()
      */
@@ -170,7 +170,6 @@ class GameTest extends TestCase
             'nodes' => [
                 1 => [
                     'content' => 'Start here.',
-                    'image' => null,
                     'type' => 'passage',
                     'choices' => [
                         ['content' => 'Go to page 2', 'target' => 2],
@@ -178,7 +177,6 @@ class GameTest extends TestCase
                 ],
                 2 => [
                     'content' => 'The end.',
-                    'image' => null,
                     'type' => 'victory',
                 ],
             ],

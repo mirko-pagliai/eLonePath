@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Core",
-                "reference": "f9ffedb2e2e03b00ee58c9d8147d73ed2b0f27d7"
+                "reference": "d8a4006addcb6f00099d5c6076c097ddf4a0c4ce"
             },
             "require": {
                 "php": "^8.4"

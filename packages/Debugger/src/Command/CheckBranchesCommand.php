@@ -67,8 +67,9 @@ class CheckBranchesCommand extends Command
                     }
 
                     // Style for image nodes
-                    if ($node->image) {
-                        $io->write("> image `<fg=yellow>{$node->image->path}</>` ");
+                    $image = Node::extractLeadingImage($node->content);
+                    if ($image['path'] !== null) {
+                        $io->write("> image `<fg=yellow>{$image['path']}</>` ");
                     }
 
                     if (array_key_last($branch) === $k) {

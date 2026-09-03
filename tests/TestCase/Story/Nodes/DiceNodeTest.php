@@ -22,7 +22,6 @@ class DiceNodeTest extends TestCase
             id: 17,
             gameId: 'test-game',
             content: 'Some content.',
-            image: null,
             requiredRolls: 2,
             minimum: 8,
             targetSuccess: 15,

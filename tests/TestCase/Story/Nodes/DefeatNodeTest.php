@@ -21,7 +21,7 @@ class DefeatNodeTest extends TestCase
     #[Test]
     public function testType(): void
     {
-        $node = new DefeatNode(id: 12, gameId: 'test-game', content: 'The end.', image: null);
+        $node = new DefeatNode(id: 12, gameId: 'test-game', content: 'The end.');
         $this->assertSame(NodeType::DEFEAT, $node->getType());
     }
 
@@ -33,11 +33,10 @@ class DefeatNodeTest extends TestCase
     {
         $node = DefeatNode::createFromArray(id: 12, gameId: 'test-game', data: [
             'content' => 'The end.',
-            'image' => null,
             'type' => 'defeat',
         ]);
 
         $this->assertSame(12, $node->id);
-        $this->assertNull($node->image);
+        $this->assertSame('The end.', $node->content);
     }
 }

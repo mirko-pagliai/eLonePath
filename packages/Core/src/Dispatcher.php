@@ -61,7 +61,7 @@ readonly class Dispatcher
 
         if (count($params) !== count($parameters)) {
             throw new HttpException(sprintf(
-                'Invalid number of parameters for %s::%s(). Expected %d, received %d.',
+                'Invalid number of parameters for `%s::%s()`. Expected %d, received %d.',
                 $method->getDeclaringClass()->getName(),
                 $method->getName(),
                 count($parameters),

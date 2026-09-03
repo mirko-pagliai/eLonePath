@@ -7,6 +7,7 @@ use Elone\Core\Dispatcher;
 use Elone\Core\Exception\HttpException;
 use Elone\Core\Exception\UnsupportedParameterTypeException;
 use Elone\Core\Routing\Route;
+use Elone\Core\Server\Request;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -20,6 +21,27 @@ use TestApp\Controller\ConversionController;
 #[CoversClass(Dispatcher::class)]
 class DispatcherTest extends TestCase
 {
+    /**
+     * `PagesController::home()` returns `void` — this is what proves `dispatch()` genuinely falls through to
+     * `templateName()` and `$controller->render()` for a real template file (`pages/home.php`, via the default
+     * layout), rather than the whole path only ever being exercised through `resolveArguments()`/`templateName()`
+     * in isolation, or through an action that returns a `Response` directly.
+     *
+     * @link \Elone\Core\Dispatcher::dispatch()
+     */
+    #[Test]
+    public function testDispatchRendersTheControllerActionsTemplate(): void
+    {
+        $dispatcher = new Dispatcher();
+        $route = new Route(controller: 'Pages', action: 'home');
+        $request = new Request('GET', '/pages/home');
+
+        $response = $dispatcher->dispatch($route, $request);
+
+        $this->assertSame(200, $response->status());
+        $this->assertStringContainsString('Home page.', $response->content());
+    }
+
     /**
      * @link \Elone\Core\Dispatcher::templateName()
      */
@@ -129,11 +151,12 @@ class DispatcherTest extends TestCase
             }
         };
 
-        $method = new ReflectionMethod(ConversionController::class, 'withInt');
+        $controller = ConversionController::class;
+        $method = new ReflectionMethod($controller, 'withInt');
 
         $this->expectException(HttpException::class);
         $this->expectExceptionMessageIs(
-            'Invalid number of parameters for TestApp\Controller\ConversionController::withInt(). Expected 1, received 0.',
+            "Invalid number of parameters for `$controller::withInt()`. Expected 1, received 0.",
         );
         $dispatcher::resolveArguments($method, []);
     }

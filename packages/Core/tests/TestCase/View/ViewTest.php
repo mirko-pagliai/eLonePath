@@ -106,6 +106,42 @@ class ViewTest extends TestCase
     }
 
     /**
+     * `pages/home.php` and `layout/default.php` are minimal, generic fixtures — this is what proves `render()`
+     * actually resolves and evaluates a real template file, not just something asserted indirectly through
+     * `Controller`/`Dispatcher`. The `#test-layout` wrapper in `layout/default.php` is the marker that proves the
+     * content genuinely went through the layout.
+     *
+     * @link \Elone\Core\View\View::render()
+     */
+    #[Test]
+    public function testRenderWithDefaultLayout(): void
+    {
+        $view = new View();
+
+        $result = $view->render('pages/home');
+
+        $this->assertStringContainsString('Home page.', $result);
+        $this->assertStringContainsString('<div id="test-layout">', $result);
+    }
+
+    /**
+     * `layout: null` skips the layout entirely — the `#test-layout` wrapper from `testRenderWithDefaultLayout()`
+     * must not appear here, which is what actually proves the layout was skipped rather than merely empty.
+     *
+     * @link \Elone\Core\View\View::render()
+     */
+    #[Test]
+    public function testRenderWithoutLayout(): void
+    {
+        $view = new View();
+
+        $result = $view->render('pages/home', null);
+
+        $this->assertStringContainsString('Home page.', $result);
+        $this->assertStringNotContainsString('test-layout', $result);
+    }
+
+    /**
      * Test for the `element()` method.
      *
      * `greeting.php` deliberately passes `name` as a data key — the exact key that used to collide with

@@ -10,7 +10,7 @@ use RuntimeException;
 /**
  * Generates HTML tags for various purposes, such as images, links, and icons.
  */
-final class HtmlHelper
+class HtmlHelper
 {
     /**
      * Converts an associative array of HTML attributes into a formatted string suitable for insertion into an HTML tag.
@@ -122,16 +122,27 @@ final class HtmlHelper
     }
 
     /**
+     * @return bool
+     * @internal Checks if the `michelf/php-markdown` package is available
+     */
+    protected function checkHasMarkdown(): bool
+    {
+        return class_exists(Markdown::class);
+    }
+
+    /**
      * Converts a markdown string into HTML.
      *
      * @param string $markdown The markdown text to be converted.
      * @return string The converted HTML string.
-     * @throws \RuntimeException If the `michelf/php-markdown` library is not installed.
+     * @throws \RuntimeException If the `michelf/php-markdown` package is not installed.
      */
     public function markdown(string $markdown): string
     {
-        if (!class_exists(Markdown::class)) {
-            throw new RuntimeException('`michelf/php-markdown` is required to use `markdown()`.');
+        if (!$this->checkHasMarkdown()) {
+            throw new RuntimeException(
+                'Package `michelf/php-markdown` is required to use `' . __METHOD__ . '()`.',
+            );
         }
 
         return Markdown::defaultTransform($markdown);

@@ -142,15 +142,39 @@ class HtmlHelperTest extends TestCase
     }
 
     /**
+     * Tests for the `markdown()` method.
+     *
      * @link \Elone\Core\View\Helper\HtmlHelper::markdown()
      */
     #[Test]
     #[TestWith(['This is a normal string', '<p>This is a normal string</p>'])]
     #[TestWith(['This is a **bold** string', '<p>This is a <strong>bold</strong> string</p>'])]
+    #[TestWith(['', ''])]
     public function testMarkdown(string $string, string $expected): void
     {
         $result = $this->htmlHelper->markdown($string);
         $this->assertSame($expected, trim($result));
+    }
+
+    /**
+     * Test for the `markdown()` method when the `michelf/php-markdown` package is missing.
+     *
+     * @link \Elone\Core\View\Helper\HtmlHelper::markdown()
+     */
+    #[Test]
+    public function testMarkdownPackageIsMissing(): void
+    {
+        $htmlHelper = new class extends HtmlHelper {
+            protected function checkHasMarkdown(): bool
+            {
+                return false;
+            }
+        };
+
+        $this->expectExceptionMessageIs(
+            'Package `michelf/php-markdown` is required to use `' . HtmlHelper::class . '::markdown()`.',
+        );
+        $htmlHelper->markdown('');
     }
 
     /**

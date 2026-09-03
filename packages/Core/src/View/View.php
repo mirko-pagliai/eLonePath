@@ -6,7 +6,6 @@ namespace Elone\Core\View;
 use Elone\Core\Exception\HelperNotFoundException;
 use Elone\Core\Exception\LayoutNotFoundException;
 use Elone\Core\Exception\TemplateNotFoundException;
-use Elone\Core\View\Helper\HtmlHelper;
 use Throwable;
 
 /**
@@ -21,8 +20,6 @@ use Throwable;
  * in the base `View`, because it's generic enough to belong in this distributable core; anything specific to a
  * particular app's own domain is loaded as its own helper instead, by that app's own `View` subclass — `View`
  * itself doesn't know what those are.
- *
- * @property-read \Elone\Core\View\Helper\HtmlHelper $Html
  */
 class View
 {
@@ -35,11 +32,6 @@ class View
      * @var array<string, mixed>
      */
     private array $data = [];
-
-    public function __construct()
-    {
-        $this->loadHelper(name: 'Html', helper: new HtmlHelper());
-    }
 
     /**
      * Registers `$helper` under `$name`, making it available in templates as `$this->$name`.

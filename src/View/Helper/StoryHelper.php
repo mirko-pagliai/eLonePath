@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\View\Helper;
 
-use Elone\Core\View\View;
+use Elone\Core\View\Helper\Helper;
 
 /**
  * A node's `content` may optionally start with a single image, written as ordinary Markdown
@@ -23,12 +23,8 @@ use Elone\Core\View\View;
  * up referencing each other in a cycle, which a constructor directly depending on another helper's instance
  * could not.
  */
-final class StoryHelper
+final class StoryHelper extends Helper
 {
-    public function __construct(private readonly View $view)
-    {
-    }
-
     /**
      * Pulls the leading image out of `$content`, if there is one, resolving its filename against
      * `webroot/assets/stories/{gameId}/img/`.

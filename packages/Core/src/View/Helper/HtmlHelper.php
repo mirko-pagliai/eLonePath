@@ -10,7 +10,7 @@ use RuntimeException;
 /**
  * Generates HTML tags for various purposes, such as images, links, and icons.
  */
-class HtmlHelper
+class HtmlHelper extends Helper
 {
     /**
      * Converts an associative array of HTML attributes into a formatted string suitable for insertion into an HTML tag.

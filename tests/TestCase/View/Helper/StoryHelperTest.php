@@ -36,8 +36,11 @@ class StoryHelperTest extends TestCase
             'the-tower',
         );
 
-        $this->assertSame('/assets/stories/the-tower/img/01.jpg', $result['path']);
-        $this->assertSame('a tower in the fog', $result['alt']);
+        $this->assertSame(
+            '<img src="/assets/stories/the-tower/img/01.jpg" alt="a tower in the fog"'
+            . ' class="img-fluid mx-auto mb-5 d-block">',
+            $result['html'],
+        );
         $this->assertSame('The wind blows hard.', $result['content']);
     }
 
@@ -49,8 +52,7 @@ class StoryHelperTest extends TestCase
     {
         $result = $this->storyHelper->image('Just plain text, no images.', 'the-tower');
 
-        $this->assertNull($result['path']);
-        $this->assertNull($result['alt']);
+        $this->assertNull($result['html']);
         $this->assertSame('Just plain text, no images.', $result['content']);
     }
 
@@ -68,7 +70,7 @@ class StoryHelperTest extends TestCase
 
         $result = $this->storyHelper->image($content, 'the-tower');
 
-        $this->assertNull($result['path']);
+        $this->assertNull($result['html']);
         $this->assertSame($content, $result['content']);
     }
 
@@ -80,6 +82,10 @@ class StoryHelperTest extends TestCase
     {
         $result = $this->storyHelper->image('![alone](02.jpg)', 'the-tower');
 
+        $this->assertSame(
+            '<img src="/assets/stories/the-tower/img/02.jpg" alt="alone" class="img-fluid mx-auto mb-5 d-block">',
+            $result['html'],
+        );
         $this->assertSame('', $result['content']);
     }
 
@@ -91,8 +97,11 @@ class StoryHelperTest extends TestCase
     {
         $result = $this->storyHelper->image('![](03.jpg)' . "\n" . 'Text.', 'the-tower');
 
-        $this->assertSame('', $result['alt']);
-        $this->assertSame('/assets/stories/the-tower/img/03.jpg', $result['path']);
+        $this->assertSame(
+            '<img src="/assets/stories/the-tower/img/03.jpg" alt="" class="img-fluid mx-auto mb-5 d-block">',
+            $result['html'],
+        );
+        $this->assertSame('Text.', $result['content']);
     }
 
     /**
@@ -106,6 +115,10 @@ class StoryHelperTest extends TestCase
             'another-story',
         );
 
+        $this->assertSame(
+            '<img src="/assets/stories/another-story/img/04.jpg" alt="alt" class="img-fluid mx-auto mb-5 d-block">',
+            $result['html'],
+        );
         $this->assertSame('Text after several blank lines.', $result['content']);
     }
 }

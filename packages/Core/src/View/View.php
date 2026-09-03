@@ -6,6 +6,7 @@ namespace Elone\Core\View;
 use Elone\Core\Exception\HelperNotFoundException;
 use Elone\Core\Exception\LayoutNotFoundException;
 use Elone\Core\Exception\TemplateNotFoundException;
+use Elone\Core\View\Helper\Helper;
 use Throwable;
 
 /**
@@ -16,15 +17,14 @@ use Throwable;
  * template, taking its own data explicitly rather than whatever's been `set()` on the view.
  *
  * Inside any template, `$this` is the `View` instance rendering it — giving access to every helper registered via
- * `loadHelper()` (e.g. `$this->Html`), and to `element()` for including further snippets. `Html` is loaded here,
- * in the base `View`, because it's generic enough to belong in this distributable core; anything specific to a
- * particular app's own domain is loaded as its own helper instead, by that app's own `View` subclass — `View`
- * itself doesn't know what those are.
+ * `loadHelper()` (e.g. `$this->Html`), and to `element()` for including further snippets. `View` itself loads no
+ * helper of its own — not even a generic HTML one — since even that is a choice specific to an app's own domain;
+ * an app's own `View` subclass decides which helpers to load, and with what.
  */
 class View
 {
     /**
-     * @var array<string, object>
+     * @var array<string, \Elone\Core\View\Helper\Helper>
      */
     private array $helpers = [];
 
@@ -34,13 +34,14 @@ class View
     private array $data = [];
 
     /**
-     * Registers `$helper` under `$name`, making it available in templates as `$this->$name`.
+     * Registers `$helper` under `$name`, making it available in templates as `$this->$name`. Only a `Helper` subclass
+     * can be passed.
      *
-     * @param string $name The name templates will use to access this helper — e.g. `'Story'` for `$this->Story`.
-     * @param object $helper The helper instance.
+     * @param string $name The name templates will use to access this helper — e.g. `'Html'` for `$this->Html`.
+     * @param \Elone\Core\View\Helper\Helper $helper The helper instance.
      * @return void
      */
-    public function loadHelper(string $name, object $helper): void
+    public function loadHelper(string $name, Helper $helper): void
     {
         $this->helpers[$name] = $helper;
     }
@@ -50,7 +51,7 @@ class View
      *
      * @throws \Elone\Core\Exception\HelperNotFoundException If no helper was registered under `$name`.
      */
-    public function __get(string $name): object
+    public function __get(string $name): Helper
     {
         if (!isset($this->helpers[$name])) {
             throw new HelperNotFoundException("Helper not loaded: `$name`.");

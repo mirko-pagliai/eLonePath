@@ -5,6 +5,7 @@ namespace Elone\Core\Test\View\Helper;
 
 use Elone\Core\Exception\RouteNotFoundException;
 use Elone\Core\View\Helper\HtmlHelper;
+use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
@@ -23,7 +24,7 @@ class HtmlHelperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->htmlHelper = new HtmlHelper();
+        $this->htmlHelper = new HtmlHelper(new View());
     }
 
     /**
@@ -164,7 +165,7 @@ class HtmlHelperTest extends TestCase
     #[Test]
     public function testMarkdownPackageIsMissing(): void
     {
-        $htmlHelper = new class extends HtmlHelper {
+        $htmlHelper = new class (new View()) extends HtmlHelper {
             protected function checkHasMarkdown(): bool
             {
                 return false;

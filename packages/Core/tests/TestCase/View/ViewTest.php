@@ -5,11 +5,12 @@ namespace Elone\Core\Test\View;
 
 use Elone\Core\Exception\HelperNotFoundException;
 use Elone\Core\Exception\TemplateNotFoundException;
-use Elone\Core\View\Helper\HtmlHelper;
+use Elone\Core\View\Helper\Helper;
 use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use TypeError;
 
 /**
  * ViewTest.
@@ -18,23 +19,10 @@ use PHPUnit\Framework\TestCase;
 class ViewTest extends TestCase
 {
     /**
-     * `Html` is loaded the same way any other helper is — through `loadHelper()`, in the constructor — not as a
-     * special-cased property. This locks that in.
-     *
-     * @link \Elone\Core\View\View::__construct()
-     */
-    #[Test]
-    public function testConstructLoadsHtmlHelper(): void
-    {
-        $view = new View();
-
-        $this->assertInstanceOf(HtmlHelper::class, $view->Html);
-    }
-
-    /**
-     * Calls `__get()` explicitly rather than through the magic `$view->Greeting` syntax — the two are identical at
-     * runtime, but `Greeting` isn't a real helper this app ever loads, so there's no `@property` declaring it;
-     * going through the method directly is what PHPStan can actually verify against `__get()`'s own signature.
+     * Loading a real `Helper` subclass makes it accessible under the name it was loaded as. Calls `__get()`
+     * explicitly rather than through the magic `$view->Greeting` syntax — the two are identical at runtime, but
+     * `Greeting` isn't a real helper this app ever loads, so there's no `@property` declaring it; going through
+     * the method directly is what PHPStan can actually verify against `__get()`'s own signature.
      *
      * @link \Elone\Core\View\View::loadHelper()
      */
@@ -42,7 +30,7 @@ class ViewTest extends TestCase
     public function testLoadHelperMakesItAccessible(): void
     {
         $view = new View();
-        $helper = new class {
+        $helper = new class ($view) extends Helper {
             public function greet(): string
             {
                 return 'hi';
@@ -52,6 +40,28 @@ class ViewTest extends TestCase
         $view->loadHelper('Greeting', $helper);
 
         $this->assertSame($helper, $view->__get('Greeting'));
+    }
+
+    /**
+     * `loadHelper()` only accepts a `Helper` subclass — the parameter type itself enforces this, so passing
+     * anything else is a `TypeError`, not a runtime check this class has to perform.
+     *
+     * @link \Elone\Core\View\View::loadHelper()
+     */
+    #[Test]
+    public function testLoadHelperRejectsNonHelperObjects(): void
+    {
+        $view = new View();
+        $notAHelper = new class {
+            public function foo(): string
+            {
+                return 'bar';
+            }
+        };
+
+        $this->expectException(TypeError::class);
+        // @phpstan-ignore-next-line argument.type
+        $view->loadHelper('Bad', $notAHelper);
     }
 
     /**
@@ -109,7 +119,7 @@ class ViewTest extends TestCase
     }
 
     /**
-     * `pages/home.php` and `layout/default.php` are minimal, generic fixtures — this is what proves `render()`
+     * `Pages/home.php` and `layout/default.php` are minimal, generic fixtures — this is what proves `render()`
      * actually resolves and evaluates a real template file, not just something asserted indirectly through
      * `Controller`/`Dispatcher`. The `#test-layout` wrapper in `layout/default.php` is the marker that proves the
      * content genuinely went through the layout.

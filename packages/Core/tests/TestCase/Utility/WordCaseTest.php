@@ -50,4 +50,23 @@ class WordCaseTest extends TestCase
         $result = new WordCase($raw)->kebabCase();
         $this->assertSame($expected, $result);
     }
+
+    /**
+     * @link \Elone\Core\Utility\WordCase::snakeCase()
+     */
+    #[Test]
+    #[TestWith(['Pages', 'pages'])]
+    #[TestWith(['pages', 'pages'])]
+    #[TestWith(['UsersSettings', 'users_settings'])]
+    #[TestWith(['someActionName', 'some_action_name'])]
+    #[TestWith(['users-settings', 'users_settings'])]
+    #[TestWith(['users_settings', 'users_settings'])]
+    #[TestWith(['API', 'api'])]
+    #[TestWith(['APIUsers', 'api_users'])]
+    #[TestWith(['', ''])]
+    public function testSnakeCase(string $raw, string $expected): void
+    {
+        $result = new WordCase($raw)->snakeCase();
+        $this->assertSame($expected, $result);
+    }
 }

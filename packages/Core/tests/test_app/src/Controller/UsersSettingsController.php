@@ -14,4 +14,12 @@ class UsersSettingsController extends Controller
     public function index(): void
     {
     }
+
+    /**
+     * A multi-word action, used to verify that `Dispatcher::templateName()` snake_cases the action portion of the
+     * template path (`some_action_name.php`), unlike the controller portion, which is used as-is.
+     */
+    public function someActionName(): void
+    {
+    }
 }

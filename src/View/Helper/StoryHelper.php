@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\View\Helper;
 
+use Elone\Core\View\View;
+
 /**
  * A node's `content` may optionally start with a single image, written as ordinary Markdown
  * (`![alt text](filename.jpg)`) — exactly one, at the very beginning, or none at all. This helper pulls that
@@ -13,9 +15,20 @@ namespace App\View\Helper;
  * This only recognizes the image when it's the very first thing in `content`; an image Markdown appearing
  * anywhere else is left untouched here — validating that the rule was actually followed is the debugger's job,
  * not this helper's.
+ *
+ * Takes the `View` itself, not any specific other helper, in its constructor — the same way a template does. Any
+ * other helper this one needs (e.g. `$this->view->Html`) is reached lazily, inside a method body, not at
+ * construction time: by the time any of this helper's own methods actually run, every helper `AppView` loads is
+ * already registered, regardless of which order they were loaded in — so this composes safely even if helpers end
+ * up referencing each other in a cycle, which a constructor directly depending on another helper's instance
+ * could not.
  */
 final class StoryHelper
 {
+    public function __construct(private readonly View $view)
+    {
+    }
+
     /**
      * Pulls the leading image out of `$content`, if there is one, resolving its filename against
      * `webroot/assets/stories/{gameId}/img/`.

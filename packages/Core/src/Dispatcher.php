@@ -8,6 +8,7 @@ use Elone\Core\Exception\UnsupportedParameterTypeException;
 use Elone\Core\Routing\Route;
 use Elone\Core\Server\Request;
 use Elone\Core\Server\Response;
+use Elone\Core\Utility\WordCase;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -141,12 +142,15 @@ readonly class Dispatcher
 
     /**
      * Builds the template path for `$route`: the controller identifier, exactly as `Route` carries it (already
-     * StudlyCase — `Router::dispatch()` builds it that way), followed by the action. The template directory for a
-     * controller mirrors its own name, the same convention CakePHP uses: `PagesController` looks in
-     * `templates/Pages/`, `UsersSettingsController` in `templates/UsersSettings/`.
+     * StudlyCase — `Router::dispatch()` builds it that way), followed by the action converted to snake_case. The
+     * template directory for a controller mirrors its own name: `PagesController` looks in `templates/Pages/`; within
+     * it, `someActionName()` looks for `some_action_name.php`.
+     *
+     * @param \Elone\Core\Routing\Route $route The route containing information about the controller and action.
+     * @return string The generated template name based on the controller and action of the route.
      */
     protected function templateName(Route $route): string
     {
-        return "$route->controller/$route->action";
+        return "$route->controller/" . new WordCase($route->action)->snakeCase();
     }
 }

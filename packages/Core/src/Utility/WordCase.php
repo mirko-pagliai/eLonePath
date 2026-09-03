@@ -45,6 +45,18 @@ final readonly class WordCase
     }
 
     /**
+     * Converts the elements of an array into a snake_case formatted string — the same words `kebabCase()` uses,
+     * joined with underscores instead of hyphens. Used for the action portion of a template path (CakePHP's own
+     * convention: `someActionName()` looks for `some_action_name.php`).
+     *
+     * @return string The snake_case formatted string created by joining array elements with underscores.
+     */
+    public function snakeCase(): string
+    {
+        return implode('_', array_map(strtolower(...), $this->words));
+    }
+
+    /**
      * Splits a raw string into an array of words based on delimiters (dashes, underscores) or PascalCase/camelCase
      * boundaries. A run of consecutive uppercase letters is kept together as a single word (e.g. `API`, `HTML`)
      * unless it's immediately followed by a lowercase letter, in which case the last uppercase letter of the run

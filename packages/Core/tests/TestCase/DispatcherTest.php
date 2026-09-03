@@ -23,7 +23,7 @@ class DispatcherTest extends TestCase
 {
     /**
      * `PagesController::home()` returns `void` — this is what proves `dispatch()` genuinely falls through to
-     * `templateName()` and `$controller->render()` for a real template file (`pages/home.php`, via the default
+     * `templateName()` and `$controller->render()` for a real template file (`Pages/home.php`, via the default
      * layout), rather than the whole path only ever being exercised through `resolveArguments()`/`templateName()`
      * in isolation, or through an action that returns a `Response` directly.
      *
@@ -43,12 +43,34 @@ class DispatcherTest extends TestCase
     }
 
     /**
+     * Distinct from the case above: a multi-word action name (`someActionName()`) proves the action portion of
+     * the template path is converted to snake_case, not just used verbatim like the controller portion is —
+     * `UsersSettings/some_action_name.php`, not `UsersSettings/someActionName.php`.
+     *
+     * @link \Elone\Core\Dispatcher::dispatch()
+     * @link \Elone\Core\Dispatcher::templateName()
+     */
+    #[Test]
+    public function testDispatchRendersTemplateWithSnakeCasedActionName(): void
+    {
+        $dispatcher = new Dispatcher();
+        $route = new Route(controller: 'UsersSettings', action: 'someActionName');
+        $request = new Request('GET', '/users-settings/some-action-name');
+
+        $response = $dispatcher->dispatch($route, $request);
+
+        $this->assertSame(200, $response->status());
+        $this->assertStringContainsString('Some action name page.', $response->content());
+    }
+
+    /**
      * @link \Elone\Core\Dispatcher::templateName()
      */
     #[Test]
     #[TestWith(['Pages/index', 'Pages', 'index'])]
     #[TestWith(['Pages/view', 'Pages', 'view'])]
     #[TestWith(['UsersSettings/view', 'UsersSettings', 'view'])]
+    #[TestWith(['UsersSettings/some_action_name', 'UsersSettings', 'someActionName'])]
     public function testTemplateName(string $expectedTemplateName, string $controller, string $action): void
     {
         $dispatcher = new readonly class extends Dispatcher {

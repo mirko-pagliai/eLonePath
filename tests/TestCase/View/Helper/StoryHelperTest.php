@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Test\View\Helper;
 
+use App\View\AppView;
 use App\View\Helper\StoryHelper;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -21,7 +22,7 @@ class StoryHelperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->storyHelper = new StoryHelper();
+        $this->storyHelper = new StoryHelper(new AppView());
     }
 
     /**

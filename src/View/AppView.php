@@ -17,6 +17,6 @@ class AppView extends View
     {
         parent::__construct();
 
-        $this->loadHelper(name: 'Story', helper: new StoryHelper());
+        $this->loadHelper(name: 'Story', helper: new StoryHelper($this));
     }
 }

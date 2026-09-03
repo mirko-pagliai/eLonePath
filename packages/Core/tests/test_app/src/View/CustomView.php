@@ -6,8 +6,7 @@ namespace TestApp\View;
 use Elone\Core\View\View;
 
 /**
- * A `View` subclass used to verify that `Controller::viewClass()` is respected — a controller overriding it should
- * end up with an instance of exactly this class, not the base `View`.
+ * A `View` subclass used to verify that `Controller::viewClass()` is respected.
  */
 final class CustomView extends View
 {

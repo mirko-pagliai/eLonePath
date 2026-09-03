@@ -15,7 +15,7 @@ final class PagesController extends AppController
      * Handles the logic for the home functionality.
      *
      * @return void
-     * @link templates/pages/home.php
+     * @link templates/Pages/home.php
      */
     public function home(): void
     {
@@ -25,7 +25,7 @@ final class PagesController extends AppController
      * Retrieves and processes stories.
      *
      * @return void
-     * @link templates/pages/stories.php
+     * @link templates/Pages/stories.php
      */
     public function stories(): void
     {

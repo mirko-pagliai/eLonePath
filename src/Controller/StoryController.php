@@ -29,6 +29,7 @@ class StoryController extends AppController
      * @param string $storyId The unique identifier of the story to start.
      * @return \Elone\Core\Server\Response|null Returns a `Response` object if a redirection is performed; otherwise,
      * returns `null`.
+     * @link templates/Story/start.php
      */
     public function start(string $storyId): ?Response
     {
@@ -48,7 +49,7 @@ class StoryController extends AppController
      * @param string $storyId
      * @param int $nodeNumber
      * @return void
-     * @link templates/story/chapter.php
+     * @link templates/Story/chapter.php
      */
     public function chapter(string $storyId, int $nodeNumber): void
     {
@@ -65,7 +66,7 @@ class StoryController extends AppController
      * @param int $nodeNumber
      * @return void
      * @throws \Random\RandomException
-     * @link templates/story/roll.php
+     * @link templates/Story/roll.php
      */
     public function roll(string $storyId, int $nodeNumber): void
     {

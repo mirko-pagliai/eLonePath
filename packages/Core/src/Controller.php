@@ -79,6 +79,37 @@ abstract class Controller
     }
 
     /**
+     * Whether the current request's HTTP method is `$type` — see `Request::is()`.
+     *
+     * @param string $type The HTTP method to check for, e.g. `'get'`, `'post'`.
+     */
+    protected function is(string $type): bool
+    {
+        return $this->request->is($type);
+    }
+
+    /**
+     * Restricts the current action to one of `$methods` — see `Request::allowMethod()`. Call as the first line of
+     * an action that should only run for specific HTTP methods:
+     *
+     * ```
+     * public function submit(): Response
+     * {
+     *     $this->allowMethod('post');
+     *     ...
+     * }
+     * ```
+     *
+     * @param list<string>|string $methods One or more HTTP methods this request must match.
+     * @throws \Elone\Core\Exception\MethodNotAllowedException If the current request's method isn't among
+     *  `$methods`.
+     */
+    protected function allowMethod(array|string $methods): void
+    {
+        $this->request->allowMethod($methods);
+    }
+
+    /**
      * Retrieves all query string parameters of the current request.
      *
      * @return array<array-key, mixed> The query string parameters, as an associative array.

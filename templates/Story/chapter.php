@@ -96,4 +96,3 @@ $image = $this->Story->image($node->content, $game->gameId);
         ) ?>
     </div>
 <?php endif; ?>
-

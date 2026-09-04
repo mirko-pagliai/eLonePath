@@ -143,6 +143,23 @@ class HtmlHelperTest extends TestCase
     }
 
     /**
+     * `$query` on `link()` carries through to the underlying `url()`/`Route::resolve()` call, appended to the
+     * `href` — separate from `$options`, which only ever becomes HTML attributes.
+     *
+     * @link \Elone\Core\View\Helper\HtmlHelper::link()
+     */
+    #[Test]
+    public function testLinkWithQuery(): void
+    {
+        $result = $this->htmlHelper->link(
+            'Continua',
+            ['controller' => 'Story', 'action' => 'chapter', 'the-tower', '5'],
+            query: ['state' => 'abc123'],
+        );
+        $this->assertSame('<a href="/story/chapter/the-tower/5?state=abc123">Continua</a>', $result);
+    }
+
+    /**
      * Tests for the `markdown()` method.
      *
      * @link \Elone\Core\View\Helper\HtmlHelper::markdown()
@@ -204,6 +221,16 @@ class HtmlHelperTest extends TestCase
     {
         $result = $this->htmlHelper->url($route);
         $this->assertSame($route, $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::url()
+     */
+    #[Test]
+    public function testUrlWithQuery(): void
+    {
+        $result = $this->htmlHelper->url(['controller' => 'Pages', 'action' => 'home'], ['state' => 'abc123']);
+        $this->assertSame('/pages/home?state=abc123', $result);
     }
 
     /**

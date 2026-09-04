@@ -106,23 +106,30 @@ readonly class Route
     }
 
     /**
-     * Resolves `$route` to a URL. A string is returned exactly as given — use it for a literal path (`/`) or an
-     * external URL (`https://example.com`). An array is treated as a route and built into one: `controller`
-     * (required) and `action` (defaults to `index`) as string keys, with additional integer keys as route
-     * parameters.
+     * Resolves `$route` to a URL, then appends `$query` as a querystring if it's non-empty. A string is returned
+     * exactly as given — use it for a literal path (`/`) or an external URL (`https://example.com`) — with
+     * `$query` appended the same way. An array is treated as a route and built into one: `controller` (required)
+     * and `action` (defaults to `index`) as string keys, with additional integer keys as route parameters.
+     *
+     * `$query` is deliberately a separate parameter, not a key inside `$route` itself — `$route`'s own validation
+     * rejects any string key besides `controller`/`action` specifically to catch typos in a route array (a
+     * misspelled key fails loudly instead of silently becoming a query parameter no one asked for); keeping
+     * `$query` outside that array means this protection doesn't need to make an exception for it.
      *
      * The one place this logic lives — `HtmlHelper::url()` and `Controller::redirect()` both delegate to this
      * instead of each having their own copy of it.
      *
      * @param array<string|int, string|int|float|bool>|string $route
+     * @param array<string, string|int|float|bool> $query Appended as `?key=value&...`. Empty (the default) adds
+     *  nothing.
      * @return string The resolved URL.
      * @throws \Elone\Core\Exception\RouteNotFoundException If `$route` is an array with invalid or missing
      *  parameters.
      */
-    public static function resolve(array|string $route): string
+    public static function resolve(array|string $route, array $query = []): string
     {
         if (is_string($route)) {
-            return $route;
+            return $query === [] ? $route : "$route?" . http_build_query($query);
         }
 
         $controller = $route['controller'] ?? null;
@@ -144,6 +151,8 @@ readonly class Route
             }
         }
 
-        return new self(controller: $controller, action: $action, params: $params)->path();
+        $path = new self(controller: $controller, action: $action, params: $params)->path();
+
+        return $query === [] ? $path : "$path?" . http_build_query($query);
     }
 }

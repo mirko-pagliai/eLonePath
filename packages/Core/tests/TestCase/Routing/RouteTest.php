@@ -176,4 +176,66 @@ class RouteTest extends TestCase
         $this->expectExceptionMessageIs('Invalid route parameter: `extra`.');
         Route::resolve(['controller' => 'Pages', 'action' => 'home', 'extra' => 'value']);
     }
+
+    /**
+     * `$query` is appended to an array route's own path, as a querystring — separate from the route array itself,
+     * so an unrelated key like `state` still can't sneak into the route array (see
+     * `testResolveWithInvalidParameter()`) while still being expressible here.
+     *
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithArrayAndQuery(): void
+    {
+        $result = Route::resolve(
+            ['controller' => 'Story', 'action' => 'chapter', 'the-tower', '5'],
+            ['state' => 'abc123'],
+        );
+        $this->assertSame('/story/chapter/the-tower/5?state=abc123', $result);
+    }
+
+    /**
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithArrayAndMultipleQueryKeys(): void
+    {
+        $result = Route::resolve(['controller' => 'Pages', 'action' => 'home'], ['state' => 'xyz', 'debug' => '1']);
+        $this->assertSame('/pages/home?state=xyz&debug=1', $result);
+    }
+
+    /**
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithStringAndQuery(): void
+    {
+        $result = Route::resolve('/', ['state' => 'abc123']);
+        $this->assertSame('/?state=abc123', $result);
+    }
+
+    /**
+     * `$query` values are escaped through `http_build_query()`, the same as any other querystring PHP builds —
+     * not left to whoever calls `resolve()` to escape by hand.
+     *
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveQueryValuesAreUrlEncoded(): void
+    {
+        $result = Route::resolve(['controller' => 'Pages', 'action' => 'home'], ['state' => 'a+b/c=d']);
+        $this->assertSame('/pages/home?state=a%2Bb%2Fc%3Dd', $result);
+    }
+
+    /**
+     * An empty `$query` (the default) changes nothing — no trailing `?`.
+     *
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithEmptyQueryAddsNothing(): void
+    {
+        $result = Route::resolve(['controller' => 'Pages', 'action' => 'home'], []);
+        $this->assertSame('/pages/home', $result);
+    }
 }

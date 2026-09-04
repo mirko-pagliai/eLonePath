@@ -30,15 +30,6 @@ class DiceNodeTest extends TestCase
     }
 
     /**
-     * @link \App\Story\Nodes\DiceNode::getType()
-     */
-    #[Test]
-    public function testType(): void
-    {
-        $this->assertSame(NodeType::DICE, $this->sample()->getType());
-    }
-
-    /**
      * @link \App\Story\Nodes\DiceNode::isSuccess()
      */
     #[Test]

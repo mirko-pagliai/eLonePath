@@ -16,16 +16,6 @@ use PHPUnit\Framework\TestCase;
 class VictoryNodeTest extends TestCase
 {
     /**
-     * @link \App\Story\Nodes\VictoryNode::getType()
-     */
-    #[Test]
-    public function testType(): void
-    {
-        $node = new VictoryNode(id: 15, gameId: 'test-game', content: 'The end.');
-        $this->assertSame(NodeType::VICTORY, $node->getType());
-    }
-
-    /**
      * @link \App\Story\Nodes\VictoryNode::createFromArray()
      */
     #[Test]

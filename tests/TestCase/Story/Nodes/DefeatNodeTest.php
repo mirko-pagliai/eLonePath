@@ -16,16 +16,6 @@ use PHPUnit\Framework\TestCase;
 class DefeatNodeTest extends TestCase
 {
     /**
-     * @link \App\Story\Nodes\DefeatNode::getType()
-     */
-    #[Test]
-    public function testType(): void
-    {
-        $node = new DefeatNode(id: 12, gameId: 'test-game', content: 'The end.');
-        $this->assertSame(NodeType::DEFEAT, $node->getType());
-    }
-
-    /**
      * @link \App\Story\Nodes\DefeatNode::createFromArray()
      */
     #[Test]

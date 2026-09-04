@@ -11,11 +11,6 @@ namespace App\Story\Nodes;
  */
 class VictoryNode extends Node
 {
-    public function getType(): NodeType
-    {
-        return NodeType::VICTORY;
-    }
-
     /**
      * @return VictoryNodeData
      */
@@ -23,7 +18,7 @@ class VictoryNode extends Node
     {
         return [
             'content' => $this->content,
-            'type' => $this->getType()->value,
+            'type' => 'victory',
         ];
     }
 

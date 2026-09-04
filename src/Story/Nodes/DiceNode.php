@@ -29,11 +29,6 @@ class DiceNode extends Node
         parent::__construct($id, $gameId, $content);
     }
 
-    public function getType(): NodeType
-    {
-        return NodeType::DICE;
-    }
-
     /**
      * Whether the sum of the rolls meets `$minimum`.
      */
@@ -57,7 +52,7 @@ class DiceNode extends Node
     {
         return [
             'content' => $this->content,
-            'type' => $this->getType()->value,
+            'type' => 'dice',
             'dice' => [
                 'required_rolls' => $this->requiredRolls,
                 'minimum' => $this->minimum,

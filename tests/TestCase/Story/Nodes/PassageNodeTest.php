@@ -17,16 +17,6 @@ use PHPUnit\Framework\TestCase;
 class PassageNodeTest extends TestCase
 {
     /**
-     * @link \App\Story\Nodes\PassageNode::getType()
-     */
-    #[Test]
-    public function testType(): void
-    {
-        $node = new PassageNode(id: 1, gameId: 'test-game', content: '', choices: []);
-        $this->assertSame(NodeType::PASSAGE, $node->getType());
-    }
-
-    /**
      * @link \App\Story\Nodes\PassageNode::createFromArray()
      */
     #[Test]

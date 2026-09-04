@@ -21,11 +21,6 @@ class PassageNode extends Node
         parent::__construct($id, $gameId, $content);
     }
 
-    public function getType(): NodeType
-    {
-        return NodeType::PASSAGE;
-    }
-
     /**
      * @return PassageNodeData
      */
@@ -33,7 +28,7 @@ class PassageNode extends Node
     {
         return [
             'content' => $this->content,
-            'type' => $this->getType()->value,
+            'type' => 'passage',
             'choices' => array_map(
                 callback: fn(Choice $choice): array => $choice->toArray(),
                 array: $this->choices,

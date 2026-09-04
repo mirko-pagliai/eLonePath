@@ -11,11 +11,6 @@ namespace App\Story\Nodes;
  */
 class DefeatNode extends Node
 {
-    public function getType(): NodeType
-    {
-        return NodeType::DEFEAT;
-    }
-
     /**
      * @return DefeatNodeData
      */
@@ -23,7 +18,7 @@ class DefeatNode extends Node
     {
         return [
             'content' => $this->content,
-            'type' => $this->getType()->value,
+            'type' => 'defeat',
         ];
     }
 

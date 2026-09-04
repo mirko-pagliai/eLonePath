@@ -27,11 +27,6 @@ abstract class Node implements Arrayable
     }
 
     /**
-     * The kind of node this is. Fixed per subclass.
-     */
-    abstract public function getType(): NodeType;
-
-    /**
      * Every subclass narrows this to its own specific data shape (e.g. `PassageNodeData`) in its own docblock —
      * `Node` itself only knows the generic shape every `Arrayable` promises, not the details of any one subclass.
      *

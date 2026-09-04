@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Test\Story\Nodes;
 
 use App\Story\Nodes\Choice;
-use App\Story\Nodes\NodeType;
 use App\Story\Nodes\PassageNode;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;

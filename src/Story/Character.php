@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Story;
 
+use App\Story\Combat\Combatant;
 use RuntimeException;
 
 /**
@@ -25,30 +26,45 @@ use RuntimeException;
  *
  * Strength and Agility have no upper bound of their own — Perception and Willpower do (1-5 each) — because the four
  * must sum to exactly `TOTAL_ATTRIBUTE_POINTS`. Capping every attribute at 1-5 while also requiring that exact sum
- * leaves exactly one possible character (5, 5, 5, 5); the asymmetry is what keeps the point distribution a real choice,
- * weighted toward the two attributes with the most direct role in combat.
+ * leaves exactly one possible character (5, 5, 5, 5); the asymmetry is what keeps the point distribution a real
+ * choice, weighted toward the two attributes with the most direct role in combat.
+ *
+ * `lifePoints` and `maxLifePoints` are deliberately two separate fields, not one: `maxLifePoints` is fixed for the
+ * character's whole story (set once, here, and never changed by `withDamage()`/`withHeal()`), while `lifePoints` is
+ * the current value, moving within `0..maxLifePoints` as the story plays out. `Character` stays fully immutable —
+ * `withDamage()` and `withHeal()` each return a new instance rather than changing this one, the same way every
+ * other domain object in this codebase (`Game`, `Node` and its subclasses, `Choice`) represents a change of state
+ * as a new value rather than a mutation.
  */
 class Character
 {
     /**
-     * The total of a character's attributes must sum to exactly.
+     * The total a character's four attributes must sum to exactly.
      */
     private const int TOTAL_ATTRIBUTE_POINTS = 20;
 
     /**
-     * @throws \RuntimeException If `$lifePoints` is less than 1, if `$strength` or `$agility` is less than 1, if
-     * `$perception` or `$willpower` is outside 1-5, or if the four attributes don't sum to
-     * `TOTAL_ATTRIBUTE_POINTS`.
+     * @throws \RuntimeException If `$maxLifePoints` is less than 1, if `$lifePoints` is outside `0..maxLifePoints`,
+     * if `$strength` or `$agility` is less than 1, if `$perception` or `$willpower` is outside 1-5, or if the four
+     * attributes don't sum to `TOTAL_ATTRIBUTE_POINTS`.
      */
     public function __construct(
+        protected(set) readonly int $maxLifePoints,
         protected(set) readonly int $lifePoints,
         protected(set) readonly int $strength,
         protected(set) readonly int $agility,
         protected(set) readonly int $perception,
         protected(set) readonly int $willpower,
     ) {
-        if ($this->lifePoints < 1) {
-            throw new RuntimeException("The lifePoints attribute must be at least 1, got `$this->lifePoints`.");
+        if ($this->maxLifePoints < 1) {
+            throw new RuntimeException("The maxLifePoints attribute must be at least 1, got `$this->maxLifePoints`.");
+        }
+
+        if ($this->lifePoints < 0 || $this->lifePoints > $this->maxLifePoints) {
+            throw new RuntimeException(
+                "The lifePoints attribute must be between 0 and maxLifePoints ($this->maxLifePoints), " .
+                "got `$this->lifePoints`.",
+            );
         }
 
         if ($this->strength < 1) {
@@ -73,5 +89,70 @@ class Character
                 'The sum of the character\'s attributes must be ' . self::TOTAL_ATTRIBUTE_POINTS . ", got `$sum`.",
             );
         }
+    }
+
+    /**
+     * Whether this character has been defeated — `lifePoints` reached `0`.
+     */
+    public function isDefeated(): bool
+    {
+        return $this->lifePoints === 0;
+    }
+
+    /**
+     * A new `Character`, identical to this one except `lifePoints` reduced by `$amount`, floored at `0` — it can
+     * never go negative, and `isDefeated()` is how a caller finds out combat is over.
+     *
+     * @throws \RuntimeException If `$amount` is negative.
+     */
+    public function withDamage(int $amount): static
+    {
+        if ($amount < 0) {
+            throw new RuntimeException("Damage amount must not be negative, got `$amount`.");
+        }
+
+        return new static(
+            maxLifePoints: $this->maxLifePoints,
+            lifePoints: max(0, $this->lifePoints - $amount),
+            strength: $this->strength,
+            agility: $this->agility,
+            perception: $this->perception,
+            willpower: $this->willpower,
+        );
+    }
+
+    /**
+     * A new `Character`, identical to this one except `lifePoints` increased by `$amount`, capped at
+     * `maxLifePoints` — healing can restore lost life points, but never push them past the character's own
+     * starting maximum.
+     *
+     * @throws \RuntimeException If `$amount` is negative.
+     */
+    public function withHeal(int $amount): static
+    {
+        if ($amount < 0) {
+            throw new RuntimeException("Heal amount must not be negative, got `$amount`.");
+        }
+
+        return new static(
+            maxLifePoints: $this->maxLifePoints,
+            lifePoints: min($this->maxLifePoints, $this->lifePoints + $amount),
+            strength: $this->strength,
+            agility: $this->agility,
+            perception: $this->perception,
+            willpower: $this->willpower,
+        );
+    }
+
+    /**
+     * The stats this character brings into a single combat round — see `App\Story\Combat\Combat::resolveRound()`.
+     * A plain snapshot, deliberately not `$this` itself: `Combat` only ever needs to know three numbers, not the
+     * whole `Character` (narrative attributes, validation rules, and — once written — an inventory none of that
+     * concerns combat math directly). Once equipped weapons exist, this is the one place their strength/agility
+     * bonuses get folded in, without `Combat` itself ever needing to change.
+     */
+    public function toCombatant(): Combatant
+    {
+        return new Combatant(strength: $this->strength, agility: $this->agility, lifePoints: $this->lifePoints);
     }
 }

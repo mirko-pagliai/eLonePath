@@ -187,11 +187,8 @@ class RouteTest extends TestCase
     #[Test]
     public function testResolveWithArrayAndQuery(): void
     {
-        $result = Route::resolve(
-            ['controller' => 'Story', 'action' => 'chapter', 'the-tower', '5'],
-            ['state' => 'abc123'],
-        );
-        $this->assertSame('/story/chapter/the-tower/5?state=abc123', $result);
+        $result = Route::resolve(['controller' => 'Pages', 'action' => 'view', '123'], ['state' => 'abc123']);
+        $this->assertSame('/pages/view/123?state=abc123', $result);
     }
 
     /**
@@ -202,6 +199,24 @@ class RouteTest extends TestCase
     {
         $result = Route::resolve(['controller' => 'Pages', 'action' => 'home'], ['state' => 'xyz', 'debug' => '1']);
         $this->assertSame('/pages/home?state=xyz&debug=1', $result);
+    }
+
+    /**
+     * With `controller`/`action` given as something other than a string (an array is the realistic mistake — a
+     * nested route array passed by accident where a single controller/action pair was expected), `APP['debug']`
+     * gates how much detail the message carries. `APP` is a fixed constant for this whole test process
+     * (`packages/Core/config/bootstrap.php` sets `debug: false` when nothing else defines `APP` first) — so only
+     * the debug-off branch is exercisable here; the debug-on branch (the actual values shown in the message) was
+     * verified directly, outside PHPUnit, since flipping a already-defined constant mid-process isn't possible.
+     *
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithNonStringControllerOrActionWithoutDebugDetail(): void
+    {
+        $this->expectException(RouteNotFoundException::class);
+        $this->expectExceptionMessageIs('Invalid route.');
+        Route::resolve(['controller' => ['nested', 'array'], 'action' => 'chapter']);
     }
 
     /**
@@ -225,6 +240,19 @@ class RouteTest extends TestCase
     {
         $result = Route::resolve(['controller' => 'Pages', 'action' => 'home'], ['state' => 'a+b/c=d']);
         $this->assertSame('/pages/home?state=a%2Bb%2Fc%3Dd', $result);
+    }
+
+    /**
+     * When `$route` is a string that already has its own querystring, `$query` is joined with `&`, not a second
+     * `?` — the bug this locks in was a real one, found while reviewing the code, not a hypothetical.
+     *
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithStringAndQueryJoinsExistingQuerystring(): void
+    {
+        $result = Route::resolve('/pages/view?foo=bar', ['state' => 'abc123']);
+        $this->assertSame('/pages/view?foo=bar&state=abc123', $result);
     }
 
     /**

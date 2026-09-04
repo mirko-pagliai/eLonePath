@@ -153,10 +153,10 @@ class HtmlHelperTest extends TestCase
     {
         $result = $this->htmlHelper->link(
             'Continua',
-            ['controller' => 'Story', 'action' => 'chapter', 'the-tower', '5'],
+            ['controller' => 'Pages', 'action' => 'view', '123'],
             query: ['state' => 'abc123'],
         );
-        $this->assertSame('<a href="/story/chapter/the-tower/5?state=abc123">Continua</a>', $result);
+        $this->assertSame('<a href="/pages/view/123?state=abc123">Continua</a>', $result);
     }
 
     /**

@@ -11,6 +11,7 @@ use App\Story\Nodes\VictoryNode;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
+use RuntimeException;
 
 /**
  * NodeFactoryTest.
@@ -79,5 +80,21 @@ class NodeFactoryTest extends TestCase
         ]);
 
         $this->assertInstanceOf(DefeatNode::class, $node);
+    }
+
+    /**
+     * The `match` in `createFromArray()` falls through to an explicit `RuntimeException` for anything that
+     * isn't one of the four known type strings — previously, an unrecognized type reached `NodeType::from()`
+     * instead, which threw its own `ValueError` automatically; nothing tested that path either, but it's worth
+     * covering now that the check (and its message) is this class's own code, not something inherited for free.
+     *
+     * @link \App\Story\Nodes\NodeFactory::createFromArray()
+     */
+    #[Test]
+    public function testCreateFromArrayWithUnknownTypeThrows(): void
+    {
+        $this->expectException(RuntimeException::class);
+        $this->expectExceptionMessageIs('Unknown node type: `mystery`.');
+        NodeFactory::createFromArray(id: 1, gameId: 'test-game', data: ['content' => 'c', 'type' => 'mystery']);
     }
 }

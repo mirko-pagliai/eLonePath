@@ -52,4 +52,27 @@ class PassageNodeTest extends TestCase
 
         $this->assertSame([], $node->choices);
     }
+
+    /**
+     * @link \App\Story\Nodes\PassageNode::toArray()
+     */
+    #[Test]
+    public function testToArray(): void
+    {
+        $node = PassageNode::createFromArray(id: 3, gameId: 'test-game', data: [
+            'content' => 'Some content.',
+            'choices' => [
+                ['content' => 'Go to page {{page}}', 'target' => 4],
+            ],
+            'type' => 'passage',
+        ]);
+
+        $this->assertSame([
+            'content' => 'Some content.',
+            'type' => 'passage',
+            'choices' => [
+                ['content' => 'Go to page 4', 'target' => 4],
+            ],
+        ], $node->toArray());
+    }
 }

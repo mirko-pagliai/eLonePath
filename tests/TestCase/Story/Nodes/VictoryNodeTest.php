@@ -28,4 +28,18 @@ class VictoryNodeTest extends TestCase
         $this->assertSame(15, $node->id);
         $this->assertSame('The end.', $node->content);
     }
+
+    /**
+     * @link \App\Story\Nodes\VictoryNode::toArray()
+     */
+    #[Test]
+    public function testToArray(): void
+    {
+        $node = new VictoryNode(id: 15, gameId: 'test-game', content: 'The end.');
+
+        $this->assertSame([
+            'content' => 'The end.',
+            'type' => 'victory',
+        ], $node->toArray());
+    }
 }

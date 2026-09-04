@@ -79,4 +79,24 @@ class DiceNodeTest extends TestCase
         $this->assertSame(15, $node->targetSuccess);
         $this->assertSame(18, $node->targetFailure);
     }
+
+    /**
+     * @link \App\Story\Nodes\DiceNode::toArray()
+     */
+    #[Test]
+    public function testToArray(): void
+    {
+        $node = $this->sample();
+
+        $this->assertSame([
+            'content' => 'Some content.',
+            'type' => 'dice',
+            'dice' => [
+                'required_rolls' => 2,
+                'minimum' => 8,
+                'target_success' => 15,
+                'target_failure' => 18,
+            ],
+        ], $node->toArray());
+    }
 }

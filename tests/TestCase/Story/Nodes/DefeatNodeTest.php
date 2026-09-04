@@ -28,4 +28,18 @@ class DefeatNodeTest extends TestCase
         $this->assertSame(12, $node->id);
         $this->assertSame('The end.', $node->content);
     }
+
+    /**
+     * @link \App\Story\Nodes\DefeatNode::toArray()
+     */
+    #[Test]
+    public function testToArray(): void
+    {
+        $node = new DefeatNode(id: 12, gameId: 'test-game', content: 'The end.');
+
+        $this->assertSame([
+            'content' => 'The end.',
+            'type' => 'defeat',
+        ], $node->toArray());
+    }
 }

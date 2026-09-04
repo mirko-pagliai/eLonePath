@@ -185,6 +185,21 @@ class CharacterTest extends TestCase
     }
 
     /**
+     * Unlike the regular constructor, `createNew()` doesn't take `lifePoints` at all — it always starts equal to
+     * `maxLifePoints`, guaranteed by the method itself rather than left to the caller to get right.
+     *
+     * @link \App\Story\Character::createNew()
+     */
+    #[Test]
+    public function testCreateNewStartsAtFullLifePoints(): void
+    {
+        $character = Character::createNew(maxLifePoints: 20, strength: 10, agility: 6, perception: 2, willpower: 2);
+
+        $this->assertSame(20, $character->maxLifePoints);
+        $this->assertSame($character->maxLifePoints, $character->lifePoints);
+    }
+
+    /**
      * @link \App\Story\Character::isDefeated()
      */
     #[Test]

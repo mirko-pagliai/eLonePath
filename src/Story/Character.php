@@ -35,11 +35,15 @@ use RuntimeException;
  * `withDamage()` and `withHeal()` each return a new instance rather than changing this one, the same way every
  * other domain object in this codebase (`Game`, `Node` and its subclasses, `Choice`) represents a change of state
  * as a new value rather than a mutation.
+ *
+ * The constructor itself allows `lifePoints` and `maxLifePoints` to differ (needed to reconstruct a character
+ * mid-story, already damaged, from previously-saved state); `createNew()` is the dedicated entry point for the
+ * one case where they must start equal — a brand-new character, at the start of a story, at full health.
  */
 class Character
 {
     /**
-     * The total a character's four attributes must sum to exactly.
+     * The total of a character's four attributes must sum to exactly.
      */
     private const int TOTAL_ATTRIBUTE_POINTS = 20;
 
@@ -89,6 +93,31 @@ class Character
                 'The sum of the character\'s attributes must be ' . self::TOTAL_ATTRIBUTE_POINTS . ", got `$sum`.",
             );
         }
+    }
+
+    /**
+     * Builds a brand-new character, at the start of a story: `lifePoints` starts equal to `$maxLifePoints`, by
+     * construction, rather than left to the caller to set correctly by hand every time. See the class docblock for
+     * why the regular constructor can't just default `lifePoints` to `$maxLifePoints` itself — it's also the one
+     * used to reconstruct an existing, already-damaged character, where the two legitimately differ.
+     *
+     * @throws \RuntimeException Same conditions as `__construct()`.
+     */
+    public static function createNew(
+        int $maxLifePoints,
+        int $strength,
+        int $agility,
+        int $perception,
+        int $willpower,
+    ): static {
+        return new static(
+            maxLifePoints: $maxLifePoints,
+            lifePoints: $maxLifePoints,
+            strength: $strength,
+            agility: $agility,
+            perception: $perception,
+            willpower: $willpower,
+        );
     }
 
     /**

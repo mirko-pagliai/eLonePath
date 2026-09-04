@@ -91,7 +91,8 @@ class HtmlHelper extends Helper
 
     /**
      * Generates a `<a>` tag with the given text, URL, and options. `$url` is resolved via `url()` — pass a literal path
-     * or external URL as a string (`/`, `https://example.com`), or a route array to build one.
+     * or external URL as a string (`/`, `https://example.com`), or a route array to build one; `$query` appends a
+     * querystring the same way `url()` does.
      *
      * `$options` accepts one known key, `escape` (bool, default `true`): whether `$text` is HTML-escaped before being
      * inserted. Leave it on for anything that isn't fully trusted, developer-written markup — story content, anything
@@ -102,11 +103,12 @@ class HtmlHelper extends Helper
      * @param array<string|int, string|int|float|bool>|string $url A literal URL/path, or a route array (see
      *  `url()`).
      * @param array<string, string|int|float|bool> $options See above — `escape`, plus any HTML attribute.
+     * @param array<string, string|int|float|bool> $query Appended to `$url` as a querystring — see `url()`.
      * @return string The rendered HTML `<a>` tag.
      * @throws \Elone\Core\Exception\RouteNotFoundException If `$url` is an array route with invalid or missing
      *  parameters.
      */
-    public function link(string $text, array|string $url, array $options = []): string
+    public function link(string $text, array|string $url, array $options = [], array $query = []): string
     {
         $escape = (bool)($options['escape'] ?? true);
         unset($options['escape']);
@@ -115,7 +117,7 @@ class HtmlHelper extends Helper
 
         return sprintf(
             '<a href="%s"%s>%s</a>',
-            h($this->url($url), ENT_QUOTES),
+            h($this->url($url, $query), ENT_QUOTES),
             $htmlAttributes,
             $escape ? h($text) : $text,
         );
@@ -149,15 +151,17 @@ class HtmlHelper extends Helper
     }
 
     /**
-     * Resolves `$route` to a URL — see `Route::resolve()`.
+     * Resolves `$route` to a URL, appending `$query` as a querystring — see `Route::resolve()`.
      *
      * @param array<string|int, string|int|float|bool>|string $route A literal URL/path, or a route array.
+     * @param array<string, string|int|float|bool> $query Appended as `?key=value&...`. Empty (the default) adds
+     *  nothing.
      * @return string The resolved URL.
      * @throws \Elone\Core\Exception\RouteNotFoundException If given an array route with invalid or missing parameters.
      * @see \Elone\Core\Routing\Route::resolve()
      */
-    public function url(array|string $route): string
+    public function url(array|string $route, array $query = []): string
     {
-        return Route::resolve($route);
+        return Route::resolve(route: $route, query: $query);
     }
 }

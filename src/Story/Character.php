@@ -39,8 +39,13 @@ use RuntimeException;
  * The constructor itself allows `lifePoints` and `maxLifePoints` to differ (needed to reconstruct a character
  * mid-story, already damaged, from previously-saved state); `createNew()` is the dedicated entry point for the
  * one case where they must start equal — a brand-new character, at the start of a story, at full health.
+ *
+ * `final`, matching every other immutable domain object in `App\Story\Combat` (`Enemy`, `Combatant`,
+ * `CombatRoundResult`) that returns `new static(...)` from a wither method — without it, PHPStan can't prove a
+ * subclass's constructor still accepts the same arguments, since nothing stops one from overriding it
+ * incompatibly.
  */
-class Character
+final class Character
 {
     /**
      * The total of a character's four attributes must sum to exactly.

@@ -3,9 +3,11 @@ declare(strict_types=1);
 
 namespace Elone\Core\Test\Server;
 
+use Elone\Core\Exception\MethodNotAllowedException;
 use Elone\Core\Server\Request;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -105,5 +107,89 @@ class RequestTest extends TestCase
         $this->assertSame('GET', $request->method());
         $this->assertSame('/', $request->path());
         $this->assertSame([], $request->queryParams());
+    }
+
+    /**
+     * @link \Elone\Core\Server\Request::is()
+     */
+    #[Test]
+    #[TestWith(['GET', 'get', true])]
+    #[TestWith(['GET', 'GET', true])]
+    #[TestWith(['GET', 'post', false])]
+    #[TestWith(['POST', 'post', true])]
+    #[TestWith(['POST', 'get', false])]
+    public function testIs(string $requestMethod, string $type, bool $expected): void
+    {
+        $request = new Request($requestMethod, '/');
+
+        $this->assertSame($expected, $request->is($type));
+    }
+
+    /**
+     * @link \Elone\Core\Server\Request::allowMethod()
+     */
+    #[Test]
+    public function testAllowMethodWithMatchingSingleMethod(): void
+    {
+        $request = new Request('POST', '/');
+
+        // No exception expected.
+        $request->allowMethod('post');
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * @link \Elone\Core\Server\Request::allowMethod()
+     */
+    #[Test]
+    public function testAllowMethodWithMatchingMethodInList(): void
+    {
+        $request = new Request('POST', '/');
+
+        // No exception expected.
+        $request->allowMethod(['get', 'post']);
+        $this->addToAssertionCount(1);
+    }
+
+    /**
+     * @link \Elone\Core\Server\Request::allowMethod()
+     */
+    #[Test]
+    public function testAllowMethodWithSingleMethodMismatch(): void
+    {
+        $request = new Request('GET', '/');
+
+        $this->expectException(MethodNotAllowedException::class);
+        $this->expectExceptionMessageIs('Method `GET` is not allowed. Allowed: `POST`.');
+        $request->allowMethod('post');
+    }
+
+    /**
+     * @link \Elone\Core\Server\Request::allowMethod()
+     */
+    #[Test]
+    public function testAllowMethodWithMultipleMethodsMismatch(): void
+    {
+        $request = new Request('GET', '/');
+
+        $this->expectException(MethodNotAllowedException::class);
+        $this->expectExceptionMessageIs('Method `GET` is not allowed. Allowed: `POST`, `DELETE`.');
+        $request->allowMethod(['post', 'delete']);
+    }
+
+    /**
+     * @link \Elone\Core\Server\Request::allowMethod()
+     */
+    #[Test]
+    public function testAllowMethodThrowsWithStatus405(): void
+    {
+        $request = new Request('GET', '/');
+
+        try {
+            $request->allowMethod('post');
+            $this->fail('Expected a MethodNotAllowedException to be thrown.');
+        } catch (MethodNotAllowedException $exception) {
+            $this->assertSame(405, $exception->statusCode());
+        }
     }
 }

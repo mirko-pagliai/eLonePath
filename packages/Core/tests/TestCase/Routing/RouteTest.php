@@ -176,4 +176,95 @@ class RouteTest extends TestCase
         $this->expectExceptionMessageIs('Invalid route parameter: `extra`.');
         Route::resolve(['controller' => 'Pages', 'action' => 'home', 'extra' => 'value']);
     }
+
+    /**
+     * `$query` is appended to an array route's own path, as a querystring — separate from the route array itself,
+     * so an unrelated key like `state` still can't sneak into the route array (see
+     * `testResolveWithInvalidParameter()`) while still being expressible here.
+     *
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithArrayAndQuery(): void
+    {
+        $result = Route::resolve(['controller' => 'Pages', 'action' => 'view', '123'], ['state' => 'abc123']);
+        $this->assertSame('/pages/view/123?state=abc123', $result);
+    }
+
+    /**
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithArrayAndMultipleQueryKeys(): void
+    {
+        $result = Route::resolve(['controller' => 'Pages', 'action' => 'home'], ['state' => 'xyz', 'debug' => '1']);
+        $this->assertSame('/pages/home?state=xyz&debug=1', $result);
+    }
+
+    /**
+     * With `controller`/`action` given as something other than a string (an array is the realistic mistake — a
+     * nested route array passed by accident where a single controller/action pair was expected), `APP['debug']`
+     * gates how much detail the message carries. `APP` is a fixed constant for this whole test process
+     * (`packages/Core/config/bootstrap.php` sets `debug: false` when nothing else defines `APP` first) — so only
+     * the debug-off branch is exercisable here; the debug-on branch (the actual values shown in the message) was
+     * verified directly, outside PHPUnit, since flipping a already-defined constant mid-process isn't possible.
+     *
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithNonStringControllerOrActionWithoutDebugDetail(): void
+    {
+        $this->expectException(RouteNotFoundException::class);
+        $this->expectExceptionMessageIs('Invalid route.');
+        // @phpstan-ignore-next-line argument.type
+        Route::resolve(['controller' => ['nested', 'array'], 'action' => 'chapter']);
+    }
+
+    /**
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithStringAndQuery(): void
+    {
+        $result = Route::resolve('/', ['state' => 'abc123']);
+        $this->assertSame('/?state=abc123', $result);
+    }
+
+    /**
+     * `$query` values are escaped through `http_build_query()`, the same as any other querystring PHP builds —
+     * not left to whoever calls `resolve()` to escape by hand.
+     *
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveQueryValuesAreUrlEncoded(): void
+    {
+        $result = Route::resolve(['controller' => 'Pages', 'action' => 'home'], ['state' => 'a+b/c=d']);
+        $this->assertSame('/pages/home?state=a%2Bb%2Fc%3Dd', $result);
+    }
+
+    /**
+     * When `$route` is a string that already has its own querystring, `$query` is joined with `&`, not a second
+     * `?` — the bug this locks in was a real one, found while reviewing the code, not a hypothetical.
+     *
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithStringAndQueryJoinsExistingQuerystring(): void
+    {
+        $result = Route::resolve('/pages/view?foo=bar', ['state' => 'abc123']);
+        $this->assertSame('/pages/view?foo=bar&state=abc123', $result);
+    }
+
+    /**
+     * An empty `$query` (the default) changes nothing — no trailing `?`.
+     *
+     * @link \Elone\Core\Routing\Route::resolve()
+     */
+    #[Test]
+    public function testResolveWithEmptyQueryAddsNothing(): void
+    {
+        $result = Route::resolve(['controller' => 'Pages', 'action' => 'home'], []);
+        $this->assertSame('/pages/home', $result);
+    }
 }

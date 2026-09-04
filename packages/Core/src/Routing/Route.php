@@ -106,29 +106,57 @@ readonly class Route
     }
 
     /**
-     * Resolves `$route` to a URL. A string is returned exactly as given — use it for a literal path (`/`) or an
-     * external URL (`https://example.com`). An array is treated as a route and built into one: `controller`
-     * (required) and `action` (defaults to `index`) as string keys, with additional integer keys as route
-     * parameters.
+     * Resolves `$route` to a URL, then appends `$query` as a querystring if it's non-empty. A string is returned
+     * exactly as given — use it for a literal path (`/`) or an external URL (`https://example.com`) — with
+     * `$query` appended the same way, joined with `&` instead of `?` if `$route` already has its own querystring.
+     * An array is treated as a route and built into one: `controller` (required) and `action` (defaults to
+     * `index`) as string keys, with additional integer keys as route parameters.
+     *
+     * `$query` is deliberately a separate parameter, not a key inside `$route` itself — `$route`'s own validation
+     * rejects any string key besides `controller`/`action` specifically to catch typos in a route array (a
+     * misspelled key fails loudly instead of silently becoming a query parameter no one asked for); keeping
+     * `$query` outside that array means this protection doesn't need to make an exception for it.
      *
      * The one place this logic lives — `HtmlHelper::url()` and `Controller::redirect()` both delegate to this
      * instead of each having their own copy of it.
      *
      * @param array<string|int, string|int|float|bool>|string $route
+     * @param array<string, string|int|float|bool> $query Appended as `?key=value&...` (or `&key=value&...` if
+     *  `$route` already has its own querystring). Empty (the default) adds nothing.
      * @return string The resolved URL.
      * @throws \Elone\Core\Exception\RouteNotFoundException If `$route` is an array with invalid or missing
      *  parameters.
      */
-    public static function resolve(array|string $route): string
+    public static function resolve(array|string $route, array $query = []): string
     {
         if (is_string($route)) {
-            return $route;
+            if ($query === []) {
+                return $route;
+            }
+
+            $separator = str_contains($route, '?') ? '&' : '?';
+
+            return $route . $separator . http_build_query($query);
         }
 
         $controller = $route['controller'] ?? null;
         $action = $route['action'] ?? 'index';
 
         if (!is_string($controller) || !is_string($action)) {
+            // Only with debug on: the values themselves might be anything at all (an array is the most common
+            // mistake — a nested route array passed where a single controller/action pair was expected), and
+            // seeing exactly what was passed is far more useful for tracking the bug down than a generic message.
+            // Kept out of the message otherwise, since it's the caller's own data and might not be meant to be
+            // shown to whoever eventually sees the error page.
+            if (APP['debug']) {
+                $describe = static fn(mixed $value): string => json_encode($value) ?: 'unserializable value';
+
+                throw new RouteNotFoundException(
+                    'Invalid route: `controller` and `action` must both be strings, got controller=' .
+                    $describe($controller) . ', action=' . $describe($action) . '.',
+                );
+            }
+
             throw new RouteNotFoundException('Invalid route.');
         }
 
@@ -144,6 +172,12 @@ readonly class Route
             }
         }
 
-        return new self(controller: $controller, action: $action, params: $params)->path();
+        $path = new self(controller: $controller, action: $action, params: $params)->path();
+
+        if ($query === []) {
+            return $path;
+        }
+
+        return "$path?" . http_build_query($query);
     }
 }

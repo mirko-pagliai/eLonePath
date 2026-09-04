@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Elone\Core\Test;
 
 use Elone\Core\Controller;
+use Elone\Core\Exception\MethodNotAllowedException;
 use Elone\Core\Server\Request;
 use Elone\Core\Server\Response;
 use Elone\Core\View\View;
@@ -121,6 +122,45 @@ class ControllerTest extends TestCase
         $this->assertSame($controller, $result);
 
         $this->assertSame('value', $controller->getView()->get('key'));
+    }
+
+    /**
+     * @link \Elone\Core\Controller::is()
+     */
+    #[Test]
+    public function testIsDelegatesToTheRequest(): void
+    {
+        $request = new Request('POST', '/');
+
+        $controller = new class (request: $request) extends Controller {
+            public function is(string $type): bool
+            {
+                return parent::is($type);
+            }
+        };
+
+        $this->assertTrue($controller->is('post'));
+        $this->assertFalse($controller->is('get'));
+    }
+
+    /**
+     * @link \Elone\Core\Controller::allowMethod()
+     */
+    #[Test]
+    public function testAllowMethodDelegatesToTheRequest(): void
+    {
+        $request = new Request('GET', '/');
+
+        $controller = new class (request: $request) extends Controller {
+            public function allowMethod(array|string $methods): void
+            {
+                parent::allowMethod($methods);
+            }
+        };
+
+        $this->expectException(MethodNotAllowedException::class);
+        $this->expectExceptionMessageIs('Method `GET` is not allowed. Allowed: `POST`.');
+        $controller->allowMethod('post');
     }
 
     /**

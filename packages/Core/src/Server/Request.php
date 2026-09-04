@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace Elone\Core\Server;
 
+use Elone\Core\Exception\MethodNotAllowedException;
+
 final class Request
 {
     private readonly string $path;
@@ -60,6 +62,57 @@ final class Request
     public function method(): string
     {
         return $this->method;
+    }
+
+    /**
+     * Checks this request's HTTP method against `$type` — a small, deliberately limited version of CakePHP's own
+     * `ServerRequest::is()`: only a method check for now (`'get'`/`'post'`), no detector registry, no other
+     * request conditions (ajax, https, content type). Case doesn't matter — `is('post')` and `is('POST')` both
+     * work, matching CakePHP's own lowercase convention in its examples even though `method()` itself always
+     * returns the request's method uppercase.
+     *
+     * @param string $type The HTTP method to check for, e.g. `'get'`, `'post'`.
+     * @return bool Whether the current request's method matches `$type`.
+     */
+    public function is(string $type): bool
+    {
+        return strtoupper($type) === $this->method;
+    }
+
+    /**
+     * Restricts this request to one of `$methods` — the same idiom as CakePHP's own
+     * `ServerRequest::allowMethod()`, called as the first line of an action that should only ever run for
+     * specific HTTP methods:
+     *
+     * ```
+     * public function submit(): Response
+     * {
+     *     $this->request->allowMethod('post');
+     *     ...
+     * }
+     * ```
+     *
+     * @param list<string>|string $methods One or more HTTP methods this request must match, e.g. `'post'` or
+     *  `['get', 'post']`. Case doesn't matter, same as `is()`.
+     * @throws \Elone\Core\Exception\MethodNotAllowedException If the current request's method isn't among
+     *  `$methods`.
+     */
+    public function allowMethod(array|string $methods): void
+    {
+        $methods = is_array($methods) ? $methods : [$methods];
+
+        if (array_any($methods, fn($allowedMethod) => $this->is($allowedMethod))) {
+            return;
+        }
+
+        throw new MethodNotAllowedException(sprintf(
+            'Method `%s` is not allowed. Allowed: %s.',
+            $this->method,
+            implode(', ', array_map(
+                callback: fn($allowedMethod) => '`' . strtoupper($allowedMethod) . '`',
+                array: $methods,
+            )),
+        ));
     }
 
     /**

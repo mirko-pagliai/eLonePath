@@ -38,8 +38,9 @@ final readonly class Fight
         $rollTwoD6 ??= static fn(): int => array_sum(new Dice()->rollDouble());
 
         $rounds = [];
+        $roundCount = 0;
 
-        while (!$player->isDefeated() && !$enemy->isDefeated() && count($rounds) < self::MAX_ROUNDS) {
+        while (!$player->isDefeated() && !$enemy->isDefeated() && $roundCount < self::MAX_ROUNDS) {
             $result = Combat::resolveRound(
                 player: $player->toCombatant(),
                 enemy: $enemy->toCombatant(),
@@ -48,6 +49,7 @@ final readonly class Fight
             );
 
             $rounds[] = $result;
+            $roundCount++;
 
             if ($result->hit === CombatHit::Player) {
                 $enemy = $enemy->withDamage($result->damage);

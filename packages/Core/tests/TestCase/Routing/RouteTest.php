@@ -216,6 +216,7 @@ class RouteTest extends TestCase
     {
         $this->expectException(RouteNotFoundException::class);
         $this->expectExceptionMessageIs('Invalid route.');
+        // @phpstan-ignore-next-line argument.type
         Route::resolve(['controller' => ['nested', 'array'], 'action' => 'chapter']);
     }
 

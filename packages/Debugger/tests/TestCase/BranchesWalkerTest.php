@@ -221,4 +221,34 @@ class BranchesWalkerTest extends TestCase
         $this->assertCount(1, $walker->getWinningBranches());
         $this->assertCount(1, $walker->getDefeatBranches());
     }
+
+    /**
+     * A `CombatNode` branches on its own two targets (`target_victory`/`target_defeat`), the same shape as
+     * `DiceNode`'s `target_success`/`target_failure` — this is what proves the walker actually knows about it,
+     * rather than falling through to the `LogicException` every other unrecognized type hits.
+     *
+     * @link \Elone\Debugger\BranchesWalker::getAllBranches()
+     */
+    #[Test]
+    public function testGetAllBranchesWithCombatNode(): void
+    {
+        $game = Game::createFromString('{' . self::GAME_HEADER . ', "nodes": {
+            "1": {"content": "start", "type": "passage", "choices": [{"content": "fight", "target": 2}]},
+            "2": {"content": "a fight", "type": "combat", "combat": {
+                "enemy_name": "Orco", "enemy_max_life_points": 10, "enemy_strength": 5, "enemy_agility": 3,
+                "target_victory": 3, "target_defeat": 4
+            }},
+            "3": {"content": "you win", "type": "victory"},
+            "4": {"content": "you lose", "type": "defeat"}
+        }}');
+
+        $walker = new BranchesWalker($game);
+
+        $this->assertSame([], $walker());
+
+        $branches = $walker->getAllBranches();
+        $this->assertCount(2, $branches);
+        $this->assertSame([1, 2, 3], array_map(fn($node) => $node->id, $branches[0]));
+        $this->assertSame([1, 2, 4], array_map(fn($node) => $node->id, $branches[1]));
+    }
 }

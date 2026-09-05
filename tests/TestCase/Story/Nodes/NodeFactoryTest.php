@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Test\Story\Nodes;
 
+use App\Story\Nodes\CombatNode;
 use App\Story\Nodes\DefeatNode;
 use App\Story\Nodes\DiceNode;
 use App\Story\Nodes\NodeFactory;
@@ -83,10 +84,30 @@ class NodeFactoryTest extends TestCase
     }
 
     /**
+     * @link \App\Story\Nodes\NodeFactory::createFromArray()
+     */
+    #[Test]
+    public function testCreateFromArrayDispatchesToCombatNode(): void
+    {
+        $node = NodeFactory::createFromArray(id: 30, gameId: 'test-game', data: [
+            'content' => 'A fight.',
+            'type' => 'combat',
+            'combat' => [
+                'enemy_name' => 'Orco',
+                'enemy_max_life_points' => 15,
+                'enemy_strength' => 8,
+                'enemy_agility' => 4,
+                'target_victory' => 31,
+                'target_defeat' => 32,
+            ],
+        ]);
+
+        $this->assertInstanceOf(CombatNode::class, $node);
+    }
+
+    /**
      * The `match` in `createFromArray()` falls through to an explicit `RuntimeException` for anything that
-     * isn't one of the four known type strings — previously, an unrecognized type reached `NodeType::from()`
-     * instead, which threw its own `ValueError` automatically; nothing tested that path either, but it's worth
-     * covering now that the check (and its message) is this class's own code, not something inherited for free.
+     * isn't one of the known type strings.
      *
      * @link \App\Story\Nodes\NodeFactory::createFromArray()
      */

@@ -5,6 +5,7 @@ namespace Elone\Debugger;
 
 use App\Story\Game;
 use App\Story\Nodes\Choice;
+use App\Story\Nodes\CombatNode;
 use App\Story\Nodes\DefeatNode;
 use App\Story\Nodes\DiceNode;
 use App\Story\Nodes\Node;
@@ -139,7 +140,8 @@ class BranchesWalker
 
     /**
      * @param list<\App\Story\Nodes\Node> $branch The branch accumulated so far, up to (but not including) `$node`.
-     * @throws \LogicException If `$node` is neither a `VictoryNode`, `DefeatNode`, `DiceNode`, nor `PassageNode`.
+     * @throws \LogicException If `$node` is neither a `VictoryNode`, `DefeatNode`, `DiceNode`, `CombatNode`, nor
+     * `PassageNode`.
      */
     protected function scanNode(Node $node, array $branch): void
     {
@@ -168,6 +170,11 @@ class BranchesWalker
             $targetNodes = [
                 $this->game->getNode($node->targetSuccess),
                 $this->game->getNode($node->targetFailure),
+            ];
+        } elseif ($node instanceof CombatNode) {
+            $targetNodes = [
+                $this->game->getNode($node->targetVictory),
+                $this->game->getNode($node->targetDefeat),
             ];
         } elseif ($node instanceof PassageNode) {
             $targetNodes = array_map(

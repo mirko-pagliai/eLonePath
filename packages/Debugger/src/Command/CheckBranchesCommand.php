@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace Elone\Debugger\Command;
 
 use App\Story\Game;
+use App\Story\Nodes\CombatNode;
 use App\Story\Nodes\DefeatNode;
 use App\Story\Nodes\DiceNode;
 use App\Story\Nodes\Node;
@@ -64,6 +65,8 @@ class CheckBranchesCommand extends Command
                         $io->write('> <fg=red>defeat</>');
                     } elseif ($node instanceof DiceNode) {
                         $io->write('> <fg=blue>dice with ' . $node->requiredRolls . ' rolls</> ');
+                    } elseif ($node instanceof CombatNode) {
+                        $io->write('> <fg=magenta>combat vs ' . $node->enemyName . '</> ');
                     }
 
                     // Style for image nodes

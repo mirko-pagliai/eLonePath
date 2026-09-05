@@ -15,16 +15,22 @@ final class Request
     private readonly array $queryParams;
 
     /**
-     * Creates a new `Request` from an HTTP method and a raw URI.
+     * Creates a new `Request` from an HTTP method, a raw URI, and optional body data.
      *
      * @param string $method The HTTP method, e.g. `GET`, `POST`. Stored exactly as given — normalizing it (e.g.
      *  to uppercase) is the caller's responsibility; `createFromGlobals()` does it before calling this.
      * @param string $uri The raw request URI — path and, optionally, query string together, e.g.
      *  `/pages/view/123?foo=bar`. Parsed once, here, into what `path()` and `queryParams()` return.
+     * @param array<array-key, mixed> $data The parsed request body — form fields from a POST submission.
+     *  `createFromGlobals()` populates this from PHP's own `$_POST`; empty (the default) for a request with no
+     *  body, such as a plain GET.
      * @return void
      */
-    public function __construct(private readonly string $method, string $uri)
-    {
+    public function __construct(
+        private readonly string $method,
+        string $uri,
+        private readonly array $data = [],
+    ) {
         $this->path = parse_url($uri, PHP_URL_PATH) ?: '/';
 
         $query = parse_url($uri, PHP_URL_QUERY);
@@ -38,8 +44,8 @@ final class Request
     }
 
     /**
-     * Builds a `Request` from PHP's own superglobals (`$_SERVER['REQUEST_METHOD']` and `['REQUEST_URI']`),
-     * defaulting to `GET /` if either is missing.
+     * Builds a `Request` from PHP's own superglobals (`$_SERVER['REQUEST_METHOD']`, `['REQUEST_URI']`, and
+     * `$_POST`), defaulting to `GET /` if the method/URI are missing.
      *
      * @return self A `Request` reflecting the current PHP superglobals.
      */
@@ -51,7 +57,7 @@ final class Request
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         assert(is_string($method));
 
-        return new self(strtoupper($method), $uri);
+        return new self(strtoupper($method), $uri, $_POST);
     }
 
     /**
@@ -147,5 +153,28 @@ final class Request
     public function queryParam(string $name, mixed $default = null): mixed
     {
         return $this->queryParams[$name] ?? $default;
+    }
+
+    /**
+     * Returns every field in the request body — a POST form submission, most commonly. Populated from PHP's own
+     * `$_POST` when built via `createFromGlobals()`.
+     *
+     * @return array<array-key, mixed> The request body fields, as an associative array.
+     */
+    public function data(): array
+    {
+        return $this->data;
+    }
+
+    /**
+     * Returns a single request body field by name.
+     *
+     * @param string $name The field name to look up.
+     * @param mixed $default The value to return if `$name` isn't present.
+     * @return mixed The field's value, or `$default`.
+     */
+    public function dataParam(string $name, mixed $default = null): mixed
+    {
+        return $this->data[$name] ?? $default;
     }
 }

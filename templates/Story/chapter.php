@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 /**
+ * @var \App\Story\Character|null $character
  * @var \App\Story\Game $game
  * @var \App\Story\Nodes\Node $node
  * @var \App\View\AppView $this
@@ -18,6 +19,11 @@ use App\Story\Nodes\VictoryNode;
 echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'subtitle' => "Pagina $node->id"]);
 
 $image = $this->Story->image($node->content, $game->gameId);
+
+if ($character !== null) {
+    /** @link templates/element/character_sheet.php */
+    echo $this->element(name: 'character_sheet', data: ['character' => $character]);
+}
 ?>
 
 <?php if ($image['html'] !== null) : ?>
@@ -32,7 +38,7 @@ $image = $this->Story->image($node->content, $game->gameId);
     <nav id="story-choices" class="d-flex flex-column gap-2">
         <?php
         foreach ($node->choices as $choice) {
-            echo $this->Html->link(
+            echo $this->Story->link(
                 text: $choice->content,
                 url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $choice->target],
                 options: [
@@ -59,7 +65,7 @@ $image = $this->Story->image($node->content, $game->gameId);
             $text = "Lancia <strong>$node->requiredRolls</strong> dadi";
         }
 
-        echo $this->Html->link(
+        echo $this->Story->link(
             text: $this->Html->icon('dice-6', ['class' => 'me-1']) . " $text",
             url: ['controller' => 'Story', 'action' => 'roll', $game->gameId, $node->id],
             options: [

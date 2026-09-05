@@ -132,23 +132,49 @@ abstract class Controller
     }
 
     /**
+     * Retrieves all request body fields of the current request — a POST form submission, most commonly.
+     *
+     * @return array<array-key, mixed> The request body fields, as an associative array.
+     */
+    protected function data(): array
+    {
+        return $this->request->data();
+    }
+
+    /**
+     * Retrieves a single request body field of the current request, or `$default` if it isn't present.
+     *
+     * @param string $name The field name to look up.
+     * @param mixed $default The value to return if `$name` isn't present.
+     * @return mixed The field's value, or `$default`.
+     */
+    protected function dataParam(string $name, mixed $default = null): mixed
+    {
+        return $this->request->dataParam($name, $default);
+    }
+
+    /**
      * Builds a redirect `Response` to `$url`: a string is used as-is (a literal path such as `/`, or an external URL),
-     * an array is built into a route.
+     * an array is built into a route. `$query` is appended as a querystring, the same way `HtmlHelper::link()` does —
+     * useful for carrying a value (e.g. `?state=...`) into the page being redirected to.
      *
      * Returns it directly from an action to have `Dispatcher` send it as-is, bypassing the view entirely:
      *
      * ```
      * return $this->redirect('/');
      * return $this->redirect(['controller' => 'Pages', 'action' => 'home']);
+     * return $this->redirect(['controller' => 'Story', 'action' => 'start', $storyId], query: ['state' => $state]);
      * ```
      *
      * @param array<string|int, string|int|float|bool>|string $url A literal URL/path, or a route array.
      * @param int $status The HTTP status code for the redirect. Defaults to `302` (temporary).
+     * @param array<string, string|int|float|bool> $query Appended to the resolved URL as a querystring. Empty
+     *  (the default) adds nothing.
      * @return \Elone\Core\Server\Response
      * @throws \Elone\Core\Exception\RouteNotFoundException If given an array route with invalid or missing parameters.
      */
-    protected function redirect(array|string $url, int $status = 302): Response
+    protected function redirect(array|string $url, int $status = 302, array $query = []): Response
     {
-        return new Response(status: $status, headers: ['Location' => Route::resolve($url)]);
+        return new Response(status: $status, headers: ['Location' => Route::resolve($url, $query)]);
     }
 }

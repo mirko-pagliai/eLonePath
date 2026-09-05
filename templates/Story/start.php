@@ -23,7 +23,7 @@ $preface = $this->Story->image($game->preface, $game->gameId);
 </section>
 
 <div class="text-center">
-    <?= $this->Html->link(
+    <?= $this->Story->link(
         text: 'Comincia la partita',
         url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
         options: ['class' => 'btn fs-4 elone-button px-4 py-2'],

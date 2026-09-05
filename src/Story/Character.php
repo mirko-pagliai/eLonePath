@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\Story;
 
 use App\Story\Combat\Combatant;
+use Elone\Core\Contract\Arrayable;
 use RuntimeException;
 
 /**
@@ -44,8 +45,17 @@ use RuntimeException;
  * `CombatRoundResult`) that returns `new static(...)` from a wither method — without it, PHPStan can't prove a
  * subclass's constructor still accepts the same arguments, since nothing stops one from overriding it
  * incompatibly.
+ *
+ * @phpstan-type CharacterData array{
+ *     max_life_points: int,
+ *     life_points: int,
+ *     strength: int,
+ *     agility: int,
+ *     perception: int,
+ *     willpower: int,
+ * }
  */
-final class Character
+final class Character implements Arrayable
 {
     /**
      * The total of a character's four attributes must sum to exactly.
@@ -188,5 +198,39 @@ final class Character
     public function toCombatant(): Combatant
     {
         return new Combatant(strength: $this->strength, agility: $this->agility, lifePoints: $this->lifePoints);
+    }
+
+    /**
+     * Exports this character as a plain array — used by `GameState` to carry it through the URL between pages,
+     * since there's no server-side session. The reverse of `createFromArray()`.
+     *
+     * @return CharacterData
+     */
+    public function toArray(): array
+    {
+        return [
+            'max_life_points' => $this->maxLifePoints,
+            'life_points' => $this->lifePoints,
+            'strength' => $this->strength,
+            'agility' => $this->agility,
+            'perception' => $this->perception,
+            'willpower' => $this->willpower,
+        ];
+    }
+
+    /**
+     * @param CharacterData $data
+     * @throws \RuntimeException Same conditions as `__construct()`.
+     */
+    public static function createFromArray(array $data): self
+    {
+        return new self(
+            maxLifePoints: $data['max_life_points'],
+            lifePoints: $data['life_points'],
+            strength: $data['strength'],
+            agility: $data['agility'],
+            perception: $data['perception'],
+            willpower: $data['willpower'],
+        );
     }
 }

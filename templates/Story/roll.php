@@ -2,6 +2,7 @@
 declare(strict_types=1);
 
 /**
+ * @var \App\Story\Character|null $character
  * @var \App\Story\Game $game
  * @var list<int> $rolls
  * @var bool $success
@@ -14,6 +15,11 @@ declare(strict_types=1);
 
 /** @link templates/element/chapter_header.php */
 echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'subtitle' => 'Lancio dei dadi']);
+
+if ($character !== null) {
+    /** @link templates/element/character_sheet.php */
+    echo $this->element(name: 'character_sheet', data: ['character' => $character]);
+}
 ?>
 
 <section id="dice-result" class="fs-4 mb-4 text-center">
@@ -38,7 +44,7 @@ echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'sub
     <?php endif; ?>
     </p>
 
-    <?= $this->Html->link(
+    <?= $this->Story->link(
         text: 'Continua',
         url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $target],
         options: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],

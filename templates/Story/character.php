@@ -20,8 +20,13 @@ echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'sub
 <?php endif; ?>
 
 <p class="fs-5 mb-4">
-    Distribuisci <strong>20 punti</strong> tra i quattro attributi. Forza e Agilità non hanno un massimo proprio;
-    Percezione e Volontà vanno da 1 a 5 ciascuna. La somma dei quattro deve fare esattamente 20.
+    Distribuisci un totale <strong>20 punti</strong> tra i quattro attributi.
+</p>
+
+<p class="fs-5 mb-4">
+    <strong>Forza</strong> e <strong>Agilità</strong> non hanno un massimo proprio.</br>
+    <strong>Percezione</strong> e <strong>Volontà</strong> vanno da 1 a 5 ciascuna.<br />
+    La somma dei quattro deve fare esattamente 20.
 </p>
 
 <form

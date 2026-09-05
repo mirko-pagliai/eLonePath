@@ -4,8 +4,12 @@ declare(strict_types=1);
 namespace App\Controller;
 
 use App\Story\Character;
+use App\Story\Combat\Combat;
+use App\Story\Combat\CombatHit;
+use App\Story\Enemy;
 use App\Story\Game;
 use App\Story\GameState;
+use App\Story\Nodes\CombatNode;
 use App\Story\Nodes\DiceNode;
 use App\Utility\Dice;
 use Elone\Core\Server\Response;
@@ -181,5 +185,95 @@ class StoryController extends AppController
         $target = $node->targetFor($total);
 
         $this->set(compact('game', 'rolls', 'total', 'success', 'target'));
+    }
+
+    /**
+     * Resolves one round of combat against a `CombatNode`'s enemy, and shows the outcome — the same "GET
+     * computes and shows a result" idiom `roll()` uses for a dice check, just repeated round after round instead
+     * of resolved in one shot: the enemy's current life points travel in `GameState::$enemyLifePoints`, absent
+     * on the first round against this node (the enemy starts at the full health the node itself declares) and
+     * present on every round after, updated each time.
+     *
+     * Ends the fight the moment either side reaches `0` life points, redirecting to whichever of the node's own
+     * `targetVictory`/`targetDefeat` applies — carrying the player's own final state forward either way, but
+     * dropping `enemyLifePoints`: the fight is over, there's nothing left to track.
+     *
+     * @param string $storyId
+     * @param int $nodeNumber
+     * @return \Elone\Core\Server\Response|null Returns a redirect once the fight ends; `null` otherwise, to show
+     * this round's outcome with a link to continue the same fight.
+     * @throws \RuntimeException If the node isn't a `CombatNode`, or if no character is present in the request —
+     * a fight can't be resolved without one.
+     * @throws \Random\RandomException
+     *
+     * @link templates/Story/fight.php
+     */
+    public function fight(string $storyId, int $nodeNumber): ?Response
+    {
+        $game = $this->getGame($storyId);
+        $node = $game->getNode($nodeNumber);
+        $character = $this->propagateState();
+
+        if (!$node instanceof CombatNode) {
+            throw new RuntimeException("Node `$nodeNumber` in `$storyId` is not a combat.");
+        }
+
+        if ($character === null) {
+            throw new RuntimeException("No character found for `$storyId` — create one before fighting.");
+        }
+
+        $stateValue = $this->queryParam('state');
+        assert(is_string($stateValue));
+        $state = GameState::fromQueryValue($stateValue);
+
+        $enemy = new Enemy(
+            name: $node->enemyName,
+            maxLifePoints: $node->enemyMaxLifePoints,
+            lifePoints: $state->enemyLifePoints ?? $node->enemyMaxLifePoints,
+            strength: $node->enemyStrength,
+            agility: $node->enemyAgility,
+        );
+
+        $rollTwoD6 = static fn(): int => array_sum(new Dice()->rollDouble());
+
+        $result = Combat::resolveRound(
+            player: $character->toCombatant(),
+            enemy: $enemy->toCombatant(),
+            playerRoll: $rollTwoD6(),
+            enemyRoll: $rollTwoD6(),
+        );
+
+        if ($result->hit === CombatHit::Player) {
+            $enemy = $enemy->withDamage($result->damage);
+        } elseif ($result->hit === CombatHit::Enemy) {
+            $character = $character->withDamage($result->damage);
+        }
+
+        if ($enemy->isDefeated()) {
+            return $this->redirect(
+                url: ['controller' => 'Story', 'action' => 'chapter', $storyId, $node->targetVictory],
+                query: ['state' => new GameState(player: $character)->toQueryValue()],
+            );
+        }
+
+        if ($character->isDefeated()) {
+            return $this->redirect(
+                url: ['controller' => 'Story', 'action' => 'chapter', $storyId, $node->targetDefeat],
+                query: ['state' => new GameState(player: $character)->toQueryValue()],
+            );
+        }
+
+        $newState = new GameState(player: $character, enemyLifePoints: $enemy->lifePoints);
+
+        $this->set([
+            'game' => $game,
+            'node' => $node,
+            'enemy' => $enemy,
+            'result' => $result,
+            'character' => $character,
+            'state' => $newState->toQueryValue(),
+        ]);
+
+        return null;
     }
 }

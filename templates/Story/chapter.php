@@ -10,6 +10,7 @@ declare(strict_types=1);
  * @link \App\Controller\StoryController::chapter()
  */
 
+use App\Story\Nodes\CombatNode;
 use App\Story\Nodes\DefeatNode;
 use App\Story\Nodes\DiceNode;
 use App\Story\Nodes\PassageNode;
@@ -74,6 +75,24 @@ if ($character !== null) {
             ],
         );
         ?>
+    </div>
+<?php endif; ?>
+
+<?php if ($node instanceof CombatNode) : ?>
+    <div id="story-combat-intro" class="mt-4 text-center">
+        <p class="fs-3">
+            Un nemico ti sbarra la strada: <strong><?= h($node->enemyName) ?></strong>
+            (<?= $node->enemyMaxLifePoints ?> Punti Vita).
+        </p>
+
+        <?= $this->Story->link(
+            text: $this->Html->icon('shield', ['class' => 'me-1']) . ' Affronta il nemico',
+            url: ['controller' => 'Story', 'action' => 'fight', $game->gameId, $node->id],
+            options: [
+                'class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none',
+                'escape' => false,
+            ],
+        ) ?>
     </div>
 <?php endif; ?>
 

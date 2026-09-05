@@ -7,4 +7,5 @@ declare(strict_types=1);
  * thing the regression test locks in.
  */
 
+// @phpstan-ignore-next-line variable.undefined -- always required from within View::evaluate(), where $this is bound
 echo $this->Probe->readState();

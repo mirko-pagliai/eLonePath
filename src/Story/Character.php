@@ -6,6 +6,7 @@ namespace App\Story;
 use App\Story\Combat\Combatant;
 use Elone\Core\Contract\Arrayable;
 use RuntimeException;
+use TypeError;
 
 /**
  * Represents a character in a story.
@@ -231,28 +232,37 @@ final class Character implements Arrayable
     public static function createFromArray(array $data): self
     {
         return new self(
-            maxLifePoints: self::requiredKey($data, 'max_life_points'),
-            lifePoints: self::requiredKey($data, 'life_points'),
-            strength: self::requiredKey($data, 'strength'),
-            agility: self::requiredKey($data, 'agility'),
-            perception: self::requiredKey($data, 'perception'),
-            willpower: self::requiredKey($data, 'willpower'),
+            maxLifePoints: self::requiredIntKey($data, 'max_life_points'),
+            lifePoints: self::requiredIntKey($data, 'life_points'),
+            strength: self::requiredIntKey($data, 'strength'),
+            agility: self::requiredIntKey($data, 'agility'),
+            perception: self::requiredIntKey($data, 'perception'),
+            willpower: self::requiredIntKey($data, 'willpower'),
         );
     }
 
     /**
-     * Reads `$data[$key]`, or `null` if it's absent — same result as `$data[$key]` directly once a missing key
-     * reaches the constructor's typed (non-nullable) parameter and throws its own `TypeError`, just without also
-     * emitting PHP's own "Undefined array key" warning along the way. `$data` is deliberately typed as a plain
-     * array here, not `CharacterData` — from `createFromArray()`'s own, more specific perspective every key is
-     * always present, so PHPStan would (rightly, for that narrower view) call the `??` redundant; this method
-     * exists to step outside that guarantee for the one caller — `GameState::fromQueryValue()` — that can't
-     * make it.
+     * Reads `$data[$key]`, requiring it to be an `int` — a missing key, or one holding the wrong type, throws
+     * the same `TypeError` that passing it straight through to the constructor's typed (non-nullable) parameter
+     * eventually would, just without also emitting PHP's own "Undefined array key" warning along the way, and
+     * without asking PHPStan to trust the whole `CharacterData` shape at this narrower point. `$data` is
+     * deliberately typed as a plain array, not `CharacterData` — from `createFromArray()`'s own perspective
+     * every key is always present and already an `int`, so PHPStan would (rightly, for that narrower view) call
+     * checking it redundant; this method exists to step outside that guarantee for the one caller —
+     * `GameState::fromQueryValue()` — that can't make it, since a `?state=` value is untrusted, hand-editable
+     * input.
      *
      * @param array<array-key, mixed> $data
+     * @throws \TypeError If `$data[$key]` is absent, or isn't an `int`.
      */
-    private static function requiredKey(array $data, string $key): mixed
+    private static function requiredIntKey(array $data, string $key): int
     {
-        return $data[$key] ?? null;
+        $value = $data[$key] ?? null;
+
+        if (!is_int($value)) {
+            throw new TypeError("Character data key `$key` must be an int, " . get_debug_type($value) . ' given.');
+        }
+
+        return $value;
     }
 }

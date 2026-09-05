@@ -221,16 +221,38 @@ final class Character implements Arrayable
     /**
      * @param CharacterData $data
      * @throws \RuntimeException Same conditions as `__construct()`.
+     * @throws \TypeError If `$data` is missing a required key, or holds the wrong type for it. Whether this is
+     *  worth catching, and turning into something clearer, is a decision for the caller —
+     *  `GameState::fromQueryValue()` does exactly that, since a `?state=` value is untrusted input a curious
+     *  player could hand-edit; a `story.json` node's data, by contrast, is trusted, author-written content, the
+     *  same as every other `createFromArray()` in this codebase that doesn't guard against a malformed shape
+     *  either.
      */
     public static function createFromArray(array $data): self
     {
         return new self(
-            maxLifePoints: $data['max_life_points'],
-            lifePoints: $data['life_points'],
-            strength: $data['strength'],
-            agility: $data['agility'],
-            perception: $data['perception'],
-            willpower: $data['willpower'],
+            maxLifePoints: self::requiredKey($data, 'max_life_points'),
+            lifePoints: self::requiredKey($data, 'life_points'),
+            strength: self::requiredKey($data, 'strength'),
+            agility: self::requiredKey($data, 'agility'),
+            perception: self::requiredKey($data, 'perception'),
+            willpower: self::requiredKey($data, 'willpower'),
         );
+    }
+
+    /**
+     * Reads `$data[$key]`, or `null` if it's absent — same result as `$data[$key]` directly once a missing key
+     * reaches the constructor's typed (non-nullable) parameter and throws its own `TypeError`, just without also
+     * emitting PHP's own "Undefined array key" warning along the way. `$data` is deliberately typed as a plain
+     * array here, not `CharacterData` — from `createFromArray()`'s own, more specific perspective every key is
+     * always present, so PHPStan would (rightly, for that narrower view) call the `??` redundant; this method
+     * exists to step outside that guarantee for the one caller — `GameState::fromQueryValue()` — that can't
+     * make it.
+     *
+     * @param array<array-key, mixed> $data
+     */
+    private static function requiredKey(array $data, string $key): mixed
+    {
+        return $data[$key] ?? null;
     }
 }

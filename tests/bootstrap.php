@@ -14,3 +14,5 @@ const TEST_APP = ROOT . '/tests/test_app';
 const STORIES = TEST_APP . '/stories';
 
 const WEBROOT = ROOT . '/tests/test_app/webroot';
+
+require ROOT . '/packages/Core/config/bootstrap.php';

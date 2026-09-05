@@ -1,30 +1,13 @@
 {
     "game": {
-        "id": "mini-quest",
-        "title": "Mini Quest",
+        "id": "no-preface",
+        "title": "No Preface Quest",
         "author": "Test Author",
-        "description": "A minimal story for StoryController tests.",
+        "description": "A story with no preface, for testing start()'s redirect.",
         "language": "en",
-        "version": "1.0",
-        "preface": "A short preface for testing."
+        "version": "1.0"
     },
     "nodes": {
-        "1": {
-            "content": "Start here.",
-            "type": "passage",
-            "choices": [{"content": "Go on", "target": 2}]
-        },
-        "2": {
-            "content": "Roll the dice.",
-            "type": "dice",
-            "dice": {
-                "required_rolls": 1,
-                "minimum": 1,
-                "target_success": 3,
-                "target_failure": 4
-            }
-        },
-        "3": {"content": "You win.", "type": "victory"},
-        "4": {"content": "You lose.", "type": "defeat"}
+        "1": {"content": "The only page.", "type": "victory"}
     }
 }

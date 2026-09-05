@@ -33,6 +33,23 @@ class StoryController extends AppController
     }
 
     /**
+     * Reads a POST field as an int, treating anything that isn't numeric — missing, malformed, or a stray array
+     * from a malicious submission — as `0` rather than a hard failure: `Character::createNew()`'s own
+     * validation already rejects `0` (strength/agility need at least 1) with a clear message, so this doesn't
+     * need to duplicate that error handling here. This is what actually narrows `dataParam()`'s `mixed` return
+     * to something `(int)` can cast safely — a bare `(int)$this->dataParam(...)` doesn't satisfy PHPStan, since
+     * `mixed` includes values (arrays, objects) a plain cast doesn't handle meaningfully.
+     *
+     * @param string $name The POST field name to read.
+     */
+    private function intDataParam(string $name): int
+    {
+        $value = $this->dataParam($name);
+
+        return is_numeric($value) ? (int)$value : 0;
+    }
+
+    /**
      * Reads the current `?state=` query parameter, decodes it into the player's `Character`, and makes both the
      * raw value and the character available to the view: the raw value under `state` (so `StoryHelper::link()`
      * can carry it forward into every navigation link on the page) and the character under `character` (so a
@@ -75,10 +92,10 @@ class StoryController extends AppController
             try {
                 $player = Character::createNew(
                     maxLifePoints: self::STARTING_MAX_LIFE_POINTS,
-                    strength: (int)$this->dataParam('strength', 0),
-                    agility: (int)$this->dataParam('agility', 0),
-                    perception: (int)$this->dataParam('perception', 0),
-                    willpower: (int)$this->dataParam('willpower', 0),
+                    strength: $this->intDataParam('strength'),
+                    agility: $this->intDataParam('agility'),
+                    perception: $this->intDataParam('perception'),
+                    willpower: $this->intDataParam('willpower'),
                 );
 
                 $state = new GameState(player: $player);

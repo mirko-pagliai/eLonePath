@@ -307,4 +307,69 @@ class CharacterTest extends TestCase
         // The current life points, not maxLifePoints.
         $this->assertSame(15, $combatant->lifePoints);
     }
+
+    /**
+     * `toArray()` is what `GameState` relies on to carry a `Character` through the URL — this locks in the exact
+     * shape it produces, snake_case keys included, since `createFromArray()` on the other end expects precisely
+     * this.
+     *
+     * @link \App\Story\Character::toArray()
+     */
+    #[Test]
+    public function testToArray(): void
+    {
+        $character = $this->sample(lifePoints: 15);
+
+        $this->assertSame([
+            'max_life_points' => 20,
+            'life_points' => 15,
+            'strength' => 10,
+            'agility' => 6,
+            'perception' => 2,
+            'willpower' => 2,
+        ], $character->toArray());
+    }
+
+    /**
+     * The round trip `GameState` actually depends on: `toArray()` followed by `createFromArray()` reproduces an
+     * identical character, not just one that happens to look similar.
+     *
+     * @link \App\Story\Character::toArray()
+     * @link \App\Story\Character::createFromArray()
+     */
+    #[Test]
+    public function testToArrayAndCreateFromArrayRoundTrip(): void
+    {
+        $original = $this->sample(lifePoints: 13);
+
+        $recreated = Character::createFromArray($original->toArray());
+
+        $this->assertSame($original->maxLifePoints, $recreated->maxLifePoints);
+        $this->assertSame($original->lifePoints, $recreated->lifePoints);
+        $this->assertSame($original->strength, $recreated->strength);
+        $this->assertSame($original->agility, $recreated->agility);
+        $this->assertSame($original->perception, $recreated->perception);
+        $this->assertSame($original->willpower, $recreated->willpower);
+    }
+
+    /**
+     * `createFromArray()` doesn't duplicate `__construct()`'s own validation — it delegates to it, so invalid
+     * data (an attribute sum that isn't 20, here) is rejected with `Character`'s own message, the same as
+     * constructing one directly would.
+     *
+     * @link \App\Story\Character::createFromArray()
+     */
+    #[Test]
+    public function testCreateFromArrayWithInvalidDataThrows(): void
+    {
+        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got `12`.");
+        Character::createFromArray([
+            'max_life_points' => 20,
+            'life_points' => 20,
+            'strength' => 3,
+            'agility' => 3,
+            'perception' => 3,
+            'willpower' => 3,
+        ]);
+    }
 }

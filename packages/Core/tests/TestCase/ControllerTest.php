@@ -191,15 +191,42 @@ class ControllerTest extends TestCase
     }
 
     /**
+     * @link \Elone\Core\Controller::data()
+     * @link \Elone\Core\Controller::dataParam()
+     */
+    #[Test]
+    public function testData(): void
+    {
+        $request = new Request('POST', '/', ['foo' => 'bar']);
+
+        $controller = new class (request: $request) extends Controller {
+            public function data(): array
+            {
+                return parent::data();
+            }
+
+            public function dataParam(string $name, mixed $default = null): mixed
+            {
+                return parent::dataParam($name, $default);
+            }
+        };
+
+        $this->assertSame(['foo' => 'bar'], $controller->data());
+        $this->assertSame('bar', $controller->dataParam('foo'));
+        $this->assertNull($controller->dataParam('missing'));
+        $this->assertSame('default', $controller->dataParam('missing', 'default'));
+    }
+
+    /**
      * @link \Elone\Core\Controller::redirect()
      */
     #[Test]
     public function testRedirectWithString(): void
     {
         $controller = new class extends Controller {
-            public function redirect(array|string $url, int $status = 302): Response
+            public function redirect(array|string $url, int $status = 302, array $query = []): Response
             {
-                return parent::redirect($url, $status);
+                return parent::redirect($url, $status, $query);
             }
         };
 
@@ -216,9 +243,9 @@ class ControllerTest extends TestCase
     public function testRedirectWithExternalUrl(): void
     {
         $controller = new class extends Controller {
-            public function redirect(array|string $url, int $status = 302): Response
+            public function redirect(array|string $url, int $status = 302, array $query = []): Response
             {
-                return parent::redirect($url, $status);
+                return parent::redirect($url, $status, $query);
             }
         };
 
@@ -234,9 +261,9 @@ class ControllerTest extends TestCase
     public function testRedirectWithRoute(): void
     {
         $controller = new class extends Controller {
-            public function redirect(array|string $url, int $status = 302): Response
+            public function redirect(array|string $url, int $status = 302, array $query = []): Response
             {
-                return parent::redirect($url, $status);
+                return parent::redirect($url, $status, $query);
             }
         };
 
@@ -252,14 +279,35 @@ class ControllerTest extends TestCase
     public function testRedirectWithCustomStatus(): void
     {
         $controller = new class extends Controller {
-            public function redirect(array|string $url, int $status = 302): Response
+            public function redirect(array|string $url, int $status = 302, array $query = []): Response
             {
-                return parent::redirect($url, $status);
+                return parent::redirect($url, $status, $query);
             }
         };
 
         $response = $controller->redirect('/', 301);
 
         $this->assertSame(301, $response->status());
+    }
+
+    /**
+     * `$query` is what lets an action carry a value (`?state=...`, most commonly in this app) into the page it
+     * redirects to — this is the one behavior the four tests above don't exercise, since none of them pass it.
+     *
+     * @link \Elone\Core\Controller::redirect()
+     */
+    #[Test]
+    public function testRedirectWithQuery(): void
+    {
+        $controller = new class extends Controller {
+            public function redirect(array|string $url, int $status = 302, array $query = []): Response
+            {
+                return parent::redirect($url, $status, $query);
+            }
+        };
+
+        $response = $controller->redirect(['controller' => 'Pages', 'action' => 'home'], query: ['state' => 'abc123']);
+
+        $this->assertSame(['Location' => '/pages/home?state=abc123'], $response->headers());
     }
 }

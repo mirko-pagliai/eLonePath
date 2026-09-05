@@ -155,6 +155,52 @@ class ViewTest extends TestCase
     }
 
     /**
+     * Regression test: `$this->data` used to get cleared *before* the template was evaluated, so a helper the
+     * template itself calls (e.g. `App\View\Helper\StoryHelper::link()`, reading `get('state')`) could never see
+     * anything `set()` for that same render — `get()` always returned `null` regardless of what had just been
+     * `set()`. `probe.php` calls a helper that reads `get('state')` from inside the very render that `set()` it,
+     * which is exactly the path that used to fail.
+     *
+     * @link \Elone\Core\View\View::render()
+     * @link \Elone\Core\View\View::get()
+     */
+    #[Test]
+    public function testRenderKeepsDataAvailableToHelpersDuringEvaluation(): void
+    {
+        $view = new View();
+        $helper = new class ($view) extends Helper {
+            public function readState(): string
+            {
+                return (string)$this->view->get('state', 'MISSING');
+            }
+        };
+        $view->loadHelper('Probe', $helper);
+        $view->set(['state' => 'abc123']);
+
+        $result = $view->render('Pages/probe', null);
+
+        $this->assertSame('abc123', trim($result));
+    }
+
+    /**
+     * The other half of the same behavior: once the template is done, `$this->data` is still cleared, ready for
+     * whatever the next `render()` call `set()`s — this is what proves the fix only changed *when* the clearing
+     * happens, not whether it happens at all.
+     *
+     * @link \Elone\Core\View\View::render()
+     */
+    #[Test]
+    public function testRenderStillClearsDataAfterEvaluation(): void
+    {
+        $view = new View();
+        $view->set(['key1' => 'value1']);
+
+        $view->render('Pages/home');
+
+        $this->assertNull($view->get('key1'));
+    }
+
+    /**
      * Test for the `element()` method.
      *
      * `greeting.php` deliberately passes `name` as a data key — the exact key that used to collide with

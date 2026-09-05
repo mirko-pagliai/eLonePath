@@ -5,6 +5,7 @@ namespace App\Story;
 
 use JsonException;
 use RuntimeException;
+use TypeError;
 
 /**
  * The player's state carried between pages via the URL's `?state=` query parameter — there is no server-side
@@ -13,6 +14,12 @@ use RuntimeException;
  * base64-encoded JSON, chosen so the whole thing is one opaque, URL-safe token — `Route::resolve()`'s own
  * `http_build_query()` still percent-encodes it like any other querystring value, but nothing inside it (a `/`
  * from a JSON structure, for instance) needs escaping of its own first.
+ *
+ * `fromQueryValue()` treats its input as untrusted — unlike `Character::createFromArray()`'s own callers
+ * elsewhere (`story.json` is static, author-written content), a `?state=` value is sitting in the URL, editable
+ * by hand by anyone curious enough to try. That's why this class, and not `Character`, is where a malformed
+ * shape gets turned into a clean `RuntimeException` instead of a raw `TypeError` escaping to `ErrorHandler` as a
+ * generic 500.
  *
  * @phpstan-import-type CharacterData from \App\Story\Character
  * @phpstan-type GameStateData array{player: CharacterData, enemyLifePoints?: int}
@@ -53,8 +60,10 @@ final readonly class GameState
      * Decodes `$value` (as produced by `toQueryValue()`) back into a `GameState`.
      *
      * @param string|null $value The raw `?state=` query value, or `null` if it wasn't present at all.
-     * @throws \RuntimeException If `$value` is `null`, isn't valid base64, doesn't decode to valid JSON, or
-     *  doesn't match the expected shape — including whatever `Character::createFromArray()` itself would reject.
+     * @throws \RuntimeException If `$value` is `null`, isn't valid base64, doesn't decode to valid JSON, or the
+     *  decoded `player` data is missing or doesn't match what `Character::createFromArray()` expects —
+     *  including a value that satisfies `Character`'s own validation rules (e.g. an attribute sum that isn't
+     *  20), whose message is `Character`'s own, re-thrown as-is rather than wrapped.
      */
     public static function fromQueryValue(?string $value): self
     {
@@ -82,8 +91,17 @@ final readonly class GameState
         /** @var CharacterData $playerData */
         $playerData = $data['player'];
 
+        try {
+            $player = Character::createFromArray($playerData);
+        } catch (TypeError $error) {
+            // A key is missing, or holds the wrong type entirely (a string where an int belongs, say) — this is
+            // what turns that into the same clean exception every other malformed-state case here already
+            // throws, instead of a raw TypeError reaching `ErrorHandler` as an undifferentiated 500.
+            throw new RuntimeException('Invalid game state: malformed player data.', previous: $error);
+        }
+
         return new self(
-            player: Character::createFromArray($playerData),
+            player: $player,
             enemyLifePoints: is_int($enemyLifePoints) ? $enemyLifePoints : null,
         );
     }

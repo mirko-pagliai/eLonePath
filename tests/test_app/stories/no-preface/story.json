@@ -1,0 +1,30 @@
+{
+    "game": {
+        "id": "mini-quest",
+        "title": "Mini Quest",
+        "author": "Test Author",
+        "description": "A minimal story for StoryController tests.",
+        "language": "en",
+        "version": "1.0",
+        "preface": "A short preface for testing."
+    },
+    "nodes": {
+        "1": {
+            "content": "Start here.",
+            "type": "passage",
+            "choices": [{"content": "Go on", "target": 2}]
+        },
+        "2": {
+            "content": "Roll the dice.",
+            "type": "dice",
+            "dice": {
+                "required_rolls": 1,
+                "minimum": 1,
+                "target_success": 3,
+                "target_failure": 4
+            }
+        },
+        "3": {"content": "You win.", "type": "victory"},
+        "4": {"content": "You lose.", "type": "defeat"}
+    }
+}

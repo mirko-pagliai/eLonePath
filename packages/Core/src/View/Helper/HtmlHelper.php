@@ -13,31 +13,6 @@ use RuntimeException;
 class HtmlHelper extends Helper
 {
     /**
-     * Converts an associative array of HTML attributes into a formatted string suitable for insertion into an HTML tag.
-     * Keys in the array represent attribute names, and their corresponding values represent the attribute values.
-     *
-     * @param array<string, string|int|float|bool> $attributes An associative array of attributes where keys are the
-     * attribute names and values are the attribute values. Boolean values are converted to their string equivalents.
-     *
-     * @return string A properly formatted string of HTML attributes, where each attribute is escaped to ensure that
-     * special characters do not break the resulting HTML.
-     */
-    protected function parseHtmlAttributes(array $attributes): string
-    {
-        $htmlAttributes = '';
-
-        foreach ($attributes as $attributeName => $value) {
-            $htmlAttributes .= sprintf(
-                ' %s="%s"',
-                h($attributeName, ENT_QUOTES),
-                h((string)$value, ENT_QUOTES),
-            );
-        }
-
-        return $htmlAttributes;
-    }
-
-    /**
      * Generates an `<i>` tag with the appropriate classes for a Bootstrap icon. The method formats the icon name and
      * merges it with additional class names provided in `$options`. Every other entry in `$options` is applied as an
      * attribute on the `<i>` tag.

@@ -32,4 +32,34 @@ abstract class Helper
     {
         return $this->view->{$name};
     }
+
+    /**
+     * Converts an associative array of HTML attributes into a formatted string suitable for insertion into an HTML
+     * tag. Keys in the array represent attribute names, and their corresponding values represent the attribute
+     * values.
+     *
+     * Lives here, not on `HtmlHelper` alone, because it's a plain string-building utility with nothing HTML-helper
+     * specific about it — `FormHelper`'s own `input()` needs exactly the same thing, for the same reason `icon()`,
+     * `image()`, and `link()` do.
+     *
+     * @param array<string, string|int|float|bool> $attributes An associative array of attributes where keys are the
+     * attribute names and values are the attribute values. Boolean values are converted to their string equivalents.
+     *
+     * @return string A properly formatted string of HTML attributes, where each attribute is escaped to ensure that
+     * special characters do not break the resulting HTML.
+     */
+    protected function parseHtmlAttributes(array $attributes): string
+    {
+        $htmlAttributes = '';
+
+        foreach ($attributes as $attributeName => $value) {
+            $htmlAttributes .= sprintf(
+                ' %s="%s"',
+                h($attributeName, ENT_QUOTES),
+                h((string)$value, ENT_QUOTES),
+            );
+        }
+
+        return $htmlAttributes;
+    }
 }

@@ -3,8 +3,8 @@ declare(strict_types=1);
 
 namespace App\View;
 
-use App\View\Helper\FormHelper;
 use App\View\Helper\StoryHelper;
+use Elone\Core\View\Helper\FormHelper;
 use Elone\Core\View\Helper\HtmlHelper;
 use Elone\Core\View\View;
 
@@ -13,7 +13,7 @@ use Elone\Core\View\View;
  *
  * @property-read \Elone\Core\View\Helper\HtmlHelper $Html
  * @property-read \App\View\Helper\StoryHelper $Story
- * @property-read \App\View\Helper\FormHelper $Form
+ * @property-read \Elone\Core\View\Helper\FormHelper $Form
  */
 class AppView extends View
 {

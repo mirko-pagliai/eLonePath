@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\View\Helper;
+namespace TestCase\View\Helper;
 
-use App\View\Helper\FormHelper;
 use Elone\Core\Exception\RouteNotFoundException;
+use Elone\Core\View\Helper\FormHelper;
 use Elone\Core\View\Helper\HtmlHelper;
 use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -30,7 +30,7 @@ class FormHelperTest extends TestCase
     }
 
     /**
-     * @link \App\View\Helper\FormHelper::create()
+     * @link \Elone\Core\View\Helper\FormHelper::create()
      */
     #[Test]
     public function testCreateWithRoute(): void
@@ -41,7 +41,7 @@ class FormHelperTest extends TestCase
     }
 
     /**
-     * @link \App\View\Helper\FormHelper::create()
+     * @link \Elone\Core\View\Helper\FormHelper::create()
      */
     #[Test]
     public function testCreateWithStringUrl(): void
@@ -52,7 +52,7 @@ class FormHelperTest extends TestCase
     }
 
     /**
-     * @link \App\View\Helper\FormHelper::create()
+     * @link \Elone\Core\View\Helper\FormHelper::create()
      */
     #[Test]
     public function testCreateWithExtraOptions(): void
@@ -66,7 +66,7 @@ class FormHelperTest extends TestCase
     }
 
     /**
-     * @link \App\View\Helper\FormHelper::create()
+     * @link \Elone\Core\View\Helper\FormHelper::create()
      */
     #[Test]
     public function testCreateWithInvalidRoute(): void
@@ -76,7 +76,7 @@ class FormHelperTest extends TestCase
     }
 
     /**
-     * @link \App\View\Helper\FormHelper::input()
+     * @link \Elone\Core\View\Helper\FormHelper::input()
      */
     #[Test]
     public function testInputDefaultsToTextType(): void
@@ -91,7 +91,7 @@ class FormHelperTest extends TestCase
     }
 
     /**
-     * @link \App\View\Helper\FormHelper::input()
+     * @link \Elone\Core\View\Helper\FormHelper::input()
      */
     #[Test]
     public function testInputWithNumberTypeAndAttributes(): void
@@ -106,7 +106,7 @@ class FormHelperTest extends TestCase
     }
 
     /**
-     * @link \App\View\Helper\FormHelper::input()
+     * @link \Elone\Core\View\Helper\FormHelper::input()
      */
     #[Test]
     public function testInputWithMinAndMax(): void
@@ -128,7 +128,7 @@ class FormHelperTest extends TestCase
     /**
      * The label is HTML-escaped — it's developer-written text today, but nothing here assumes that stays true.
      *
-     * @link \App\View\Helper\FormHelper::input()
+     * @link \Elone\Core\View\Helper\FormHelper::input()
      */
     #[Test]
     public function testInputEscapesLabel(): void
@@ -139,7 +139,7 @@ class FormHelperTest extends TestCase
     }
 
     /**
-     * @link \App\View\Helper\FormHelper::end()
+     * @link \Elone\Core\View\Helper\FormHelper::end()
      */
     #[Test]
     public function testEnd(): void
@@ -154,9 +154,9 @@ class FormHelperTest extends TestCase
      * builds — this is what proves the pieces compose into a real, submittable form, not just that each one
      * works in isolation.
      *
-     * @link \App\View\Helper\FormHelper::create()
-     * @link \App\View\Helper\FormHelper::input()
-     * @link \App\View\Helper\FormHelper::end()
+     * @link \Elone\Core\View\Helper\FormHelper::create()
+     * @link \Elone\Core\View\Helper\FormHelper::input()
+     * @link \Elone\Core\View\Helper\FormHelper::end()
      */
     #[Test]
     public function testFullFormSequence(): void

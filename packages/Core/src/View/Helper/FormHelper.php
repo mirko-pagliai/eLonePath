@@ -1,9 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\View\Helper;
-
-use Elone\Core\View\Helper\Helper;
+namespace Elone\Core\View\Helper;
 
 /**
  * Builds a `<form>`, one labeled input at a time — `create()`/`end()` open and close the tag, `input()` wraps a

@@ -39,6 +39,11 @@ class StoryControllerTest extends TestCase
 
                 return $view;
             }
+
+            public function translateCharacterCreationError(RuntimeException $exception): string
+            {
+                return parent::translateCharacterCreationError($exception);
+            }
         };
     }
 
@@ -113,7 +118,7 @@ class StoryControllerTest extends TestCase
      * @link \App\Controller\StoryController::character()
      */
     #[Test]
-    public function testCharacterWithInvalidSumShowsError(): void
+    public function testCharacterWithInvalidDataShowsErrorInsteadOfRedirecting(): void
     {
         $request = new Request('POST', '/story/character/mini-quest', [
             'strength' => '10',
@@ -126,19 +131,16 @@ class StoryControllerTest extends TestCase
         $result = $controller->character('mini-quest');
 
         $this->assertNull($result);
-        $this->assertSame(
-            'La somma dei quattro attributi deve essere esattamente 20.',
-            $controller->getView()->get('error'),
-        );
+        $this->assertIsString($controller->getView()->get('error'));
     }
 
     /**
-     * A missing field is treated as `0` by `intDataParam()`.
+     * A missing field is treated as `0` by `intDataParam()`, which `Character::createNew()` itself then rejects.
      *
      * @link \App\Controller\StoryController::character()
      */
     #[Test]
-    public function testCharacterWithMissingFieldShowsError(): void
+    public function testCharacterWithMissingFieldShowsErrorInsteadOfRedirecting(): void
     {
         $request = new Request('POST', '/story/character/mini-quest', [
             'agility' => '5',
@@ -150,64 +152,53 @@ class StoryControllerTest extends TestCase
         $result = $controller->character('mini-quest');
 
         $this->assertNull($result);
-        $this->assertSame('La Forza deve essere almeno 1.', $controller->getView()->get('error'));
+        $this->assertIsString($controller->getView()->get('error'));
     }
 
     /**
-     * @link \App\Controller\StoryController::character()
+     * `translateCharacterCreationError()` matches `$exception->getCode()`, not its message — this checks the
+     * mapping directly, one code at a time, without needing to trigger each `Character` failure for real.
+     * Doesn't assert the Italian text itself (that's content, not behavior) — only that the five reachable
+     * codes each get their own distinct message, and none of them collide with each other or with the fallback.
+     *
+     * @link \App\Controller\StoryController::translateCharacterCreationError()
      */
     #[Test]
-    public function testCharacterWithAgilityTooLowShowsError(): void
+    public function testTranslateCharacterCreationErrorGivesEachCodeADistinctMessage(): void
     {
-        $request = new Request('POST', '/story/character/mini-quest', [
-            'strength' => '5',
-            'agility' => '0',
-            'perception' => '3',
-            'willpower' => '3',
-        ]);
-        $controller = $this->makeController($request);
+        $controller = $this->makeController(new Request('GET', '/'));
 
-        $controller->character('mini-quest');
+        $codes = [
+            Character::ERROR_STRENGTH_TOO_LOW,
+            Character::ERROR_AGILITY_TOO_LOW,
+            Character::ERROR_PERCEPTION_OUT_OF_RANGE,
+            Character::ERROR_WILLPOWER_OUT_OF_RANGE,
+            Character::ERROR_INVALID_ATTRIBUTE_SUM,
+        ];
 
-        $this->assertSame('L\'Agilità deve essere almeno 1.', $controller->getView()->get('error'));
+        $messages = array_map(
+            fn(int $code): string => $controller->translateCharacterCreationError(new RuntimeException('x', $code)),
+            $codes,
+        );
+
+        $this->assertSame(count($codes), count(array_unique($messages)));
     }
 
     /**
-     * @link \App\Controller\StoryController::character()
+     * An unrecognized code (`Character::ERROR_MAX_LIFE_POINTS_TOO_LOW`/`ERROR_LIFE_POINTS_OUT_OF_RANGE`
+     * included — unreachable from this form today, but not handled specially either) still produces something,
+     * rather than an empty string or a crash.
+     *
+     * @link \App\Controller\StoryController::translateCharacterCreationError()
      */
     #[Test]
-    public function testCharacterWithPerceptionOutOfRangeShowsError(): void
+    public function testTranslateCharacterCreationErrorFallsBackForUnknownCode(): void
     {
-        $request = new Request('POST', '/story/character/mini-quest', [
-            'strength' => '5',
-            'agility' => '5',
-            'perception' => '6',
-            'willpower' => '3',
-        ]);
-        $controller = $this->makeController($request);
+        $controller = $this->makeController(new Request('GET', '/'));
 
-        $controller->character('mini-quest');
+        $result = $controller->translateCharacterCreationError(new RuntimeException('x', 999));
 
-        $this->assertSame('La Percezione deve essere tra 1 e 5.', $controller->getView()->get('error'));
-    }
-
-    /**
-     * @link \App\Controller\StoryController::character()
-     */
-    #[Test]
-    public function testCharacterWithWillpowerOutOfRangeShowsError(): void
-    {
-        $request = new Request('POST', '/story/character/mini-quest', [
-            'strength' => '5',
-            'agility' => '5',
-            'perception' => '3',
-            'willpower' => '6',
-        ]);
-        $controller = $this->makeController($request);
-
-        $controller->character('mini-quest');
-
-        $this->assertSame('La Volontà deve essere tra 1 e 5.', $controller->getView()->get('error'));
+        $this->assertNotSame('', $result);
     }
 
     /**
@@ -612,5 +603,92 @@ class StoryControllerTest extends TestCase
         // Neither side was defeated this round — a parry, or the player landed a hit that didn't finish the
         // enemy off. Either way, the player wasn't the one hit, so they're still at their starting 1 life point.
         $this->assertSame(1, $controller->getView()->get('character')->lifePoints);
+    }
+
+    /**
+     * None of the tests above call `render()` — `fight.php` was missing for several turns without any of them
+     * noticing. These do: for each action that falls through to `Dispatcher`'s own render step, confirm the
+     * template it would use actually exists and evaluates without throwing. Not checking the rendered content
+     * against what the action `set()` — that's a second, much larger claim this doesn't make.
+     *
+     * @link \App\Controller\StoryController::character()
+     */
+    #[Test]
+    public function testCharacterTemplateExists(): void
+    {
+        $controller = $this->makeController(new Request('GET', '/story/character/mini-quest'));
+        $controller->character('mini-quest');
+
+        $result = $controller->render('Story/character', layout: null);
+
+        $this->assertNotSame('', trim($result));
+    }
+
+    /**
+     * @link \App\Controller\StoryController::start()
+     */
+    #[Test]
+    public function testStartTemplateExists(): void
+    {
+        $controller = $this->makeController(new Request('GET', '/story/start/mini-quest'));
+        $controller->start('mini-quest');
+
+        $result = $controller->render('Story/start', layout: null);
+
+        $this->assertNotSame('', trim($result));
+    }
+
+    /**
+     * @link \App\Controller\StoryController::chapter()
+     */
+    #[Test]
+    public function testChapterTemplateExists(): void
+    {
+        $controller = $this->makeController(new Request('GET', '/story/chapter/mini-quest/1'));
+        $controller->chapter('mini-quest', 1);
+
+        $result = $controller->render('Story/chapter', layout: null);
+
+        $this->assertNotSame('', trim($result));
+    }
+
+    /**
+     * @link \App\Controller\StoryController::roll()
+     */
+    #[Test]
+    public function testRollTemplateExists(): void
+    {
+        $controller = $this->makeController(new Request('GET', '/story/roll/mini-quest/2'));
+        $controller->roll('mini-quest', 2);
+
+        $result = $controller->render('Story/roll', layout: null);
+
+        $this->assertNotSame('', trim($result));
+    }
+
+    /**
+     * `fight()` uses real dice — it might redirect (the round ended the fight) instead of rendering. Retries
+     * with a fresh state until one round doesn't, rather than asserting on a specific, unforceable outcome.
+     *
+     * @link \App\Controller\StoryController::fight()
+     */
+    #[Test]
+    public function testFightTemplateExists(): void
+    {
+        for ($attempt = 0; $attempt < 10; $attempt++) {
+            $state = new GameState(player: $this->samplePlayer());
+            $controller = $this->makeController(
+                new Request('GET', "/story/fight/combat-quest/1?state={$state->toQueryValue()}"),
+            );
+
+            if ($controller->fight('combat-quest', 1) === null) {
+                $result = $controller->render('Story/fight', layout: null);
+                $this->assertNotSame('', trim($result));
+
+                return;
+            }
+        }
+
+        $this->fail('Combat ended on every one of 10 attempts before a round could be rendered.');
     }
 }

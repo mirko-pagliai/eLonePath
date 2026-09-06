@@ -47,34 +47,21 @@ class StoryController extends AppController
     }
 
     /**
-     * Translates one of `Character`'s own validation messages into Italian, for display on this app's
-     * Italian-language `templates/Story/character.php`. `Character` itself stays in English — matching every
-     * other exception in this codebase, written for logs and developers rather than a player.
-     *
-     * Matched against `Character`'s current wording specifically, deliberately without introducing a dedicated
-     * exception/reason type just for this: `CharacterTest::testTranslateCharacterCreationErrorHandlesRealFailures()`
-     * (in `tests/TestCase/Controller/StoryControllerTest.php`) exercises this against `Character`'s *own*, real
-     * validation — not hand-built messages — so if that wording ever changes, that test catches the drift by
-     * falling through to the generic line below rather than the specific one it expects.
+     * Translates one of `Character`'s own validation failures into Italian, for `templates/Story/character.php`.
+     * `Character` itself stays in English. Matches `$exception->getCode()`, not the message text — a stable
+     * identifier `Character` itself defines (`Character::ERROR_*`), unaffected if the English wording changes.
      *
      * @param \RuntimeException $exception The exception `Character::createNew()` threw.
      * @return string An Italian message suitable for the character-creation form's `error` display.
      */
-    private function translateCharacterCreationError(RuntimeException $exception): string
+    protected function translateCharacterCreationError(RuntimeException $exception): string
     {
-        $message = $exception->getMessage();
-
-        return match (true) {
-            str_starts_with($message, 'The strength attribute must be at least 1') =>
-                'La Forza deve essere almeno 1.',
-            str_starts_with($message, 'The agility attribute must be at least 1') =>
-                'L\'Agilità deve essere almeno 1.',
-            str_starts_with($message, 'The perception attribute must be between 1 and 5') =>
-                'La Percezione deve essere tra 1 e 5.',
-            str_starts_with($message, 'The willpower attribute must be between 1 and 5') =>
-                'La Volontà deve essere tra 1 e 5.',
-            str_starts_with($message, "The sum of the character's attributes must be") =>
-                'La somma dei quattro attributi deve essere esattamente 20.',
+        return match ($exception->getCode()) {
+            Character::ERROR_STRENGTH_TOO_LOW => 'La Forza deve essere almeno 1.',
+            Character::ERROR_AGILITY_TOO_LOW => 'L\'Agilità deve essere almeno 1.',
+            Character::ERROR_PERCEPTION_OUT_OF_RANGE => 'La Percezione deve essere tra 1 e 5.',
+            Character::ERROR_WILLPOWER_OUT_OF_RANGE => 'La Volontà deve essere tra 1 e 5.',
+            Character::ERROR_INVALID_ATTRIBUTE_SUM => 'La somma dei quattro attributi deve essere esattamente 20.',
             default => 'I valori inseriti non sono validi. Controlla gli attributi e riprova.',
         };
     }

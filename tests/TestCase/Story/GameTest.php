@@ -229,7 +229,7 @@ class GameTest extends TestCase
     #[Test]
     public function testCreateFromFileFailedToParseJson(): void
     {
-        $path = STORIES . '/invalid-json/story.json';
+        $path = TEST_APP . '/malformed-stories/invalid-json/story.json';
 
         $this->expectExceptionMessageMatches('#^Failed to parse `' . preg_quote($path) . '`: .+\.$#');
         Game::createFromFile($path);
@@ -243,7 +243,7 @@ class GameTest extends TestCase
     #[Test]
     public function testCreateFromFileFailedToParseJsonDueToWrongShape(): void
     {
-        $path = STORIES . '/wrong-shape/story.json';
+        $path = TEST_APP . '/malformed-stories/wrong-shape/story.json';
 
         $this->expectExceptionMessageIs("Failed to parse `$path`: expected a JSON object at the top level.");
         Game::createFromFile($path);

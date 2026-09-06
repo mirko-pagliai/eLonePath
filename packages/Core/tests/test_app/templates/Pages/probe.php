@@ -6,6 +6,6 @@ declare(strict_types=1);
  * helper (`$this->Probe`) that reads `get()` on the view rendering it, from *inside* that same render, the exact
  * thing the regression test locks in.
  */
-?>
 
-<?= $this->Probe->readState() ?>
+// @phpstan-ignore-next-line variable.undefined -- always required from within View::evaluate(), where $this is bound
+echo $this->Probe->readState();

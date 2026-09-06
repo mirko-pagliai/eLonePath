@@ -171,12 +171,15 @@ class ViewTest extends TestCase
         $helper = new class ($view) extends Helper {
             public function readState(): string
             {
-                return (string)$this->view->get('state', 'MISSING');
+                $state = $this->view->get('state', 'MISSING');
+
+                return is_string($state) ? $state : 'MISSING';
             }
         };
         $view->loadHelper('Probe', $helper);
         $view->set(['state' => 'abc123']);
 
+        /** @link packages/Core/tests/test_app/templates/Pages/probe.php */
         $result = $view->render('Pages/probe', null);
 
         $this->assertSame('abc123', trim($result));

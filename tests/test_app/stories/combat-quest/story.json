@@ -1,0 +1,26 @@
+{
+    "game": {
+        "id": "combat-quest",
+        "title": "Combat Quest",
+        "author": "Test Author",
+        "description": "A minimal story with a combat node, for testing StoryController::fight().",
+        "language": "en",
+        "version": "1.0"
+    },
+    "nodes": {
+        "1": {
+            "content": "An enemy blocks your path.",
+            "type": "combat",
+            "combat": {
+                "enemy_name": "Goblin",
+                "enemy_max_life_points": 10,
+                "enemy_strength": 3,
+                "enemy_agility": 3,
+                "target_victory": 2,
+                "target_defeat": 3
+            }
+        },
+        "2": {"content": "You win.", "type": "victory"},
+        "3": {"content": "You lose.", "type": "defeat"}
+    }
+}

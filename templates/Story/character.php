@@ -14,9 +14,7 @@ echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'sub
 ?>
 
 <?php if ($error !== null) : ?>
-    <div class="alert alert-danger" role="alert">
-        <?= h($error) ?>
-    </div>
+    <?= $this->Alert->render('danger', $error) ?>
 <?php endif; ?>
 
 <p class="fs-5 mb-4">
@@ -39,3 +37,11 @@ echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'sub
 <button type="submit" class="btn fs-4 elone-button px-4 py-2">Crea personaggio</button>
 
 <?= $this->Form->end() ?>
+
+<p class="fs-5 mt-3">
+    Non hai voglia di fare i calcoli?
+    <?= $this->Html->link(
+        text: 'Crealo casualmente',
+        url: ['controller' => 'Story', 'action' => 'random', $game->gameId],
+    ) ?>
+</p>

@@ -146,6 +146,35 @@ final class Character implements Arrayable
     }
 
     /**
+     * Builds a brand-new character with a random, valid distribution of the 20-point attribute budget — for
+     * anyone who'd rather not work out a distribution by hand. Perception and Willpower are each rolled within
+     * their own 1-5 range first; whatever's left of the budget is then split between Strength and Agility, each
+     * ending up at least 1 — the only constraint either has today. Delegates to `createNew()` for the actual
+     * construction, so a random character is subject to exactly the same rules as a hand-picked one, not a
+     * separate path that could drift from them.
+     *
+     * @throws \Random\RandomException
+     */
+    public static function createRandom(int $maxLifePoints): static
+    {
+        $perception = random_int(1, 5);
+        $willpower = random_int(1, 5);
+
+        $remaining = self::TOTAL_ATTRIBUTE_POINTS - $perception - $willpower;
+        // Splits $remaining between strength and agility, each at least 1 — the only constraint either has today.
+        $strength = random_int(1, $remaining - 1);
+        $agility = $remaining - $strength;
+
+        return self::createNew(
+            maxLifePoints: $maxLifePoints,
+            strength: $strength,
+            agility: $agility,
+            perception: $perception,
+            willpower: $willpower,
+        );
+    }
+
+    /**
      * Whether this character has been defeated — `lifePoints` reached `0`.
      */
     public function isDefeated(): bool
@@ -269,7 +298,9 @@ final class Character implements Arrayable
         $value = $data[$key] ?? null;
 
         if (!is_int($value)) {
-            throw new TypeError("Character data key `$key` must be an int, " . get_debug_type($value) . ' given.');
+            throw new TypeError(
+                "Character data key `$key` must be an int, " . get_debug_type($value) . ' given.',
+            );
         }
 
         return $value;

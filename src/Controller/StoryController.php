@@ -49,12 +49,13 @@ class StoryController extends AppController
     /**
      * Translates one of `Character`'s own validation messages into Italian, for display on this app's
      * Italian-language `templates/Story/character.php`. `Character` itself stays in English — matching every
-     * other exception in this codebase, written for logs and developers rather than a player — this is the one
-     * place such a message reaches the page directly, so the translation happens here rather than changing
-     * `Character`'s own wording, which would be wrong for anyone reading it anywhere else (tests, logs).
+     * other exception in this codebase, written for logs and developers rather than a player.
      *
-     * Matched against `Character`'s current wording specifically: if that wording ever changes, an
-     * unrecognized message falls through to the generic line rather than breaking or leaking English again.
+     * Matched against `Character`'s current wording specifically, deliberately without introducing a dedicated
+     * exception/reason type just for this: `CharacterTest::testTranslateCharacterCreationErrorHandlesRealFailures()`
+     * (in `tests/TestCase/Controller/StoryControllerTest.php`) exercises this against `Character`'s *own*, real
+     * validation — not hand-built messages — so if that wording ever changes, that test catches the drift by
+     * falling through to the generic line below rather than the specific one it expects.
      *
      * @param \RuntimeException $exception The exception `Character::createNew()` threw.
      * @return string An Italian message suitable for the character-creation form's `error` display.
@@ -141,6 +142,32 @@ class StoryController extends AppController
         $this->set(compact('game', 'error'));
 
         return null;
+    }
+
+    /**
+     * Asks `Character` for a random, valid one — for anyone at the creation form who'd rather not work out a
+     * distribution by hand — and redirects into `start()` exactly the way a manual submission would, since the
+     * result is a perfectly ordinary `Character`, not a different kind of playthrough. This action only handles
+     * the request/response side of that; the random distribution itself is `Character::createRandom()`'s own
+     * business; nothing here needs to know how it works.
+     *
+     * @param string $storyId The unique identifier of the story to create a random character for.
+     * @return \Elone\Core\Server\Response A redirect into `start()`, carrying the new character's `?state=`.
+     * @throws \Random\RandomException
+     * @link templates/Story/character.php
+     */
+    public function random(string $storyId): Response
+    {
+        $this->allowMethod('get');
+
+        $player = Character::createRandom(maxLifePoints: Character::DEFAULT_MAX_LIFE_POINTS);
+
+        $state = new GameState(player: $player);
+
+        return $this->redirect(
+            url: ['controller' => 'Story', 'action' => 'start', $storyId],
+            query: ['state' => $state->toQueryValue()],
+        );
     }
 
     /**

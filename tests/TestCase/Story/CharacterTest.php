@@ -200,6 +200,47 @@ class CharacterTest extends TestCase
     }
 
     /**
+     * Every random distribution `createRandom()` picks must itself satisfy `__construct()`'s own validation —
+     * running it many times is what actually catches a boundary mistake in the splitting logic that a single
+     * lucky call could easily miss.
+     *
+     * @link \App\Story\Character::createRandom()
+     */
+    #[Test]
+    public function testCreateRandomAlwaysProducesAValidCharacter(): void
+    {
+        for ($i = 0; $i < 2000; $i++) {
+            $character = Character::createRandom(maxLifePoints: 20);
+
+            $this->assertGreaterThanOrEqual(1, $character->strength);
+            $this->assertGreaterThanOrEqual(1, $character->agility);
+            $this->assertGreaterThanOrEqual(1, $character->perception);
+            $this->assertLessThanOrEqual(5, $character->perception);
+            $this->assertGreaterThanOrEqual(1, $character->willpower);
+            $this->assertLessThanOrEqual(5, $character->willpower);
+            $this->assertSame(
+                20,
+                $character->strength + $character->agility + $character->perception + $character->willpower,
+            );
+        }
+    }
+
+    /**
+     * `createRandom()` starts at full life points, the same as `createNew()` — it delegates to it for the
+     * actual construction, so this is really a check that the delegation happens, not a separate rule of its own.
+     *
+     * @link \App\Story\Character::createRandom()
+     */
+    #[Test]
+    public function testCreateRandomRespectsGivenMaxLifePoints(): void
+    {
+        $character = Character::createRandom(maxLifePoints: 30);
+
+        $this->assertSame(30, $character->maxLifePoints);
+        $this->assertSame(30, $character->lifePoints);
+    }
+
+    /**
      * @link \App\Story\Character::isDefeated()
      */
     #[Test]

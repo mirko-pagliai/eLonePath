@@ -24,12 +24,17 @@ final class AlertHelper extends Helper
      */
     public function render(string $variant, string $message, array $options = []): string
     {
-        $variantClass = match ($variant) {
-            'primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark' => "alert-$variant",
-            default => throw new InvalidArgumentException("Unknown alert variant: `$variant`."),
-        };
+        if (
+            !in_array(
+                needle: $variant,
+                haystack: ['primary', 'secondary', 'success', 'danger', 'warning', 'info', 'light', 'dark'],
+                strict: true,
+            )
+        ) {
+            throw new InvalidArgumentException("Unknown alert variant: `$variant`.");
+        }
 
-        $class = "alert $variantClass";
+        $class = "alert alert-$variant";
         if (isset($options['class'])) {
             $class .= ' ' . $options['class'];
             unset($options['class']);

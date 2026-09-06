@@ -28,8 +28,7 @@ class AlertHelperTest extends TestCase
     }
 
     /**
-     * Every one of Bootstrap's eight basic variants — https://getbootstrap.com/docs/5.3/components/alerts/#examples
-     * — produces exactly that markup, `role="alert"` included.
+     * Every one of Bootstrap's eight basic variants produces exactly that markup, `role="alert"` included.
      *
      * @link \Elone\Core\View\Helper\AlertHelper::render()
      */
@@ -44,6 +43,7 @@ class AlertHelperTest extends TestCase
     #[TestWith(['dark'])]
     public function testRenderWithEachVariant(string $variant): void
     {
+        // @phpstan-ignore-next-line argument.type
         $result = $this->alertHelper->render($variant, 'A simple alert—check it out!');
 
         $this->assertSame(
@@ -53,6 +53,10 @@ class AlertHelperTest extends TestCase
     }
 
     /**
+     * The one call in this file passing something `render()`'s own type doesn't allow, on purpose — proving the
+     * runtime guard behind the type actually fires, for the one path (untrusted input, template, this test) that
+     * skirts the static check.
+     *
      * @link \Elone\Core\View\Helper\AlertHelper::render()
      */
     #[Test]
@@ -60,6 +64,7 @@ class AlertHelperTest extends TestCase
     {
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIs('Unknown alert variant: `boh`.');
+        // @phpstan-ignore-next-line argument.type
         $this->alertHelper->render('boh', 'Some message.');
     }
 
@@ -85,9 +90,10 @@ class AlertHelperTest extends TestCase
     #[Test]
     public function testRenderWithExtraAttribute(): void
     {
+        $expected = '<div class="alert alert-info" role="alert" id="my-alert">Attenzione.</div>';
         $result = $this->alertHelper->render('info', 'Attenzione.', ['id' => 'my-alert']);
 
-        $this->assertSame('<div class="alert alert-info" role="alert" id="my-alert">Attenzione.</div>', $result);
+        $this->assertSame($expected, $result);
     }
 
     /**

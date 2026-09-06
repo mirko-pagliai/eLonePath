@@ -20,38 +20,17 @@ echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'sub
 <?php endif; ?>
 
 <p class="fs-5 mb-4">
-    Distribuisci un totale <strong>20 punti</strong> tra i quattro attributi.
+    Distribuisci <strong>20 punti</strong> tra i quattro attributi. Forza e Agilità non hanno un massimo proprio;
+    Percezione e Volontà vanno da 1 a 5 ciascuna. La somma dei quattro deve fare esattamente 20.
 </p>
 
-<p class="fs-5 mb-4">
-    <strong>Forza</strong> e <strong>Agilità</strong> non hanno un massimo proprio.</br>
-    <strong>Percezione</strong> e <strong>Volontà</strong> vanno da 1 a 5 ciascuna.<br />
-    La somma dei quattro deve fare esattamente 20.
-</p>
+<?= $this->Form->create(['controller' => 'Story', 'action' => 'character', $game->gameId]) ?>
 
-<form
-    method="post"
-    action="<?= h($this->Html->url(['controller' => 'Story', 'action' => 'character', $game->gameId])) ?>"
->
-    <div class="mb-3">
-        <label for="strength" class="form-label">Forza</label>
-        <input type="number" class="form-control" id="strength" name="strength" min="1" required>
-    </div>
+<?= $this->Form->input('strength', 'Forza', ['type' => 'number', 'min' => 1, 'required' => true]) ?>
+<?= $this->Form->input('agility', 'Agilità', ['type' => 'number', 'min' => 1, 'required' => true]) ?>
+<?= $this->Form->input('perception', 'Percezione', ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true]) ?>
+<?= $this->Form->input('willpower', 'Volontà', ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true]) ?>
 
-    <div class="mb-3">
-        <label for="agility" class="form-label">Agilità</label>
-        <input type="number" class="form-control" id="agility" name="agility" min="1" required>
-    </div>
+<button type="submit" class="btn fs-4 elone-button px-4 py-2">Crea personaggio</button>
 
-    <div class="mb-3">
-        <label for="perception" class="form-label">Percezione</label>
-        <input type="number" class="form-control" id="perception" name="perception" min="1" max="5" required>
-    </div>
-
-    <div class="mb-3">
-        <label for="willpower" class="form-label">Volontà</label>
-        <input type="number" class="form-control" id="willpower" name="willpower" min="1" max="5" required>
-    </div>
-
-    <button type="submit" class="btn fs-4 elone-button px-4 py-2">Crea personaggio</button>
-</form>
+<?= $this->Form->end() ?>

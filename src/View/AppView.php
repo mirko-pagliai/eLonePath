@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\View;
 
 use App\View\Helper\StoryHelper;
+use Elone\Core\View\Helper\AlertHelper;
 use Elone\Core\View\Helper\FormHelper;
 use Elone\Core\View\Helper\HtmlHelper;
 use Elone\Core\View\View;
@@ -14,6 +15,7 @@ use Elone\Core\View\View;
  * @property-read \Elone\Core\View\Helper\HtmlHelper $Html
  * @property-read \App\View\Helper\StoryHelper $Story
  * @property-read \Elone\Core\View\Helper\FormHelper $Form
+ * @property-read \Elone\Core\View\Helper\AlertHelper $Alert
  */
 class AppView extends View
 {
@@ -22,5 +24,6 @@ class AppView extends View
         $this->loadHelper(name: 'Html', helper: new HtmlHelper($this));
         $this->loadHelper(name: 'Story', helper: new StoryHelper($this));
         $this->loadHelper(name: 'Form', helper: new FormHelper($this));
+        $this->loadHelper(name: 'Alert', helper: new AlertHelper($this));
     }
 }

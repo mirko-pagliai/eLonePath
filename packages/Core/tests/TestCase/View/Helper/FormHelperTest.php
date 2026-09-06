@@ -1,11 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace TestCase\View\Helper;
+namespace Elone\Core\Test\View\Helper;
 
 use Elone\Core\Exception\RouteNotFoundException;
 use Elone\Core\View\Helper\FormHelper;
-use Elone\Core\View\Helper\HtmlHelper;
 use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -24,9 +23,7 @@ class FormHelperTest extends TestCase
      */
     protected function setUp(): void
     {
-        $view = new View();
-        $view->loadHelper('Html', new HtmlHelper($view));
-        $this->formHelper = new FormHelper($view);
+        $this->formHelper = new FormHelper(new View());
     }
 
     /**

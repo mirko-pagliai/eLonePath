@@ -9,13 +9,14 @@ namespace Elone\Core\View\Helper;
  * minimal: no label-from-field-name guessing, no validation-aware error display, no select/checkbox/radio
  * helpers — those get built the moment an actual form in this app needs one, not before.
  *
- * @property-read \Elone\Core\View\Helper\HtmlHelper $Html
+ * Generic enough to live here, in Core, alongside `HtmlHelper` — nothing about opening a `<form>` tag or wrapping
+ * a labeled `<input>` is specific to this app's own story/character concerns.
  */
 final class FormHelper extends Helper
 {
     /**
-     * Opens a `<form>` tag that POSTs to `$url` — this app has no other kind of form yet, so `method="post"` isn't
-     * a parameter.
+     * Opens a `<form>` tag that POSTs to `$url` — no application built on this framework has needed another kind
+     * of form yet, so `method="post"` isn't a parameter.
      *
      * @param array<string|int, string|int|float|bool>|string $url A literal URL/path, or a route array — see
      *  `Elone\Core\Routing\Route::resolve()`.
@@ -28,7 +29,7 @@ final class FormHelper extends Helper
     {
         return sprintf(
             '<form method="post" action="%s"%s>',
-            h($this->Html->url($url), ENT_QUOTES),
+            h($this->url($url), ENT_QUOTES),
             $this->parseHtmlAttributes($options),
         );
     }

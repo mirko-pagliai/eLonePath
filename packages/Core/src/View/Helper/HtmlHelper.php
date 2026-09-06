@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Elone\Core\View\Helper;
 
-use Elone\Core\Routing\Route;
 use Michelf\Markdown;
 use RuntimeException;
 
@@ -123,20 +122,5 @@ class HtmlHelper extends Helper
         }
 
         return Markdown::defaultTransform($markdown);
-    }
-
-    /**
-     * Resolves `$route` to a URL, appending `$query` as a querystring — see `Route::resolve()`.
-     *
-     * @param array<string|int, string|int|float|bool>|string $route A literal URL/path, or a route array.
-     * @param array<string, string|int|float|bool> $query Appended as `?key=value&...`. Empty (the default) adds
-     *  nothing.
-     * @return string The resolved URL.
-     * @throws \Elone\Core\Exception\RouteNotFoundException If given an array route with invalid or missing parameters.
-     * @see \Elone\Core\Routing\Route::resolve()
-     */
-    public function url(array|string $route, array $query = []): string
-    {
-        return Route::resolve(route: $route, query: $query);
     }
 }

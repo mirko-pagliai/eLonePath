@@ -110,9 +110,6 @@ class StoryControllerTest extends TestCase
     }
 
     /**
-     * An invalid submission (the four attributes don't sum to 20) doesn't redirect — it re-renders the form,
-     * carrying `Character`'s own validation message as `error`, rather than a generic one.
-     *
      * @link \App\Controller\StoryController::character()
      */
     #[Test]
@@ -130,15 +127,13 @@ class StoryControllerTest extends TestCase
 
         $this->assertNull($result);
         $this->assertSame(
-            "The sum of the character's attributes must be 20, got `21`.",
+            'La somma dei quattro attributi deve essere esattamente 20.',
             $controller->getView()->get('error'),
         );
     }
 
     /**
-     * A missing/non-numeric field (nothing submitted for `strength`, here) is treated as `0` — which
-     * `Character::createNew()` itself then rejects with its own clear message, rather than this action crashing
-     * on a type mismatch.
+     * A missing field is treated as `0` by `intDataParam()`.
      *
      * @link \App\Controller\StoryController::character()
      */
@@ -155,10 +150,64 @@ class StoryControllerTest extends TestCase
         $result = $controller->character('mini-quest');
 
         $this->assertNull($result);
-        $this->assertSame(
-            'The strength attribute must be at least 1, got `0`.',
-            $controller->getView()->get('error'),
-        );
+        $this->assertSame('La Forza deve essere almeno 1.', $controller->getView()->get('error'));
+    }
+
+    /**
+     * @link \App\Controller\StoryController::character()
+     */
+    #[Test]
+    public function testCharacterWithAgilityTooLowShowsError(): void
+    {
+        $request = new Request('POST', '/story/character/mini-quest', [
+            'strength' => '5',
+            'agility' => '0',
+            'perception' => '3',
+            'willpower' => '3',
+        ]);
+        $controller = $this->makeController($request);
+
+        $controller->character('mini-quest');
+
+        $this->assertSame('L\'Agilità deve essere almeno 1.', $controller->getView()->get('error'));
+    }
+
+    /**
+     * @link \App\Controller\StoryController::character()
+     */
+    #[Test]
+    public function testCharacterWithPerceptionOutOfRangeShowsError(): void
+    {
+        $request = new Request('POST', '/story/character/mini-quest', [
+            'strength' => '5',
+            'agility' => '5',
+            'perception' => '6',
+            'willpower' => '3',
+        ]);
+        $controller = $this->makeController($request);
+
+        $controller->character('mini-quest');
+
+        $this->assertSame('La Percezione deve essere tra 1 e 5.', $controller->getView()->get('error'));
+    }
+
+    /**
+     * @link \App\Controller\StoryController::character()
+     */
+    #[Test]
+    public function testCharacterWithWillpowerOutOfRangeShowsError(): void
+    {
+        $request = new Request('POST', '/story/character/mini-quest', [
+            'strength' => '5',
+            'agility' => '5',
+            'perception' => '3',
+            'willpower' => '6',
+        ]);
+        $controller = $this->makeController($request);
+
+        $controller->character('mini-quest');
+
+        $this->assertSame('La Volontà deve essere tra 1 e 5.', $controller->getView()->get('error'));
     }
 
     /**

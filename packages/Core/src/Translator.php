@@ -47,8 +47,18 @@ final class Translator
      * @param string $domain The translation domain to use. Defaults to 'default'.
      * @return string The translated string.
      */
-    public static function trans(string $string, string $domain = 'default'): string
+    public static function trans(string $string, string $domain = 'default', mixed ...$args): string
     {
-        return self::$translator->trans(id: $string, parameters: [], domain: $domain);
+        return self::$translator->trans(
+            id: $string,
+            parameters: array_combine(
+                keys: array_map(
+                    callback: fn(int $index): string => '{' . $index . '}',
+                    array: array_keys($args),
+                ),
+                values: array_values($args),
+            ),
+            domain: $domain,
+        );
     }
 }

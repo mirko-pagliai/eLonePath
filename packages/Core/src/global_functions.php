@@ -8,10 +8,10 @@ if (!function_exists('__')) {
      * Translates a string using the default translation domain.
      *
      * @param string $string The string to translate.
-     * @param string ...$args Values to substitute into the translation message.
+     * @param string|int ...$args The arguments to replace placeholders in the string.
      * @return string The translated string.
      */
-    function __(string $string, string ...$args): string
+    function __(string $string, string|int ...$args): string
     {
         return Translator::translate('default', $string, ...$args);
     }
@@ -23,10 +23,10 @@ if (!function_exists('__d')) {
      *
      * @param string $domain The translation domain to use.
      * @param string $string The string to translate.
-     * @param string ...$args Values to substitute into the translation message.
+     * @param string|int ...$args The arguments to replace placeholders in the string.
      * @return string The translated string.
      */
-    function __d(string $domain, string $string, string ...$args): string
+    function __d(string $domain, string $string, string|int ...$args): string
     {
         return Translator::translate($domain, $string, ...$args);
     }

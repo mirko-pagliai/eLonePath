@@ -26,31 +26,35 @@ final class Translator
     public static function init(string $locale): void
     {
         self::$translator = new SymfonyTranslator(locale: $locale);
-        self::$translator->addLoader(format: 'po', loader: new PoFileLoader());
 
-        $files = glob(LOCALES . '/*/default.po') ?: [];
-        foreach ($files as $file) {
-            $language = basename(dirname($file));
-
-            self::$translator->addResource(
-                format: 'po',
-                resource: $file,
-                locale: $language,
-                domain: 'default',
-            );
+        $file = LOCALES . "$locale/default.po";
+        if (!is_file($file)) {
+            return;
         }
+
+        self::$translator->addLoader(format: 'po', loader: new PoFileLoader());
+        self::$translator->addResource(
+            format: 'po',
+            resource: LOCALES . "$locale/default.po",
+            locale: $locale,
+            domain: 'default',
+        );
     }
 
     /**
-     * Translates a string using the specified domain and optional parameters.
+     * Translates the given string within the specified domain, replacing placeholders with the provided arguments.
      *
-     * @param string $domain The domain in which the translation should be looked up.
+     * @param string $domain The domain to use for translation.
      * @param string $string The string to be translated.
-     * @param string ...$args Optional arguments to replace placeholders within the string.
+     * @param string|int ...$args The arguments to replace placeholders in the string.
      * @return string The translated string with placeholders replaced by the provided arguments.
      */
-    public static function translate(string $domain, string $string, string ...$args): string
+    public static function translate(string $domain, string $string, string|int ...$args): string
     {
+        if (!isset(self::$translator)) {
+            self::init('en');
+        }
+
         $parameters = array_combine(
             keys: array_map(
                 callback: fn(int $index): string => '{' . $index . '}',

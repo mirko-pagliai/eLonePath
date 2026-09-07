@@ -3,3 +3,6 @@ msgstr "Buongiorno"
 
 msgid "Hello {0}, I'm {1}"
 msgstr "Ciao {0}, io sono {1}"
+
+msgid "We are {0} people"
+msgstr "Noi siamo {0} persone"

@@ -47,7 +47,7 @@ final class Translator
      * @param string $string The string to translate.
      * @return string The translated string.
      */
-    public static function trans(string $domain, string $string, mixed ...$args): string
+    public static function translate(string $domain, string $string, mixed ...$args): string
     {
         $parameters = array_combine(
             keys: array_map(

@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "822f89e6244de272d95de55f1ce55ef2",
+    "content-hash": "955587bf8674cb23d1f72b7de077ca8c",
     "packages": [
         {
             "name": "elone/core",
@@ -12,10 +12,11 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Core",
-                "reference": "d8a4006addcb6f00099d5c6076c097ddf4a0c4ce"
+                "reference": "1320fca6a009de5efece9a0b5d8fddc78f1b5e62"
             },
             "require": {
-                "php": "^8.4"
+                "php": "^8.4",
+                "symfony/translation": "^8.1"
             },
             "require-dev": {
                 "cakephp/cakephp-codesniffer": "^5.3.2",

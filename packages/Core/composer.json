@@ -3,7 +3,8 @@
 	"type": "library",
 	"license": "MIT",
 	"require": {
-		"php": "^8.4"
+		"php": "^8.4",
+		"symfony/translation": "^8.1"
 	},
 	"suggest": {
 		"michelf/php-markdown": "Markdown parser. Necessary if you want to use `HtmlHelper::markdown()`"

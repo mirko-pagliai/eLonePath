@@ -1,2 +1,5 @@
 msgid "Good morning"
 msgstr "Buongiorno"
+
+msgid "Hello {0}, I'm {1}"
+msgstr "Ciao {0}, io sono {1}"

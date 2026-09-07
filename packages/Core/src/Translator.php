@@ -28,7 +28,8 @@ final class Translator
         self::$translator = new SymfonyTranslator(locale: $locale);
         self::$translator->addLoader(format: 'po', loader: new PoFileLoader());
 
-        foreach (glob(LOCALES . '/*/default.po') as $file) {
+        $files = glob(LOCALES . '/*/default.po') ?: [];
+        foreach ($files as $file) {
             $language = basename(dirname($file));
 
             self::$translator->addResource(
@@ -41,13 +42,14 @@ final class Translator
     }
 
     /**
-     * Translates the given string using the specified translation domain.
+     * Translates a string using the specified domain and optional parameters.
      *
-     * @param string $domain The translation domain to use.
-     * @param string $string The string to translate.
-     * @return string The translated string.
+     * @param string $domain The domain in which the translation should be looked up.
+     * @param string $string The string to be translated.
+     * @param string ...$args Optional arguments to replace placeholders within the string.
+     * @return string The translated string with placeholders replaced by the provided arguments.
      */
-    public static function translate(string $domain, string $string, mixed ...$args): string
+    public static function translate(string $domain, string $string, string ...$args): string
     {
         $parameters = array_combine(
             keys: array_map(

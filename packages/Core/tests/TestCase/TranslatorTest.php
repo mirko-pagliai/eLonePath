@@ -21,4 +21,16 @@ class TranslatorTest extends TestCase
         $result = Translator::translate('default', 'Good morning');
         $this->assertSame($expected, $result);
     }
+
+    /**
+     * @link \Elone\Core\Translator::translate()
+     */
+    public function testTranslateWithPlaceholders(): void
+    {
+        Translator::init('it');
+
+        $expected = 'Ciao Frank, io sono Mark';
+        $result = Translator::translate('default', 'Hello {0}, I\'m {1}', 'Frank', 'Mark');
+        $this->assertSame($expected, $result);
+    }
 }

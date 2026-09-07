@@ -1,6 +1,35 @@
 <?php
 declare(strict_types=1);
 
+use Elone\Core\Translator;
+
+if (!function_exists('__')) {
+    /**
+     * Translates a string using the default translation domain.
+     *
+     * @param string $string The string to translate.
+     * @return string The translated string.
+     */
+    function __(string $string): string
+    {
+        return Translator::trans(string: $string);
+    }
+}
+
+if (!function_exists('__d')) {
+/**
+ * Translates a string using the specified translation domain.
+ *
+ * @param string $domain The translation domain to use.
+ * @param string $string The string to translate.
+ * @return string The translated string.
+ */
+    function __d(string $domain, string $string): string
+    {
+        return Translator::trans(string: $string, domain: $domain);
+    }
+}
+
 if (!function_exists('debug')) {
     /**
      * Provides a global alias for the `dump()` function.

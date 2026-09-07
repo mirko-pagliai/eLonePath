@@ -13,7 +13,7 @@ if (!function_exists('__')) {
      */
     function __(string $string, mixed ...$args): string
     {
-        return Translator::trans($string, 'default', ...$args);
+        return Translator::trans('default', $string, ...$args);
     }
 }
 
@@ -28,7 +28,7 @@ if (!function_exists('__d')) {
      */
     function __d(string $domain, string $string, mixed ...$args): string
     {
-        return Translator::trans($string, $domain, ...$args);
+        return Translator::trans($domain, $string, ...$args);
     }
 }
 

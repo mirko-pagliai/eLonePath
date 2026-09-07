@@ -39,6 +39,19 @@ class TranslatorTest extends TestCase
     }
 
     /**
+     * Test for `translate()` method, using a custom domain.
+     *
+     * @link \Elone\Core\Translator::translate()
+     */
+    public function testTranslateCustomDomain(): void
+    {
+        Translator::init('it');
+        $expected = 'Errore: `404`';
+        $result = Translator::translate('validation', 'Error: `{0}`', 404);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
      * @link \Elone\Core\Translator::translate()
      */
     public function testTranslateMissingMessage(): void
@@ -49,12 +62,18 @@ class TranslatorTest extends TestCase
         $this->assertSame($expected, $result);
 
         /**
-         * This string exists, but only for `it`, not for `fr`.
-         * So the fallback is still expected.
+         * These strings exist, but only for `it`, not for `fr`.
+         *
+         * So the fallback is still expected for both cases.
          */
         $expected = 'Good morning';
         Translator::init('fr');
         $result = Translator::translate('default', 'Good morning');
+        $this->assertSame($expected, $result);
+
+        Translator::init('fr');
+        $expected = 'Error: `404`';
+        $result = Translator::translate('validation', 'Error: `{0}`', 404);
         $this->assertSame($expected, $result);
     }
 

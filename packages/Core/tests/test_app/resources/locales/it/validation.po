@@ -1,0 +1,2 @@
+msgid "Error: `{0}`"
+msgstr "Errore: `{0}`"

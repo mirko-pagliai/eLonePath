@@ -26,19 +26,15 @@ final class Translator
     public static function init(string $locale): void
     {
         self::$translator = new SymfonyTranslator(locale: $locale);
-
-        $file = LOCALES . "$locale/default.po";
-        if (!is_file($file)) {
-            return;
-        }
-
         self::$translator->addLoader(format: 'po', loader: new PoFileLoader());
-        self::$translator->addResource(
-            format: 'po',
-            resource: LOCALES . "$locale/default.po",
-            locale: $locale,
-            domain: 'default',
-        );
+
+        $files = glob(LOCALES . "$locale/*.po") ?: [];
+
+        foreach ($files as $file) {
+            $domain = basename($file, '.po');
+
+            self::$translator->addResource(format: 'po', resource: $file, locale: $locale, domain: $domain);
+        }
     }
 
     /**

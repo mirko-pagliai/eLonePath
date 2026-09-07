@@ -6,3 +6,6 @@ msgstr "Ciao {0}, io sono {1}"
 
 msgid "We are {0} people"
 msgstr "Noi siamo {0} persone"
+
+msgid "{0,plural,=0{No records found} =1{Found 1 record} other{Found # records}}"
+msgstr "{0,plural,=0{Nessun risultato} =1{1 risultato} other{# risultati}}"

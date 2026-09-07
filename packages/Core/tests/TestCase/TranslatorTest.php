@@ -5,6 +5,7 @@ namespace Elone\Core\Test;
 
 use Elone\Core\Translator;
 use PHPUnit\Framework\Attributes\CoversClass;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 #[CoversClass(Translator::class)]
@@ -35,6 +36,26 @@ class TranslatorTest extends TestCase
 
         $expected = 'Noi siamo 2 persone';
         $result = Translator::translate('default', 'We are {0} people', 2);
+        $this->assertSame($expected, $result);
+    }
+
+    /**
+     * Test for `translate()` method using plurals.
+     *
+     * @link \Elone\Core\Translator::translate()
+     */
+    #[TestWith(['Nessun risultato', 0])]
+    #[TestWith(['1 risultato', 1])]
+    #[TestWith(['2 risultati', 2])]
+    public function testTranslateWithPlurals(string $expected, int $number): void
+    {
+        Translator::init('it');
+
+        $result = Translator::translate(
+            'default',
+            '{0,plural,=0{No records found} =1{Found 1 record} other{Found # records}}',
+            $number,
+        );
         $this->assertSame($expected, $result);
     }
 

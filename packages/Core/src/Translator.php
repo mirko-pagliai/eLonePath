@@ -33,7 +33,12 @@ final class Translator
         foreach ($files as $file) {
             $domain = basename($file, '.po');
 
-            self::$translator->addResource(format: 'po', resource: $file, locale: $locale, domain: $domain);
+            self::$translator->addResource(
+                format: 'po',
+                resource: $file,
+                locale: $locale,
+                domain: $domain . '+intl-icu',
+            );
         }
     }
 
@@ -51,14 +56,10 @@ final class Translator
             self::init('en');
         }
 
-        $parameters = array_combine(
-            keys: array_map(
-                callback: fn(int $index): string => '{' . $index . '}',
-                array: array_keys($args),
-            ),
-            values: array_values($args),
+        return self::$translator->trans(
+            id: $string,
+            parameters: $args,
+            domain: $domain . '+intl-icu',
         );
-
-        return self::$translator->trans(id: $string, parameters: $parameters, domain: $domain);
     }
 }

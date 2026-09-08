@@ -16,14 +16,14 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(HtmlHelper::class)]
 class HtmlHelperTest extends TestCase
 {
-    private HtmlHelper $htmlHelper;
+    private HtmlHelper $helper;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->htmlHelper = new HtmlHelper(new View());
+        $this->helper = new HtmlHelper(new View());
     }
 
     /**
@@ -35,7 +35,7 @@ class HtmlHelperTest extends TestCase
     #[TestWith(['bi bi-github'])]
     public function testIcon(string $name): void
     {
-        $result = $this->htmlHelper->icon($name);
+        $result = $this->helper->icon($name);
         $this->assertSame('<i class="bi bi-github"></i>', $result);
     }
 
@@ -45,7 +45,7 @@ class HtmlHelperTest extends TestCase
     #[Test]
     public function testIconWithOptions(): void
     {
-        $result = $this->htmlHelper->icon('github', ['class' => 'fs-3', 'aria-hidden' => 'true']);
+        $result = $this->helper->icon('github', ['class' => 'fs-3', 'aria-hidden' => 'true']);
         $this->assertSame('<i class="bi bi-github fs-3" aria-hidden="true"></i>', $result);
     }
 
@@ -55,8 +55,8 @@ class HtmlHelperTest extends TestCase
     #[Test]
     public function testImage(): void
     {
-        $result = $this->htmlHelper->image('/assets/img/stories/example/1.jpg');
-        $this->assertSame('<img src="/assets/img/stories/example/1.jpg">', $result);
+        $result = $this->helper->image('/assets/img/example/1.jpg');
+        $this->assertSame('<img src="/assets/img/example/1.jpg">', $result);
     }
 
     /**
@@ -66,7 +66,7 @@ class HtmlHelperTest extends TestCase
     public function testImageWithOptions(): void
     {
         $expected = '<img src="/img.jpg" alt="A &quot;special&quot; image" class="img-fluid">';
-        $result = $this->htmlHelper->image('/img.jpg', ['alt' => 'A "special" image', 'class' => 'img-fluid']);
+        $result = $this->helper->image('/img.jpg', ['alt' => 'A "special" image', 'class' => 'img-fluid']);
         $this->assertSame($expected, $result);
     }
 
@@ -76,7 +76,7 @@ class HtmlHelperTest extends TestCase
     #[Test]
     public function testLink(): void
     {
-        $result = $this->htmlHelper->link('Home', ['controller' => 'Pages', 'action' => 'home']);
+        $result = $this->helper->link('Home', ['controller' => 'Pages', 'action' => 'home']);
         $this->assertSame('<a href="/pages/home">Home</a>', $result);
     }
 
@@ -87,11 +87,12 @@ class HtmlHelperTest extends TestCase
     public function testLinkEscapesTextAndAttributesByDefault(): void
     {
         $expected = '<a href="/pages/home" class="btn &quot;special&quot;">A &amp; B</a>';
-        $result = $this->htmlHelper->link(
+        $result = $this->helper->link(
             'A & B',
             ['controller' => 'Pages', 'action' => 'home'],
             ['class' => 'btn "special"'],
         );
+
         $this->assertSame($expected, $result);
     }
 
@@ -101,12 +102,14 @@ class HtmlHelperTest extends TestCase
     #[Test]
     public function testLinkWithEscapeFalseRendersRawText(): void
     {
-        $result = $this->htmlHelper->link(
+        $expected = '<a href="/pages/home"><strong>Bold</strong></a>';
+        $result = $this->helper->link(
             '<strong>Bold</strong>',
             ['controller' => 'Pages', 'action' => 'home'],
             ['escape' => false],
         );
-        $this->assertSame('<a href="/pages/home"><strong>Bold</strong></a>', $result);
+
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -115,7 +118,7 @@ class HtmlHelperTest extends TestCase
     #[Test]
     public function testLinkEscapeOptionIsNotRenderedAsAttribute(): void
     {
-        $result = $this->htmlHelper->link(
+        $result = $this->helper->link(
             'Home',
             ['controller' => 'Pages', 'action' => 'home'],
             ['escape' => true, 'class' => 'btn'],
@@ -129,7 +132,7 @@ class HtmlHelperTest extends TestCase
     #[Test]
     public function testLinkWithStringUrl(): void
     {
-        $result = $this->htmlHelper->link('Home', '/');
+        $result = $this->helper->link('Home', '/');
         $this->assertSame('<a href="/">Home</a>', $result);
     }
 
@@ -139,7 +142,7 @@ class HtmlHelperTest extends TestCase
     #[Test]
     public function testLinkWithExternalUrlString(): void
     {
-        $result = $this->htmlHelper->link('Example', 'https://example.com');
+        $result = $this->helper->link('Example', 'https://example.com');
         $this->assertSame('<a href="https://example.com">Example</a>', $result);
     }
 
@@ -152,12 +155,12 @@ class HtmlHelperTest extends TestCase
     #[Test]
     public function testLinkWithQuery(): void
     {
-        $result = $this->htmlHelper->link(
-            'Continua',
+        $result = $this->helper->link(
+            'Go',
             ['controller' => 'Pages', 'action' => 'view', '123'],
             query: ['state' => 'abc123'],
         );
-        $this->assertSame('<a href="/pages/view/123?state=abc123">Continua</a>', $result);
+        $this->assertSame('<a href="/pages/view/123?state=abc123">Go</a>', $result);
     }
 
     /**
@@ -169,7 +172,7 @@ class HtmlHelperTest extends TestCase
     #[TestWith(['', ''])]
     public function testMarkdown(string $string, string $expected): void
     {
-        $result = $this->htmlHelper->markdown($string);
+        $result = $this->helper->markdown($string);
         $this->assertSame($expected, trim($result));
     }
 

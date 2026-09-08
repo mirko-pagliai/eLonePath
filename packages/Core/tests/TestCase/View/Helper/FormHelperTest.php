@@ -16,14 +16,14 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(FormHelper::class)]
 class FormHelperTest extends TestCase
 {
-    private FormHelper $formHelper;
+    private FormHelper $helper;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->formHelper = new FormHelper(new View());
+        $this->helper = new FormHelper(new View());
     }
 
     /**
@@ -32,7 +32,7 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testCreateWithRoute(): void
     {
-        $result = $this->formHelper->create(['controller' => 'Pages', 'action' => 'postOnly']);
+        $result = $this->helper->create(['controller' => 'Pages', 'action' => 'postOnly']);
 
         $this->assertSame('<form method="post" action="/pages/postOnly">', $result);
     }
@@ -43,7 +43,7 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testCreateWithStringUrl(): void
     {
-        $result = $this->formHelper->create('/pages/postOnly');
+        $result = $this->helper->create('/pages/postOnly');
 
         $this->assertSame('<form method="post" action="/pages/postOnly">', $result);
     }
@@ -54,7 +54,7 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testCreateWithExtraOptions(): void
     {
-        $result = $this->formHelper->create('/pages/postOnly', ['class' => 'needs-validation']);
+        $result = $this->helper->create('/pages/postOnly', ['class' => 'needs-validation']);
 
         $this->assertSame(
             '<form method="post" action="/pages/postOnly" class="needs-validation">',
@@ -69,7 +69,7 @@ class FormHelperTest extends TestCase
     public function testCreateWithInvalidRoute(): void
     {
         $this->expectException(RouteNotFoundException::class);
-        $this->formHelper->create([]);
+        $this->helper->create([]);
     }
 
     /**
@@ -78,7 +78,7 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testInputDefaultsToTextType(): void
     {
-        $result = $this->formHelper->input('name', 'Name');
+        $result = $this->helper->input('name', 'Name');
 
         $this->assertSame(
             '<div class="mb-3"><label for="name" class="form-label">Name</label>'
@@ -93,7 +93,7 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testInputWithNumberTypeAndAttributes(): void
     {
-        $result = $this->formHelper->input(
+        $result = $this->helper->input(
             'age',
             'Age',
             ['type' => 'number', 'min' => 1, 'required' => true],
@@ -101,8 +101,7 @@ class FormHelperTest extends TestCase
 
         $this->assertSame(
             '<div class="mb-3"><label for="age" class="form-label">Age</label>'
-            . '<input type="number" class="form-control" id="age" name="age" min="1"'
-            . ' required="1"></div>',
+            . '<input type="number" class="form-control" id="age" name="age" min="1" required="required"></div>',
             $result,
         );
     }
@@ -113,7 +112,7 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testInputWithMinAndMax(): void
     {
-        $result = $this->formHelper->input(
+        $result = $this->helper->input(
             'age',
             'Age',
             ['type' => 'number', 'min' => 18, 'max' => 99, 'required' => true],
@@ -121,8 +120,7 @@ class FormHelperTest extends TestCase
 
         $this->assertSame(
             '<div class="mb-3"><label for="age" class="form-label">Age</label>'
-            . '<input type="number" class="form-control" id="age" name="age" min="18" max="99"'
-            . ' required="1"></div>',
+            . '<input type="number" class="form-control" id="age" name="age" min="18" max="99" required="required"></div>',
             $result,
         );
     }
@@ -135,7 +133,7 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testInputEscapesLabel(): void
     {
-        $result = $this->formHelper->input('name', 'A & B');
+        $result = $this->helper->input('name', 'A & B');
 
         $this->assertStringContainsString('<label for="name" class="form-label">A &amp; B</label>', $result);
     }
@@ -146,13 +144,13 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testEnd(): void
     {
-        $result = $this->formHelper->end();
+        $result = $this->helper->end();
 
         $this->assertSame('</form>', $result);
     }
 
     /**
-     * A full `create()`/`input()`/`end()` sequence.
+     * Test with a full `create()`/`input()`/`end()` sequence.
      *
      * @link \Elone\Core\View\Helper\FormHelper::create()
      * @link \Elone\Core\View\Helper\FormHelper::input()
@@ -161,16 +159,15 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testFullFormSequence(): void
     {
-        $html = $this->formHelper->create(['controller' => 'Pages', 'action' => 'postOnly'])
-            . $this->formHelper->input('age', 'Age', ['type' => 'number', 'min' => 1, 'required' => true])
-            . $this->formHelper->end();
-
-        $this->assertSame(
-            '<form method="post" action="/pages/postOnly">'
+        $expected = '<form method="post" action="/pages/postOnly">'
             . '<div class="mb-3"><label for="age" class="form-label">Age</label>'
-            . '<input type="number" class="form-control" id="age" name="age" min="1" required="1"></div>'
-            . '</form>',
-            $html,
-        );
+            . '<input type="number" class="form-control" id="age" name="age" required="required"></div>'
+            . '</form>';
+
+        $result = $this->helper->create(['controller' => 'Pages', 'action' => 'postOnly'])
+            . $this->helper->input('age', 'Age', ['type' => 'number', 'required' => true])
+            . $this->helper->end();
+
+        $this->assertSame($expected, $result);
     }
 }

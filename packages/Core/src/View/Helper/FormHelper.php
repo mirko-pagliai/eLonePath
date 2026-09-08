@@ -48,6 +48,10 @@ final class FormHelper extends Helper
         $type = (string)($options['type'] ?? 'text');
         unset($options['type']);
 
+        if (($options['required'] ?? false) === true) {
+            $options['required'] = 'required';
+        }
+
         $attributes = $this->parseHtmlAttributes(['id' => $name, 'name' => $name, ...$options]);
 
         return sprintf(

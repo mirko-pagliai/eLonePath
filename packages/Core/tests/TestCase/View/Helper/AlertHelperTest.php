@@ -17,14 +17,14 @@ use PHPUnit\Framework\TestCase;
 #[CoversClass(AlertHelper::class)]
 class AlertHelperTest extends TestCase
 {
-    private AlertHelper $alertHelper;
+    private AlertHelper $helper;
 
     /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
-        $this->alertHelper = new AlertHelper(new View());
+        $this->helper = new AlertHelper(new View());
     }
 
     /**
@@ -44,7 +44,7 @@ class AlertHelperTest extends TestCase
     public function testRenderWithEachVariant(string $variant): void
     {
         // @phpstan-ignore-next-line argument.type
-        $result = $this->alertHelper->render($variant, 'A simple alert—check it out!');
+        $result = $this->helper->render($variant, 'A simple alert—check it out!');
 
         $this->assertSame(
             "<div class=\"alert alert-$variant\" role=\"alert\">A simple alert—check it out!</div>",
@@ -65,7 +65,7 @@ class AlertHelperTest extends TestCase
         $this->expectException(InvalidArgumentException::class);
         $this->expectExceptionMessageIs('Unknown alert variant: `boh`.');
         // @phpstan-ignore-next-line argument.type
-        $this->alertHelper->render('boh', 'Some message.');
+        $this->helper->render('boh', 'Some message.');
     }
 
     /**
@@ -77,9 +77,9 @@ class AlertHelperTest extends TestCase
     #[Test]
     public function testRenderWithExtraClass(): void
     {
-        $result = $this->alertHelper->render('danger', 'Errore.', ['class' => 'mt-3']);
+        $result = $this->helper->render('danger', 'Error.', ['class' => 'mt-3']);
 
-        $this->assertSame('<div class="alert alert-danger mt-3" role="alert">Errore.</div>', $result);
+        $this->assertSame('<div class="alert alert-danger mt-3" role="alert">Error.</div>', $result);
     }
 
     /**
@@ -90,8 +90,8 @@ class AlertHelperTest extends TestCase
     #[Test]
     public function testRenderWithExtraAttribute(): void
     {
-        $expected = '<div class="alert alert-info" role="alert" id="my-alert">Attenzione.</div>';
-        $result = $this->alertHelper->render('info', 'Attenzione.', ['id' => 'my-alert']);
+        $expected = '<div class="alert alert-info" role="alert" id="my-alert">Alert.</div>';
+        $result = $this->helper->render('info', 'Alert.', ['id' => 'my-alert']);
 
         $this->assertSame($expected, $result);
     }
@@ -105,7 +105,7 @@ class AlertHelperTest extends TestCase
     #[Test]
     public function testRenderEscapesMessage(): void
     {
-        $result = $this->alertHelper->render('warning', 'A & B');
+        $result = $this->helper->render('warning', 'A & B');
 
         $this->assertSame('<div class="alert alert-warning" role="alert">A &amp; B</div>', $result);
     }

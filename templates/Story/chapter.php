@@ -34,7 +34,7 @@ if ($character) {
         <?php
         foreach ($node->choices as $choice) {
             echo $this->Story->link(
-                text: $choice->content,
+                text: $choice->content . ' <i class="bi bi-arrow-right"></i>',
                 url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $choice->target],
                 options: [
                     'class' => 'elone-button fw-medium p-2 fs-5',

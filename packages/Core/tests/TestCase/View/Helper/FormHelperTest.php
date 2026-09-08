@@ -170,4 +170,104 @@ class FormHelperTest extends TestCase
 
         $this->assertSame($expected, $result);
     }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::button()
+     */
+    #[Test]
+    public function testButtonDefaultsToTypeButton(): void
+    {
+        $this->assertSame('<button type="button">Cancel</button>', $this->helper->button('Cancel'));
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::button()
+     */
+    #[Test]
+    public function testButtonWithExplicitTypeAndOptions(): void
+    {
+        $result = $this->helper->button('Go', ['type' => 'submit', 'class' => 'btn btn-primary']);
+
+        $this->assertSame('<button type="submit" class="btn btn-primary">Go</button>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::button()
+     */
+    #[Test]
+    public function testButtonEscapesLabelByDefault(): void
+    {
+        $this->assertSame('<button type="button">A &amp; B</button>', $this->helper->button('A & B'));
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::button()
+     */
+    #[Test]
+    public function testButtonWithEscapeFalseRendersRawLabel(): void
+    {
+        $result = $this->helper->button('<strong>Go</strong>', ['escape' => false]);
+
+        $this->assertSame('<button type="button"><strong>Go</strong></button>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::submit()
+     */
+    #[Test]
+    public function testSubmitWithDefaultLabel(): void
+    {
+        $this->assertSame('<button type="submit">Submit</button>', $this->helper->submit());
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::submit()
+     */
+    #[Test]
+    public function testSubmitWithLabelAndOptions(): void
+    {
+        $result = $this->helper->submit('Create character', ['class' => 'btn elone-button']);
+
+        $this->assertSame('<button type="submit" class="btn elone-button">Create character</button>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::reset()
+     */
+    #[Test]
+    public function testResetWithDefaultLabel(): void
+    {
+        $this->assertSame('<button type="reset">Reset</button>', $this->helper->reset());
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::reset()
+     */
+    #[Test]
+    public function testResetWithCustomLabel(): void
+    {
+        $this->assertSame('<button type="reset">Clear</button>', $this->helper->reset('Clear'));
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::hidden()
+     */
+    #[Test]
+    public function testHidden(): void
+    {
+        $result = $this->helper->hidden('token', 'abc123');
+
+        $this->assertSame('<input type="hidden" id="token" name="token" value="abc123">', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::hidden()
+     */
+    #[Test]
+    public function testHiddenEscapesValue(): void
+    {
+        $result = $this->helper->hidden('name', 'A & "B"');
+
+        $this->assertSame('<input type="hidden" id="name" name="name" value="A &amp; &quot;B&quot;">', $result);
+    }
 }

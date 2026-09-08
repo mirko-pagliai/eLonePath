@@ -5,9 +5,10 @@ namespace Elone\Core\View\Helper;
 
 /**
  * Builds a `<form>`, one labeled input at a time — `create()`/`end()` open and close the tag, `input()` wraps a
- * single labeled field in the same `.mb-3` div `templates/Story/character.php` already hand-wrote. Deliberately
- * minimal: no label-from-field-name guessing, no validation-aware error display, no select/checkbox/radio
- * helpers — those get built the moment an actual form in this app needs one, not before.
+ * single labeled field in the same `.mb-3` div `templates/Story/character.php` already hand-wrote, `submit()`,
+ * `reset()`, and `hidden()` cover the other pieces almost every form needs. Deliberately minimal beyond that: no
+ * label-from-field-name guessing, no validation-aware error display, no select/checkbox/radio helpers — those
+ * get built the moment an actual form in this app needs one, not before.
  *
  * Generic enough to live here, in Core, alongside `HtmlHelper` — nothing about opening a `<form>` tag or wrapping
  * a labeled `<input>` is specific to this app's own story/character concerns.
@@ -62,6 +63,71 @@ final class FormHelper extends Helper
             h($type, ENT_QUOTES),
             $attributes,
         );
+    }
+
+    /**
+     * A hidden `<input>` — for carrying a value along with the form without showing it to the user.
+     *
+     * @param string $name Both the field's `name` and `id` attribute.
+     * @param string $value The field's value.
+     * @param array<string, string|int|float|bool> $options Extra `<input>` attributes.
+     * @return string The rendered `<input type="hidden">` tag.
+     */
+    public function hidden(string $name, string $value, array $options = []): string
+    {
+        $attributes = $this->parseHtmlAttributes(['id' => $name, 'name' => $name, 'value' => $value, ...$options]);
+
+        return "<input type=\"hidden\"$attributes>";
+    }
+
+    /**
+     * A generic `<button>` — what `submit()` and `reset()` both build on. `type` defaults to `'button'`: a bare
+     * HTML `<button>` defaults to `'submit'`, which silently submits the enclosing form — surprising for
+     * anything that isn't meant to (a button wired to its own JS handler, say).
+     *
+     * @param string $label The button's visible text (or, with `escape: false`, raw HTML).
+     * @param array<string, string|int|float|bool> $options Extra `<button>` attributes — `type`, `class`, and so
+     *  on. `escape` (default `true`) controls whether `$label` is escaped.
+     * @return string The rendered `<button>` tag.
+     */
+    public function button(string $label, array $options = []): string
+    {
+        $type = (string)($options['type'] ?? 'button');
+        unset($options['type']);
+
+        $escape = (bool)($options['escape'] ?? true);
+        unset($options['escape']);
+
+        return sprintf(
+            '<button type="%s"%s>%s</button>',
+            h($type, ENT_QUOTES),
+            $this->parseHtmlAttributes($options),
+            $escape ? h($label) : $label,
+        );
+    }
+
+    /**
+     * A submit button — see `button()`.
+     *
+     * @param string $label The button's visible text.
+     * @param array<string, string|int|float|bool> $options Extra `<button>` attributes.
+     * @return string The rendered `<button type="submit">` tag.
+     */
+    public function submit(string $label = 'Submit', array $options = []): string
+    {
+        return $this->button($label, ['type' => 'submit', ...$options]);
+    }
+
+    /**
+     * A reset button — see `button()`.
+     *
+     * @param string $label The button's visible text.
+     * @param array<string, string|int|float|bool> $options Extra `<button>` attributes.
+     * @return string The rendered `<button type="reset">` tag.
+     */
+    public function reset(string $label = 'Reset', array $options = []): string
+    {
+        return $this->button($label, ['type' => 'reset', ...$options]);
     }
 
     /**

@@ -28,7 +28,7 @@ abstract class Node implements Arrayable
         protected readonly string $gameId,
         string $content,
     ) {
-        $this->content = self::resolveImagePaths(content: $content, gameId: $this->gameId);
+        $this->content = self::resolveImagePaths(content: $content, gameId: $gameId);
     }
 
     /**

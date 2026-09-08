@@ -33,11 +33,9 @@ echo $this->Form->input('strength', 'Forza', ['type' => 'number', 'min' => 1, 'r
 echo $this->Form->input('agility', 'Agilità', ['type' => 'number', 'min' => 1, 'required' => true]);
 echo $this->Form->input('perception', 'Percezione', ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true]);
 echo $this->Form->input('willpower', 'Volontà', ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true]);
+echo $this->Form->submit('Crea personaggio', ['class' => 'btn fs-4 elone-button px-4 py-2']);
+echo $this->Form->end();
 ?>
-
-<button type="submit" class="btn fs-4 elone-button px-4 py-2">Crea personaggio</button>
-
-<?= $this->Form->end() ?>
 
 <p class="fs-5 mt-3">
     Non hai voglia di fare i calcoli?

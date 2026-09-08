@@ -47,7 +47,7 @@ class Game implements Arrayable
         protected(set) readonly bool $requiresCombat,
         protected(set) array $nodes,
     ) {
-        $this->preface = Node::resolveImagePaths(content: $preface, gameId: $this->gameId);
+        $this->preface = Node::resolveImagePaths(content: $preface, gameId: $gameId);
     }
 
     /**

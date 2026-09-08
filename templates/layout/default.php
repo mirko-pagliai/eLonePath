@@ -31,4 +31,5 @@ declare(strict_types=1);
             </article>
         </main>
     </body>
+    <script src="/assets/js/bootstrap.bundle.min.js"></script>
 </html>

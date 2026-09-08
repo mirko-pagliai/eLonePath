@@ -75,8 +75,9 @@ class CheckBranchesCommand extends Command
                     }
 
                     // Style for image nodes
-                    if (preg_match('/^!\[([^\]]+)\]\(([^)]+)\)/', $node->content, matches: $matches)) {
-                        $io->write('> image `<fg=yellow>' . basename($matches[2]) . '</>`');
+                    $nodeImages = $node->findImages($node->content);
+                    if ($nodeImages) {
+                        $io->write('> image `<fg=yellow>' . basename(array_first($nodeImages)['path']) . '</>`');
                     }
 
                     if (array_key_last($branch) === $k) {

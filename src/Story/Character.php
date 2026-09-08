@@ -59,6 +59,15 @@ use TypeError;
 final class Character implements Arrayable
 {
     /**
+     * The default `maxLifePoints` for a newly created character, used whenever a story doesn't specify its own —
+     * lives here, not on `StoryController`, since it's a fact about characters, not about handling a web request.
+     * Currently the only value every story gets; the name says "default" rather than just "starting" so that a
+     * later per-story override (read from that story's own `story.json`, once that's built) has an obvious place
+     * to fall back to, without this constant needing to move or be renamed when that happens.
+     */
+    public const int DEFAULT_MAX_LIFE_POINTS = 20;
+
+    /**
      * The total of a character's four attributes must sum to exactly.
      */
     private const int TOTAL_ATTRIBUTE_POINTS = 20;
@@ -129,6 +138,35 @@ final class Character implements Arrayable
         return new static(
             maxLifePoints: $maxLifePoints,
             lifePoints: $maxLifePoints,
+            strength: $strength,
+            agility: $agility,
+            perception: $perception,
+            willpower: $willpower,
+        );
+    }
+
+    /**
+     * Builds a brand-new character with a random, valid distribution of the 20-point attribute budget — for
+     * anyone who'd rather not work out a distribution by hand. Perception and Willpower are each rolled within
+     * their own 1-5 range first; whatever's left of the budget is then split between Strength and Agility, each
+     * ending up at least 1 — the only constraint either has today. Delegates to `createNew()` for the actual
+     * construction, so a random character is subject to exactly the same rules as a hand-picked one, not a
+     * separate path that could drift from them.
+     *
+     * @throws \Random\RandomException
+     */
+    public static function createRandom(int $maxLifePoints): static
+    {
+        $perception = random_int(1, 5);
+        $willpower = random_int(1, 5);
+
+        $remaining = self::TOTAL_ATTRIBUTE_POINTS - $perception - $willpower;
+        // Splits $remaining between strength and agility, each at least 1 — the only constraint either has today.
+        $strength = random_int(1, $remaining - 1);
+        $agility = $remaining - $strength;
+
+        return self::createNew(
+            maxLifePoints: $maxLifePoints,
             strength: $strength,
             agility: $agility,
             perception: $perception,
@@ -260,7 +298,9 @@ final class Character implements Arrayable
         $value = $data[$key] ?? null;
 
         if (!is_int($value)) {
-            throw new TypeError("Character data key `$key` must be an int, " . get_debug_type($value) . ' given.');
+            throw new TypeError(
+                "Character data key `$key` must be an int, " . get_debug_type($value) . ' given.',
+            );
         }
 
         return $value;

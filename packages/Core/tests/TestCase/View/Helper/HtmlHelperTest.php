@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Elone\Core\Test\View\Helper;
 
-use Elone\Core\Exception\RouteNotFoundException;
 use Elone\Core\View\Helper\HtmlHelper;
 use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -66,8 +65,9 @@ class HtmlHelperTest extends TestCase
     #[Test]
     public function testImageWithOptions(): void
     {
+        $expected = '<img src="/img.jpg" alt="A &quot;special&quot; image" class="img-fluid">';
         $result = $this->htmlHelper->image('/img.jpg', ['alt' => 'A "special" image', 'class' => 'img-fluid']);
-        $this->assertSame('<img src="/img.jpg" alt="A &quot;special&quot; image" class="img-fluid">', $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -86,12 +86,13 @@ class HtmlHelperTest extends TestCase
     #[Test]
     public function testLinkEscapesTextAndAttributesByDefault(): void
     {
+        $expected = '<a href="/pages/home" class="btn &quot;special&quot;">A &amp; B</a>';
         $result = $this->htmlHelper->link(
             'A & B',
             ['controller' => 'Pages', 'action' => 'home'],
             ['class' => 'btn "special"'],
         );
-        $this->assertSame('<a href="/pages/home" class="btn &quot;special&quot;">A &amp; B</a>', $result);
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -160,8 +161,6 @@ class HtmlHelperTest extends TestCase
     }
 
     /**
-     * Tests for the `markdown()` method.
-     *
      * @link \Elone\Core\View\Helper\HtmlHelper::markdown()
      */
     #[Test]
@@ -193,65 +192,5 @@ class HtmlHelperTest extends TestCase
             'Package `michelf/php-markdown` is required to use `' . HtmlHelper::class . '::markdown()`.',
         );
         $htmlHelper->markdown('');
-    }
-
-    /**
-     * @param array<string|int, string|int|float|bool> $route
-     *
-     * @link \Elone\Core\View\Helper\HtmlHelper::url()
-     */
-    #[Test]
-    #[TestWith([['controller' => 'Pages', 'action' => 'home'], '/pages/home'])]
-    #[TestWith([['controller' => 'Pages', 'action' => 'view', '123'], '/pages/view/123'])]
-    #[TestWith([['controller' => 'UsersSettings'], '/users-settings/index'])]
-    public function testUrl(array $route, string $expected): void
-    {
-        $result = $this->htmlHelper->url($route);
-        $this->assertSame($expected, $result);
-    }
-
-    /**
-     * @link \Elone\Core\View\Helper\HtmlHelper::url()
-     */
-    #[Test]
-    #[TestWith(['/'])]
-    #[TestWith(['/img/logo-1024.png'])]
-    #[TestWith(['https://example.com/path'])]
-    public function testUrlWithString(string $route): void
-    {
-        $result = $this->htmlHelper->url($route);
-        $this->assertSame($route, $result);
-    }
-
-    /**
-     * @link \Elone\Core\View\Helper\HtmlHelper::url()
-     */
-    #[Test]
-    public function testUrlWithQuery(): void
-    {
-        $result = $this->htmlHelper->url(['controller' => 'Pages', 'action' => 'home'], ['state' => 'abc123']);
-        $this->assertSame('/pages/home?state=abc123', $result);
-    }
-
-    /**
-     * @link \Elone\Core\View\Helper\HtmlHelper::url()
-     */
-    #[Test]
-    public function testUrlWithMissingController(): void
-    {
-        $this->expectException(RouteNotFoundException::class);
-        $this->expectExceptionMessageIs('Invalid route.');
-        $this->htmlHelper->url([]);
-    }
-
-    /**
-     * @link \Elone\Core\View\Helper\HtmlHelper::url()
-     */
-    #[Test]
-    public function testUrlWithInvalidParameter(): void
-    {
-        $this->expectException(RouteNotFoundException::class);
-        $this->expectExceptionMessageIs('Invalid route parameter: `extra`.');
-        $this->htmlHelper->url(['controller' => 'Pages', 'action' => 'home', 'extra' => 'value']);
     }
 }

@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace Elone\Core\View\Helper;
 
-use Elone\Core\Routing\Route;
 use Michelf\Markdown;
 use RuntimeException;
 
@@ -12,31 +11,6 @@ use RuntimeException;
  */
 class HtmlHelper extends Helper
 {
-    /**
-     * Converts an associative array of HTML attributes into a formatted string suitable for insertion into an HTML tag.
-     * Keys in the array represent attribute names, and their corresponding values represent the attribute values.
-     *
-     * @param array<string, string|int|float|bool> $attributes An associative array of attributes where keys are the
-     * attribute names and values are the attribute values. Boolean values are converted to their string equivalents.
-     *
-     * @return string A properly formatted string of HTML attributes, where each attribute is escaped to ensure that
-     * special characters do not break the resulting HTML.
-     */
-    protected function parseHtmlAttributes(array $attributes): string
-    {
-        $htmlAttributes = '';
-
-        foreach ($attributes as $attributeName => $value) {
-            $htmlAttributes .= sprintf(
-                ' %s="%s"',
-                h($attributeName, ENT_QUOTES),
-                h((string)$value, ENT_QUOTES),
-            );
-        }
-
-        return $htmlAttributes;
-    }
-
     /**
      * Generates an `<i>` tag with the appropriate classes for a Bootstrap icon. The method formats the icon name and
      * merges it with additional class names provided in `$options`. Every other entry in `$options` is applied as an
@@ -148,20 +122,5 @@ class HtmlHelper extends Helper
         }
 
         return Markdown::defaultTransform($markdown);
-    }
-
-    /**
-     * Resolves `$route` to a URL, appending `$query` as a querystring — see `Route::resolve()`.
-     *
-     * @param array<string|int, string|int|float|bool>|string $route A literal URL/path, or a route array.
-     * @param array<string, string|int|float|bool> $query Appended as `?key=value&...`. Empty (the default) adds
-     *  nothing.
-     * @return string The resolved URL.
-     * @throws \Elone\Core\Exception\RouteNotFoundException If given an array route with invalid or missing parameters.
-     * @see \Elone\Core\Routing\Route::resolve()
-     */
-    public function url(array|string $route, array $query = []): string
-    {
-        return Route::resolve(route: $route, query: $query);
     }
 }

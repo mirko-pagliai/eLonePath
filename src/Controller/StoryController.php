@@ -21,13 +21,6 @@ use RuntimeException;
 class StoryController extends AppController
 {
     /**
-     * The player's starting maximum life points — fixed here, arbitrarily, until character creation says
-     * otherwise (rolled, derived from an attribute, chosen by the player, or something else entirely). Not part
-     * of the 20-point attribute budget `Character` itself enforces.
-     */
-    private const int STARTING_MAX_LIFE_POINTS = 20;
-
-    /**
      * @param string $storyId The identifier of the story.
      * @return \App\Story\Game The game instance created from the specified story file.
      */
@@ -51,6 +44,26 @@ class StoryController extends AppController
         $value = $this->dataParam($name);
 
         return is_numeric($value) ? (int)$value : 0;
+    }
+
+    /**
+     * Translates one of `Character`'s own validation failures into Italian, for `templates/Story/character.php`.
+     * `Character` itself stays in English. Matches `$exception->getCode()`, not the message text — a stable
+     * identifier `Character` itself defines (`Character::ERROR_*`), unaffected if the English wording changes.
+     *
+     * @param \RuntimeException $exception The exception `Character::createNew()` threw.
+     * @return string An Italian message suitable for the character-creation form's `error` display.
+     */
+    protected function translateCharacterCreationError(RuntimeException $exception): string
+    {
+        return match ($exception->getCode()) {
+            Character::ERROR_STRENGTH_TOO_LOW => 'La Forza deve essere almeno 1.',
+            Character::ERROR_AGILITY_TOO_LOW => 'L\'Agilità deve essere almeno 1.',
+            Character::ERROR_PERCEPTION_OUT_OF_RANGE => 'La Percezione deve essere tra 1 e 5.',
+            Character::ERROR_WILLPOWER_OUT_OF_RANGE => 'La Volontà deve essere tra 1 e 5.',
+            Character::ERROR_INVALID_ATTRIBUTE_SUM => 'La somma dei quattro attributi deve essere esattamente 20.',
+            default => 'I valori inseriti non sono validi. Controlla gli attributi e riprova.',
+        };
     }
 
     /**
@@ -95,7 +108,7 @@ class StoryController extends AppController
         if ($this->is('post')) {
             try {
                 $player = Character::createNew(
-                    maxLifePoints: self::STARTING_MAX_LIFE_POINTS,
+                    maxLifePoints: Character::DEFAULT_MAX_LIFE_POINTS,
                     strength: $this->intDataParam('strength'),
                     agility: $this->intDataParam('agility'),
                     perception: $this->intDataParam('perception'),
@@ -109,13 +122,39 @@ class StoryController extends AppController
                     query: ['state' => $state->toQueryValue()],
                 );
             } catch (RuntimeException $exception) {
-                $error = $exception->getMessage();
+                $error = $this->translateCharacterCreationError($exception);
             }
         }
 
         $this->set(compact('game', 'error'));
 
         return null;
+    }
+
+    /**
+     * Asks `Character` for a random, valid one — for anyone at the creation form who'd rather not work out a
+     * distribution by hand — and redirects into `start()` exactly the way a manual submission would, since the
+     * result is a perfectly ordinary `Character`, not a different kind of playthrough. This action only handles
+     * the request/response side of that; the random distribution itself is `Character::createRandom()`'s own
+     * business; nothing here needs to know how it works.
+     *
+     * @param string $storyId The unique identifier of the story to create a random character for.
+     * @return \Elone\Core\Server\Response A redirect into `start()`, carrying the new character's `?state=`.
+     * @throws \Random\RandomException
+     * @link templates/Story/character.php
+     */
+    public function random(string $storyId): Response
+    {
+        $this->allowMethod('get');
+
+        $player = Character::createRandom(maxLifePoints: Character::DEFAULT_MAX_LIFE_POINTS);
+
+        $state = new GameState(player: $player);
+
+        return $this->redirect(
+            url: ['controller' => 'Story', 'action' => 'start', $storyId],
+            query: ['state' => $state->toQueryValue()],
+        );
     }
 
     /**

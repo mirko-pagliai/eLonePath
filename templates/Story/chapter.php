@@ -21,9 +21,9 @@ echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'sub
 
 $image = $this->Story->image($node->content, $game->gameId);
 
-if ($character !== null) {
+if ($character) {
     /** @link templates/element/character_sheet.php */
-    echo $this->element(name: 'character_sheet', data: ['character' => $character]);
+    echo $this->element(name: 'character_sheet', data: compact('character'));
 }
 ?>
 

@@ -10,7 +10,7 @@ declare(strict_types=1);
 ?>
 
 <h1 class="display-3 ff-cinzel fw-semibold mb-3 text-center">
-    Elone Path
+    eLone Path
 </h1>
 
 <ul id="stories-list" class="list-unstyled">

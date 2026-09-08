@@ -18,7 +18,7 @@ declare(strict_types=1);
 </p>
 
 <p class="fs-5 mb-2">
-    <em>Elone Path</em> porta l'esperienza dei librigame cartacei nel digitale, senza tradirne lo spirito: storie fatte
+    <em>eLone Path</em> porta l'esperienza dei librigame cartacei nel digitale, senza tradirne lo spirito: storie fatte
     di pagine numerate, scelte, prove di abilità e finali diversi.
 </p>
 

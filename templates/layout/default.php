@@ -22,7 +22,7 @@ declare(strict_types=1);
         <link rel="icon" href="/img/icons/favicon.ico">
         <link rel="apple-touch-icon" sizes="180x180" href="/img/icons/apple-touch-icon.png">
 
-        <title>Elone Path</title>
+        <title>eLone Path</title>
     </head>
     <body class="min-vh-100">
         <main class="container py-5" style="max-width: 960px">

@@ -67,6 +67,23 @@ class GameTest extends TestCase
     }
 
     /**
+     * The preface goes through the same rewriting as a node's own `content` — via `App\Story\MarkdownImage`,
+     * shared between the two, so neither one risks drifting from the other's idea of what counts as an image.
+     *
+     * @link \App\Story\Game::__construct()
+     */
+    #[Test]
+    public function testCreateFromArrayRewritesImagePathsInPreface(): void
+    {
+        $data = $this->sampleData();
+        $data['game']['preface'] = '![A castle](castle.jpg)';
+
+        $game = Game::createFromArray($data);
+
+        $this->assertSame('![A castle](/assets/stories/test-game/img/castle.jpg)', $game->preface);
+    }
+
+    /**
      * `sampleData()` never sets `requires_combat` — this is what every existing story, written before the key
      * existed, gets: no character required, exactly like before.
      *

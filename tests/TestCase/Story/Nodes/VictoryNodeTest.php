@@ -30,6 +30,20 @@ class VictoryNodeTest extends TestCase
     }
 
     /**
+     * `Node`'s own constructor rewrites every image path — tested here, via the simplest concrete subclass,
+     * rather than repeated in every node type's own test file.
+     *
+     * @link \App\Story\Nodes\Node::__construct()
+     */
+    #[Test]
+    public function testConstructRewritesImagePaths(): void
+    {
+        $node = new VictoryNode(id: 15, gameId: 'the-tower', content: '![A castle](castle.jpg)');
+
+        $this->assertSame('![A castle](/assets/stories/the-tower/img/castle.jpg)', $node->content);
+    }
+
+    /**
      * @link \App\Story\Nodes\VictoryNode::toArray()
      */
     #[Test]

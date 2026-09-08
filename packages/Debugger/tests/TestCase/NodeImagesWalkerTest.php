@@ -24,7 +24,7 @@ class NodeImagesWalkerTest extends TestCase
     }';
 
     /**
-     * Builds a single-node `Game` whose one node's `content` starts with a leading image, resolved against
+     * Builds a single-node `Game` whose one node's `content` has a single image, resolved against
      * `STORIES . '/test-game/img/'` by `NodeImagesWalker`.
      */
     private function gameWithNodeImage(string $path, string $alt = 'An illustration'): Game
@@ -157,7 +157,29 @@ class NodeImagesWalkerTest extends TestCase
 
         $errors = $walker();
         $this->assertCount(1, $errors);
-        $this->assertSame('Node image alt text for node 1 is empty', $errors[0]);
+        $this->assertSame('Node image alt text for node 1 (`correct_960x600.jpg`) is empty', $errors[0]);
+    }
+
+    /**
+     * A node can reference more than one image — `Node`'s own constructor rewrites every one of them, not just a
+     * leading one, so the walker validates every one of them too. Each error names its own path, which is what
+     * actually tells the two apart in this test.
+     *
+     * @link \Elone\Debugger\NodeImagesWalker::__invoke()
+     */
+    #[Test]
+    public function testInvokeWithMultipleImagesInOneNode(): void
+    {
+        $game = Game::createFromString('{' . self::GAME_HEADER . ', "nodes": {
+            "1": {"content": "![First](correct_960x600.jpg)\nSome text.\n![Second](does-not-exist.jpg)", "type": "victory"}
+        }}');
+
+        $walker = new NodeImagesWalker($game);
+
+        $errors = $walker();
+        $this->assertCount(1, $errors);
+        $this->assertStringContainsString('does-not-exist.jpg', $errors[0]);
+        $this->assertStringContainsString('is not readable', $errors[0]);
     }
 
     /**
@@ -174,5 +196,23 @@ class NodeImagesWalkerTest extends TestCase
         $walker = new NodeImagesWalker($game);
 
         $this->assertSame([2], array_keys($walker->getAllNodesWithImages()));
+    }
+
+    /**
+     * @link \Elone\Debugger\NodeImagesWalker::getAllNodesWithImages()
+     */
+    #[Test]
+    public function testGetAllNodesWithImagesListsEveryImageInANode(): void
+    {
+        $game = Game::createFromString('{' . self::GAME_HEADER . ', "nodes": {
+            "1": {"content": "![First](one.jpg)\nSome text.\n![Second](two.jpg)", "type": "victory"}
+        }}');
+
+        $walker = new NodeImagesWalker($game);
+
+        $images = $walker->getAllNodesWithImages()[1];
+        $this->assertCount(2, $images);
+        $this->assertStringEndsWith('one.jpg', $images[0]['path']);
+        $this->assertStringEndsWith('two.jpg', $images[1]['path']);
     }
 }

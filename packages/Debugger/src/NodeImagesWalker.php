@@ -4,11 +4,12 @@ declare(strict_types=1);
 namespace Elone\Debugger;
 
 use App\Story\Game;
+use App\Story\Nodes\Node;
 
 /**
- * Validates every node's leading image (see `App\Story\Nodes\Node::extractLeadingImage()`) against the fixed
- * requirements every story image must meet: readable, non-empty, a valid JPEG, exactly 960px wide, at most 960px
- * tall.
+ * Validates every image referenced anywhere in every node's content (see `App\Story\Nodes\Node::findImages()`)
+ * against the fixed requirements every story image must meet: readable, non-empty, a valid JPEG, exactly 960px
+ * wide, at most 960px tall, and with non-empty alt text.
  */
 readonly class NodeImagesWalker
 {
@@ -25,40 +26,42 @@ readonly class NodeImagesWalker
 
         $dir = STORIES . "/{$this->game->gameId}/img";
 
-        $nodesWithImages = $this->getAllNodesWithImages();
+        foreach ($this->getAllNodesWithImages() as $nodeId => $images) {
+            foreach ($images as $image) {
+                $filename = basename($image['path']);
 
-        foreach ($nodesWithImages as $nodeId => $image) {
-            if (trim($image['alt']) === '') {
-                $errors[] = "Node image alt text for node $nodeId is empty";
-            }
+                if (trim($image['alt']) === '') {
+                    $errors[] = "Node image alt text for node $nodeId (`$filename`) is empty";
+                }
 
-            $fullPath = "$dir/{$image['path']}";
-            if (!is_readable($fullPath)) {
-                $errors[] = "Node image path `$fullPath` for node $nodeId is not readable";
+                $fullPath = "$dir/$filename";
+                if (!is_readable($fullPath)) {
+                    $errors[] = "Node image path `$fullPath` for node $nodeId is not readable";
 
-                continue;
-            }
+                    continue;
+                }
 
-            // Checked explicitly, before getimagesize()
-            if (filesize($fullPath) === 0) {
-                $errors[] = "Node image path `$fullPath` for node $nodeId is an empty file";
+                // Checked explicitly, before getimagesize()
+                if (filesize($fullPath) === 0) {
+                    $errors[] = "Node image path `$fullPath` for node $nodeId is an empty file";
 
-                continue;
-            }
+                    continue;
+                }
 
-            $info = getimagesize($fullPath);
+                $info = getimagesize($fullPath);
 
-            if ($info === false || $info['mime'] !== 'image/jpeg') {
-                $errors[] = "Node image path `$fullPath` for node $nodeId is not a valid jpeg file";
+                if ($info === false || $info['mime'] !== 'image/jpeg') {
+                    $errors[] = "Node image path `$fullPath` for node $nodeId is not a valid jpeg file";
 
-                continue;
-            }
+                    continue;
+                }
 
-            if ($info[0] !== 960) {
-                $errors[] = "Node image path `$fullPath` for node $nodeId is not 960px wide ($info[0]px)";
-            }
-            if ($info[1] > 960) {
-                $errors[] = "Node image path `$fullPath` for node $nodeId is greater than 960px high ($info[1]px)";
+                if ($info[0] !== 960) {
+                    $errors[] = "Node image path `$fullPath` for node $nodeId is not 960px wide ($info[0]px)";
+                }
+                if ($info[1] > 960) {
+                    $errors[] = "Node image path `$fullPath` for node $nodeId is greater than 960px high ($info[1]px)";
+                }
             }
         }
 
@@ -66,29 +69,21 @@ readonly class NodeImagesWalker
     }
 
     /**
-     * Every node whose `content` starts with an image, with the image's filename and alt text.
+     * Every node with at least one image, each with its own list of images (in the order they appear in that
+     * node's content) — a node can reference more than one.
      *
-     * @return array<int, array{path: string, alt: string}>
+     * @return array<int, list<array{alt: string, path: string}>>
      */
     public function getAllNodesWithImages(): array
     {
         $nodes = [];
 
         foreach ($this->game->nodes as $node) {
-            $result = preg_match(
-                pattern: '/!\[([^\]]*)\]\(([^)]+)\)/',
-                subject: $node->content,
-                matches: $matches,
-            );
+            $images = Node::findImages($node->content);
 
-            if ($result === 0) {
-                continue;
+            if ($images !== []) {
+                $nodes[$node->id] = $images;
             }
-
-            $nodes[$node->id] = [
-                'alt' => $matches['1'] ?? '',
-                'path' => $matches['2'] ?? '' ? basename($matches['2']) : '',
-            ];
         }
 
         return $nodes;

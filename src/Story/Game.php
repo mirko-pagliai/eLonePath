@@ -47,11 +47,7 @@ class Game implements Arrayable
         protected(set) readonly bool $requiresCombat,
         protected(set) array $nodes,
     ) {
-        $this->preface = preg_replace(
-            pattern: '/!\[([^\]]+)\]\(([^)]+)\)/',
-            replacement: '![$1](/assets/stories/' . $this->gameId . '/img/$2)',
-            subject: $preface,
-        ) ?: $preface;
+        $this->preface = Node::resolveImagePaths(content: $preface, gameId: $this->gameId);
     }
 
     /**

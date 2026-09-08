@@ -6,12 +6,6 @@ namespace App\View\Helper;
 use Elone\Core\View\Helper\Helper;
 
 /**
- * A node's `content` may optionally start with a single image — see `App\Story\Nodes\Node::extractLeadingImage()`
- * for the exact rule. This helper pulls that leading image apart from the rest of the content, resolving its
- * filename against `webroot/assets/stories/{gameId}/img/` and rendering it via `Html->image()`, so a template
- * gets back ready-made `<img>` markup for the image (if there was one) plus whatever markdown text follows it,
- * rather than raw pieces it would have to assemble itself.
- *
  * @property-read \Elone\Core\View\Helper\HtmlHelper $Html
  */
 final class StoryHelper extends Helper

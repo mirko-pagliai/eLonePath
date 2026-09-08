@@ -79,7 +79,13 @@ class NodeTest extends TestCase
     #[Test]
     public function testFindImagesWithNoImages(): void
     {
-        $this->assertSame([], Node::findImages('Just plain text, no images.'));
+        $node = new class (id: 1, gameId: 'some-game', content: 'Just plain text, no images.') extends Node {
+            public function toArray(): array
+            {
+                return [];
+            }
+        };
+        $this->assertSame([], $node->findImages());
     }
 
     /**
@@ -88,9 +94,25 @@ class NodeTest extends TestCase
     #[Test]
     public function testFindImagesWithOneImage(): void
     {
-        $images = Node::findImages('![A castle](castle.jpg)' . "\n" . 'Some text.');
+        $node = new class (
+            id: 1,
+            gameId: 'some-game',
+            content: '![A castle](castle.jpg)' . "\n" . 'Some text.',
+        ) extends Node {
+            public function toArray(): array
+            {
+                return [];
+            }
+        };
 
-        $this->assertSame([['alt' => 'A castle', 'path' => 'castle.jpg']], $images);
+        $expected = [
+            [
+                'alt' => 'A castle',
+                'path' => '/assets/stories/some-game/img/castle.jpg',
+            ],
+        ];
+        $result = $node->findImages();
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -99,14 +121,29 @@ class NodeTest extends TestCase
     #[Test]
     public function testFindImagesWithMultipleImages(): void
     {
-        $markdown = '![First](one.jpg)' . "\n" . 'Some text.' . "\n" . '![Second](two.jpg)';
+        $node = new class (
+            id: 1,
+            gameId: 'some-game',
+            content: '![First](one.jpg)' . "\n" . 'Some text.' . "\n" . '![Second](two.jpg)',
+        ) extends Node {
+            public function toArray(): array
+            {
+                return [];
+            }
+        };
 
-        $images = Node::findImages($markdown);
-
-        $this->assertSame([
-            ['alt' => 'First', 'path' => 'one.jpg'],
-            ['alt' => 'Second', 'path' => 'two.jpg'],
-        ], $images);
+        $expected = [
+            [
+                'alt' => 'First',
+                'path' => '/assets/stories/some-game/img/one.jpg',
+            ],
+            [
+                'alt' => 'Second',
+                'path' => '/assets/stories/some-game/img/two.jpg',
+            ],
+        ];
+        $result = $node->findImages();
+        $this->assertSame($expected, $result);
     }
 
     /**
@@ -118,8 +155,20 @@ class NodeTest extends TestCase
     #[Test]
     public function testFindImagesWithEmptyAltText(): void
     {
-        $images = Node::findImages('![](no-alt.jpg)');
+        $node = new class (id: 1, gameId: 'some-game', content: '![](no-alt.jpg)') extends Node {
+            public function toArray(): array
+            {
+                return [];
+            }
+        };
 
-        $this->assertSame([['alt' => '', 'path' => 'no-alt.jpg']], $images);
+        $expected = [
+            [
+                'alt' => '',
+                'path' => '/assets/stories/some-game/img/no-alt.jpg',
+            ],
+        ];
+        $result = $node->findImages();
+        $this->assertSame($expected, $result);
     }
 }

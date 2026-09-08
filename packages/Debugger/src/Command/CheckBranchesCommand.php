@@ -75,7 +75,7 @@ class CheckBranchesCommand extends Command
                     }
 
                     // Style for image nodes
-                    $nodeImages = $node->findImages($node->content);
+                    $nodeImages = $node->findImages();
                     if ($nodeImages) {
                         $io->write('> image `<fg=yellow>' . basename(array_first($nodeImages)['path']) . '</>`');
                     }

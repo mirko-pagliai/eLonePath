@@ -21,7 +21,7 @@ use Elone\Core\Contract\Arrayable;
  */
 abstract class Node implements Arrayable
 {
-    private const string IMAGE_PATTERN = '/!\[([^\]]*)\]\(([^)]+)\)/';
+    protected const string IMAGE_PATTERN = '/!\[([^\]]*)\]\(([^)]+)\)/';
 
     public protected(set) readonly string $content;
 
@@ -53,9 +53,14 @@ abstract class Node implements Arrayable
      *
      * @return list<array{alt: string, path: string}>
      */
-    public static function findImages(string $markdown): array
+    public function findImages(): array
     {
-        preg_match_all(pattern: self::IMAGE_PATTERN, subject: $markdown, matches: $matches, flags: PREG_SET_ORDER);
+        preg_match_all(
+            pattern: $this::IMAGE_PATTERN,
+            subject: $this->content,
+            matches: $matches,
+            flags: PREG_SET_ORDER,
+        );
 
         return array_map(
             callback: fn(array $match): array => ['alt' => $match[1], 'path' => $match[2]],

@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Elone\Debugger;
 
 use App\Story\Game;
-use App\Story\Nodes\Node;
 
 /**
  * Validates every image referenced anywhere in every node's content (see `App\Story\Nodes\Node::findImages()`)
@@ -79,8 +78,7 @@ readonly class NodeImagesWalker
         $nodes = [];
 
         foreach ($this->game->nodes as $node) {
-            $images = Node::findImages($node->content);
-
+            $images = $node->findImages();
             if ($images !== []) {
                 $nodes[$node->id] = $images;
             }

@@ -47,26 +47,6 @@ class StoryController extends AppController
     }
 
     /**
-     * Translates one of `Character`'s own validation failures into Italian, for `templates/Story/character.php`.
-     * `Character` itself stays in English. Matches `$exception->getCode()`, not the message text — a stable
-     * identifier `Character` itself defines (`Character::ERROR_*`), unaffected if the English wording changes.
-     *
-     * @param \RuntimeException $exception The exception `Character::createNew()` threw.
-     * @return string An Italian message suitable for the character-creation form's `error` display.
-     */
-    protected function translateCharacterCreationError(RuntimeException $exception): string
-    {
-        return match ($exception->getCode()) {
-            Character::ERROR_STRENGTH_TOO_LOW => 'La Forza deve essere almeno 1.',
-            Character::ERROR_AGILITY_TOO_LOW => 'L\'Agilità deve essere almeno 1.',
-            Character::ERROR_PERCEPTION_OUT_OF_RANGE => 'La Percezione deve essere tra 1 e 5.',
-            Character::ERROR_WILLPOWER_OUT_OF_RANGE => 'La Volontà deve essere tra 1 e 5.',
-            Character::ERROR_INVALID_ATTRIBUTE_SUM => 'La somma dei quattro attributi deve essere esattamente 20.',
-            default => 'I valori inseriti non sono validi. Controlla gli attributi e riprova.',
-        };
-    }
-
-    /**
      * Reads the current `?state=` query parameter, decodes it into the player's `Character`, and makes both the
      * raw value and the character available to the view: the raw value under `state` (so `StoryHelper::link()`
      * can carry it forward into every navigation link on the page) and the character under `character` (so a
@@ -122,7 +102,7 @@ class StoryController extends AppController
                     query: ['state' => $state->toQueryValue()],
                 );
             } catch (RuntimeException $exception) {
-                $error = $this->translateCharacterCreationError($exception);
+                $error = $exception->getMessage();
             }
         }
 

@@ -39,11 +39,6 @@ class StoryControllerTest extends TestCase
 
                 return $view;
             }
-
-            public function translateCharacterCreationError(RuntimeException $exception): string
-            {
-                return parent::translateCharacterCreationError($exception);
-            }
         };
     }
 
@@ -115,10 +110,13 @@ class StoryControllerTest extends TestCase
     }
 
     /**
+     * An invalid submission (the four attributes don't sum to 20) doesn't redirect — it re-renders the form,
+     * carrying `Character`'s own validation message as `error`, rather than a generic one.
+     *
      * @link \App\Controller\StoryController::character()
      */
     #[Test]
-    public function testCharacterWithInvalidDataShowsErrorInsteadOfRedirecting(): void
+    public function testCharacterWithInvalidSumShowsError(): void
     {
         $request = new Request('POST', '/story/character/mini-quest', [
             'strength' => '10',
@@ -131,16 +129,21 @@ class StoryControllerTest extends TestCase
         $result = $controller->character('mini-quest');
 
         $this->assertNull($result);
-        $this->assertIsString($controller->getView()->get('error'));
+        $this->assertSame(
+            "The sum of the character's attributes must be 20, got `21`.",
+            $controller->getView()->get('error'),
+        );
     }
 
     /**
-     * A missing field is treated as `0` by `intDataParam()`, which `Character::createNew()` itself then rejects.
+     * A missing/non-numeric field (nothing submitted for `strength`, here) is treated as `0` — which
+     * `Character::createNew()` itself then rejects with its own clear message, rather than this action crashing
+     * on a type mismatch.
      *
      * @link \App\Controller\StoryController::character()
      */
     #[Test]
-    public function testCharacterWithMissingFieldShowsErrorInsteadOfRedirecting(): void
+    public function testCharacterWithMissingFieldShowsError(): void
     {
         $request = new Request('POST', '/story/character/mini-quest', [
             'agility' => '5',
@@ -152,53 +155,10 @@ class StoryControllerTest extends TestCase
         $result = $controller->character('mini-quest');
 
         $this->assertNull($result);
-        $this->assertIsString($controller->getView()->get('error'));
-    }
-
-    /**
-     * `translateCharacterCreationError()` matches `$exception->getCode()`, not its message — this checks the
-     * mapping directly, one code at a time, without needing to trigger each `Character` failure for real.
-     * Doesn't assert the Italian text itself (that's content, not behavior) — only that the five reachable
-     * codes each get their own distinct message, and none of them collide with each other or with the fallback.
-     *
-     * @link \App\Controller\StoryController::translateCharacterCreationError()
-     */
-    #[Test]
-    public function testTranslateCharacterCreationErrorGivesEachCodeADistinctMessage(): void
-    {
-        $controller = $this->makeController(new Request('GET', '/'));
-
-        $codes = [
-            Character::ERROR_STRENGTH_TOO_LOW,
-            Character::ERROR_AGILITY_TOO_LOW,
-            Character::ERROR_PERCEPTION_OUT_OF_RANGE,
-            Character::ERROR_WILLPOWER_OUT_OF_RANGE,
-            Character::ERROR_INVALID_ATTRIBUTE_SUM,
-        ];
-
-        $messages = array_map(
-            fn(int $code): string => $controller->translateCharacterCreationError(new RuntimeException('x', $code)),
-            $codes,
+        $this->assertSame(
+            'The strength attribute must be at least 1, got `0`.',
+            $controller->getView()->get('error'),
         );
-
-        $this->assertSame(count($codes), count(array_unique($messages)));
-    }
-
-    /**
-     * An unrecognized code (`Character::ERROR_MAX_LIFE_POINTS_TOO_LOW`/`ERROR_LIFE_POINTS_OUT_OF_RANGE`
-     * included — unreachable from this form today, but not handled specially either) still produces something,
-     * rather than an empty string or a crash.
-     *
-     * @link \App\Controller\StoryController::translateCharacterCreationError()
-     */
-    #[Test]
-    public function testTranslateCharacterCreationErrorFallsBackForUnknownCode(): void
-    {
-        $controller = $this->makeController(new Request('GET', '/'));
-
-        $result = $controller->translateCharacterCreationError(new RuntimeException('x', 999));
-
-        $this->assertNotSame('', $result);
     }
 
     /**

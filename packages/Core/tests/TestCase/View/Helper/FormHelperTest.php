@@ -32,9 +32,9 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testCreateWithRoute(): void
     {
-        $result = $this->formHelper->create(['controller' => 'Story', 'action' => 'character', 'la-torre']);
+        $result = $this->formHelper->create(['controller' => 'Pages', 'action' => 'postOnly']);
 
-        $this->assertSame('<form method="post" action="/story/character/la-torre">', $result);
+        $this->assertSame('<form method="post" action="/pages/postOnly">', $result);
     }
 
     /**
@@ -43,9 +43,9 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testCreateWithStringUrl(): void
     {
-        $result = $this->formHelper->create('/story/character/la-torre');
+        $result = $this->formHelper->create('/pages/postOnly');
 
-        $this->assertSame('<form method="post" action="/story/character/la-torre">', $result);
+        $this->assertSame('<form method="post" action="/pages/postOnly">', $result);
     }
 
     /**
@@ -54,10 +54,10 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testCreateWithExtraOptions(): void
     {
-        $result = $this->formHelper->create('/story/character/la-torre', ['class' => 'needs-validation']);
+        $result = $this->formHelper->create('/pages/postOnly', ['class' => 'needs-validation']);
 
         $this->assertSame(
-            '<form method="post" action="/story/character/la-torre" class="needs-validation">',
+            '<form method="post" action="/pages/postOnly" class="needs-validation">',
             $result,
         );
     }
@@ -78,10 +78,10 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testInputDefaultsToTextType(): void
     {
-        $result = $this->formHelper->input('name', 'Nome');
+        $result = $this->formHelper->input('name', 'Name');
 
         $this->assertSame(
-            '<div class="mb-3"><label for="name" class="form-label">Nome</label>'
+            '<div class="mb-3"><label for="name" class="form-label">Name</label>'
             . '<input type="text" class="form-control" id="name" name="name"></div>',
             $result,
         );
@@ -93,11 +93,16 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testInputWithNumberTypeAndAttributes(): void
     {
-        $result = $this->formHelper->input('strength', 'Forza', ['type' => 'number', 'min' => 1, 'required' => true]);
+        $result = $this->formHelper->input(
+            'age',
+            'Age',
+            ['type' => 'number', 'min' => 1, 'required' => true],
+        );
 
         $this->assertSame(
-            '<div class="mb-3"><label for="strength" class="form-label">Forza</label>'
-            . '<input type="number" class="form-control" id="strength" name="strength" min="1" required="1"></div>',
+            '<div class="mb-3"><label for="age" class="form-label">Age</label>'
+            . '<input type="number" class="form-control" id="age" name="age" min="1"'
+            . ' required="1"></div>',
             $result,
         );
     }
@@ -109,14 +114,14 @@ class FormHelperTest extends TestCase
     public function testInputWithMinAndMax(): void
     {
         $result = $this->formHelper->input(
-            'perception',
-            'Percezione',
-            ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true],
+            'age',
+            'Age',
+            ['type' => 'number', 'min' => 18, 'max' => 99, 'required' => true],
         );
 
         $this->assertSame(
-            '<div class="mb-3"><label for="perception" class="form-label">Percezione</label>'
-            . '<input type="number" class="form-control" id="perception" name="perception" min="1" max="5"'
+            '<div class="mb-3"><label for="age" class="form-label">Age</label>'
+            . '<input type="number" class="form-control" id="age" name="age" min="18" max="99"'
             . ' required="1"></div>',
             $result,
         );
@@ -147,9 +152,7 @@ class FormHelperTest extends TestCase
     }
 
     /**
-     * A full `create()`/`input()`/`end()` sequence, matching the exact shape `templates/Story/character.php`
-     * builds — this is what proves the pieces compose into a real, submittable form, not just that each one
-     * works in isolation.
+     * A full `create()`/`input()`/`end()` sequence.
      *
      * @link \Elone\Core\View\Helper\FormHelper::create()
      * @link \Elone\Core\View\Helper\FormHelper::input()
@@ -158,14 +161,14 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testFullFormSequence(): void
     {
-        $html = $this->formHelper->create(['controller' => 'Story', 'action' => 'character', 'la-torre'])
-            . $this->formHelper->input('strength', 'Forza', ['type' => 'number', 'min' => 1, 'required' => true])
+        $html = $this->formHelper->create(['controller' => 'Pages', 'action' => 'postOnly'])
+            . $this->formHelper->input('age', 'Age', ['type' => 'number', 'min' => 1, 'required' => true])
             . $this->formHelper->end();
 
         $this->assertSame(
-            '<form method="post" action="/story/character/la-torre">'
-            . '<div class="mb-3"><label for="strength" class="form-label">Forza</label>'
-            . '<input type="number" class="form-control" id="strength" name="strength" min="1" required="1"></div>'
+            '<form method="post" action="/pages/postOnly">'
+            . '<div class="mb-3"><label for="age" class="form-label">Age</label>'
+            . '<input type="number" class="form-control" id="age" name="age" min="1" required="1"></div>'
             . '</form>',
             $html,
         );

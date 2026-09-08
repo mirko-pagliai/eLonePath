@@ -73,19 +73,6 @@ final class Character implements Arrayable
     private const int TOTAL_ATTRIBUTE_POINTS = 20;
 
     /**
-     * Exception codes for `__construct()`'s validation failures — used as `RuntimeException::getCode()`, so a
-     * caller (`App\Controller\StoryController::translateCharacterCreationError()`) can identify which rule
-     * failed without parsing the English message.
-     */
-    public const int ERROR_MAX_LIFE_POINTS_TOO_LOW = 1;
-    public const int ERROR_LIFE_POINTS_OUT_OF_RANGE = 2;
-    public const int ERROR_STRENGTH_TOO_LOW = 3;
-    public const int ERROR_AGILITY_TOO_LOW = 4;
-    public const int ERROR_PERCEPTION_OUT_OF_RANGE = 5;
-    public const int ERROR_WILLPOWER_OUT_OF_RANGE = 6;
-    public const int ERROR_INVALID_ATTRIBUTE_SUM = 7;
-
-    /**
      * @throws \RuntimeException If `$maxLifePoints` is less than 1, if `$lifePoints` is outside `0..maxLifePoints`,
      * if `$strength` or `$agility` is less than 1, if `$perception` or `$willpower` is outside 1-5, or if the four
      * attributes don't sum to `TOTAL_ATTRIBUTE_POINTS`.
@@ -99,53 +86,36 @@ final class Character implements Arrayable
         protected(set) readonly int $willpower,
     ) {
         if ($this->maxLifePoints < 1) {
-            throw new RuntimeException(
-                "The maxLifePoints attribute must be at least 1, got `$this->maxLifePoints`.",
-                self::ERROR_MAX_LIFE_POINTS_TOO_LOW,
-            );
+            throw new RuntimeException("The maxLifePoints attribute must be at least 1, got `$this->maxLifePoints`.");
         }
 
         if ($this->lifePoints < 0 || $this->lifePoints > $this->maxLifePoints) {
             throw new RuntimeException(
                 "The lifePoints attribute must be between 0 and maxLifePoints ($this->maxLifePoints), " .
                 "got `$this->lifePoints`.",
-                self::ERROR_LIFE_POINTS_OUT_OF_RANGE,
             );
         }
 
         if ($this->strength < 1) {
-            throw new RuntimeException(
-                "The strength attribute must be at least 1, got `$this->strength`.",
-                self::ERROR_STRENGTH_TOO_LOW,
-            );
+            throw new RuntimeException("The strength attribute must be at least 1, got `$this->strength`.");
         }
 
         if ($this->agility < 1) {
-            throw new RuntimeException(
-                "The agility attribute must be at least 1, got `$this->agility`.",
-                self::ERROR_AGILITY_TOO_LOW,
-            );
+            throw new RuntimeException("The agility attribute must be at least 1, got `$this->agility`.");
         }
 
         if ($this->perception < 1 || $this->perception > 5) {
-            throw new RuntimeException(
-                "The perception attribute must be between 1 and 5, got `$this->perception`.",
-                self::ERROR_PERCEPTION_OUT_OF_RANGE,
-            );
+            throw new RuntimeException("The perception attribute must be between 1 and 5, got `$this->perception`.");
         }
 
         if ($this->willpower < 1 || $this->willpower > 5) {
-            throw new RuntimeException(
-                "The willpower attribute must be between 1 and 5, got `$this->willpower`.",
-                self::ERROR_WILLPOWER_OUT_OF_RANGE,
-            );
+            throw new RuntimeException("The willpower attribute must be between 1 and 5, got `$this->willpower`.");
         }
 
         $sum = $this->strength + $this->agility + $this->perception + $this->willpower;
         if ($sum !== self::TOTAL_ATTRIBUTE_POINTS) {
             throw new RuntimeException(
                 'The sum of the character\'s attributes must be ' . self::TOTAL_ATTRIBUTE_POINTS . ", got `$sum`.",
-                self::ERROR_INVALID_ATTRIBUTE_SUM,
             );
         }
     }

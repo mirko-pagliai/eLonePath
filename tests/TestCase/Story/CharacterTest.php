@@ -9,7 +9,6 @@ use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
-use RuntimeException;
 
 /**
  * CharacterTest.
@@ -72,13 +71,9 @@ class CharacterTest extends TestCase
     #[Test]
     public function testConstructWithMaxLifePointsTooLow(): void
     {
-        try {
-            new Character(maxLifePoints: 0, lifePoints: 0, strength: 10, agility: 6, perception: 2, willpower: 2);
-            $this->fail('Expected a RuntimeException to be thrown.');
-        } catch (RuntimeException $exception) {
-            $this->assertSame('The maxLifePoints attribute must be at least 1, got `0`.', $exception->getMessage());
-            $this->assertSame(Character::ERROR_MAX_LIFE_POINTS_TOO_LOW, $exception->getCode());
-        }
+        $this->expectExceptionMessageIs('The maxLifePoints attribute must be at least 1, got `0`.');
+
+        new Character(maxLifePoints: 0, lifePoints: 0, strength: 10, agility: 6, perception: 2, willpower: 2);
     }
 
     /**
@@ -102,16 +97,9 @@ class CharacterTest extends TestCase
     #[Test]
     public function testConstructWithNegativeLifePoints(): void
     {
-        try {
-            new Character(maxLifePoints: 20, lifePoints: -1, strength: 10, agility: 6, perception: 2, willpower: 2);
-            $this->fail('Expected a RuntimeException to be thrown.');
-        } catch (RuntimeException $exception) {
-            $this->assertSame(
-                'The lifePoints attribute must be between 0 and maxLifePoints (20), got `-1`.',
-                $exception->getMessage(),
-            );
-            $this->assertSame(Character::ERROR_LIFE_POINTS_OUT_OF_RANGE, $exception->getCode());
-        }
+        $this->expectExceptionMessageIs('The lifePoints attribute must be between 0 and maxLifePoints (20), got `-1`.');
+
+        new Character(maxLifePoints: 20, lifePoints: -1, strength: 10, agility: 6, perception: 2, willpower: 2);
     }
 
     /**
@@ -120,16 +108,9 @@ class CharacterTest extends TestCase
     #[Test]
     public function testConstructWithLifePointsAboveMax(): void
     {
-        try {
-            new Character(maxLifePoints: 20, lifePoints: 25, strength: 10, agility: 6, perception: 2, willpower: 2);
-            $this->fail('Expected a RuntimeException to be thrown.');
-        } catch (RuntimeException $exception) {
-            $this->assertSame(
-                'The lifePoints attribute must be between 0 and maxLifePoints (20), got `25`.',
-                $exception->getMessage(),
-            );
-            $this->assertSame(Character::ERROR_LIFE_POINTS_OUT_OF_RANGE, $exception->getCode());
-        }
+        $this->expectExceptionMessageIs('The lifePoints attribute must be between 0 and maxLifePoints (20), got `25`.');
+
+        new Character(maxLifePoints: 20, lifePoints: 25, strength: 10, agility: 6, perception: 2, willpower: 2);
     }
 
     /**
@@ -138,13 +119,9 @@ class CharacterTest extends TestCase
     #[Test]
     public function testConstructWithStrengthTooLow(): void
     {
-        try {
-            new Character(maxLifePoints: 20, lifePoints: 20, strength: 0, agility: 14, perception: 3, willpower: 3);
-            $this->fail('Expected a RuntimeException to be thrown.');
-        } catch (RuntimeException $exception) {
-            $this->assertSame('The strength attribute must be at least 1, got `0`.', $exception->getMessage());
-            $this->assertSame(Character::ERROR_STRENGTH_TOO_LOW, $exception->getCode());
-        }
+        $this->expectExceptionMessageIs('The strength attribute must be at least 1, got `0`.');
+
+        new Character(maxLifePoints: 20, lifePoints: 20, strength: 0, agility: 14, perception: 3, willpower: 3);
     }
 
     /**
@@ -153,13 +130,9 @@ class CharacterTest extends TestCase
     #[Test]
     public function testConstructWithAgilityTooLow(): void
     {
-        try {
-            new Character(maxLifePoints: 20, lifePoints: 20, strength: 14, agility: 0, perception: 3, willpower: 3);
-            $this->fail('Expected a RuntimeException to be thrown.');
-        } catch (RuntimeException $exception) {
-            $this->assertSame('The agility attribute must be at least 1, got `0`.', $exception->getMessage());
-            $this->assertSame(Character::ERROR_AGILITY_TOO_LOW, $exception->getCode());
-        }
+        $this->expectExceptionMessageIs('The agility attribute must be at least 1, got `0`.');
+
+        new Character(maxLifePoints: 20, lifePoints: 20, strength: 14, agility: 0, perception: 3, willpower: 3);
     }
 
     /**
@@ -170,25 +143,18 @@ class CharacterTest extends TestCase
     #[TestWith([6])]
     public function testConstructWithPerceptionOutOfRange(int $perception): void
     {
+        $this->expectExceptionMessageIs("The perception attribute must be between 1 and 5, got `$perception`.");
+
         $strength = 20 - 8 - $perception - 3;
 
-        try {
-            new Character(
-                maxLifePoints: 20,
-                lifePoints: 20,
-                strength: $strength,
-                agility: 8,
-                perception: $perception,
-                willpower: 3,
-            );
-            $this->fail('Expected a RuntimeException to be thrown.');
-        } catch (RuntimeException $exception) {
-            $this->assertSame(
-                "The perception attribute must be between 1 and 5, got `$perception`.",
-                $exception->getMessage(),
-            );
-            $this->assertSame(Character::ERROR_PERCEPTION_OUT_OF_RANGE, $exception->getCode());
-        }
+        new Character(
+            maxLifePoints: 20,
+            lifePoints: 20,
+            strength: $strength,
+            agility: 8,
+            perception: $perception,
+            willpower: 3,
+        );
     }
 
     /**
@@ -199,25 +165,18 @@ class CharacterTest extends TestCase
     #[TestWith([6])]
     public function testConstructWithWillpowerOutOfRange(int $willpower): void
     {
+        $this->expectExceptionMessageIs("The willpower attribute must be between 1 and 5, got `$willpower`.");
+
         $strength = 20 - 8 - 3 - $willpower;
 
-        try {
-            new Character(
-                maxLifePoints: 20,
-                lifePoints: 20,
-                strength: $strength,
-                agility: 8,
-                perception: 3,
-                willpower: $willpower,
-            );
-            $this->fail('Expected a RuntimeException to be thrown.');
-        } catch (RuntimeException $exception) {
-            $this->assertSame(
-                "The willpower attribute must be between 1 and 5, got `$willpower`.",
-                $exception->getMessage(),
-            );
-            $this->assertSame(Character::ERROR_WILLPOWER_OUT_OF_RANGE, $exception->getCode());
-        }
+        new Character(
+            maxLifePoints: 20,
+            lifePoints: 20,
+            strength: $strength,
+            agility: 8,
+            perception: 3,
+            willpower: $willpower,
+        );
     }
 
     /**
@@ -226,16 +185,9 @@ class CharacterTest extends TestCase
     #[Test]
     public function testConstructWithInvalidSum(): void
     {
-        try {
-            new Character(maxLifePoints: 20, lifePoints: 20, strength: 3, agility: 3, perception: 3, willpower: 3);
-            $this->fail('Expected a RuntimeException to be thrown.');
-        } catch (RuntimeException $exception) {
-            $this->assertSame(
-                "The sum of the character's attributes must be 20, got `12`.",
-                $exception->getMessage(),
-            );
-            $this->assertSame(Character::ERROR_INVALID_ATTRIBUTE_SUM, $exception->getCode());
-        }
+        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got `12`.");
+
+        new Character(maxLifePoints: 20, lifePoints: 20, strength: 3, agility: 3, perception: 3, willpower: 3);
     }
 
     /**
@@ -457,22 +409,15 @@ class CharacterTest extends TestCase
     #[Test]
     public function testCreateFromArrayWithInvalidDataThrows(): void
     {
-        try {
-            Character::createFromArray([
-                'max_life_points' => 20,
-                'life_points' => 20,
-                'strength' => 3,
-                'agility' => 3,
-                'perception' => 3,
-                'willpower' => 3,
-            ]);
-            $this->fail('Expected a RuntimeException to be thrown.');
-        } catch (RuntimeException $exception) {
-            $this->assertSame(
-                "The sum of the character's attributes must be 20, got `12`.",
-                $exception->getMessage(),
-            );
-            $this->assertSame(Character::ERROR_INVALID_ATTRIBUTE_SUM, $exception->getCode());
-        }
+        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got `12`.");
+
+        Character::createFromArray([
+            'max_life_points' => 20,
+            'life_points' => 20,
+            'strength' => 3,
+            'agility' => 3,
+            'perception' => 3,
+            'willpower' => 3,
+        ]);
     }
 }

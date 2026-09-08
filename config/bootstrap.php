@@ -1,9 +1,22 @@
 <?php
 declare(strict_types=1);
 
+use Elone\Core\Translator;
 use josegonzalez\Dotenv\Loader;
 
-define('ROOT', dirname(__DIR__));
+if (!defined('ROOT')) {
+    define('ROOT', dirname(__DIR__));
+}
+
+if (!defined('APP')) {
+    define('APP', require ROOT . '/config/config.php');
+}
+
+const LOCALES = ROOT . '/resources/locales';
+
+if (!defined('STORIES')) {
+    define('STORIES', ROOT . '/resources/stories');
+}
 
 /**
  * It is only used if the `/.env` file is present and the `josegonzalez/dotenv` package is installed.
@@ -17,8 +30,6 @@ if (file_exists($envFile) && class_exists(Loader::class)) {
         ->toEnv();
 }
 
-define('APP', require ROOT . '/config/config.php');
-
 require ROOT . '/packages/Core/config/bootstrap.php';
 
-const STORIES = ROOT . '/resources/stories';
+Translator::init('it');

@@ -11,6 +11,10 @@ define('ROOT', dirname(__DIR__));
 
 const APP_NAMESPACE = 'TestApp';
 
-const TEMPLATES = ROOT . '/tests/test_app/templates/';
+const TEST_APP = ROOT . '/tests/test_app';
+
+const LOCALES = TEST_APP . '/resources/locales/';
+
+const TEMPLATES = TEST_APP . '/templates/';
 
 require ROOT . '/config/bootstrap.php';

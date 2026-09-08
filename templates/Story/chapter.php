@@ -19,20 +19,14 @@ use App\Story\Nodes\VictoryNode;
 /** @link templates/element/chapter_header.php */
 echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'subtitle' => "Pagina $node->id"]);
 
-$image = $this->Story->image($node->content, $game->gameId);
-
 if ($character) {
     /** @link templates/element/character_sheet.php */
     echo $this->element(name: 'character_sheet', data: compact('character'));
 }
 ?>
 
-<?php if ($image['html'] !== null) : ?>
-    <?= $image['html'] ?>
-<?php endif; ?>
-
 <section id="story-content" class="fs-4 mb-4">
-    <?= $this->Html->markdown(markdown: $image['content']) ?>
+    <?= $this->Html->markdown(markdown: $node->content) ?>
 </section>
 
 <?php if ($node instanceof PassageNode) : ?>

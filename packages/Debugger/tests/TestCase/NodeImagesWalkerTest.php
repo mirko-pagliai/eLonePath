@@ -157,7 +157,7 @@ class NodeImagesWalkerTest extends TestCase
 
         $errors = $walker();
         $this->assertCount(1, $errors);
-        $this->assertStringContainsString('alt text for node 1 is empty', $errors[0]);
+        $this->assertSame('Node image alt text for node 1 is empty', $errors[0]);
     }
 
     /**

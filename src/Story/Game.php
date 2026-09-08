@@ -30,6 +30,8 @@ use RuntimeException;
  */
 class Game implements Arrayable
 {
+    public protected(set) readonly string $preface;
+
     /**
      * @param array<int, \App\Story\Nodes\Node> $nodes
      */
@@ -41,10 +43,15 @@ class Game implements Arrayable
         protected(set) readonly string $description,
         protected(set) readonly string $language,
         protected(set) readonly string $version,
-        protected(set) readonly string $preface,
+        string $preface,
         protected(set) readonly bool $requiresCombat,
         protected(set) array $nodes,
     ) {
+        $this->preface = preg_replace(
+            pattern: '/!\[([^\]]+)\]\(([^)]+)\)/',
+            replacement: '![$1](/assets/stories/' . $this->gameId . '/img/$2)',
+            subject: $preface,
+        ) ?: $preface;
     }
 
     /**

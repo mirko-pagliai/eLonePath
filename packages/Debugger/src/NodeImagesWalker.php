@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace Elone\Debugger;
 
 use App\Story\Game;
-use App\Story\Nodes\Node;
 
 /**
  * Validates every node's leading image (see `App\Story\Nodes\Node::extractLeadingImage()`) against the fixed
@@ -24,6 +23,8 @@ readonly class NodeImagesWalker
     {
         $errors = [];
 
+        $dir = STORIES . "/{$this->game->gameId}/img";
+
         $nodesWithImages = $this->getAllNodesWithImages();
 
         foreach ($nodesWithImages as $nodeId => $image) {
@@ -31,7 +32,7 @@ readonly class NodeImagesWalker
                 $errors[] = "Node image alt text for node $nodeId is empty";
             }
 
-            $fullPath = STORIES . "/{$this->game->gameId}/img/{$image['path']}";
+            $fullPath = "$dir/{$image['path']}";
             if (!is_readable($fullPath)) {
                 $errors[] = "Node image path `$fullPath` for node $nodeId is not readable";
 
@@ -74,15 +75,19 @@ readonly class NodeImagesWalker
         $nodes = [];
 
         foreach ($this->game->nodes as $node) {
-            $extracted = Node::extractLeadingImage($node->content);
+            $result = preg_match(
+                pattern: '/!\[([^\]]*)\]\(([^)]+)\)/',
+                subject: $node->content,
+                matches: $matches,
+            );
 
-            if ($extracted['path'] === null) {
+            if ($result === 0) {
                 continue;
             }
 
             $nodes[$node->id] = [
-                'alt' => $extracted['alt'] ?? '',
-                'path' => $extracted['path'],
+                'alt' => $matches['1'] ?? '',
+                'path' => $matches['2'] ?? '' ? basename($matches['2']) : '',
             ];
         }
 

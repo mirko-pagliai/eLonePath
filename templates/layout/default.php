@@ -25,7 +25,7 @@ declare(strict_types=1);
         <title>eLone Path</title>
     </head>
     <body class="min-vh-100">
-        <main class="container py-5" style="max-width: 960px">
+        <main class="container p-0 py-lg-5" style="max-width: 960px">
             <article class="mx-auto p-4 p-md-5">
                 <?= $content ?>
             </article>

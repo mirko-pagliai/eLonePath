@@ -58,11 +58,12 @@ article {
 #story-content blockquote {
     color: var(--elone-muted);
     font-style: italic;
+    font-size: 120%
 }
 
 #story-content img {
     display: block;
-    margin: 0 auto 3rem;
+    margin: 0 auto 2rem;
     max-width: 100%;
 }
 

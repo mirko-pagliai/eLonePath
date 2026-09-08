@@ -30,7 +30,7 @@ if ($character) {
 </section>
 
 <?php if ($node instanceof PassageNode) : ?>
-    <nav id="story-choices" class="d-flex flex-column gap-2">
+    <nav id="story-choices" class="d-flex flex-column gap-3">
         <?php
         foreach ($node->choices as $choice) {
             echo $this->Story->link(

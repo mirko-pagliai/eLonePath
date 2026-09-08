@@ -8,7 +8,7 @@
     "packages": [
         {
             "name": "elone/core",
-            "version": "dev-main-i18n-symfony",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/Core",
@@ -677,7 +677,7 @@
         },
         {
             "name": "elone/debugger",
-            "version": "dev-main-i18n-symfony",
+            "version": "dev-main",
             "dist": {
                 "type": "path",
                 "url": "packages/Debugger",

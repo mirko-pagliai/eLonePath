@@ -19,13 +19,13 @@ declare(strict_types=1);
 
 <p class="fs-5 mb-2">
     <em>eLone Path</em> porta l'esperienza dei librigame cartacei nel digitale, senza tradirne lo spirito: storie fatte
-    di pagine numerate, scelte, prove di abilità e finali diversi.
+    di pagine numerate, scelte, prove di abilità, combattimenti e finali diversi.
 </p>
 
 <p class="fs-5 mb-4">
     Come su carta, sei libero di sfogliare come vuoi: puoi tornare indietro dopo una sconfitta, o saltare a una
-    pagina qualsiasi cambiando l'indirizzo. Nessuno stato nascosto tiene traccia di cosa hai fatto — quello che
-    vedi dipende solo dalla pagina in cui ti trovi.
+    pagina qualsiasi cambiando l'indirizzo. Nessuno stato nascosto sul server: il tuo personaggio, quando c'è,
+    viaggia nell'indirizzo stesso della pagina.
 </p>
 
 <div class="text-center">

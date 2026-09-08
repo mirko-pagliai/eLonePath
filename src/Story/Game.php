@@ -21,7 +21,6 @@ use RuntimeException;
  *     language: string,
  *     version: string,
  *     preface?: string,
- *     requires_combat?: bool,
  * }
  * @phpstan-type GameData array{
  *     game: GameHeaderData,
@@ -44,7 +43,6 @@ class Game implements Arrayable
         protected(set) readonly string $language,
         protected(set) readonly string $version,
         string $preface,
-        protected(set) readonly bool $requiresCombat,
         protected(set) array $nodes,
     ) {
         $this->preface = Node::resolveImagePaths(content: $preface, gameId: $gameId);
@@ -89,7 +87,6 @@ class Game implements Arrayable
                 'language' => $this->language,
                 'version' => $this->version,
                 'preface' => $this->preface,
-                'requires_combat' => $this->requiresCombat,
             ],
             'nodes' => array_map(
                 callback: fn(Node $node): array => $node->toArray(),
@@ -117,9 +114,6 @@ class Game implements Arrayable
             language: $data['game']['language'],
             version: $data['game']['version'],
             preface: $data['game']['preface'] ?? '',
-            // Defaults to false: a story that doesn't declare this key is treated as pure narration, needing no
-            // character before it starts — the same way every story already worked before this key existed.
-            requiresCombat: $data['game']['requires_combat'] ?? false,
             nodes: $nodes,
         );
     }

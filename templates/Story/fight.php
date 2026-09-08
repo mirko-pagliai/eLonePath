@@ -48,6 +48,6 @@ echo $this->element(name: 'character_sheet', data: ['character' => $character]);
     <?= $this->Story->link(
         text: 'Continua a combattere',
         url: ['controller' => 'Story', 'action' => 'fight', $game->gameId, $node->id],
-        options: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],
+        options: ['class' => 'elone-button d-inline-block px-3 py-2'],
     ) ?>
 </section>

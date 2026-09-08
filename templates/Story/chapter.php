@@ -37,7 +37,7 @@ if ($character) {
                 text: $choice->content,
                 url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $choice->target],
                 options: [
-                    'class' => 'elone-button fw-medium p-2 fs-5 text-decoration-none',
+                    'class' => 'elone-button fw-medium p-2 fs-5',
                     'escape' => false,
                 ],
             );
@@ -64,7 +64,7 @@ if ($character) {
             text: $this->Html->icon('dice-6', ['class' => 'me-1']) . " $text",
             url: ['controller' => 'Story', 'action' => 'roll', $game->gameId, $node->id],
             options: [
-                'class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none',
+                'class' => 'elone-button d-inline-block px-3 py-2',
                 'escape' => false,
             ],
         );
@@ -83,7 +83,7 @@ if ($character) {
             text: $this->Html->icon('shield', ['class' => 'me-1']) . ' Affronta il nemico',
             url: ['controller' => 'Story', 'action' => 'fight', $game->gameId, $node->id],
             options: [
-                'class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none',
+                'class' => 'elone-button d-inline-block px-3 py-2',
                 'escape' => false,
             ],
         ) ?>
@@ -99,7 +99,7 @@ if ($character) {
         <?= $this->Html->link(
             text: 'Torna alla homepage',
             url: '/',
-            options: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],
+            options: ['class' => 'elone-button d-inline-block px-3 py-2'],
         ) ?>
     </div>
 <?php elseif ($node instanceof DefeatNode) : ?>
@@ -111,7 +111,7 @@ if ($character) {
         <?= $this->Html->link(
             text: 'Ricomincia da pagina 1',
             url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
-            options: ['class' => 'elone-button d-inline-block px-3 py-2 text-decoration-none'],
+            options: ['class' => 'elone-button d-inline-block px-3 py-2'],
         ) ?>
     </div>
 <?php endif; ?>

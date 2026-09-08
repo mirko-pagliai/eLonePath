@@ -75,12 +75,13 @@ article {
 }
 
 .elone-button {
+    background-color: transparent;
     border: 2px solid var(--elone-accent);
     border-radius: 0;
     color: var(--elone-ink);
-    font-size: 1.5rem;
-    background-color: transparent;
     font-family: "Cinzel", serif;
+    font-size: 1.5rem;
+    text-decoration: none;
 }
 
 .elone-button:hover {

@@ -9,12 +9,10 @@ use Elone\Core\Contract\Arrayable;
  * A single node — a "page" — in a game's story graph: some content, and either a way to continue (a passage's
  * choices, a dice check's two outcomes) or an ending (victory, defeat). Every concrete node type extends this.
  *
- * `content` may reference any number of images, anywhere in the text, written as ordinary Markdown
- * (`![alt text](filename.jpg)`) — the constructor rewrites every one of them so `content` is ready to render
- * as-is, through ordinary Markdown rendering, with no separate image-extraction step. `resolveImagePaths()` and
- * `findImages()` are the one place that pattern is parsed or rewritten — also used by `Game`, for its own
- * preface, and by the debugger's `NodeImagesWalker`, for validation — so none of them risks drifting from what
- * the others consider an image.
+ * `content` may reference at most one image, at the very beginning, written as ordinary Markdown
+ * (`![alt text](filename.jpg)`) — `Elone\Debugger\NodeImagesWalker` is what actually enforces that rule; the
+ * constructor here only rewrites whatever image it finds (anywhere, however many) to resolve under this game's
+ * own asset directory, so `content` is ready to render as-is, with no separate image-extraction step.
  *
  * Built from raw story data via `NodeFactory::createFromArray()`, not through `Node` itself — `Node` only knows
  * the shape every node shares, not which concrete types exist or how to choose between them.

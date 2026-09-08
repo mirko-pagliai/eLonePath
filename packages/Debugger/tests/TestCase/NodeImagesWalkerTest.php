@@ -161,14 +161,13 @@ class NodeImagesWalkerTest extends TestCase
     }
 
     /**
-     * A node can reference more than one image — `Node`'s own constructor rewrites every one of them, not just a
-     * leading one, so the walker validates every one of them too. Each error names its own path, which is what
-     * actually tells the two apart in this test.
+     * A node can reference more than one image, mechanically — `Node::findImages()` doesn't restrict this —
+     * but only one is allowed. This is what actually catches it, rather than silently validating both.
      *
      * @link \Elone\Debugger\NodeImagesWalker::__invoke()
      */
     #[Test]
-    public function testInvokeWithMultipleImagesInOneNode(): void
+    public function testInvokeWithMoreThanOneImageInOneNode(): void
     {
         $game = Game::createFromString('{' . self::GAME_HEADER . ', "nodes": {
             "1": {"content": "![First](correct_960x600.jpg)\nSome text.\n![Second](does-not-exist.jpg)", "type": "victory"}
@@ -177,9 +176,23 @@ class NodeImagesWalkerTest extends TestCase
         $walker = new NodeImagesWalker($game);
 
         $errors = $walker();
-        $this->assertCount(1, $errors);
-        $this->assertStringContainsString('does-not-exist.jpg', $errors[0]);
-        $this->assertStringContainsString('is not readable', $errors[0]);
+        $this->assertNotEmpty(array_filter($errors, fn(string $e): bool => str_contains($e, '2 images')));
+    }
+
+    /**
+     * @link \Elone\Debugger\NodeImagesWalker::__invoke()
+     */
+    #[Test]
+    public function testInvokeWithImageNotAtTheBeginning(): void
+    {
+        $game = Game::createFromString('{' . self::GAME_HEADER . ', "nodes": {
+            "1": {"content": "Some text first.\n![An illustration](correct_960x600.jpg)", "type": "victory"}
+        }}');
+
+        $walker = new NodeImagesWalker($game);
+
+        $errors = $walker();
+        $this->assertNotEmpty(array_filter($errors, fn(string $e): bool => str_contains($e, 'not at the very beginning')));
     }
 
     /**

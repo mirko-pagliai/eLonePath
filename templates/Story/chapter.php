@@ -76,7 +76,7 @@ if ($character) {
     <div id="story-combat-intro" class="mt-4 text-center">
         <p class="fs-3">
             Un nemico ti sbarra la strada: <strong><?= h($node->enemyName) ?></strong>
-            (<?= $node->enemyMaxLifePoints ?> Punti Vita).
+            (<?= $node->enemyMaxLifePoints ?> punti vita).
         </p>
 
         <?= $this->Story->link(

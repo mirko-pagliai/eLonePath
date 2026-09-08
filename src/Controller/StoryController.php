@@ -148,6 +148,7 @@ class StoryController extends AppController
     public function start(string $storyId): ?Response
     {
         $game = $this->getGame($storyId);
+
         $this->propagateState();
         $stateValue = $this->queryParam('state');
 
@@ -174,6 +175,7 @@ class StoryController extends AppController
     {
         $game = $this->getGame($storyId);
         $node = $game->getNode($nodeNumber);
+
         $this->propagateState();
 
         $this->set(compact('game', 'node'));
@@ -192,6 +194,7 @@ class StoryController extends AppController
     {
         $game = $this->getGame($storyId);
         $node = $game->getNode($nodeNumber);
+
         $this->propagateState();
 
         if (!$node instanceof DiceNode) {
@@ -231,6 +234,7 @@ class StoryController extends AppController
     {
         $game = $this->getGame($storyId);
         $node = $game->getNode($nodeNumber);
+
         $character = $this->propagateState();
 
         if (!$node instanceof CombatNode) {

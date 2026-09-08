@@ -8,8 +8,10 @@ use App\Story\Nodes\CombatNode;
 use App\Story\Nodes\DefeatNode;
 use App\Story\Nodes\DiceNode;
 use App\Story\Nodes\Node;
+use App\Story\Nodes\PassageNode;
 use App\Story\Nodes\VictoryNode;
 use Elone\Debugger\BranchesWalker;
+use RuntimeException;
 use Symfony\Component\Console\Attribute\Argument;
 use Symfony\Component\Console\Attribute\AsCommand;
 use Symfony\Component\Console\Style\SymfonyStyle;
@@ -59,7 +61,8 @@ class CheckBranchesCommand extends Command
                     $io->write("$node->id ");
 
                     // Style for some node types
-                    if ($node instanceof VictoryNode) {
+                    if ($node instanceof PassageNode) {
+                    } elseif ($node instanceof VictoryNode) {
                         $io->write('> <fg=green>victory</>');
                     } elseif ($node instanceof DefeatNode) {
                         $io->write('> <fg=red>defeat</>');
@@ -67,6 +70,8 @@ class CheckBranchesCommand extends Command
                         $io->write('> <fg=blue>dice with ' . $node->requiredRolls . ' rolls</> ');
                     } elseif ($node instanceof CombatNode) {
                         $io->write('> <fg=magenta>combat vs ' . $node->enemyName . '</> ');
+                    } else {
+                        throw new RuntimeException('Unknown node type `' . get_class($node) . '`');
                     }
 
                     // Style for image nodes

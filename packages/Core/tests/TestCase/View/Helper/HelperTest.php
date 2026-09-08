@@ -18,19 +18,6 @@ use PHPUnit\Framework\TestCase;
 class HelperTest extends TestCase
 {
     /**
-     * A minimal concrete `Helper` exposing `parseHtmlAttributes()` (`protected`) for testing.
-     */
-    private function makeHelper(): Helper
-    {
-        return new class (new View()) extends Helper {
-            public function parseHtmlAttributes(array $attributes): string
-            {
-                return parent::parseHtmlAttributes($attributes);
-            }
-        };
-    }
-
-    /**
      * @link \Elone\Core\View\Helper\Helper::__get()
      */
     #[Test]
@@ -44,10 +31,16 @@ class HelperTest extends TestCase
         $helper = new class ($view) extends Helper {
         };
 
-        $this->assertSame($otherHelper, $helper->Other);
+        // @phpstan-ignore property.notFound
+        $result = $helper->Other;
+
+        $this->assertSame($otherHelper, $result);
     }
 
     /**
+     * @param array<string, bool|float|int|string> $attributes
+     * @param string $expected
+     *
      * @link \Elone\Core\View\Helper\Helper::parseHtmlAttributes()
      */
     #[Test]
@@ -58,7 +51,14 @@ class HelperTest extends TestCase
     #[TestWith([['required' => true], ' required="1"'])]
     public function testParseHtmlAttributes(array $attributes, string $expected): void
     {
-        $result = $this->makeHelper()->parseHtmlAttributes($attributes);
+        $helper = new class (new View()) extends Helper {
+            public function parseHtmlAttributes(array $attributes): string
+            {
+                return parent::parseHtmlAttributes($attributes);
+            }
+        };
+
+        $result = $helper->parseHtmlAttributes($attributes);
 
         $this->assertSame($expected, $result);
     }
@@ -72,12 +72,22 @@ class HelperTest extends TestCase
     #[Test]
     public function testParseHtmlAttributesEscapesValues(): void
     {
-        $result = $this->makeHelper()->parseHtmlAttributes(['title' => 'A "quote" & more']);
+        $helper = new class (new View()) extends Helper {
+            public function parseHtmlAttributes(array $attributes): string
+            {
+                return parent::parseHtmlAttributes($attributes);
+            }
+        };
+
+        $result = $helper->parseHtmlAttributes(['title' => 'A "quote" & more']);
 
         $this->assertSame(' title="A &quot;quote&quot; &amp; more"', $result);
     }
 
     /**
+     * @param array<string|int, string> $route
+     * @param string $expected
+     *
      * @link \Elone\Core\View\Helper\Helper::url()
      */
     #[Test]
@@ -86,7 +96,10 @@ class HelperTest extends TestCase
     #[TestWith([['controller' => 'UsersSettings'], '/users-settings/index'])]
     public function testUrlWithRoute(array $route, string $expected): void
     {
-        $result = $this->makeHelper()->url($route);
+        $helper = new class (new View()) extends Helper {
+        };
+
+        $result = $helper->url($route);
 
         $this->assertSame($expected, $result);
     }
@@ -100,7 +113,10 @@ class HelperTest extends TestCase
     #[TestWith(['https://example.com/path'])]
     public function testUrlWithString(string $route): void
     {
-        $result = $this->makeHelper()->url($route);
+        $helper = new class (new View()) extends Helper {
+        };
+
+        $result = $helper->url($route);
 
         $this->assertSame($route, $result);
     }
@@ -111,7 +127,10 @@ class HelperTest extends TestCase
     #[Test]
     public function testUrlWithQuery(): void
     {
-        $result = $this->makeHelper()->url(['controller' => 'Pages', 'action' => 'home'], ['state' => 'abc123']);
+        $helper = new class (new View()) extends Helper {
+        };
+
+        $result = $helper->url(['controller' => 'Pages', 'action' => 'home'], ['state' => 'abc123']);
 
         $this->assertSame('/pages/home?state=abc123', $result);
     }
@@ -122,9 +141,12 @@ class HelperTest extends TestCase
     #[Test]
     public function testUrlWithMissingController(): void
     {
+        $helper = new class (new View()) extends Helper {
+        };
+
         $this->expectException(RouteNotFoundException::class);
         $this->expectExceptionMessageIs('Invalid route.');
-        $this->makeHelper()->url([]);
+        $helper->url([]);
     }
 
     /**
@@ -133,8 +155,11 @@ class HelperTest extends TestCase
     #[Test]
     public function testUrlWithInvalidParameter(): void
     {
+        $helper = new class (new View()) extends Helper {
+        };
+
         $this->expectException(RouteNotFoundException::class);
         $this->expectExceptionMessageIs('Invalid route parameter: `extra`.');
-        $this->makeHelper()->url(['controller' => 'Pages', 'action' => 'home', 'extra' => 'value']);
+        $helper->url(['controller' => 'Pages', 'action' => 'home', 'extra' => 'value']);
     }
 }

@@ -1,25 +1,16 @@
 {
     "game": {
         "id": "test-game",
-        "title": "Test Game",
+        "title": "Valid Test Game",
         "author": "Test Author",
-        "translators": "",
-        "description": "A game for testing.",
-        "language": "it",
+        "description": "A minimal, structurally valid story.",
+        "language": "en",
         "version": "1.0",
-        "preface": "A short preface for testing."
+        "difficulty": "easy",
+        "requires_character": false
     },
     "nodes": {
-        "1": {
-            "content": "Start here.",
-            "choices": [
-                {"content": "Go to page {{page}}", "target": 2}
-            ],
-            "type": "passage"
-        },
-        "2": {
-            "content": "The end.",
-            "type": "victory"
-        }
+        "1": {"content": "Start.", "type": "passage", "choices": [{"content": "Go", "target": 2}]},
+        "2": {"content": "The end.", "type": "victory"}
     }
 }

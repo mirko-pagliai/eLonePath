@@ -61,7 +61,7 @@
             "type": "combat",
             "content": "Forzi la porta quel tanto che basta per intrufolarti.\n\nAll'interno, un **drone di sicurezza** ti individua immediatamente. Il suo modulo ottico principale è in frantumi — ruota a vuoto sopra un secondo occhio ausiliario, più piccolo, che ora ti fissa fisso.\n\nI suoi bracci articolati, un tempo pensati per la manutenzione, terminano in utensili da taglio riconvertiti in modo grezzo. La sua unità vocale, danneggiata, ripete lo stesso comando distorto in loop: *«Intruso rilevato. Intruso rilevato.»*\n\nNon ha intenzione di lasciarti passare.",
             "combat": {
-                "enemy_name": "Drone di Sicurezza Malfunzionante",
+                "enemy_name": "Drone di sicurezza malfunzionante",
                 "enemy_max_life_points": 12,
                 "enemy_strength": 6,
                 "enemy_agility": 4,

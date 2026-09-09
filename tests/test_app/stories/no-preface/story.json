@@ -1,13 +1,15 @@
 {
     "game": {
         "id": "no-preface",
-        "title": "No Preface Quest",
+        "title": "No Preface",
         "author": "Test Author",
-        "description": "A story with no preface, for testing start()'s redirect.",
+        "description": "A story with no preface, redirecting straight to chapter 1.",
         "language": "en",
-        "version": "1.0"
+        "version": "1.0",
+        "difficulty": "easy",
+        "requires_character": false
     },
     "nodes": {
-        "1": {"content": "The only page.", "type": "victory"}
+        "1": {"content": "Start here directly.", "type": "victory"}
     }
 }

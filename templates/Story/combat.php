@@ -9,7 +9,7 @@ declare(strict_types=1);
  * @var \App\Story\Combat\CombatRoundResult $result
  * @var \App\View\AppView $this
  *
- * @link \App\Controller\StoryController::fight()
+ * @link \App\Controller\StoryController::combat()
  */
 
 use App\Story\Combat\CombatHit;
@@ -74,7 +74,7 @@ echo $this->element(name: 'character_sheet', data: ['character' => $character]);
 
     <?= $this->Story->link(
         text: $this->Html->icon('bi-crosshair', ['class' => 'me-1']) . 'Continua a combattere',
-        url: ['controller' => 'Story', 'action' => 'fight', $game->gameId, $node->id],
+        url: ['controller' => 'Story', 'action' => 'combat', $game->gameId, $node->id],
         options: ['class' => 'elone-button d-inline-block px-3 py-2'],
     ) ?>
 </section>

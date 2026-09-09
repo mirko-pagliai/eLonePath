@@ -145,13 +145,13 @@ class StoryController extends AppController
      *
      * Call this right after `propagateState()`, in any action a player could plausibly reach directly by URL.
      */
-    private function requireCharacterIfNeeded(Game $game, string $storyId, ?Character $character): ?Response
+    private function requireCharacterIfNeeded(Game $game, ?Character $character): ?Response
     {
         if (!$game->requiresCharacter || $character !== null) {
             return null;
         }
 
-        return $this->redirect(url: ['controller' => 'Story', 'action' => 'character', $storyId]);
+        return $this->redirect(url: ['controller' => 'Story', 'action' => 'character', $game->gameId]);
     }
 
     /**
@@ -168,8 +168,8 @@ class StoryController extends AppController
 
         $character = $this->propagateState();
 
-        $response = $this->requireCharacterIfNeeded($game, $storyId, $character);
-        if (!$response) {
+        $response = $this->requireCharacterIfNeeded($game, $character);
+        if ($response) {
             return $response;
         }
 
@@ -202,8 +202,8 @@ class StoryController extends AppController
 
         $character = $this->propagateState();
 
-        $response = $this->requireCharacterIfNeeded($game, $storyId, $character);
-        if (!$response) {
+        $response = $this->requireCharacterIfNeeded($game, $character);
+        if ($response) {
             return $response;
         }
 
@@ -229,8 +229,8 @@ class StoryController extends AppController
 
         $character = $this->propagateState();
 
-        $response = $this->requireCharacterIfNeeded($game, $storyId, $character);
-        if (!$response) {
+        $response = $this->requireCharacterIfNeeded($game, $character);
+        if ($response) {
             return $response;
         }
 
@@ -267,9 +267,9 @@ class StoryController extends AppController
      * a fight can't be resolved without one.
      * @throws \Random\RandomException
      *
-     * @link templates/Story/fight.php
+     * @link templates/Story/combat.php
      */
-    public function fight(string $storyId, int $nodeNumber): ?Response
+    public function combat(string $storyId, int $nodeNumber): ?Response
     {
         $game = $this->getGame($storyId);
         $node = $game->getNode($nodeNumber);

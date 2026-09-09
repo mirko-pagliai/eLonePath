@@ -3,9 +3,11 @@
         "id": "combat-quest",
         "title": "Combat Quest",
         "author": "Test Author",
-        "description": "A minimal story with a combat node, for testing StoryController::fight().",
+        "description": "A minimal story with a combat node, to test the combat system.",
         "language": "en",
-        "version": "1.0"
+        "version": "1.0",
+        "difficulty": "medium",
+        "requires_character": true
     },
     "nodes": {
         "1": {

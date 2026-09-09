@@ -380,22 +380,22 @@ class StoryControllerTest extends TestCase
     }
 
     /**
-     * `fight()` only makes sense for a `CombatNode` — calling it against, say, the passage at node 1, throws
+     * `combat()` only makes sense for a `CombatNode` — calling it against, say, the passage at node 1, throws
      * instead of silently doing nothing.
      *
-     * @link \App\Controller\StoryController::fight()
+     * @link \App\Controller\StoryController::combat()
      */
     #[Test]
-    public function testFightWithNonCombatNodeThrows(): void
+    public function testCombatWithNonCombatNodeThrows(): void
     {
         $state = new GameState(player: $this->samplePlayer());
         $controller = $this->makeController(
-            new Request('GET', "/story/fight/mini-quest/1?state={$state->toQueryValue()}"),
+            new Request('GET', "/story/combat/mini-quest/1?state={$state->toQueryValue()}"),
         );
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageIs('Node `1` in `mini-quest` is not a combat.');
-        $controller->fight('mini-quest', 1);
+        $controller->combat('mini-quest', 1);
     }
 
     /**
@@ -403,37 +403,37 @@ class StoryControllerTest extends TestCase
      * no `?state=` at all (skipping character creation) is a navigation mistake, not something to recover from
      * silently.
      *
-     * @link \App\Controller\StoryController::fight()
+     * @link \App\Controller\StoryController::combat()
      */
     #[Test]
-    public function testFightWithoutCharacterThrows(): void
+    public function testCombatWithoutCharacterThrows(): void
     {
-        $controller = $this->makeController(new Request('GET', '/story/fight/combat-quest/1'));
+        $controller = $this->makeController(new Request('GET', '/story/combat/combat-quest/1'));
 
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageIs('No character found for `combat-quest` — create one before fighting.');
-        $controller->fight('combat-quest', 1);
+        $controller->combat('combat-quest', 1);
     }
 
     /**
      * One round, whatever its real-dice outcome, either redirects (the round ended the fight) or leaves the
      * view holding a consistent, fully-typed set of round data — this doesn't pin down *who* wins, since that
-     * depends on genuine randomness `fight()` has no way to fake for a test (a public action reached by URL
+     * depends on genuine randomness `combat()` has no way to fake for a test (a public action reached by URL
      * can't take an extra injectable-dice parameter: `Dispatcher` requires the URL's own parameter count to
      * match exactly). What it proves is that the wiring between `Combat::resolveRound()` and the controller's
      * own state handling doesn't fall over either way.
      *
-     * @link \App\Controller\StoryController::fight()
+     * @link \App\Controller\StoryController::combat()
      */
     #[Test]
-    public function testFightRendersOrRedirectsConsistently(): void
+    public function testCombatRendersOrRedirectsConsistently(): void
     {
         $state = new GameState(player: $this->samplePlayer());
         $controller = $this->makeController(
-            new Request('GET', "/story/fight/combat-quest/1?state={$state->toQueryValue()}"),
+            new Request('GET', "/story/combat/combat-quest/1?state={$state->toQueryValue()}"),
         );
 
-        $response = $controller->fight('combat-quest', 1);
+        $response = $controller->combat('combat-quest', 1);
 
         if ($response !== null) {
             $location = $response->headers()['Location'];
@@ -457,19 +457,19 @@ class StoryControllerTest extends TestCase
      * exactly as a browser would via the "continue fighting" link — and checks only that it always terminates,
      * and always at one of the node's own two declared endings. Which one is genuinely up to the dice.
      *
-     * @link \App\Controller\StoryController::fight()
+     * @link \App\Controller\StoryController::combat()
      */
     #[Test]
-    public function testFightEventuallyEndsInVictoryOrDefeat(): void
+    public function testCombatEventuallyEndsInVictoryOrDefeat(): void
     {
         $stateValue = (new GameState(player: $this->samplePlayer()))->toQueryValue();
 
         for ($round = 0; $round < 50; $round++) {
             $controller = $this->makeController(
-                new Request('GET', "/story/fight/combat-quest/1?state=$stateValue"),
+                new Request('GET', "/story/combat/combat-quest/1?state=$stateValue"),
             );
 
-            $response = $controller->fight('combat-quest', 1);
+            $response = $controller->combat('combat-quest', 1);
 
             if ($response !== null) {
                 $location = $response->headers()['Location'];
@@ -492,19 +492,19 @@ class StoryControllerTest extends TestCase
 
     /**
      * The enemy's life points travel through `GameState`, not the node — passing an already-reduced value in
-     * proves `fight()` actually reads it, rather than always starting fresh at the node's own full health.
+     * proves `combat()` actually reads it, rather than always starting fresh at the node's own full health.
      *
-     * @link \App\Controller\StoryController::fight()
+     * @link \App\Controller\StoryController::combat()
      */
     #[Test]
-    public function testFightReadsEnemyLifePointsFromState(): void
+    public function testCombatReadsEnemyLifePointsFromState(): void
     {
         $state = new GameState(player: $this->samplePlayer(), enemyLifePoints: 3);
         $controller = $this->makeController(
-            new Request('GET', "/story/fight/combat-quest/1?state={$state->toQueryValue()}"),
+            new Request('GET', "/story/combat/combat-quest/1?state={$state->toQueryValue()}"),
         );
 
-        $response = $controller->fight('combat-quest', 1);
+        $response = $controller->combat('combat-quest', 1);
 
         if ($response !== null) {
             // Defeated this very round — consistent with having started at only 3 life points, not a fresh 10.
@@ -519,20 +519,20 @@ class StoryControllerTest extends TestCase
     }
 
     /**
-     * The counterpart to `testFightReadsEnemyLifePointsFromState()`: a player already at 1 life point, reading
+     * The counterpart to `testCombatReadsEnemyLifePointsFromState()`: a player already at 1 life point, reading
      * from a hand-built `Character` (the same technique `Character`'s own docblock describes for reconstructing
      * mid-story state), is defeated by essentially any hit at all. This alone doesn't force a specific outcome —
      * the same lucky roll that would defeat the player could instead land a big enough hit on the enemy to end
      * the fight the *other* way, since a single hit's damage isn't bounded by the enemy's own life points — but
      * whichever of the three outcomes occurs (defeat, victory, or the fight continuing with the player still at
      * 1) is what actually exercises the "player defeated" redirect branch across enough runs, which
-     * `testFightEventuallyEndsInVictoryOrDefeat()` alone might never reach by chance if the fixture's own stats
+     * `testCombatEventuallyEndsInVictoryOrDefeat()` alone might never reach by chance if the fixture's own stats
      * happen to favor the player, as they currently do.
      *
-     * @link \App\Controller\StoryController::fight()
+     * @link \App\Controller\StoryController::combat()
      */
     #[Test]
-    public function testFightWithLowPlayerLifePointsCanEndInDefeat(): void
+    public function testCombatWithLowPlayerLifePointsCanEndInDefeat(): void
     {
         $nearlyDefeatedPlayer = new Character(
             maxLifePoints: 20,
@@ -544,10 +544,10 @@ class StoryControllerTest extends TestCase
         );
         $state = new GameState(player: $nearlyDefeatedPlayer);
         $controller = $this->makeController(
-            new Request('GET', "/story/fight/combat-quest/1?state={$state->toQueryValue()}"),
+            new Request('GET', "/story/combat/combat-quest/1?state={$state->toQueryValue()}"),
         );
 
-        $response = $controller->fight('combat-quest', 1);
+        $response = $controller->combat('combat-quest', 1);
 
         if ($response !== null) {
             $location = $response->headers()['Location'];
@@ -566,7 +566,7 @@ class StoryControllerTest extends TestCase
     }
 
     /**
-     * None of the tests above call `render()` — `fight.php` was missing for several turns without any of them
+     * None of the tests above call `render()` — `combat.php` was missing for several turns without any of them
      * noticing. These do: for each action that falls through to `Dispatcher`'s own render step, confirm the
      * template it would use actually exists and evaluates without throwing. Not checking the rendered content
      * against what the action `set()` — that's a second, much larger claim this doesn't make.
@@ -627,22 +627,22 @@ class StoryControllerTest extends TestCase
     }
 
     /**
-     * `fight()` uses real dice — it might redirect (the round ended the fight) instead of rendering. Retries
+     * `combat()` uses real dice — it might redirect (the round ended the fight) instead of rendering. Retries
      * with a fresh state until one round doesn't, rather than asserting on a specific, unforceable outcome.
      *
-     * @link \App\Controller\StoryController::fight()
+     * @link \App\Controller\StoryController::combat()
      */
     #[Test]
-    public function testFightTemplateExists(): void
+    public function testCombatTemplateExists(): void
     {
         for ($attempt = 0; $attempt < 10; $attempt++) {
             $state = new GameState(player: $this->samplePlayer());
             $controller = $this->makeController(
-                new Request('GET', "/story/fight/combat-quest/1?state={$state->toQueryValue()}"),
+                new Request('GET', "/story/combat/combat-quest/1?state={$state->toQueryValue()}"),
             );
 
-            if ($controller->fight('combat-quest', 1) === null) {
-                $result = $controller->render('Story/fight', layout: null);
+            if ($controller->combat('combat-quest', 1) === null) {
+                $result = $controller->render('Story/combat', layout: null);
                 $this->assertNotSame('', trim($result));
 
                 return;

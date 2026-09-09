@@ -33,6 +33,8 @@ class GameTest extends TestCase
                 'language' => 'it',
                 'version' => '1.0',
                 'preface' => 'A short preface for testing.',
+                'difficulty' => 'easy',
+                'requires_character' => false,
             ],
             'nodes' => [
                 1 => [
@@ -157,7 +159,7 @@ class GameTest extends TestCase
                 'version' => '1.0',
                 'preface' => 'A short preface for testing.',
                 'genre' => null,
-                'difficulty' => null,
+                'difficulty' => 'easy',
                 'requires_character' => false,
             ],
             'nodes' => [
@@ -243,36 +245,30 @@ class GameTest extends TestCase
     }
 
     /**
-     * `sampleData()` never sets `genre`/`difficulty`/`requires_character` — this is what every story written
-     * before these keys existed gets: no genre or difficulty label, no character required.
+     * `sampleData()` never sets `genre` — the one field that's still optional. Every story written before it
+     * existed gets no genre label, the same as now.
      *
      * @link \App\Story\Game::createFromArray()
      */
     #[Test]
-    public function testCreateFromArrayDefaultsGenreDifficultyAndRequiresCharacter(): void
+    public function testCreateFromArrayDefaultsGenreToNullWhenAbsent(): void
     {
         $game = Game::createFromArray($this->sampleData());
 
         $this->assertNull($game->genre);
-        $this->assertNull($game->difficulty);
-        $this->assertFalse($game->requiresCharacter);
     }
 
     /**
      * @link \App\Story\Game::createFromArray()
      */
     #[Test]
-    public function testCreateFromArrayWithGenreDifficultyAndRequiresCharacter(): void
+    public function testCreateFromArrayWithGenreSet(): void
     {
         $data = $this->sampleData();
         $data['game']['genre'] = 'science_fiction';
-        $data['game']['difficulty'] = 'medium';
-        $data['game']['requires_character'] = true;
 
         $game = Game::createFromArray($data);
 
         $this->assertSame(StoryGenre::SCIENCE_FICTION, $game->genre);
-        $this->assertSame(StoryDifficulty::MEDIUM, $game->difficulty);
-        $this->assertTrue($game->requiresCharacter);
     }
 }

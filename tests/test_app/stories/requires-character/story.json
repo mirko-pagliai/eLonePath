@@ -6,6 +6,7 @@
         "description": "A minimal story with requires_character: true, for testing StoryController's enforcement.",
         "language": "en",
         "version": "1.0",
+        "difficulty": "easy",
         "requires_character": true
     },
     "nodes": {

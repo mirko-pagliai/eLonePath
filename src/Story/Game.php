@@ -22,8 +22,8 @@ use RuntimeException;
  *     version: string,
  *     preface?: string,
  *     genre?: string|null,
- *     difficulty?: string|null,
- *     requires_character?: bool,
+ *     difficulty: string,
+ *     requires_character: bool,
  * }
  * @phpstan-type GameData array{
  *     game: GameHeaderData,
@@ -47,7 +47,7 @@ class Game implements Arrayable
         protected(set) readonly string $version,
         string $preface,
         protected(set) readonly ?StoryGenre $genre,
-        protected(set) readonly ?StoryDifficulty $difficulty,
+        protected(set) readonly StoryDifficulty $difficulty,
         protected(set) readonly bool $requiresCharacter,
         protected(set) array $nodes,
     ) {
@@ -94,7 +94,7 @@ class Game implements Arrayable
                 'version' => $this->version,
                 'preface' => $this->preface,
                 'genre' => $this->genre?->value,
-                'difficulty' => $this->difficulty?->value,
+                'difficulty' => $this->difficulty->value,
                 'requires_character' => $this->requiresCharacter,
             ],
             'nodes' => array_map(
@@ -124,10 +124,8 @@ class Game implements Arrayable
             version: $data['game']['version'],
             preface: $data['game']['preface'] ?? '',
             genre: isset($data['game']['genre']) ? StoryGenre::from($data['game']['genre']) : null,
-            difficulty: isset($data['game']['difficulty']) ? StoryDifficulty::from($data['game']['difficulty']) : null,
-            // Defaults to false: a story that doesn't declare this key needs no character before it starts —
-            // the same way every story already worked before this key existed.
-            requiresCharacter: $data['game']['requires_character'] ?? false,
+            difficulty: StoryDifficulty::from($data['game']['difficulty']),
+            requiresCharacter: $data['game']['requires_character'],
             nodes: $nodes,
         );
     }

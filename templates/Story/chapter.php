@@ -81,7 +81,7 @@ if ($character) {
 
         <?= $this->Story->link(
             text: $this->Html->icon('bi-crosshair', ['class' => 'me-1']) . ' Affronta il nemico',
-            url: ['controller' => 'Story', 'action' => 'fight', $game->gameId, $node->id],
+            url: ['controller' => 'Story', 'action' => 'combat', $game->gameId, $node->id],
             options: [
                 'class' => 'elone-button',
                 'escape' => false,
@@ -109,7 +109,7 @@ if ($character) {
         <p class="fs-3 mb-4">Hai perso.</p>
 
         <?= $this->Html->link(
-            text: 'Ricomincia da pagina 1',
+            text: "Ricomincia dall'inizio",
             url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
             options: [
                 'class' => 'elone-button',

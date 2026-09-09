@@ -75,7 +75,7 @@ class StoryControllerTest extends TestCase
     }
 
     /**
-     * A valid submission builds a `Character`, wraps it in a `GameState`, and redirects into `start()` with
+     * A valid-game submission builds a `Character`, wraps it in a `GameState`, and redirects into `start()` with
      * `?state=` carrying exactly the submitted values — this is the one behavior the whole character-creation
      * flow exists for.
      *

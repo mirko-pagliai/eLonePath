@@ -80,7 +80,7 @@ class CharacterTest extends TestCase
     }
 
     /**
-     * `lifePoints` reaching `0` is a valid state — a defeated character, not a construction error. Only a
+     * `lifePoints` reaching `0` is a valid-game state — a defeated character, not a construction error. Only a
      * negative value, or one exceeding `maxLifePoints`, is rejected.
      *
      * @link \App\Story\Character::__construct()

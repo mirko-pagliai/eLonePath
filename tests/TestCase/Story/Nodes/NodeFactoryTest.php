@@ -26,7 +26,7 @@ class NodeFactoryTest extends TestCase
     #[Test]
     public function testCreateFromArrayDispatchesToPassageNode(): void
     {
-        $node = NodeFactory::createFromArray(id: 1, gameId: 'test-game', data: [
+        $node = NodeFactory::createFromArray(id: 1, gameId: 'valid-game', data: [
             'content' => 'Some content.',
             'type' => 'passage',
             'choices' => [],
@@ -41,7 +41,7 @@ class NodeFactoryTest extends TestCase
     #[Test]
     public function testCreateFromArrayDispatchesToDiceNode(): void
     {
-        $node = NodeFactory::createFromArray(id: 17, gameId: 'test-game', data: [
+        $node = NodeFactory::createFromArray(id: 17, gameId: 'valid-game', data: [
             'content' => 'Some content.',
             'type' => 'dice',
             'dice' => [
@@ -61,7 +61,7 @@ class NodeFactoryTest extends TestCase
     #[Test]
     public function testCreateFromArrayDispatchesToVictoryNode(): void
     {
-        $node = NodeFactory::createFromArray(id: 15, gameId: 'test-game', data: [
+        $node = NodeFactory::createFromArray(id: 15, gameId: 'valid-game', data: [
             'content' => 'The end.',
             'type' => 'victory',
         ]);
@@ -75,7 +75,7 @@ class NodeFactoryTest extends TestCase
     #[Test]
     public function testCreateFromArrayDispatchesToDefeatNode(): void
     {
-        $node = NodeFactory::createFromArray(id: 12, gameId: 'test-game', data: [
+        $node = NodeFactory::createFromArray(id: 12, gameId: 'valid-game', data: [
             'content' => 'The end.',
             'type' => 'defeat',
         ]);
@@ -89,7 +89,7 @@ class NodeFactoryTest extends TestCase
     #[Test]
     public function testCreateFromArrayDispatchesToCombatNode(): void
     {
-        $node = NodeFactory::createFromArray(id: 30, gameId: 'test-game', data: [
+        $node = NodeFactory::createFromArray(id: 30, gameId: 'valid-game', data: [
             'content' => 'A fight.',
             'type' => 'combat',
             'combat' => [
@@ -116,6 +116,6 @@ class NodeFactoryTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageIs('Unknown node type: `mystery`.');
-        NodeFactory::createFromArray(id: 1, gameId: 'test-game', data: ['content' => 'c', 'type' => 'mystery']);
+        NodeFactory::createFromArray(id: 1, gameId: 'valid-game', data: ['content' => 'c', 'type' => 'mystery']);
     }
 }

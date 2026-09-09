@@ -21,7 +21,7 @@ class PassageNodeTest extends TestCase
     #[Test]
     public function testCreateFromArray(): void
     {
-        $node = PassageNode::createFromArray(id: 3, gameId: 'test-game', data: [
+        $node = PassageNode::createFromArray(id: 3, gameId: 'valid-game', data: [
             'content' => 'Some content.',
             'choices' => [
                 ['content' => 'Go to page {{page}}', 'target' => 4],
@@ -45,7 +45,7 @@ class PassageNodeTest extends TestCase
     #[Test]
     public function testCreateFromArrayWithoutChoicesKey(): void
     {
-        $node = PassageNode::createFromArray(id: 1, gameId: 'test-game', data: [
+        $node = PassageNode::createFromArray(id: 1, gameId: 'valid-game', data: [
             'content' => 'Some content.',
             'type' => 'passage',
         ]);
@@ -59,7 +59,7 @@ class PassageNodeTest extends TestCase
     #[Test]
     public function testToArray(): void
     {
-        $node = PassageNode::createFromArray(id: 3, gameId: 'test-game', data: [
+        $node = PassageNode::createFromArray(id: 3, gameId: 'valid-game', data: [
             'content' => 'Some content.',
             'choices' => [
                 ['content' => 'Go to page {{page}}', 'target' => 4],

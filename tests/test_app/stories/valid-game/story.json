@@ -1,6 +1,6 @@
 {
     "game": {
-        "id": "test-game",
+        "id": "valid-game",
         "title": "Valid Test Game",
         "author": "Test Author",
         "description": "A minimal, structurally valid story.",

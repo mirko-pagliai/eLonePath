@@ -20,7 +20,7 @@ class DefeatNodeTest extends TestCase
     #[Test]
     public function testCreateFromArray(): void
     {
-        $node = DefeatNode::createFromArray(id: 12, gameId: 'test-game', data: [
+        $node = DefeatNode::createFromArray(id: 12, gameId: 'valid-game', data: [
             'content' => 'The end.',
             'type' => 'defeat',
         ]);
@@ -35,7 +35,7 @@ class DefeatNodeTest extends TestCase
     #[Test]
     public function testToArray(): void
     {
-        $node = new DefeatNode(id: 12, gameId: 'test-game', content: 'The end.');
+        $node = new DefeatNode(id: 12, gameId: 'valid-game', content: 'The end.');
 
         $this->assertSame([
             'content' => 'The end.',

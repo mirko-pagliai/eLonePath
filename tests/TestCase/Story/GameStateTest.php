@@ -152,7 +152,7 @@ class GameStateTest extends TestCase
     }
 
     /**
-     * A malformed `player` value — valid JSON, valid top-level shape, but `player` isn't itself the object
+     * A malformed `player` value — valid-game JSON, valid-game top-level shape, but `player` isn't itself the object
      * `Character::createFromArray()` expects — is rejected the same way as a missing key entirely, rather than
      * reaching `Character::createFromArray()` with something it can't use.
      *

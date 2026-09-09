@@ -19,7 +19,7 @@ class DiceNodeTest extends TestCase
     {
         return new DiceNode(
             id: 17,
-            gameId: 'test-game',
+            gameId: 'valid-game',
             content: 'Some content.',
             requiredRolls: 2,
             minimum: 8,
@@ -62,7 +62,7 @@ class DiceNodeTest extends TestCase
     #[Test]
     public function testCreateFromArray(): void
     {
-        $node = DiceNode::createFromArray(id: 17, gameId: 'test-game', data: [
+        $node = DiceNode::createFromArray(id: 17, gameId: 'valid-game', data: [
             'content' => 'Some content.',
             'type' => 'dice',
             'dice' => [

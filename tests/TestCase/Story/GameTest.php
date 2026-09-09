@@ -25,7 +25,7 @@ class GameTest extends TestCase
     {
         return [
             'game' => [
-                'id' => 'test-game',
+                'id' => 'valid-game',
                 'title' => 'Test Game',
                 'author' => 'Test Author',
                 'translators' => '',
@@ -61,7 +61,7 @@ class GameTest extends TestCase
     {
         $game = Game::createFromArray($this->sampleData());
 
-        $this->assertSame('test-game', $game->gameId);
+        $this->assertSame('valid-game', $game->gameId);
         $this->assertSame('Test Game', $game->title);
         $this->assertSame('Test Author', $game->author);
         $this->assertSame('', $game->translators);
@@ -88,7 +88,7 @@ class GameTest extends TestCase
 
         $game = Game::createFromArray($data);
 
-        $this->assertSame('![A castle](/assets/stories/test-game/img/castle.jpg)', $game->preface);
+        $this->assertSame('![A castle](/assets/stories/valid-game/img/castle.jpg)', $game->preface);
     }
 
     /**
@@ -133,7 +133,7 @@ class GameTest extends TestCase
             $game->getNode(99);
             $this->fail('Expected an HttpException to be thrown.');
         } catch (HttpException $exception) {
-            $this->assertSame('Node `99` not found in `test-game`.', $exception->getMessage());
+            $this->assertSame('Node `99` not found in `valid-game`.', $exception->getMessage());
             $this->assertSame(404, $exception->statusCode());
         }
     }
@@ -154,7 +154,7 @@ class GameTest extends TestCase
 
         $this->assertSame([
             'game' => [
-                'id' => 'test-game',
+                'id' => 'valid-game',
                 'title' => 'Test Game',
                 'author' => 'Test Author',
                 'translators' => '',
@@ -188,9 +188,9 @@ class GameTest extends TestCase
     #[Test]
     public function testCreateFromFile(): void
     {
-        $game = Game::createFromFile(STORIES . '/valid/story.json');
+        $game = Game::createFromFile(STORIES . '/valid-game/story.json');
 
-        $this->assertSame('test-game', $game->gameId);
+        $this->assertSame('valid-game', $game->gameId);
         $this->assertInstanceOf(Node::class, $game->getNode(2));
     }
 

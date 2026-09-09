@@ -18,7 +18,7 @@ class CombatNodeTest extends TestCase
     {
         return new CombatNode(
             id: 30,
-            gameId: 'test-game',
+            gameId: 'valid-game',
             content: 'Some content.',
             enemyName: 'Orco',
             enemyMaxLifePoints: 15,
@@ -35,7 +35,7 @@ class CombatNodeTest extends TestCase
     #[Test]
     public function testCreateFromArray(): void
     {
-        $node = CombatNode::createFromArray(id: 30, gameId: 'test-game', data: [
+        $node = CombatNode::createFromArray(id: 30, gameId: 'valid-game', data: [
             'content' => 'Some content.',
             'type' => 'combat',
             'combat' => [

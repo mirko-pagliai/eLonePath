@@ -167,7 +167,9 @@ class StoryController extends AppController
         $game = $this->getGame($storyId);
 
         $character = $this->propagateState();
-        if (($response = $this->requireCharacterIfNeeded($game, $storyId, $character)) !== null) {
+
+        $response = $this->requireCharacterIfNeeded($game, $storyId, $character);
+        if (!$response) {
             return $response;
         }
 
@@ -199,7 +201,9 @@ class StoryController extends AppController
         $node = $game->getNode($nodeNumber);
 
         $character = $this->propagateState();
-        if (($response = $this->requireCharacterIfNeeded($game, $storyId, $character)) !== null) {
+
+        $response = $this->requireCharacterIfNeeded($game, $storyId, $character);
+        if (!$response) {
             return $response;
         }
 
@@ -224,7 +228,9 @@ class StoryController extends AppController
         $node = $game->getNode($nodeNumber);
 
         $character = $this->propagateState();
-        if (($response = $this->requireCharacterIfNeeded($game, $storyId, $character)) !== null) {
+
+        $response = $this->requireCharacterIfNeeded($game, $storyId, $character);
+        if (!$response) {
             return $response;
         }
 

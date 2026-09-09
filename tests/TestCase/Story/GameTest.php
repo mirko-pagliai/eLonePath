@@ -156,6 +156,9 @@ class GameTest extends TestCase
                 'language' => 'it',
                 'version' => '1.0',
                 'preface' => 'A short preface for testing.',
+                'genre' => null,
+                'difficulty' => null,
+                'requires_character' => false,
             ],
             'nodes' => [
                 1 => [

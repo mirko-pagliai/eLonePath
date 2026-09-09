@@ -1,0 +1,156 @@
+{
+    "game": {
+        "id": "segnale_dal_vuoto",
+        "title": "Segnale dal Vuoto",
+        "author": "Mirko Pagliai - mirko.pagliai@gmail.com",
+        "translators": "",
+        "description": "Una stazione di ricerca alla deriva, un segnale di soccorso senza voce, e qualcosa a bordo che non dovrebbe più essere vivo.",
+        "language": "it",
+        "version": "1.0-alpha",
+        "preface": "Sei ai comandi della *Vela Sottile*, una piccola nave da ricognizione ai margini dello spazio conosciuto.\n\nUn segnale di soccorso, debole e ripetuto, ti porta fino alla **Kairos** — una stazione di ricerca alla deriva, silenziosa da mesi.\n\nNon hai intenzione di restarci a lungo.\n\n## Buona fortuna, pilota."
+    },
+    "nodes": {
+        "1": {
+            "type": "passage",
+            "content": "Il segnale è debole, intermittente, ripetuto in loop da ore: una richiesta di soccorso automatica, priva ormai di qualunque voce umana dietro.\n\nLa tua nave da ricognizione, la **Vela Sottile**, lo intercetta ai margini della fascia di detriti. La fonte è una stazione di ricerca alla deriva — la **Kairos** — silenziosa da mesi secondo i registri pubblici.\n\nTi avvicini per un rilievo di routine. Poi, senza preavviso, un frammento di scafo alla deriva colpisce il propulsore principale. Gli allarmi si accendono tutti insieme.\n\n**Propulsore fuori uso. Riserve d'ossigeno: 6 ore.**\n\nL'unica fonte di componenti compatibili nel raggio di soccorso è la Kairos stessa. Aggancia il portello di emergenza e ti prepari a entrare.",
+            "choices": [
+                {
+                    "content": "Se vuoi entrare dal corridoio principale, vai a pagina {{page}}",
+                    "target": 2
+                },
+                {
+                    "content": "Se vuoi entrare dai cunicoli di servizio, vai a pagina {{page}}",
+                    "target": 3
+                }
+            ]
+        },
+        "2": {
+            "type": "passage",
+            "content": "Il corridoio principale è ampio, ma le luci di emergenza pulsano deboli, rosse, a intervalli irregolari.\n\nPannelli divelti pendono dal soffitto. In un punto, il pavimento metallico è inciso da lunghi solchi paralleli, come se qualcosa di pesante fosse stato trascinato — o avesse trascinato qualcun altro.\n\nNon c'è alcun corpo. Non c'è alcun segno recente di vita.\n\nUn ronzio meccanico rompe il silenzio, proveniente da dietro una porta scorrevole bloccata a metà. Qualcosa, dall'altra parte, si sta muovendo.",
+            "choices": [
+                {
+                    "content": "Se vuoi forzare la porta, vai a pagina {{page}}",
+                    "target": 5
+                }
+            ]
+        },
+        "3": {
+            "type": "passage",
+            "content": "I cunicoli di servizio sono stretti, a malapena sufficienti per farti strada. Fasci di cavi recisi pendono dalle pareti, alcuni ancora scintillanti di scariche residue.\n\nDopo una decina di metri il cunicolo si apre su un vano di manutenzione sospeso: una **passerella metallica** attraversa un pozzo tecnico buio, di cui non riesci a vedere il fondo. Metà della struttura è visibilmente compromessa, piegata verso il basso, tenuta da bulloni che scricchiolano a ogni tuo passo di avvicinamento.\n\nNon hai altra strada per proseguire.",
+            "choices": [
+                {
+                    "content": "Se vuoi attraversare la passerella, vai a pagina {{page}}",
+                    "target": 4
+                }
+            ]
+        },
+        "4": {
+            "type": "dice",
+            "content": "Ti fermi sul bordo del pozzo tecnico, valutando il punto più stabile della struttura danneggiata.\n\nUn passo alla volta, cercando di distribuire il peso, provi ad attraversare la passerella prima che ceda del tutto.",
+            "dice": {
+                "required_rolls": 1,
+                "minimum": 3,
+                "target_success": 6,
+                "target_failure": 13
+            }
+        },
+        "5": {
+            "type": "combat",
+            "content": "Forzi la porta quel tanto che basta per intrufolarti.\n\nAll'interno, un **drone di sicurezza** ti individua immediatamente. Il suo modulo ottico principale è in frantumi — ruota a vuoto sopra un secondo occhio ausiliario, più piccolo, che ora ti fissa fisso.\n\nI suoi bracci articolati, un tempo pensati per la manutenzione, terminano in utensili da taglio riconvertiti in modo grezzo. La sua unità vocale, danneggiata, ripete lo stesso comando distorto in loop: *«Intruso rilevato. Intruso rilevato.»*\n\nNon ha intenzione di lasciarti passare.",
+            "combat": {
+                "enemy_name": "Drone di Sicurezza Malfunzionante",
+                "enemy_max_life_points": 12,
+                "enemy_strength": 6,
+                "enemy_agility": 4,
+                "target_victory": 6,
+                "target_defeat": 14
+            }
+        },
+        "6": {
+            "type": "passage",
+            "content": "Con il drone ormai fermo, ti prendi un momento per riprendere fiato prima di proseguire.\n\nIl corridoio sbocca in un ampio **snodo centrale**, dal quale si dipartono diversi settori della stazione. Una mappa olografica, semi-funzionante, sfarfalla accanto a un pannello di controllo.\n\nDue percorsi sembrano ancora accessibili: la **stiva di carico**, verso poppa, e la **plancia di comando**, verso prua. Da entrambi provengono i componenti che ti servono per riparare il propulsore — ma il tempo stringe.",
+            "choices": [
+                {
+                    "content": "Se vuoi dirigerti verso la stiva di carico, vai a pagina {{page}}",
+                    "target": 7
+                },
+                {
+                    "content": "Se vuoi dirigerti verso la plancia di comando, vai a pagina {{page}}",
+                    "target": 8
+                }
+            ]
+        },
+        "7": {
+            "type": "passage",
+            "content": "La stiva di carico è enorme, semibuia, costellata di container sigillati con codici che non riconosci.\n\nUno di essi, al centro del vano, è diverso dagli altri: **squarciato dall'interno**, non dall'esterno. Il sigillo di biocontenimento pende inerte, reciso.\n\nSul terminale di carico accanto al container trovi l'ultima voce del registro merci, datata mesi prima: *\"Campione BX-19, classificazione: sconosciuta. Origine: recupero in campo detriti. Protocollo di contenimento livello massimo. Comportamento del campione: **imprevedibile oltre le stime iniziali**.\"*\n\nRecuperi comunque i componenti che ti servono, ma la sensazione di essere osservato non ti abbandona per tutto il tempo.",
+            "choices": [
+                {
+                    "content": "Se vuoi proseguire verso i settori interni, vai a pagina {{page}}",
+                    "target": 9
+                }
+            ]
+        },
+        "8": {
+            "type": "passage",
+            "content": "La plancia di comando è stranamente intatta, come se l'equipaggio l'avesse abbandonata in fretta ma senza violenza.\n\nRecuperi i componenti da una consolle laterale. Prima di andartene, un display secondario attira la tua attenzione: l'ultimo registro vocale del comandante, mai trasmesso.\n\n*\"...non è più contenuto. Ha imparato a imitare le voci dell'equipaggio attraverso l'interfono. Se state ricevendo questo messaggio, non fidatevi di nulla che sentite chiamarvi per nome. Non è più—\"*\n\nLa registrazione si interrompe di netto.",
+            "choices": [
+                {
+                    "content": "Se vuoi proseguire verso i settori interni, vai a pagina {{page}}",
+                    "target": 9
+                }
+            ]
+        },
+        "9": {
+            "type": "combat",
+            "content": "Una voce familiare ti chiama per nome dal fondo del corridoio.\n\nNon conosci nessuno, a bordo della Kairos. Non dovrebbe conoscere il tuo nome nessuno, a bordo della Kairos.\n\nQuando la **cosa** emerge dall'oscurità, ciò che resta di una forma umana è a malapena riconoscibile sotto gli strati di tessuto organico che si sono richiusi, mutati, attorno a quello che una volta era un membro dell'equipaggio. Si muove in modo sbagliato — troppe articolazioni, in punti dove non dovrebbero essercene.\n\nContinua a chiamarti per nome, con una voce che non è più una voce.",
+            "combat": {
+                "enemy_name": "L'Ospite",
+                "enemy_max_life_points": 30,
+                "enemy_strength": 5,
+                "enemy_agility": 5,
+                "target_victory": 10,
+                "target_defeat": 15
+            }
+        },
+        "10": {
+            "type": "passage",
+            "content": "Ti allontani il più in fretta possibile, i componenti stretti al petto.\n\nLa baia delle capsule di fuga è esattamente dove i registri della stazione la indicano. Una sola capsula risulta ancora operativa, anche se i suoi indicatori lampeggiano in giallo, non in verde.\n\nInserisci i componenti recuperati nel vano del propulsore d'emergenza. Il sistema si avvia con un ronzio incerto.\n\nAlle tue spalle, in fondo al corridoio da cui sei appena arrivato, senti qualcosa muoversi di nuovo.",
+            "choices": [
+                {
+                    "content": "Se vuoi avviare la sequenza di distacco, vai a pagina {{page}}",
+                    "target": 11
+                }
+            ]
+        },
+        "11": {
+            "type": "dice",
+            "content": "Le mani ti tremano sui comandi. La sequenza di distacco richiede una calibrazione manuale precisa — non c'è tempo per un secondo tentativo.\n\nInspiri a fondo e avvii la procedura.",
+            "dice": {
+                "required_rolls": 1,
+                "minimum": 4,
+                "target_success": 12,
+                "target_failure": 16
+            }
+        },
+        "12": {
+            "type": "victory",
+            "content": "La capsula si stacca dalla Kairos un istante prima che qualcosa colpisca lo scafo esterno, proprio dove ti trovavi.\n\nAttraverso l'oblò, guardi la stazione rimpicciolire fino a diventare un puntino tra i detriti, silenziosa come l'hai trovata.\n\nI sistemi della capsula segnalano una rotta di intercettazione verso la Vela Sottile. Sei vivo — e, questa volta, non hai lasciato nulla a bordo che possa chiamarti per nome."
+        },
+        "13": {
+            "type": "defeat",
+            "content": "Un bullone cede sotto il tuo peso.\n\nLa passerella si piega di colpo, e per un istante ti aggrappi al metallo con tutte le forze che hai — poi anche quello scivola via dalle tue dita.\n\nIl pozzo tecnico non ha fondo visibile, e non ne troverai mai uno.\n\nL'ultima cosa che senti, prima del buio, è l'eco del tuo stesso allarme d'ossigeno, sempre più lontano."
+        },
+        "14": {
+            "type": "defeat",
+            "content": "L'utensile da taglio del drone trova un varco nell'armatura leggera della tua tuta.\n\nIl dolore è immediato, poi stranamente lontano.\n\n*\"Intruso neutralizzato\"*, ripete la voce distorta, più e più volte, mentre l'allarme dell'ossigeno della tua tuta inizia a lampeggiare, inascoltato.\n\nLa Kairos resta silenziosa come prima che tu arrivassi. Un corpo in più non farà differenza."
+        },
+        "15": {
+            "type": "defeat",
+            "content": "Le braccia troppo lunghe ti raggiungono prima che tu riesca a divincolarti.\n\nLa voce continua a chiamarti per nome, sempre più vicina, sempre più simile a qualcuno che conosci — anche se sai che non può essere vero.\n\nQuando i tessuti mutati ti si richiudono addosso, per un istante ti chiedi se anche tu, un giorno, chiamerai qualcun altro per nome.\n\nPoi non ti chiedi più nulla."
+        },
+        "16": {
+            "type": "defeat",
+            "content": "La sequenza di calibrazione fallisce proprio mentre i passi, dietro di te, si fanno più vicini.\n\nProvi a riavviarla, ma il tempo per un secondo tentativo non c'è mai stato davvero.\n\nL'oblò della capsula, ancora agganciata alla Kairos, si oscura un istante prima che tu smetta di guardare attraverso di esso."
+        }
+    }
+}

@@ -33,6 +33,7 @@ class GameTest extends TestCase
                 'language' => 'it',
                 'version' => '1.0',
                 'preface' => 'A short preface for testing.',
+                'genre' => 'medieval_fantasy',
                 'difficulty' => 'easy',
                 'requires_character' => false,
             ],
@@ -68,6 +69,9 @@ class GameTest extends TestCase
         $this->assertSame('it', $game->language);
         $this->assertSame('1.0', $game->version);
         $this->assertSame('A short preface for testing.', $game->preface);
+        $this->assertSame(StoryGenre::MEDIEVAL_FANTASY, $game->genre);
+        $this->assertSame(StoryDifficulty::EASY, $game->difficulty);
+        $this->assertFalse($game->requiresCharacter);
     }
 
     /**
@@ -158,7 +162,7 @@ class GameTest extends TestCase
                 'language' => 'it',
                 'version' => '1.0',
                 'preface' => 'A short preface for testing.',
-                'genre' => null,
+                'genre' => 'medieval_fantasy',
                 'difficulty' => 'easy',
                 'requires_character' => false,
             ],
@@ -242,33 +246,5 @@ class GameTest extends TestCase
 
         $this->expectExceptionMessageIs("Failed to parse `$path`: expected a JSON object at the top level.");
         Game::createFromFile($path);
-    }
-
-    /**
-     * `sampleData()` never sets `genre` — the one field that's still optional. Every story written before it
-     * existed gets no genre label, the same as now.
-     *
-     * @link \App\Story\Game::createFromArray()
-     */
-    #[Test]
-    public function testCreateFromArrayDefaultsGenreToNullWhenAbsent(): void
-    {
-        $game = Game::createFromArray($this->sampleData());
-
-        $this->assertNull($game->genre);
-    }
-
-    /**
-     * @link \App\Story\Game::createFromArray()
-     */
-    #[Test]
-    public function testCreateFromArrayWithGenreSet(): void
-    {
-        $data = $this->sampleData();
-        $data['game']['genre'] = 'science_fiction';
-
-        $game = Game::createFromArray($data);
-
-        $this->assertSame(StoryGenre::SCIENCE_FICTION, $game->genre);
     }
 }

@@ -6,6 +6,7 @@
         "description": "A story with no preface, redirecting straight to chapter 1.",
         "language": "en",
         "version": "1.0",
+        "genre": "medieval_fantasy",
         "difficulty": "easy",
         "requires_character": false
     },

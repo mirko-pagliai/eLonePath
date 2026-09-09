@@ -20,7 +20,8 @@ class NodeImagesWalkerTest extends TestCase
      * A minimal but complete game header, reused across the story JSON strings below.
      */
     private const GAME_HEADER = '"game": {
-        "id": "test-game", "title": "t", "author": "a", "description": "d", "language": "it", "version": "1.0"
+        "id": "test-game", "title": "t", "author": "a", "description": "d", "language": "it", "version": "1.0",
+        "genre": "medieval_fantasy", "difficulty": "easy", "requires_character": false
     }';
 
     /**

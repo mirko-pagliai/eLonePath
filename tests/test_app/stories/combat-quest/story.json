@@ -6,6 +6,7 @@
         "description": "A minimal story with a combat node, to test the combat system.",
         "language": "en",
         "version": "1.0",
+        "genre": "science_fiction",
         "difficulty": "medium",
         "requires_character": true
     },

@@ -6,6 +6,7 @@
         "description": "A minimal, structurally valid story.",
         "language": "en",
         "version": "1.0",
+        "genre": "medieval_fantasy",
         "difficulty": "easy",
         "requires_character": false
     },

@@ -226,9 +226,9 @@ class FormHelperTest extends TestCase
     #[Test]
     public function testSubmitWithLabelAndOptions(): void
     {
-        $result = $this->helper->submit('Create character', ['class' => 'btn elone-button']);
+        $result = $this->helper->submit('Create character', ['class' => 'btn btn-primary']);
 
-        $this->assertSame('<button type="submit" class="btn elone-button">Create character</button>', $result);
+        $this->assertSame('<button type="submit" class="btn btn-primary">Create character</button>', $result);
     }
 
     /**

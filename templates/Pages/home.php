@@ -42,6 +42,6 @@ declare(strict_types=1);
     <?= $this->Html->link(
         text: 'Le storie',
         url: ['controller' => 'Pages', 'action' => 'stories'],
-        options: ['class' => 'btn fs-4 elone-button px-4 py-2'],
+        options: ['class' => 'elone-button fs-4'],
     ) ?>
 </div>

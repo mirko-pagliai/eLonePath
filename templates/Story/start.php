@@ -20,6 +20,6 @@ echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'sub
     <?= $this->Story->link(
         text: 'Comincia la partita',
         url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, 1],
-        options: ['class' => 'btn fs-4 elone-button px-4 py-2'],
+        options: ['class' => 'elone-button fs-4'],
     ) ?>
 </div>

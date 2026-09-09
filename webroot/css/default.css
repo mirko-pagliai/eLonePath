@@ -51,8 +51,13 @@ article {
 }
 
 .story-page {
-    font-family: "Cinzel", serif;
     color: var(--elone-muted);
+}
+
+.story-page hr {
+    border-color: var(--elone-accent);
+    border-width: 3px;
+    opacity: .70;
 }
 
 #story-content blockquote {
@@ -80,8 +85,10 @@ article {
     border: 2px solid var(--elone-accent);
     border-radius: 0;
     color: var(--elone-ink);
+    display: inline-block;
     font-family: "Cinzel", serif;
     font-size: 1.5rem;
+    padding: .5rem 1rem;
     text-decoration: none;
 }
 

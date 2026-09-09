@@ -47,6 +47,6 @@ if ($character !== null) {
     <?= $this->Story->link(
         text: 'Continua',
         url: ['controller' => 'Story', 'action' => 'chapter', $game->gameId, $target],
-        options: ['class' => 'elone-button d-inline-block px-3 py-2'],
+        options: ['class' => 'elone-button'],
     ) ?>
 </section>

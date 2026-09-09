@@ -9,7 +9,7 @@ declare(strict_types=1);
 ?>
 
 <aside class="mb-4">
-    <a class="elone-button d-inline-block p-2" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
+    <a class="elone-button" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
         <i class="bi bi-lightning-fill fs-5"></i> Il tuo personaggio
     </a>
 

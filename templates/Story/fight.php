@@ -17,7 +17,7 @@ use App\Story\Combat\CombatHit;
 /** @link templates/element/chapter_header.php */
 echo $this->element(
     name: 'chapter_header',
-    data: ['title' => $game->title, 'subtitle' => "Combattimento contro {$node->enemyName}"],
+    data: ['title' => $game->title, 'subtitle' => "Combattimento contro $node->enemyName"],
 );
 
 /** @link templates/element/character_sheet.php */
@@ -48,6 +48,6 @@ echo $this->element(name: 'character_sheet', data: ['character' => $character]);
     <?= $this->Story->link(
         text: 'Continua a combattere',
         url: ['controller' => 'Story', 'action' => 'fight', $game->gameId, $node->id],
-        options: ['class' => 'elone-button d-inline-block px-3 py-2'],
+        options: ['class' => 'elone-button'],
     ) ?>
 </section>

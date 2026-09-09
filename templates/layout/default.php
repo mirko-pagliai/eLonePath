@@ -26,7 +26,7 @@ declare(strict_types=1);
     </head>
     <body class="min-vh-100">
         <main class="container p-0 py-lg-5" style="max-width: 960px">
-            <article class="mx-auto p-4 p-md-5">
+            <article class="mx-auto p-4 p-md-5 story-page">
                 <?= $content ?>
             </article>
         </main>

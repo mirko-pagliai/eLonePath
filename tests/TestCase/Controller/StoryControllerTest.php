@@ -53,12 +53,12 @@ class StoryControllerTest extends TestCase
     #[Test]
     public function testCharacterShowsFormOnGet(): void
     {
-        $controller = $this->makeController(new Request('GET', '/story/character/mini-quest'));
+        $controller = $this->makeController(new Request('GET', '/story/character/requires-character'));
 
-        $result = $controller->character('mini-quest');
+        $result = $controller->character('requires-character');
 
         $this->assertNull($result);
-        $this->assertSame('mini-quest', $controller->getView()->get('game')->gameId);
+        $this->assertSame('requires-character', $controller->getView()->get('game')->gameId);
         $this->assertNull($controller->getView()->get('error'));
     }
 
@@ -68,22 +68,23 @@ class StoryControllerTest extends TestCase
     #[Test]
     public function testCharacterRejectsOtherMethods(): void
     {
-        $controller = $this->makeController(new Request('DELETE', '/story/character/mini-quest'));
+        $controller = $this->makeController(new Request('DELETE', '/story/character/requires-character'));
 
         $this->expectException(MethodNotAllowedException::class);
-        $controller->character('mini-quest');
+        $controller->character('requires-character');
     }
 
     /**
-     * A valid submission builds a `Character`, wraps it in a `GameState`, and redirects into `start()` with `?state=`
-     * carrying exactly the submitted values — this is the one behavior the whole character-creation flow exists for.
+     * A valid submission builds a `Character`, wraps it in a `GameState`, and redirects into `start()` with
+     * `?state=` carrying exactly the submitted values — this is the one behavior the whole character-creation
+     * flow exists for.
      *
      * @link \App\Controller\StoryController::character()
      */
     #[Test]
     public function testCharacterWithValidDataRedirectsWithState(): void
     {
-        $request = new Request('POST', '/story/character/mini-quest', [
+        $request = new Request('POST', '/story/character/requires-character', [
             'strength' => '9',
             'agility' => '5',
             'perception' => '3',
@@ -91,13 +92,13 @@ class StoryControllerTest extends TestCase
         ]);
         $controller = $this->makeController($request);
 
-        $response = $controller->character('mini-quest');
+        $response = $controller->character('requires-character');
 
         $this->assertInstanceOf(Response::class, $response);
         $this->assertSame(302, $response->status());
 
         $location = $response->headers()['Location'];
-        $this->assertStringStartsWith('/story/start/mini-quest?state=', $location);
+        $this->assertStringStartsWith('/story/start/requires-character?state=', $location);
 
         parse_str((string)parse_url($location, PHP_URL_QUERY), $query);
         $state = GameState::fromQueryValue($query['state']);
@@ -117,7 +118,7 @@ class StoryControllerTest extends TestCase
     #[Test]
     public function testCharacterWithInvalidSumShowsError(): void
     {
-        $request = new Request('POST', '/story/character/mini-quest', [
+        $request = new Request('POST', '/story/character/requires-character', [
             'strength' => '10',
             'agility' => '5',
             'perception' => '3',
@@ -125,7 +126,7 @@ class StoryControllerTest extends TestCase
         ]);
         $controller = $this->makeController($request);
 
-        $result = $controller->character('mini-quest');
+        $result = $controller->character('requires-character');
 
         $this->assertNull($result);
         $this->assertSame(
@@ -144,14 +145,14 @@ class StoryControllerTest extends TestCase
     #[Test]
     public function testCharacterWithMissingFieldShowsError(): void
     {
-        $request = new Request('POST', '/story/character/mini-quest', [
+        $request = new Request('POST', '/story/character/requires-character', [
             'agility' => '5',
             'perception' => '3',
             'willpower' => '3',
         ]);
         $controller = $this->makeController($request);
 
-        $result = $controller->character('mini-quest');
+        $result = $controller->character('requires-character');
 
         $this->assertNull($result);
         $this->assertSame(
@@ -170,18 +171,49 @@ class StoryControllerTest extends TestCase
     #[Test]
     public function testRandomRedirectsWithValidState(): void
     {
-        $controller = $this->makeController(new Request('GET', '/story/random/mini-quest'));
+        $controller = $this->makeController(new Request('GET', '/story/random/requires-character'));
 
-        $response = $controller->random('mini-quest');
+        $response = $controller->random('requires-character');
 
         $this->assertSame(302, $response->status());
 
         $location = $response->headers()['Location'];
-        $this->assertStringStartsWith('/story/start/mini-quest?state=', $location);
+        $this->assertStringStartsWith('/story/start/requires-character?state=', $location);
 
         parse_str((string)parse_url($location, PHP_URL_QUERY), $query);
         $state = GameState::fromQueryValue($query['state']);
         $this->assertSame(Character::DEFAULT_MAX_LIFE_POINTS, $state->player->maxLifePoints);
+    }
+
+    /**
+     * `mini-quest` doesn't require a character — creating one would be pointless, since nothing in the story
+     * ever reads it. Neither the form nor a manual submission should be reachable; both redirect straight to
+     * `start()` instead.
+     *
+     * @link \App\Controller\StoryController::character()
+     */
+    #[Test]
+    public function testCharacterRedirectsToStartWhenStoryDoesNotRequireOne(): void
+    {
+        $controller = $this->makeController(new Request('GET', '/story/character/mini-quest'));
+
+        $response = $controller->character('mini-quest');
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame('/story/start/mini-quest', $response->headers()['Location']);
+    }
+
+    /**
+     * @link \App\Controller\StoryController::random()
+     */
+    #[Test]
+    public function testRandomRedirectsToStartWhenStoryDoesNotRequireOne(): void
+    {
+        $controller = $this->makeController(new Request('GET', '/story/random/mini-quest'));
+
+        $response = $controller->random('mini-quest');
+
+        $this->assertSame('/story/start/mini-quest', $response->headers()['Location']);
     }
 
     /**
@@ -575,8 +607,8 @@ class StoryControllerTest extends TestCase
     #[Test]
     public function testCharacterTemplateExists(): void
     {
-        $controller = $this->makeController(new Request('GET', '/story/character/mini-quest'));
-        $controller->character('mini-quest');
+        $controller = $this->makeController(new Request('GET', '/story/character/requires-character'));
+        $controller->character('requires-character');
 
         $result = $controller->render('Story/character', layout: null);
 

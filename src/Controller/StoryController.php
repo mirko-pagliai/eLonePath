@@ -83,6 +83,12 @@ class StoryController extends AppController
         $this->allowMethod(['get', 'post']);
 
         $game = $this->getGame($storyId);
+
+        $response = $this->redirectToStartIfCharacterNotNeeded($game);
+        if ($response) {
+            return $response;
+        }
+
         $error = null;
 
         if ($this->is('post')) {
@@ -119,13 +125,21 @@ class StoryController extends AppController
      * business; nothing here needs to know how it works.
      *
      * @param string $storyId The unique identifier of the story to create a random character for.
-     * @return \Elone\Core\Server\Response A redirect into `start()`, carrying the new character's `?state=`.
+     * @return \Elone\Core\Server\Response A redirect into `start()` — carrying the new character's `?state=`, or
+     * carrying nothing at all if `$storyId` doesn't require a character in the first place.
      * @throws \Random\RandomException
      * @link templates/Story/character.php
      */
     public function random(string $storyId): Response
     {
         $this->allowMethod('get');
+
+        $game = $this->getGame($storyId);
+
+        $response = $this->redirectToStartIfCharacterNotNeeded($game);
+        if ($response) {
+            return $response;
+        }
 
         $player = Character::createRandom(maxLifePoints: Character::DEFAULT_MAX_LIFE_POINTS);
 
@@ -135,6 +149,20 @@ class StoryController extends AppController
             url: ['controller' => 'Story', 'action' => 'start', $storyId],
             query: ['state' => $state->toQueryValue()],
         );
+    }
+
+    /**
+     * If `$game` doesn't require a character, redirects straight to `start()` instead of letting the caller
+     * continue — the mirror image of `requireCharacterIfNeeded()`: creating one for a story that never reads a
+     * single attribute would be pointless, so neither `character()` nor `random()` should offer to.
+     */
+    private function redirectToStartIfCharacterNotNeeded(Game $game): ?Response
+    {
+        if ($game->requiresCharacter) {
+            return null;
+        }
+
+        return $this->redirect(url: ['controller' => 'Story', 'action' => 'start', $game->gameId]);
     }
 
     /**

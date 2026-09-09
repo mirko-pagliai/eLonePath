@@ -92,6 +92,7 @@ class CheckBranchesCommand extends Command
 
             $io->newLine();
 
+            $io->writeln('Chapters: ' . count($game->nodes));
             $io->writeln('Branches: ' . count($walker->getAllBranches()));
             $io->writeln('Winning branches: ' . count($walker->getWinningBranches()));
             $io->writeln('Defeat branches: ' . count($walker->getDefeatBranches()));

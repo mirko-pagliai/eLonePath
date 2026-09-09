@@ -16,7 +16,9 @@ proprio come un libro-game di carta, solo giocabile dal browser (ed installabile
 Un libro-game cartaceo non ti ha mai davvero impedito di sfogliarlo come volevi: tornare indietro dopo una
 sconfitta, saltare avanti per curiosità, ignorare le regole. *eLone Path* mantiene la stessa libertà per
 costruzione: ogni pagina è raggiungibile direttamente, e tornare a una pagina precedente — anche solo
-modificando l'indirizzo — è sempre possibile.
+modificando l'indirizzo — è sempre possibile. Non esiste uno stato nascosto sul server: il personaggio, quando
+c'è, viaggia nell'indirizzo stesso della pagina (`?state=...`), mai in una sessione invisibile che tenga traccia
+di nascosto di cosa hai fatto altrove.
 
 ## Requisiti
 
@@ -35,8 +37,14 @@ L'app sarà disponibile su `http://localhost:9996`.
 ## Le storie
 
 Ogni storia vive in `resources/stories/<id>/story.json` — un file che descrive pagine, scelte, prove di dadi,
-combattimenti e finali. Le storie che lo richiedono iniziano con la creazione di un personaggio (Forza, Agilità,
-Percezione, Volontà), a mano o generato casualmente.
+combattimenti e finali.
+
+## Il personaggio
+
+Le storie che lo richiedono iniziano con la creazione di un personaggio: venti punti da distribuire tra
+**Forza**, **Agilità**, **Percezione** e **Volontà** — a mano, oppure generato casualmente per chi non vuole
+farsi due conti.
+In combattimento, l'Agilità decide chi colpisce, la Forza quanto sono i danni procurati al nemico.
 
 ## Stato del progetto
 

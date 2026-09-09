@@ -25,7 +25,17 @@ declare(strict_types=1);
 <p class="fs-5 mb-4">
     Come su carta, sei libero di sfogliare come vuoi: puoi tornare indietro dopo una sconfitta, o saltare a una
     pagina qualsiasi cambiando l'indirizzo. Nessuno stato nascosto sul server: il tuo personaggio, quando c'è,
-    viaggia nell'indirizzo stesso della pagina.
+    viaggia nell'indirizzo stesso della pagina — puoi salvarla, condividerla, riprendere da lì.
+</p>
+
+<p class="fs-5 mb-2">
+    Le storie che lo richiedono iniziano con la creazione di un personaggio: distribuisci venti punti tra
+    <strong>Forza</strong>, <strong>Agilità</strong>, <strong>Percezione</strong> e <strong>Volontà</strong> — o
+    lascia che sia il caso a deciderlo per te.
+</p>
+
+<p class="fs-5 mb-4">
+    In combattimento, l'Agilità decide chi colpisce, la Forza quanto sono i danni procurati al nemico.
 </p>
 
 <div class="text-center">

@@ -9,7 +9,7 @@ declare(strict_types=1);
  */
 ?>
 
-<h1 class="display-3 ff-cinzel fw-semibold mb-3 text-center">
+<h1 class="display-4 fw-semibold mb-3 text-center">
     eLone Path
 </h1>
 

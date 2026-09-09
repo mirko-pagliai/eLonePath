@@ -37,7 +37,7 @@ echo $this->Form->submit('Crea personaggio', ['class' => 'elone-button fs-4']);
 echo $this->Form->end();
 ?>
 
-<hr class="my-4" />
+<hr class="border-3 my-4" />
 
 <div class="fs-4">
     <p class="fst-italic">Oppure...</p>

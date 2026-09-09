@@ -16,10 +16,14 @@ if (!$title) {
 
 <header class="d-flex justify-content-end mb-5">
     <div class="d-flex flex-column align-self-center text-end">
-        <h3 id="story-title" class="m-0"><?= h($title) ?></h3>
+        <h2 class="fs-4 fw-bolder m-0">eLonePath</h2>
+
+        <h3 class="ff-cinzel m-0"><?= h($title) ?></h3>
+
+        <hr class="border-2 my-1" />
 
         <?php if ($subtitle) : ?>
-        <div id="story-page" class="story-page fs-4"><?= h($subtitle) ?></div>
+        <div class="story-page fs-4"><?= h($subtitle) ?></div>
         <?php endif; ?>
     </div>
 

@@ -213,15 +213,13 @@
             "content": "![Teschio antico tra le Ragnatele](generic_death.jpg)\n\nIl cavaliere scuote lentamente la testa.\n\nLa stanza sprofonda nell'oscurità e senti il peso di qualcosa che ti afferra alle spalle.\n\nCerchi di reagire, ma è ormai troppo tardi.\n\nLa porta della torre non si aprirà più per te."
         },
         "19": {
-            "type": "combat",
-            "content": "![Scontro nella foresta nebbiosa](19.jpg)\n\nLasci il bivio e imbocchi un vecchio sentiero che sale verso la collina.\n\nIl terreno diventa sempre più ripido e gli alberi si fanno più radi. Dopo pochi minuti la nebbia si apre e intravedi la torre molto più in alto, stagliata contro il cielo scuro.\n\nPoi senti un rumore davanti a te.\n\nUn ramo si spezza.\n\nDal margine del sentiero emerge una creatura massiccia, con il corpo coperto da una rozza armatura di cuoio. Nella mano stringe una lunga mazza di ferro.\n\nTi vede.\n\nPer qualche secondo rimane immobile. Poi solleva lentamente la mazza.\n\nNon sembra intenzionata a lasciarti passare.\n\n**Devi affrontare il nemico, non hai altra scelta!**",
-            "combat": {
-                "enemy_name": "Il Guardiano della Collina",
-                "enemy_max_life_points": 12,
-                "enemy_strength": 6,
-                "enemy_agility": 4,
-                "target_victory": 20,
-                "target_defeat": 27
+            "type": "dice",
+            "content": "![Scontro nella foresta nebbiosa](19.jpg)\n\nLasci il bivio e imbocchi un vecchio sentiero che sale verso la collina.\n\nIl terreno diventa sempre più ripido e gli alberi si fanno più radi. Dopo pochi minuti la nebbia si apre e intravedi la torre molto più in alto, stagliata contro il cielo scuro.\n\nPoi senti un rumore davanti a te.\n\nUn ramo si spezza.\n\nDal margine del sentiero emerge una creatura massiccia, con il corpo coperto da una rozza armatura di cuoio. Nella mano stringe una lunga mazza di ferro.\n\nTi vede.\n\nPer qualche secondo rimane immobile. Poi solleva lentamente la mazza.\n\nNon sembra intenzionata a lasciarti passare. Dovrai trovare il momento giusto per superarla di corsa, prima che decida di colpire.\n\n**Lancia un dado.**",
+            "dice": {
+                "required_rolls": 1,
+                "minimum": 4,
+                "target_success": 20,
+                "target_failure": 27
             }
         },
         "20": {
@@ -288,7 +286,7 @@
         },
         "27": {
             "type": "defeat",
-            "content": "![Teschio antico tra le Ragnatele](generic_death.jpg)\n\nLa mazza di ferro ti coglie in pieno.\n\nIl colpo ti toglie il fiato e le gambe cedono sotto di te.\n\nProvi a rialzarti, ma la creatura è già sopra di te, la mazza sollevata di nuovo.\n\nIl bosco si fa silenzioso.\n\nQuando gli abitanti di Valdombra saliranno fin quassù, in cerca di chi si è avventurato verso la torre, troveranno soltanto un sentiero interrotto e, poco più avanti, un'orma pesante che si allontana verso la collina."
+            "content": "![Teschio antico tra le Ragnatele](generic_death.jpg)\n\nTi lanci di corsa verso il varco tra gli alberi, ma il piede ti tradisce su una radice nascosta dalla nebbia.\n\nLa mazza di ferro ti raggiunge prima che tu riesca a rialzarti.\n\nIl bosco si fa silenzioso.\n\nQuando gli abitanti di Valdombra saliranno fin quassù, in cerca di chi si è avventurato verso la torre, troveranno soltanto un sentiero interrotto e, poco più avanti, un'orma pesante che si allontana verso la collina."
         }
     }
 }

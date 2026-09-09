@@ -63,7 +63,7 @@ class NodeImagesWalkerTest extends TestCase
     }
 
     /**
-     * A non-empty file that still isn't a valid-game image — distinct from the empty-file case above, which is caught
+     * A non-empty file that still isn't a valid image — distinct from the empty-file case above, which is caught
      * earlier and never reaches this check.
      *
      * @link \Elone\Debugger\NodeImagesWalker::__invoke()

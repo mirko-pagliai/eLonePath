@@ -7,7 +7,10 @@
         "description": "Solo una piccola storia per cominciare...",
         "language": "it",
         "version": "1.0-alpha",
-        "preface": "Questa è una storia breve e semplice, ideata per aiutare gli **avventurieri** come te a capire come funziona il gioco.\n\n## Buona fortuna!"
+        "preface": "Questa è una storia breve e semplice, ideata per aiutare gli **avventurieri** come te a capire come funziona il gioco.\n\n## Buona fortuna!",
+        "genre": "medieval_fantasy",
+        "difficulty": "very_easy",
+        "requires_character": false
     },
     "nodes": {
         "1": {

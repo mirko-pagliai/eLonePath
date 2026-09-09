@@ -651,4 +651,82 @@ class StoryControllerTest extends TestCase
 
         $this->fail('Combat ended on every one of 10 attempts before a round could be rendered.');
     }
+
+    /**
+     * The bug this fixes: visiting a chapter URL directly, with no `?state=` at all, used to render fine even
+     * for a story that needs a character — nothing stopped it. Now it redirects to `character()` instead.
+     *
+     * @link \App\Controller\StoryController::chapter()
+     */
+    #[Test]
+    public function testChapterRedirectsToCharacterWhenStoryRequiresOneAndNoneIsPresent(): void
+    {
+        $controller = $this->makeController(new Request('GET', '/story/chapter/requires-character/1'));
+
+        $response = $controller->chapter('requires-character', 1);
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame('/story/character/requires-character', $response->headers()['Location']);
+    }
+
+    /**
+     * @link \App\Controller\StoryController::chapter()
+     */
+    #[Test]
+    public function testChapterRendersNormallyWhenStoryRequiresCharacterAndOneIsPresent(): void
+    {
+        $state = new GameState(player: $this->samplePlayer());
+        $controller = $this->makeController(
+            new Request('GET', "/story/chapter/requires-character/1?state={$state->toQueryValue()}"),
+        );
+
+        $response = $controller->chapter('requires-character', 1);
+
+        $this->assertNull($response);
+        $this->assertNotNull($controller->getView()->get('node'));
+    }
+
+    /**
+     * A story that doesn't require a character is unaffected — this is what actually proves the check doesn't
+     * fire indiscriminately, only for the stories that opted into it.
+     *
+     * @link \App\Controller\StoryController::chapter()
+     */
+    #[Test]
+    public function testChapterRendersNormallyWhenStoryDoesNotRequireACharacter(): void
+    {
+        $controller = $this->makeController(new Request('GET', '/story/chapter/mini-quest/1'));
+
+        $response = $controller->chapter('mini-quest', 1);
+
+        $this->assertNull($response);
+    }
+
+    /**
+     * @link \App\Controller\StoryController::roll()
+     */
+    #[Test]
+    public function testRollRedirectsToCharacterWhenStoryRequiresOneAndNoneIsPresent(): void
+    {
+        $controller = $this->makeController(new Request('GET', '/story/roll/requires-character/1'));
+
+        $response = $controller->roll('requires-character', 1);
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame('/story/character/requires-character', $response->headers()['Location']);
+    }
+
+    /**
+     * @link \App\Controller\StoryController::start()
+     */
+    #[Test]
+    public function testStartRedirectsToCharacterWhenStoryRequiresOneAndNoneIsPresent(): void
+    {
+        $controller = $this->makeController(new Request('GET', '/story/start/requires-character'));
+
+        $response = $controller->start('requires-character');
+
+        $this->assertInstanceOf(Response::class, $response);
+        $this->assertSame('/story/character/requires-character', $response->headers()['Location']);
+    }
 }

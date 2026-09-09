@@ -1,0 +1,14 @@
+{
+    "game": {
+        "id": "requires-character",
+        "title": "Requires Character",
+        "author": "Test Author",
+        "description": "A minimal story with requires_character: true, for testing StoryController's enforcement.",
+        "language": "en",
+        "version": "1.0",
+        "requires_character": true
+    },
+    "nodes": {
+        "1": {"content": "You need a character to be here.", "type": "victory"}
+    }
+}

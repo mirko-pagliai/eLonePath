@@ -138,6 +138,23 @@ class StoryController extends AppController
     }
 
     /**
+     * If `$game` requires a character and none is present, redirects to `character()` for this story instead of
+     * letting the caller continue — closing the gap `?state=` alone leaves open: nothing stops a player from
+     * typing a chapter's URL directly, skipping character creation entirely, and `propagateState()` on its own
+     * only reads whatever state happens to be there, it doesn't enforce that any should be.
+     *
+     * Call this right after `propagateState()`, in any action a player could plausibly reach directly by URL.
+     */
+    private function requireCharacterIfNeeded(Game $game, string $storyId, ?Character $character): ?Response
+    {
+        if (!$game->requiresCharacter || $character !== null) {
+            return null;
+        }
+
+        return $this->redirect(url: ['controller' => 'Story', 'action' => 'character', $storyId]);
+    }
+
+    /**
      * Starts the game by checking for a preface and determining whether to redirect or set up the necessary game data.
      *
      * @param string $storyId The unique identifier of the story to start.
@@ -149,7 +166,11 @@ class StoryController extends AppController
     {
         $game = $this->getGame($storyId);
 
-        $this->propagateState();
+        $character = $this->propagateState();
+        if (($response = $this->requireCharacterIfNeeded($game, $storyId, $character)) !== null) {
+            return $response;
+        }
+
         $stateValue = $this->queryParam('state');
 
         // If the game does not have a preface, redirects to the first chapter
@@ -168,17 +189,23 @@ class StoryController extends AppController
     /**
      * @param string $storyId
      * @param int $nodeNumber
-     * @return void
+     * @return \Elone\Core\Server\Response|null Returns a redirect to `character()` if this story requires one and
+     * none is present; `null` otherwise, to render the chapter.
      * @link templates/Story/chapter.php
      */
-    public function chapter(string $storyId, int $nodeNumber): void
+    public function chapter(string $storyId, int $nodeNumber): ?Response
     {
         $game = $this->getGame($storyId);
         $node = $game->getNode($nodeNumber);
 
-        $this->propagateState();
+        $character = $this->propagateState();
+        if (($response = $this->requireCharacterIfNeeded($game, $storyId, $character)) !== null) {
+            return $response;
+        }
 
         $this->set(compact('game', 'node'));
+
+        return null;
     }
 
     /**
@@ -186,16 +213,20 @@ class StoryController extends AppController
      *
      * @param string $storyId
      * @param int $nodeNumber
-     * @return void
+     * @return \Elone\Core\Server\Response|null Returns a redirect to `character()` if this story requires one and
+     * none is present; `null` otherwise, to render the roll's outcome.
      * @throws \Random\RandomException
      * @link templates/Story/roll.php
      */
-    public function roll(string $storyId, int $nodeNumber): void
+    public function roll(string $storyId, int $nodeNumber): ?Response
     {
         $game = $this->getGame($storyId);
         $node = $game->getNode($nodeNumber);
 
-        $this->propagateState();
+        $character = $this->propagateState();
+        if (($response = $this->requireCharacterIfNeeded($game, $storyId, $character)) !== null) {
+            return $response;
+        }
 
         if (!$node instanceof DiceNode) {
             throw new RuntimeException("Node `$nodeNumber` in `$storyId` is not a dice check.");
@@ -207,6 +238,8 @@ class StoryController extends AppController
         $target = $node->targetFor($total);
 
         $this->set(compact('game', 'rolls', 'total', 'success', 'target'));
+
+        return null;
     }
 
     /**

@@ -5,6 +5,8 @@ namespace Test\Story;
 
 use App\Story\Game;
 use App\Story\Nodes\Node;
+use App\Story\StoryDifficulty;
+use App\Story\StoryGenre;
 use Elone\Core\Exception\HttpException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
@@ -235,5 +237,39 @@ class GameTest extends TestCase
 
         $this->expectExceptionMessageIs("Failed to parse `$path`: expected a JSON object at the top level.");
         Game::createFromFile($path);
+    }
+
+    /**
+     * `sampleData()` never sets `genre`/`difficulty`/`requires_character` — this is what every story written
+     * before these keys existed gets: no genre or difficulty label, no character required.
+     *
+     * @link \App\Story\Game::createFromArray()
+     */
+    #[Test]
+    public function testCreateFromArrayDefaultsGenreDifficultyAndRequiresCharacter(): void
+    {
+        $game = Game::createFromArray($this->sampleData());
+
+        $this->assertNull($game->genre);
+        $this->assertNull($game->difficulty);
+        $this->assertFalse($game->requiresCharacter);
+    }
+
+    /**
+     * @link \App\Story\Game::createFromArray()
+     */
+    #[Test]
+    public function testCreateFromArrayWithGenreDifficultyAndRequiresCharacter(): void
+    {
+        $data = $this->sampleData();
+        $data['game']['genre'] = 'science_fiction';
+        $data['game']['difficulty'] = 'medium';
+        $data['game']['requires_character'] = true;
+
+        $game = Game::createFromArray($data);
+
+        $this->assertSame(StoryGenre::SCIENCE_FICTION, $game->genre);
+        $this->assertSame(StoryDifficulty::MEDIUM, $game->difficulty);
+        $this->assertTrue($game->requiresCharacter);
     }
 }

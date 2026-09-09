@@ -34,4 +34,3 @@ enum StoryDifficulty: string implements LabeledEnum
         };
     }
 }
-

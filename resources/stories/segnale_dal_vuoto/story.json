@@ -7,7 +7,10 @@
         "description": "Una stazione di ricerca alla deriva, un segnale di soccorso senza voce, e qualcosa a bordo che non dovrebbe più essere vivo.",
         "language": "it",
         "version": "1.0-alpha",
-        "preface": "Sei ai comandi della *Vela Sottile*, una piccola nave da ricognizione ai margini dello spazio conosciuto.\n\nUn segnale di soccorso, debole e ripetuto, ti porta fino alla **Kairos** — una stazione di ricerca alla deriva, silenziosa da mesi.\n\nNon hai intenzione di restarci a lungo.\n\n## Buona fortuna, pilota."
+        "preface": "Sei ai comandi della *Vela Sottile*, una piccola nave da ricognizione ai margini dello spazio conosciuto.\n\nUn segnale di soccorso, debole e ripetuto, ti porta fino alla **Kairos** — una stazione di ricerca alla deriva, silenziosa da mesi.\n\nNon hai intenzione di restarci a lungo.\n\n## Buona fortuna, pilota.",
+        "genre": "science_fiction",
+        "difficulty": "medium",
+        "requires_character": true
     },
     "nodes": {
         "1": {

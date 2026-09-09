@@ -156,7 +156,7 @@ class StoryControllerTest extends TestCase
 
         $this->assertNull($result);
         $this->assertSame(
-            'The strength attribute must be at least 1, got `0`.',
+            'The strength attribute must be between 4 and 10, got `0`.',
             $controller->getView()->get('error'),
         );
     }

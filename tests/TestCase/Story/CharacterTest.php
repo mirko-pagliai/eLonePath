@@ -45,24 +45,27 @@ class CharacterTest extends TestCase
     }
 
     /**
-     * Strength and Agility have no upper bound of their own — only the sum constraint limits them. This locks
-     * that in, rather than leaving it provable only by reading the code.
+     * Strength and Agility each range 4-10 — this locks the boundaries in, rather than leaving them provable
+     * only by reading the code.
      *
      * @link \App\Story\Character::__construct()
      */
     #[Test]
-    public function testConstructAllowsStrengthOrAgilityAboveFive(): void
+    #[TestWith([4, 10])]
+    #[TestWith([10, 4])]
+    public function testConstructAllowsStrengthAndAgilityAtEitherBoundary(int $strength, int $agility): void
     {
         $character = new Character(
             maxLifePoints: 20,
             lifePoints: 20,
-            strength: 17,
-            agility: 1,
-            perception: 1,
-            willpower: 1,
+            strength: $strength,
+            agility: $agility,
+            perception: 3,
+            willpower: 3,
         );
 
-        $this->assertSame(17, $character->strength);
+        $this->assertSame($strength, $character->strength);
+        $this->assertSame($agility, $character->agility);
     }
 
     /**
@@ -117,22 +120,26 @@ class CharacterTest extends TestCase
      * @link \App\Story\Character::__construct()
      */
     #[Test]
-    public function testConstructWithStrengthTooLow(): void
+    #[TestWith([3])]
+    #[TestWith([11])]
+    public function testConstructWithStrengthOutOfRange(int $strength): void
     {
-        $this->expectExceptionMessageIs('The strength attribute must be at least 1, got `0`.');
+        $this->expectExceptionMessageIs("The strength attribute must be between 4 and 10, got `$strength`.");
 
-        new Character(maxLifePoints: 20, lifePoints: 20, strength: 0, agility: 14, perception: 3, willpower: 3);
+        new Character(maxLifePoints: 20, lifePoints: 20, strength: $strength, agility: 7, perception: 3, willpower: 3);
     }
 
     /**
      * @link \App\Story\Character::__construct()
      */
     #[Test]
-    public function testConstructWithAgilityTooLow(): void
+    #[TestWith([3])]
+    #[TestWith([11])]
+    public function testConstructWithAgilityOutOfRange(int $agility): void
     {
-        $this->expectExceptionMessageIs('The agility attribute must be at least 1, got `0`.');
+        $this->expectExceptionMessageIs("The agility attribute must be between 4 and 10, got `$agility`.");
 
-        new Character(maxLifePoints: 20, lifePoints: 20, strength: 14, agility: 0, perception: 3, willpower: 3);
+        new Character(maxLifePoints: 20, lifePoints: 20, strength: 7, agility: $agility, perception: 3, willpower: 3);
     }
 
     /**
@@ -145,12 +152,10 @@ class CharacterTest extends TestCase
     {
         $this->expectExceptionMessageIs("The perception attribute must be between 1 and 5, got `$perception`.");
 
-        $strength = 20 - 8 - $perception - 3;
-
         new Character(
             maxLifePoints: 20,
             lifePoints: 20,
-            strength: $strength,
+            strength: 5,
             agility: 8,
             perception: $perception,
             willpower: 3,
@@ -167,12 +172,10 @@ class CharacterTest extends TestCase
     {
         $this->expectExceptionMessageIs("The willpower attribute must be between 1 and 5, got `$willpower`.");
 
-        $strength = 20 - 8 - 3 - $willpower;
-
         new Character(
             maxLifePoints: 20,
             lifePoints: 20,
-            strength: $strength,
+            strength: 5,
             agility: 8,
             perception: 3,
             willpower: $willpower,
@@ -185,9 +188,9 @@ class CharacterTest extends TestCase
     #[Test]
     public function testConstructWithInvalidSum(): void
     {
-        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got `12`.");
+        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got `10`.");
 
-        new Character(maxLifePoints: 20, lifePoints: 20, strength: 3, agility: 3, perception: 3, willpower: 3);
+        new Character(maxLifePoints: 20, lifePoints: 20, strength: 4, agility: 4, perception: 1, willpower: 1);
     }
 
     /**
@@ -218,8 +221,10 @@ class CharacterTest extends TestCase
         for ($i = 0; $i < 2000; $i++) {
             $character = Character::createRandom(maxLifePoints: 20);
 
-            $this->assertGreaterThanOrEqual(1, $character->strength);
-            $this->assertGreaterThanOrEqual(1, $character->agility);
+            $this->assertGreaterThanOrEqual(4, $character->strength);
+            $this->assertLessThanOrEqual(10, $character->strength);
+            $this->assertGreaterThanOrEqual(4, $character->agility);
+            $this->assertLessThanOrEqual(10, $character->agility);
             $this->assertGreaterThanOrEqual(1, $character->perception);
             $this->assertLessThanOrEqual(5, $character->perception);
             $this->assertGreaterThanOrEqual(1, $character->willpower);
@@ -409,15 +414,15 @@ class CharacterTest extends TestCase
     #[Test]
     public function testCreateFromArrayWithInvalidDataThrows(): void
     {
-        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got `12`.");
+        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got `10`.");
 
         Character::createFromArray([
             'max_life_points' => 20,
             'life_points' => 20,
-            'strength' => 3,
-            'agility' => 3,
-            'perception' => 3,
-            'willpower' => 3,
+            'strength' => 4,
+            'agility' => 4,
+            'perception' => 1,
+            'willpower' => 1,
         ]);
     }
 }

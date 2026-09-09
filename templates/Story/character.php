@@ -22,20 +22,21 @@ if ($error) {
 </p>
 
 <p class="fs-5 mb-4">
-    <strong>Forza</strong> e <strong>Agilità</strong> non hanno un massimo proprio.<br />
+    <strong>Forza</strong> e <strong>Agilità</strong> vanno da 4 a 10 ciascuna.<br />
     <strong>Percezione</strong> e <strong>Volontà</strong> vanno da 1 a 5 ciascuna.<br />
     La somma dei quattro deve fare esattamente 20.
 </p>
 
-<?php
-echo $this->Form->create(['controller' => 'Story', 'action' => 'character', $game->gameId]);
-echo $this->Form->input('strength', 'Forza', ['type' => 'number', 'min' => 1, 'required' => true]);
-echo $this->Form->input('agility', 'Agilità', ['type' => 'number', 'min' => 1, 'required' => true]);
-echo $this->Form->input('perception', 'Percezione', ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true]);
-echo $this->Form->input('willpower', 'Volontà', ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true]);
-echo $this->Form->submit('Crea personaggio', ['class' => 'btn fs-4 elone-button px-4 py-2']);
-echo $this->Form->end();
-?>
+<?= $this->Form->create(['controller' => 'Story', 'action' => 'character', $game->gameId]) ?>
+
+<?= $this->Form->input('strength', 'Forza', ['type' => 'number', 'min' => 4, 'max' => 10, 'required' => true]) ?>
+<?= $this->Form->input('agility', 'Agilità', ['type' => 'number', 'min' => 4, 'max' => 10, 'required' => true]) ?>
+<?= $this->Form->input('perception', 'Percezione', ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true]) ?>
+<?= $this->Form->input('willpower', 'Volontà', ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true]) ?>
+
+<?= $this->Form->submit('Crea personaggio', ['class' => 'btn fs-4 elone-button px-4 py-2']) ?>
+
+<?= $this->Form->end() ?>
 
 <p class="fs-5 mt-3">
     Non hai voglia di fare i calcoli?

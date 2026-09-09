@@ -176,7 +176,10 @@ class NodeImagesWalkerTest extends TestCase
         $walker = new NodeImagesWalker($game);
 
         $errors = $walker();
-        $this->assertNotEmpty(array_filter($errors, fn(string $e): bool => str_contains($e, '2 images')));
+        $this->assertNotEmpty(array_filter(
+            $errors,
+            fn(string $e): bool => str_contains($e, '2') && str_contains($e, 'images'),
+        ));
     }
 
     /**

@@ -26,10 +26,12 @@ use TypeError;
  * It can also be used in narrative paragraphs to resist fear, pressure, pain, intimidation, or other similar
  * situations.
  *
- * Strength and Agility have no upper bound of their own — Perception and Willpower do (1-5 each) — because the four
- * must sum to exactly `TOTAL_ATTRIBUTE_POINTS`. Capping every attribute at 1-5 while also requiring that exact sum
- * leaves exactly one possible character (5, 5, 5, 5); the asymmetry is what keeps the point distribution a real
- * choice, weighted toward the two attributes with the most direct role in combat.
+ * Strength and Agility each range 4-10; Perception and Willpower each range 1-5 — all four must sum to exactly
+ * `TOTAL_ATTRIBUTE_POINTS`. The narrower range on Perception/Willpower, and the floor (not just a ceiling) on
+ * Strength/Agility, both exist for the same reason: without them, `Combat`'s formula lets a character dump
+ * everything into Agility and become nearly unbeatable, since Agility alone decides who lands every hit. Capping
+ * how far any single attribute can be pushed is what keeps the four a real trade-off instead of one dominant
+ * choice.
  *
  * `lifePoints` and `maxLifePoints` are deliberately two separate fields, not one: `maxLifePoints` is fixed for the
  * character's whole story (set once, here, and never changed by `withDamage()`/`withHeal()`), while `lifePoints` is
@@ -74,7 +76,7 @@ final class Character implements Arrayable
 
     /**
      * @throws \RuntimeException If `$maxLifePoints` is less than 1, if `$lifePoints` is outside `0..maxLifePoints`,
-     * if `$strength` or `$agility` is less than 1, if `$perception` or `$willpower` is outside 1-5, or if the four
+     * if `$strength` or `$agility` is outside 4-10, if `$perception` or `$willpower` is outside 1-5, or if the four
      * attributes don't sum to `TOTAL_ATTRIBUTE_POINTS`.
      */
     public function __construct(
@@ -96,12 +98,12 @@ final class Character implements Arrayable
             );
         }
 
-        if ($this->strength < 1) {
-            throw new RuntimeException("The strength attribute must be at least 1, got `$this->strength`.");
+        if ($this->strength < 4 || $this->strength > 10) {
+            throw new RuntimeException("The strength attribute must be between 4 and 10, got `$this->strength`.");
         }
 
-        if ($this->agility < 1) {
-            throw new RuntimeException("The agility attribute must be at least 1, got `$this->agility`.");
+        if ($this->agility < 4 || $this->agility > 10) {
+            throw new RuntimeException("The agility attribute must be between 4 and 10, got `$this->agility`.");
         }
 
         if ($this->perception < 1 || $this->perception > 5) {
@@ -149,9 +151,9 @@ final class Character implements Arrayable
      * Builds a brand-new character with a random, valid distribution of the 20-point attribute budget — for
      * anyone who'd rather not work out a distribution by hand. Perception and Willpower are each rolled within
      * their own 1-5 range first; whatever's left of the budget is then split between Strength and Agility, each
-     * ending up at least 1 — the only constraint either has today. Delegates to `createNew()` for the actual
-     * construction, so a random character is subject to exactly the same rules as a hand-picked one, not a
-     * separate path that could drift from them.
+     * kept within its own 4-10 range. Delegates to `createNew()` for the actual construction, so a random
+     * character is subject to exactly the same rules as a hand-picked one, not a separate path that could drift
+     * from them.
      *
      * @throws \Random\RandomException
      */
@@ -161,8 +163,14 @@ final class Character implements Arrayable
         $willpower = random_int(1, 5);
 
         $remaining = self::TOTAL_ATTRIBUTE_POINTS - $perception - $willpower;
-        // Splits $remaining between strength and agility, each at least 1 — the only constraint either has today.
-        $strength = random_int(1, $remaining - 1);
+        // Keeps both strength and agility within 4-10: strength can't be so low that the rest would push agility
+        // over 10, nor so high that the rest would leave agility under 4.
+        $minStrength = max(4, $remaining - 10);
+        $maxStrength = min(10, $remaining - 4);
+        // Both bounds come from the same $remaining, which keeps $minStrength <= $maxStrength for every
+        // possible value of $remaining (10-18) — verified exhaustively; PHPStan tracks the two ranges
+        // independently and can't see that correlation.
+        $strength = random_int($minStrength, $maxStrength); // @phpstan-ignore argument.type
         $agility = $remaining - $strength;
 
         return self::createNew(

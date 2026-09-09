@@ -5,11 +5,11 @@ namespace App\Story\Combat;
 
 /**
  * Resolves a single round of combat between the player and an enemy — an opposed roll where each side's total is
- * their own already-rolled 2d6 sum plus half their own Agility (rounded down): Agility decides who lands the hit,
- * but its influence is deliberately dampened rather than added in full, so a wide Agility gap doesn't make Strength
- * irrelevant — a strong, clumsy character still keeps a real chance to land (and win) a hit against a fast, weak
- * one. Whoever wins the roll deals damage equal to their own Strength plus a bonus scaled by the margin they won
- * by; a tied roll is a parry, and neither side is hurt.
+ * their own already-rolled 2d6 sum plus a third of their own Agility (rounded down): Agility decides who lands
+ * the hit, nothing else. Whoever wins deals damage equal to their own Strength, flat — not scaled by how wide the
+ * winning margin was. The two attributes are deliberately kept from overlapping: Agility only ever affects who
+ * hits, Strength only ever affects how hard, so neither one can double up on the other's job. A tied roll is a
+ * parry; neither side is hurt.
  *
  * Rolling the actual dice is the caller's job, not this class's — the same way `StoryController::roll()` already
  * rolls for a `DiceNode`'s own check itself, passing only the resulting total into `DiceNode::isSuccess()`. Kept
@@ -18,12 +18,6 @@ namespace App\Story\Combat;
  */
 final readonly class Combat
 {
-    /**
-     * The floor on how much damage a hit deals, regardless of how narrow the winning margin was — a hit that
-     * barely wins should still hurt.
-     */
-    private const int MINIMUM_DAMAGE = 2;
-
     /**
      * @param \App\Story\Combat\Combatant $player The player's stats for this round.
      * @param \App\Story\Combat\Combatant $enemy The enemy's stats for this round.
@@ -36,8 +30,8 @@ final readonly class Combat
         int $playerRoll,
         int $enemyRoll,
     ): CombatRoundResult {
-        $playerTotal = $playerRoll + intdiv($player->agility, 2);
-        $enemyTotal = $enemyRoll + intdiv($enemy->agility, 2);
+        $playerTotal = $playerRoll + intdiv($player->agility, 3);
+        $enemyTotal = $enemyRoll + intdiv($enemy->agility, 3);
         $delta = $playerTotal - $enemyTotal;
 
         if ($delta === 0) {
@@ -52,26 +46,22 @@ final readonly class Combat
         }
 
         if ($delta > 0) {
-            $damage = max(self::MINIMUM_DAMAGE, $player->strength + intdiv($delta, 2));
-
             return new CombatRoundResult(
                 hit: CombatHit::Player,
-                damage: $damage,
+                damage: $player->strength,
                 playerTotal: $playerTotal,
                 enemyTotal: $enemyTotal,
                 playerLifePoints: $player->lifePoints,
-                enemyLifePoints: max(0, $enemy->lifePoints - $damage),
+                enemyLifePoints: max(0, $enemy->lifePoints - $player->strength),
             );
         }
 
-        $damage = max(self::MINIMUM_DAMAGE, $enemy->strength + intdiv(abs($delta), 2));
-
         return new CombatRoundResult(
             hit: CombatHit::Enemy,
-            damage: $damage,
+            damage: $enemy->strength,
             playerTotal: $playerTotal,
             enemyTotal: $enemyTotal,
-            playerLifePoints: max(0, $player->lifePoints - $damage),
+            playerLifePoints: max(0, $player->lifePoints - $enemy->strength),
             enemyLifePoints: $enemy->lifePoints,
         );
     }

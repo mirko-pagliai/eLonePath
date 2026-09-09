@@ -257,13 +257,14 @@ class StoryController extends AppController
             agility: $node->enemyAgility,
         );
 
-        $rollTwoD6 = static fn(): int => array_sum(new Dice()->rollDouble());
+        $playerDice = new Dice()->rollDouble();
+        $enemyDice = new Dice()->rollDouble();
 
         $result = Combat::resolveRound(
             player: $character->toCombatant(),
             enemy: $enemy->toCombatant(),
-            playerRoll: $rollTwoD6(),
-            enemyRoll: $rollTwoD6(),
+            playerDice: $playerDice,
+            enemyDice: $enemyDice,
         );
 
         if ($result->hit === CombatHit::Player) {

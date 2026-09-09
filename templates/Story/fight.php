@@ -17,7 +17,7 @@ use App\Story\Combat\CombatHit;
 /** @link templates/element/chapter_header.php */
 echo $this->element(
     name: 'chapter_header',
-    data: ['title' => $game->title, 'subtitle' => "Combattimento contro $node->enemyName"],
+    data: ['title' => $game->title, 'subtitle' => "Combattimento contro {$node->enemyName}"],
 );
 
 /** @link templates/element/character_sheet.php */
@@ -25,30 +25,37 @@ echo $this->element(name: 'character_sheet', data: ['character' => $character]);
 ?>
 
 <section id="combat-round" class="fs-4 mb-4 text-center">
-    <div class="d-flex justify-content-center">
+    <div class="d-flex justify-content-center gap-5 mb-4">
         <div>
-            Tu
+            <p class="mb-1">Tu</p>
 
-            <?= $this->Html->icon(
-                name: "dice-$result->playerTotal",
-                options: ['class' => 'd-block', 'style' => 'font-size: 5rem'],
-            ) ?>
+            <?php foreach ($result->playerDice as $roll) : ?>
+                <?= $this->Html->icon(
+                    name: "dice-$roll",
+                    options: ['class' => 'mx-1', 'style' => 'font-size: 3rem'],
+                ) ?>
+            <?php endforeach; ?>
+
+            <p class="fs-2 mb-0">
+                Totale: <strong><?= $result->playerDiceTotal ?></strong>
+            </p>
         </div>
 
         <div>
-            <?= h($node->enemyName) ?> (nemico)
+            <p class="mb-1">Nemico (<em><?= h($node->enemyName) ?>)</em></p>
 
-            <?= $this->Html->icon(
-                name: "dice-$result->enemyTotal",
-                options: ['class' => 'd-block', 'style' => 'font-size: 5rem'],
-            ) ?>
+            <?php foreach ($result->enemyDice as $roll) : ?>
+                <?= $this->Html->icon(
+                    name: "dice-$roll",
+                    options: ['class' => 'mx-1', 'style' => 'font-size: 3rem'],
+                ) ?>
+            <?php endforeach; ?>
+
+            <p class="fs-2 mb-0">
+                Totale: <strong><?= $result->enemyDiceTotal ?></strong>
+            </p>
         </div>
     </div>
-
-    <p class="fs-2">
-        Tu: <strong><?= $result->playerTotal ?></strong>
-        — <?= h($node->enemyName) ?>: <strong><?= $result->enemyTotal ?></strong>
-    </p>
 
     <p class="fs-3 fst-italic mb-4">
         <?php if ($result->hit === CombatHit::Player) : ?>
@@ -62,12 +69,12 @@ echo $this->element(name: 'character_sheet', data: ['character' => $character]);
 
     <p class="fs-4 mb-4">
         <?= h($node->enemyName) ?>:
-        <strong><?= $enemy->lifePoints ?> / <?= $enemy->maxLifePoints ?></strong> Punti Vita
+        <strong><?= $enemy->lifePoints ?> / <?= $enemy->maxLifePoints ?></strong> punti vita
     </p>
 
     <?= $this->Story->link(
-        text: 'Continua a combattere',
+        text: $this->Html->icon('bi-crosshair', ['class' => 'me-1']) . 'Continua a combattere',
         url: ['controller' => 'Story', 'action' => 'fight', $game->gameId, $node->id],
-        options: ['class' => 'elone-button'],
+        options: ['class' => 'elone-button d-inline-block px-3 py-2'],
     ) ?>
 </section>

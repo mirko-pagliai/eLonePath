@@ -25,12 +25,14 @@ class CombatTest extends TestCase
         $player = new Combatant(strength: 10, agility: 6, lifePoints: 20);
         $enemy = new Combatant(strength: 6, agility: 9, lifePoints: 20);
 
-        // playerTotal = 8 + intdiv(6,3)=2 -> 10, enemyTotal = 4 + intdiv(9,3)=3 -> 7, delta = 3
-        $result = Combat::resolveRound($player, $enemy, playerRoll: 8, enemyRoll: 4);
+        // playerDiceTotal = (5+3) + intdiv(6,3)=2 -> 10, enemyDiceTotal = (2+2) + intdiv(9,3)=3 -> 7, delta = 3
+        $result = Combat::resolveRound($player, $enemy, playerDice: [5, 3], enemyDice: [2, 2]);
 
         $this->assertSame(CombatHit::Player, $result->hit);
-        $this->assertSame(10, $result->playerTotal);
-        $this->assertSame(7, $result->enemyTotal);
+        $this->assertSame([5, 3], $result->playerDice);
+        $this->assertSame([2, 2], $result->enemyDice);
+        $this->assertSame(10, $result->playerDiceTotal);
+        $this->assertSame(7, $result->enemyDiceTotal);
         // damage = player's own strength, flat
         $this->assertSame(10, $result->damage);
         $this->assertSame(20, $result->playerLifePoints);
@@ -46,8 +48,8 @@ class CombatTest extends TestCase
         $player = new Combatant(strength: 10, agility: 6, lifePoints: 20);
         $enemy = new Combatant(strength: 6, agility: 9, lifePoints: 20);
 
-        // playerTotal = 4 + 2 = 6, enemyTotal = 8 + 3 = 11, delta = -5
-        $result = Combat::resolveRound($player, $enemy, playerRoll: 4, enemyRoll: 8);
+        // playerDiceTotal = (2+2) + 2 = 6, enemyDiceTotal = (5+3) + 3 = 11, delta = -5
+        $result = Combat::resolveRound($player, $enemy, playerDice: [2, 2], enemyDice: [5, 3]);
 
         $this->assertSame(CombatHit::Enemy, $result->hit);
         // damage = enemy's own strength, flat
@@ -65,8 +67,8 @@ class CombatTest extends TestCase
         $player = new Combatant(strength: 10, agility: 6, lifePoints: 20);
         $enemy = new Combatant(strength: 6, agility: 6, lifePoints: 20);
 
-        // playerTotal = 5 + 2 = 7, enemyTotal = 5 + 2 = 7, delta = 0
-        $result = Combat::resolveRound($player, $enemy, playerRoll: 5, enemyRoll: 5);
+        // playerDiceTotal = (3+2) + 2 = 7, enemyDiceTotal = (3+2) + 2 = 7, delta = 0
+        $result = Combat::resolveRound($player, $enemy, playerDice: [3, 2], enemyDice: [3, 2]);
 
         $this->assertSame(CombatHit::None, $result->hit);
         $this->assertSame(0, $result->damage);
@@ -87,10 +89,10 @@ class CombatTest extends TestCase
         $player = new Combatant(strength: 7, agility: 4, lifePoints: 20);
         $enemy = new Combatant(strength: 5, agility: 4, lifePoints: 20);
 
-        // Narrow win: playerTotal = 5 + 1 = 6, enemyTotal = 4 + 1 = 5, delta = 1
-        $narrow = Combat::resolveRound($player, $enemy, playerRoll: 5, enemyRoll: 4);
-        // Wide win: playerTotal = 12 + 1 = 13, enemyTotal = 2 + 1 = 3, delta = 10
-        $wide = Combat::resolveRound($player, $enemy, playerRoll: 12, enemyRoll: 2);
+        // Narrow win: playerDiceTotal = (3+2) + 1 = 6, enemyDiceTotal = (2+2) + 1 = 5, delta = 1
+        $narrow = Combat::resolveRound($player, $enemy, playerDice: [3, 2], enemyDice: [2, 2]);
+        // Wide win: playerDiceTotal = (6+6) + 1 = 13, enemyDiceTotal = (1+1) + 1 = 3, delta = 10
+        $wide = Combat::resolveRound($player, $enemy, playerDice: [6, 6], enemyDice: [1, 1]);
 
         $this->assertSame(CombatHit::Player, $narrow->hit);
         $this->assertSame(CombatHit::Player, $wide->hit);
@@ -109,8 +111,8 @@ class CombatTest extends TestCase
         $player = new Combatant(strength: 15, agility: 10, lifePoints: 20);
         $enemy = new Combatant(strength: 1, agility: 1, lifePoints: 3);
 
-        // playerTotal = 10 + intdiv(10,3)=3 -> 13, enemyTotal = 2 + 0 = 2, delta = 11
-        $result = Combat::resolveRound($player, $enemy, playerRoll: 10, enemyRoll: 2);
+        // playerDiceTotal = (5+5) + intdiv(10,3)=3 -> 13, enemyDiceTotal = (1+1) + 0 = 2, delta = 11
+        $result = Combat::resolveRound($player, $enemy, playerDice: [5, 5], enemyDice: [1, 1]);
 
         $this->assertSame(CombatHit::Player, $result->hit);
         $this->assertSame(15, $result->damage);

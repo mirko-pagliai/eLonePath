@@ -80,7 +80,7 @@ if ($character) {
         </p>
 
         <?= $this->Story->link(
-            text: $this->Html->icon('shield', ['class' => 'me-1']) . ' Affronta il nemico',
+            text: $this->Html->icon('bi-crosshair', ['class' => 'me-1']) . ' Affronta il nemico',
             url: ['controller' => 'Story', 'action' => 'fight', $game->gameId, $node->id],
             options: [
                 'class' => 'elone-button',

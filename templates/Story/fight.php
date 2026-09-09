@@ -25,6 +25,26 @@ echo $this->element(name: 'character_sheet', data: ['character' => $character]);
 ?>
 
 <section id="combat-round" class="fs-4 mb-4 text-center">
+    <div class="d-flex justify-content-center">
+        <div>
+            Tu
+
+            <?= $this->Html->icon(
+                name: "dice-$result->playerTotal",
+                options: ['class' => 'd-block', 'style' => 'font-size: 5rem'],
+            ) ?>
+        </div>
+
+        <div>
+            <?= h($node->enemyName) ?> (nemico)
+
+            <?= $this->Html->icon(
+                name: "dice-$result->enemyTotal",
+                options: ['class' => 'd-block', 'style' => 'font-size: 5rem'],
+            ) ?>
+        </div>
+    </div>
+
     <p class="fs-2">
         Tu: <strong><?= $result->playerTotal ?></strong>
         — <?= h($node->enemyName) ?>: <strong><?= $result->enemyTotal ?></strong>

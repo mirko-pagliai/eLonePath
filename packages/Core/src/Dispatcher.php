@@ -66,17 +66,19 @@ readonly class Dispatcher
      */
     protected function detectLocale(Request $request): string
     {
+        $defaultLocale = 'en';
+
         $header = $request->getHeader('Accept-Language');
         if ($header === null) {
-            return 'en';
+            return $defaultLocale;
         }
 
         $locale = Locale::acceptFromHttp($header);
         if ($locale === false) {
-            return 'en';
+            return $defaultLocale;
         }
 
-        return Locale::getPrimaryLanguage($locale) ?? 'en';
+        return Locale::getPrimaryLanguage($locale) ?? $defaultLocale;
     }
 
     /**

@@ -13,28 +13,28 @@ declare(strict_types=1);
     options: ['class' => 'd-block img-fluid mb-5 mx-auto'],
 ) ?>
 
-<p class="fs-4 mb-4 text-center">
+<h3 class="display-5 mb-4 text-center">
     Librogame digitali
-</p>
+</h3>
 
-<p class="fs-5 mb-2">
+<p>
     <em>eLone Path</em> porta l'esperienza dei librigame cartacei nel digitale, senza tradirne lo spirito: storie fatte
     di pagine numerate, scelte, prove di abilità, combattimenti e finali diversi.
 </p>
 
-<p class="fs-5 mb-4">
+<p>
     Come su carta, sei libero di sfogliare come vuoi: puoi tornare indietro dopo una sconfitta, o saltare a una
     pagina qualsiasi cambiando l'indirizzo. Nessuno stato nascosto sul server: il tuo personaggio, quando c'è,
     viaggia nell'indirizzo stesso della pagina — puoi salvarla, condividerla, riprendere da lì.
 </p>
 
-<p class="fs-5 mb-2">
+<p>
     Le storie che lo richiedono iniziano con la creazione di un personaggio: distribuisci venti punti tra
     <strong>Forza</strong>, <strong>Agilità</strong>, <strong>Percezione</strong> e <strong>Volontà</strong> — o
     lascia che sia il caso a deciderlo per te.
 </p>
 
-<p class="fs-5 mb-4">
+<p>
     In combattimento, l'Agilità decide chi colpisce, la Forza quanto sono i danni procurati al nemico.
 </p>
 

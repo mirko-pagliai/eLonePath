@@ -17,11 +17,11 @@ if ($error) {
 }
 ?>
 
-<p class="fs-5 mb-4">
+<p class="mb-4">
     Distribuisci un <strong>totale di 20 punti</strong> tra i quattro attributi.
 </p>
 
-<p class="fs-5 mb-4">
+<p class="mb-4">
     <strong>Forza</strong> e <strong>Agilità</strong> vanno da 4 a 10 ciascuna.<br />
     <strong>Percezione</strong> e <strong>Volontà</strong> vanno da 1 a 5 ciascuna.<br />
     La somma dei quattro deve fare esattamente 20.

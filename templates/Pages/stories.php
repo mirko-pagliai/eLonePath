@@ -9,13 +9,13 @@ declare(strict_types=1);
  */
 ?>
 
-<h1 class="display-4 fw-semibold mb-3 text-center">
+<h1 class="display-5 mb-4 text-center">
     eLone Path
 </h1>
 
 <ul id="stories-list" class="list-unstyled">
     <?php foreach ($stories as $game) : ?>
-        <li class="position-relative py-3 px-4">
+        <li class="position-relative py-4 px-3">
             <?= $this->Html->link(
                 text: $game->title,
                 url: ['controller' => 'Story', 'action' => 'character', $game->gameId],
@@ -23,17 +23,33 @@ declare(strict_types=1);
             ) ?>
 
             <?php if ($game->description) : ?>
-                <div class="mt-1 fs-4">
-                    <?= h($game->description) ?>
-                </div>
+            <div class="mt-1 fs-4">
+                <?= h($game->description) ?>
+            </div>
             <?php endif; ?>
 
-            <div class="fs-5 mt-1 text-body-secondary">
+            <div class="d-flex flex-row gap-4 fs-5">
+                <div>
+                    Genere: <?= lcfirst($game->genre->label()) ?>
+                </div>
+
+                <div>
+                    Difficoltà: <?= lcfirst($game->difficulty->label()) ?>
+                </div>
+
+                <?php if ($game->requiresCharacter) : ?>
+                <div>
+                    Richiede la creazione di un personaggio
+                </div>
+                <?php endif; ?>
+            </div>
+
+            <div class="fs-5 text-body-secondary">
                 Autori: <?= h($game->author) ?>
             </div>
 
             <?php if ($game->translators) : ?>
-                <div class="fs-5 mt-1 text-body-secondary">
+                <div class="fs-5 text-body-secondary">
                     Traduttori: <?= h($game->translators) ?>
                 </div>
             <?php endif; ?>

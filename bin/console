@@ -5,6 +5,7 @@ declare(strict_types=1);
 require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/config/bootstrap.php';
 
+use Elone\Core\Command\ExtractMessagesCommand;
 use Symfony\Component\Console\Application;
 
 if (!class_exists(Application::class)) {
@@ -60,6 +61,15 @@ function discoverConsoleCommands(): array
 
 $application = new Application();
 
+// Core itself is a mandatory dependency of the app — unlike an optional package (Debugger, or any future one),
+// its own commands don't need the `extra["elone/console-commands"]` discovery dance below; they're wired in
+// directly. The `class_exists()` guard still matters here: Core's *own* console dependency (`symfony/console`,
+// already confirmed present above) is separate from the gettext libraries `ExtractMessagesCommand` itself needs
+// — those stay optional, so the command only gets added when they're actually installed.
+if (class_exists(\Gettext\Scanner\PhpScanner::class)) {
+    $application->addCommand(new ExtractMessagesCommand());
+}
+
 foreach (discoverConsoleCommands() as $commandClass) {
     if (class_exists($commandClass)) {
         $application->addCommand(new $commandClass());
@@ -67,4 +77,3 @@ foreach (discoverConsoleCommands() as $commandClass) {
 }
 
 $application->run();
-

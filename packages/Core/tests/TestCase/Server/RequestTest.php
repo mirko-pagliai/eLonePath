@@ -273,37 +273,37 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @link \Elone\Core\Server\Request::header()
+     * @link \Elone\Core\Server\Request::getHeader()
      */
     #[Test]
-    public function testHeader(): void
+    public function testGetHeader(): void
     {
         $request = new Request('GET', '/', headers: ['Accept-Language' => 'it-IT,it;q=0.9']);
 
-        $this->assertSame('it-IT,it;q=0.9', $request->header('Accept-Language'));
+        $this->assertSame('it-IT,it;q=0.9', $request->getHeader('Accept-Language'));
     }
 
     /**
-     * @link \Elone\Core\Server\Request::header()
+     * @link \Elone\Core\Server\Request::getHeader()
      */
     #[Test]
-    public function testHeaderWithMissingHeaderReturnsDefault(): void
+    public function testGetHeaderWithMissingHeaderReturnsDefault(): void
     {
         $request = new Request('GET', '/');
 
-        $this->assertNull($request->header('Accept-Language'));
-        $this->assertSame('fallback', $request->header('Accept-Language', 'fallback'));
+        $this->assertNull($request->getHeader('Accept-Language'));
+        $this->assertSame('fallback', $request->getHeader('Accept-Language', 'fallback'));
     }
 
     /**
-     * @link \Elone\Core\Server\Request::headers()
+     * @link \Elone\Core\Server\Request::getHeaders()
      */
     #[Test]
-    public function testHeaders(): void
+    public function testGetHeaders(): void
     {
         $request = new Request('GET', '/', headers: ['Accept-Language' => 'it', 'User-Agent' => 'Test/1.0']);
 
-        $this->assertSame(['Accept-Language' => 'it', 'User-Agent' => 'Test/1.0'], $request->headers());
+        $this->assertSame(['Accept-Language' => 'it', 'User-Agent' => 'Test/1.0'], $request->getHeaders());
     }
 
     /**
@@ -325,8 +325,8 @@ class RequestTest extends TestCase
         try {
             $request = Request::createFromGlobals();
 
-            $this->assertSame('fr-FR,fr;q=0.9', $request->header('Accept-Language'));
-            $this->assertNull($request->header('Server-Name'));
+            $this->assertSame('fr-FR,fr;q=0.9', $request->getHeader('Accept-Language'));
+            $this->assertNull($request->getHeader('Server-Name'));
         } finally {
             $_SERVER = $original;
         }

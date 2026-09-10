@@ -208,7 +208,7 @@ final class Request
      *
      * @return array<string, string> The request headers, keyed by their standard name.
      */
-    public function headers(): array
+    public function getHeaders(): array
     {
         return $this->headers;
     }
@@ -220,7 +220,7 @@ final class Request
      * @param string|null $default The value to return if `$name` isn't present.
      * @return string|null The header's value, or `$default`.
      */
-    public function header(string $name, ?string $default = null): ?string
+    public function getHeader(string $name, ?string $default = null): ?string
     {
         return $this->headers[$name] ?? $default;
     }

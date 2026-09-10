@@ -70,7 +70,7 @@ readonly class Dispatcher
     {
         return Locale::lookup(
             self::SUPPORTED_LOCALES,
-            $request->header('Accept-Language') ?? '',
+            $request->getHeader('Accept-Language') ?? '',
             true,
             'en',
         );

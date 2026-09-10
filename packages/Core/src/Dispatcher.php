@@ -21,13 +21,6 @@ use ReflectionParameter;
 readonly class Dispatcher
 {
     /**
-     * Locales this app can pick between when reading a request's own `Accept-Language` header.
-     *
-     * @var list<string>
-     */
-    private const array SUPPORTED_LOCALES = ['en', 'it'];
-
-    /**
      * Dispatches a request to the appropriate controller/action, resolving method arguments and generating a
      * response. Also initializes `Translator` with `detectLocale()`'s own pick for this request — done here, not
      * in the app's bootstrap, since `dispatch()` is the earliest point with a `Request` to read.
@@ -68,16 +61,22 @@ readonly class Dispatcher
      * Picks the locale for `$request`.
      *
      * @param \Elone\Core\Server\Request $request The current HTTP request object.
-     * @return string One of `SUPPORTED_LOCALES`, or `'en'` if `$request` doesn't ask for one we have.
+     * @return string The primary language `$request` asks for (e.g. `'it'`, from `it-IT` or `it_IT` alike), or
+     * `'en'` if it doesn't ask for one at all.
      */
     protected function detectLocale(Request $request): string
     {
-        return Locale::lookup(
-            self::SUPPORTED_LOCALES,
-            $request->getHeader('Accept-Language') ?? '',
-            true,
-            'en',
-        ) ?: 'en';
+        $header = $request->getHeader('Accept-Language');
+        if ($header === null) {
+            return 'en';
+        }
+
+        $locale = Locale::acceptFromHttp($header);
+        if ($locale === false) {
+            return 'en';
+        }
+
+        return Locale::getPrimaryLanguage($locale) ?? 'en';
     }
 
     /**

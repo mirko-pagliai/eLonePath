@@ -17,7 +17,7 @@ Anche il tuo nemico ha una sua Forza e una sua Agilità, oltre ai propri Punti V
 
 Ogni assalto — cioè ogni round dello scontro — si risolve così:
 
-1. **Tu lanci 2 dadi** e sommi al risultato la tua Agilità divisa per due, arrotondata per difetto. Questo è il tuo **totale d'assalto**.
+1. **Tu lanci 2 dadi** e sommi al risultato la tua Agilità divisa per tre, arrotondata per difetto. Questo è il tuo **totale d'assalto**.
 2. **Il nemico fa lo stesso**, con i propri dadi e la propria Agilità.
 3. **Si confrontano i due totali.**
    - Se il tuo totale è più alto, **colpisci tu**.
@@ -26,7 +26,7 @@ Ogni assalto — cioè ogni round dello scontro — si risolve così:
 
 ## Quanto danno si subisce
 
-Chi vince l'assalto infligge un danno pari alla propria **Forza**, aumentato di un bonus legato a quanto ha vinto per un margine ampio: più netta la vittoria nel confronto dei totali, più il colpo fa male. Il danno minimo di un colpo andato a segno è comunque di **2 punti**, anche quando il margine di vittoria è minimo: un colpo che arriva a segno fa sempre sentire il suo peso.
+Chi vince l'assalto infligge un danno pari, esattamente, alla propria **Forza** — non di più, non di meno, indipendentemente da quanto ampio sia stato lo scarto tra i due totali. Vincere per un soffio o vincere nettamente non cambia quanto male fa il colpo: a deciderlo è solo quanto sei forte, non quanto sei stato fortunato con i dadi.
 
 I punti danno subiti si tolgono dai Punti Vita di chi li incassa.
 

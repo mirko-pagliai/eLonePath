@@ -146,9 +146,9 @@ class DispatcherTest extends TestCase
      * @link \Elone\Core\Dispatcher::resolveArguments()
      */
     #[Test]
-    #[TestWith(['withInt', 'not-a-number', "Invalid integer parameter `not-a-number` for `\$value`."])]
-    #[TestWith(['withFloat', 'not-a-number', "Invalid float parameter `not-a-number` for `\$value`."])]
-    #[TestWith(['withBool', 'maybe', "Invalid boolean parameter `maybe` for `\$value`."])]
+    #[TestWith(['withInt', 'not-a-number', 'Invalid integer parameter `not-a-number` for `$value`.'])]
+    #[TestWith(['withFloat', 'not-a-number', 'Invalid float parameter `not-a-number` for `$value`.'])]
+    #[TestWith(['withBool', 'maybe', 'Invalid boolean parameter `maybe` for `$value`.'])]
     public function testResolveArgumentsWithInvalidValue(string $action, string $value, string $expectedMessage): void
     {
         $dispatcher = new readonly class extends Dispatcher {
@@ -181,7 +181,7 @@ class DispatcherTest extends TestCase
         $method = new ReflectionMethod(ConversionController::class, 'withArray');
 
         $this->expectException(UnsupportedParameterTypeException::class);
-        $this->expectExceptionMessageIs("Unsupported parameter type `array` for `\$value`.");
+        $this->expectExceptionMessageIs('Unsupported parameter type `array` for `$value`.');
         $dispatcher::resolveArguments($method, ['irrelevant']);
     }
 

@@ -6,20 +6,22 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/config/bootstrap.php';
 
 use Elone\Core\Command\ExtractMessagesCommand;
+use Gettext\Scanner\PhpScanner;
 use Symfony\Component\Console\Application;
 
 if (!class_exists(Application::class)) {
     die(
         'Symfony Console is not installed.' . PHP_EOL .
-        'Install a package that provides console commands (e.g. `composer require --dev elone/debugger`) to use the console.' . PHP_EOL
+        'Install a package that provides console commands to use the console.' . PHP_EOL
     );
 }
 
 /**
  * Reads `extra["elone/console-commands"]` from every installed package's own `composer.json` — as recorded by
- * Composer in `vendor/composer/installed.json` — and returns every command class name found there. A package
- * registers its own commands by declaring that key; nothing here needs to know about any specific package, so a
- * future plugin only needs to be installed to show up.
+ * Composer in `vendor/composer/installed.json` — and returns every command class name found there.
+ *
+ * A package registers its own commands by declaring that key; nothing here needs to know about any specific package,
+ * so a future plugin only needs to be installed to show up.
  *
  * @return list<class-string>
  */
@@ -61,12 +63,8 @@ function discoverConsoleCommands(): array
 
 $application = new Application();
 
-// Core itself is a mandatory dependency of the app — unlike an optional package (Debugger, or any future one),
-// its own commands don't need the `extra["elone/console-commands"]` discovery dance below; they're wired in
-// directly. The `class_exists()` guard still matters here: Core's *own* console dependency (`symfony/console`,
-// already confirmed present above) is separate from the gettext libraries `ExtractMessagesCommand` itself needs
-// — those stay optional, so the command only gets added when they're actually installed.
-if (class_exists(\Gettext\Scanner\PhpScanner::class)) {
+// Core is a mandatory dependency, wired in directly — the discovery below is only for optional packages.
+if (class_exists(PhpScanner::class)) {
     $application->addCommand(new ExtractMessagesCommand());
 }
 

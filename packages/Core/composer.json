@@ -4,17 +4,22 @@
 	"license": "MIT",
 	"require": {
 		"php": "^8.4",
-		"ext-intl": "*",
 		"symfony/translation": "^8.1"
 	},
 	"suggest": {
+		"symfony/console": "Needed to run console commands",
+		"gettext/gettext": "Needed to run the `i18n:extract` console command",
+		"gettext/php-scanner": "Needed to run the `i18n:extract` console command",
 		"michelf/php-markdown": "Markdown parser. Necessary if you want to use `HtmlHelper::markdown()`"
 	},
 	"require-dev": {
 		"cakephp/cakephp-codesniffer": "^5.3.2",
+		"gettext/gettext": "^5.7",
+		"gettext/php-scanner": "^2.0",
 		"michelf/php-markdown": "^2.0",
 		"phpstan/phpstan": "^2.2",
 		"phpunit/phpunit": "^13.2",
+		"symfony/console": "^8.1",
 		"symfony/var-dumper": "^8.1"
 	},
 	"autoload": {

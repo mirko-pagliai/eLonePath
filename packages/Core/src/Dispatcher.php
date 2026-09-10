@@ -140,7 +140,7 @@ readonly class Dispatcher
         if ($typeName === 'int') {
             $converted = filter_var($value, FILTER_VALIDATE_INT, FILTER_NULL_ON_FAILURE);
             if ($converted === null) {
-                throw new HttpException("Invalid integer parameter '$value' for `\${$parameter->getName()}`.");
+                throw new HttpException("Invalid integer parameter `$value` for `\${$parameter->getName()}`.");
             }
 
             return $converted;
@@ -149,7 +149,7 @@ readonly class Dispatcher
         if ($typeName === 'float') {
             $converted = filter_var($value, FILTER_VALIDATE_FLOAT, FILTER_NULL_ON_FAILURE);
             if ($converted === null) {
-                throw new HttpException("Invalid float parameter '$value' for `\${$parameter->getName()}`.");
+                throw new HttpException("Invalid float parameter `$value` for `\${$parameter->getName()}`.");
             }
 
             return $converted;
@@ -165,11 +165,11 @@ readonly class Dispatcher
                 return false;
             }
 
-            throw new HttpException("Invalid boolean parameter '$value' for `\${$parameter->getName()}`.");
+            throw new HttpException("Invalid boolean parameter `$value` for `\${$parameter->getName()}`.");
         }
 
         throw new UnsupportedParameterTypeException(
-            "Unsupported parameter type '$typeName' for `\${$parameter->getName()}`.",
+            "Unsupported parameter type `$typeName` for `\${$parameter->getName()}`.",
         );
     }
 

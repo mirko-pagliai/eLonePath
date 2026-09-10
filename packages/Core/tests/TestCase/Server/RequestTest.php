@@ -273,7 +273,7 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @link \Elone\Core\Server\Request::getHeader()
+     * @link \Elone\Core\Server\Request::header()
      */
     #[Test]
     public function testGetHeader(): void
@@ -284,7 +284,7 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @link \Elone\Core\Server\Request::getHeader()
+     * @link \Elone\Core\Server\Request::header()
      */
     #[Test]
     public function testGetHeaderWithMissingHeaderReturnsDefault(): void
@@ -296,7 +296,7 @@ class RequestTest extends TestCase
     }
 
     /**
-     * @link \Elone\Core\Server\Request::getHeaders()
+     * @link \Elone\Core\Server\Request::headers()
      */
     #[Test]
     public function testGetHeaders(): void

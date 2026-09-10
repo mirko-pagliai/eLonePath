@@ -14,6 +14,10 @@ use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
 
+/**
+ * Responsible for dispatching HTTP requests to the appropriate controller and action, resolving method arguments,
+ * determining the locale, and generating the resulting response.
+ */
 readonly class Dispatcher
 {
     /**
@@ -63,8 +67,8 @@ readonly class Dispatcher
     /**
      * Picks the locale for `$request`.
      *
-     * @param \Elone\Core\Server\Request $request
-     * @return string
+     * @param \Elone\Core\Server\Request $request The current HTTP request object.
+     * @return string One of `SUPPORTED_LOCALES`, or `'en'` if `$request` doesn't ask for one we have.
      */
     protected function detectLocale(Request $request): string
     {
@@ -73,7 +77,7 @@ readonly class Dispatcher
             $request->getHeader('Accept-Language') ?? '',
             true,
             'en',
-        );
+        ) ?: 'en';
     }
 
     /**

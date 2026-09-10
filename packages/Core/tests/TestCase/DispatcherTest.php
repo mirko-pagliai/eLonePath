@@ -48,8 +48,8 @@ class DispatcherTest extends TestCase
     #[Test]
     #[TestWith(['it-IT,it;q=0.9,en-US;q=0.8', 'it'])]
     #[TestWith(['en-US,en;q=0.9', 'en'])]
-    #[TestWith(['fr-FR,fr;q=0.9,de;q=0.8', 'it'])]
-    #[TestWith([null, 'it'])]
+    #[TestWith(['fr-FR,fr;q=0.9,de;q=0.8', 'en'])]
+    #[TestWith([null, 'en'])]
     public function testDetectLocale(?string $acceptLanguage, string $expected): void
     {
         $dispatcher = new readonly class () extends Dispatcher {

@@ -271,4 +271,64 @@ class RequestTest extends TestCase
             $this->assertSame(405, $exception->statusCode());
         }
     }
+
+    /**
+     * @link \Elone\Core\Server\Request::header()
+     */
+    #[Test]
+    public function testHeader(): void
+    {
+        $request = new Request('GET', '/', headers: ['Accept-Language' => 'it-IT,it;q=0.9']);
+
+        $this->assertSame('it-IT,it;q=0.9', $request->header('Accept-Language'));
+    }
+
+    /**
+     * @link \Elone\Core\Server\Request::header()
+     */
+    #[Test]
+    public function testHeaderWithMissingHeaderReturnsDefault(): void
+    {
+        $request = new Request('GET', '/');
+
+        $this->assertNull($request->header('Accept-Language'));
+        $this->assertSame('fallback', $request->header('Accept-Language', 'fallback'));
+    }
+
+    /**
+     * @link \Elone\Core\Server\Request::headers()
+     */
+    #[Test]
+    public function testHeaders(): void
+    {
+        $request = new Request('GET', '/', headers: ['Accept-Language' => 'it', 'User-Agent' => 'Test/1.0']);
+
+        $this->assertSame(['Accept-Language' => 'it', 'User-Agent' => 'Test/1.0'], $request->headers());
+    }
+
+    /**
+     * `createFromGlobals()` normalizes every `HTTP_*` key in `$_SERVER` to standard header casing
+     * (`HTTP_ACCEPT_LANGUAGE` becomes `Accept-Language`) — this is what `header()` expects to be called with.
+     * Other `$_SERVER` keys (`SERVER_NAME`, in this test) aren't headers and don't leak through.
+     *
+     * @link \Elone\Core\Server\Request::createFromGlobals()
+     */
+    #[Test]
+    public function testCreateFromGlobalsReadsAndNormalizesHeaders(): void
+    {
+        $original = $_SERVER;
+        $_SERVER['REQUEST_URI'] = '/';
+        $_SERVER['REQUEST_METHOD'] = 'GET';
+        $_SERVER['HTTP_ACCEPT_LANGUAGE'] = 'fr-FR,fr;q=0.9';
+        $_SERVER['SERVER_NAME'] = 'localhost';
+
+        try {
+            $request = Request::createFromGlobals();
+
+            $this->assertSame('fr-FR,fr;q=0.9', $request->header('Accept-Language'));
+            $this->assertNull($request->header('Server-Name'));
+        } finally {
+            $_SERVER = $original;
+        }
+    }
 }

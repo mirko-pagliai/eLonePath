@@ -43,6 +43,28 @@ class DispatcherTest extends TestCase
     }
 
     /**
+     * @link \Elone\Core\Dispatcher::detectLocale()
+     */
+    #[Test]
+    #[TestWith(['it-IT,it;q=0.9,en-US;q=0.8', 'it'])]
+    #[TestWith(['en-US,en;q=0.9', 'en'])]
+    #[TestWith(['fr-FR,fr;q=0.9,de;q=0.8', 'it'])]
+    #[TestWith([null, 'it'])]
+    public function testDetectLocale(?string $acceptLanguage, string $expected): void
+    {
+        $dispatcher = new readonly class () extends Dispatcher {
+            public function detectLocale(Request $request): string
+            {
+                return parent::detectLocale($request);
+            }
+        };
+        $headers = $acceptLanguage === null ? [] : ['Accept-Language' => $acceptLanguage];
+        $request = new Request('GET', '/', headers: $headers);
+
+        $this->assertSame($expected, $dispatcher->detectLocale($request));
+    }
+
+    /**
      * Distinct from the case above: a multi-word action name (`someActionName()`) proves the action portion of
      * the template path is converted to snake_case, not just used verbatim like the controller portion is —
      * `UsersSettings/some_action_name.php`, not `UsersSettings/someActionName.php`.

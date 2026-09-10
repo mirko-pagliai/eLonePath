@@ -9,6 +9,7 @@ use Elone\Core\Routing\Route;
 use Elone\Core\Server\Request;
 use Elone\Core\Server\Response;
 use Elone\Core\Utility\WordCase;
+use Locale;
 use ReflectionMethod;
 use ReflectionNamedType;
 use ReflectionParameter;
@@ -16,7 +17,16 @@ use ReflectionParameter;
 readonly class Dispatcher
 {
     /**
-     * Dispatches a request to the appropriate controller/action, resolving method arguments and generating a response.
+     * Locales this app can pick between when reading a request's own `Accept-Language` header.
+     *
+     * @var list<string>
+     */
+    private const array SUPPORTED_LOCALES = ['en', 'it'];
+
+    /**
+     * Dispatches a request to the appropriate controller/action, resolving method arguments and generating a
+     * response. Also initializes `Translator` with `detectLocale()`'s own pick for this request — done here, not
+     * in the app's bootstrap, since `dispatch()` is the earliest point with a `Request` to read.
      *
      * @param \Elone\Core\Routing\Route $route The route containing information controller, action and parameters.
      * @param \Elone\Core\Server\Request $request The current HTTP request object.
@@ -29,6 +39,8 @@ readonly class Dispatcher
      */
     public function dispatch(Route $route, Request $request): Response
     {
+        Translator::init($this->detectLocale($request));
+
         $controllerClass = $route->controllerClass();
 
         $method = new ReflectionMethod($controllerClass, $route->action);
@@ -46,6 +58,22 @@ readonly class Dispatcher
         $content = $controller->render($template);
 
         return new Response($content);
+    }
+
+    /**
+     * Picks the locale for `$request`.
+     *
+     * @param \Elone\Core\Server\Request $request
+     * @return string
+     */
+    protected function detectLocale(Request $request): string
+    {
+        return Locale::lookup(
+            self::SUPPORTED_LOCALES,
+            $request->header('Accept-Language') ?? '',
+            true,
+            'en',
+        );
     }
 
     /**

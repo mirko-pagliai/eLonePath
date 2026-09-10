@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use Elone\Core\Translator;
 use josegonzalez\Dotenv\Loader;
 
 if (!defined('ROOT')) {
@@ -31,5 +30,3 @@ if (file_exists($envFile) && class_exists(Loader::class)) {
 }
 
 require ROOT . '/packages/Core/config/bootstrap.php';
-
-Translator::init('it');

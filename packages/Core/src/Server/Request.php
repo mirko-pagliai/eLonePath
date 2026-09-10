@@ -5,6 +5,10 @@ namespace Elone\Core\Server;
 
 use Elone\Core\Exception\MethodNotAllowedException;
 
+/**
+ * Represents an HTTP request, encapsulating details such as the HTTP method, URI, query string, headers,
+ * and request body data. Provides utility methods for accessing and validating these details.
+ */
 final class Request
 {
     private readonly string $path;
@@ -15,7 +19,7 @@ final class Request
     private readonly array $queryParams;
 
     /**
-     * Creates a new `Request` from an HTTP method, a raw URI, and optional body data.
+     * Creates a new `Request` from an HTTP method, a raw URI, optional body data, and optional headers.
      *
      * @param string $method The HTTP method, e.g. `GET`, `POST`. Stored exactly as given — normalizing it (e.g.
      *  to uppercase) is the caller's responsibility; `createFromGlobals()` does it before calling this.
@@ -24,12 +28,16 @@ final class Request
      * @param array<array-key, mixed> $data The parsed request body — form fields from a POST submission.
      *  `createFromGlobals()` populates this from PHP's own `$_POST`; empty (the default) for a request with no
      *  body, such as a plain GET.
+     * @param array<string, string> $headers Request headers, keyed by their standard name (e.g. `Accept-Language`,
+     *  not `HTTP_ACCEPT_LANGUAGE`) — `createFromGlobals()` does that normalization from `$_SERVER` before calling
+     *  this. Empty (the default) for a request with no headers of interest.
      * @return void
      */
     public function __construct(
         private readonly string $method,
         string $uri,
         private readonly array $data = [],
+        private readonly array $headers = [],
     ) {
         $this->path = parse_url($uri, PHP_URL_PATH) ?: '/';
 
@@ -45,7 +53,9 @@ final class Request
 
     /**
      * Builds a `Request` from PHP's own superglobals (`$_SERVER['REQUEST_METHOD']`, `['REQUEST_URI']`, and
-     * `$_POST`), defaulting to `GET /` if the method/URI are missing.
+     * `$_POST`), defaulting to `GET /` if the method/URI are missing. Headers come from every `$_SERVER` key
+     * starting with `HTTP_` — `HTTP_ACCEPT_LANGUAGE` becomes `Accept-Language`, matching how `header()` expects
+     * to be called.
      *
      * @return self A `Request` reflecting the current PHP superglobals.
      */
@@ -57,7 +67,21 @@ final class Request
         $method = $_SERVER['REQUEST_METHOD'] ?? 'GET';
         assert(is_string($method));
 
-        return new self(strtoupper($method), $uri, $_POST);
+        $headers = [];
+        foreach ($_SERVER as $key => $value) {
+            if (!is_string($key) || !str_starts_with($key, 'HTTP_') || !is_string($value)) {
+                continue;
+            }
+
+            $name = implode('-', array_map(
+                callback: ucfirst(...),
+                array: explode('_', strtolower(substr($key, 5))),
+            ));
+
+            $headers[$name] = $value;
+        }
+
+        return new self(strtoupper($method), $uri, $_POST, $headers);
     }
 
     /**
@@ -176,5 +200,28 @@ final class Request
     public function dataParam(string $name, mixed $default = null): mixed
     {
         return $this->data[$name] ?? $default;
+    }
+
+    /**
+     * Returns every request header. Populated from `$_SERVER`'s own `HTTP_*` keys when built via
+     * `createFromGlobals()`, normalized to standard header casing (`Accept-Language`, not `HTTP_ACCEPT_LANGUAGE`).
+     *
+     * @return array<string, string> The request headers, keyed by their standard name.
+     */
+    public function headers(): array
+    {
+        return $this->headers;
+    }
+
+    /**
+     * Returns a single request header by name.
+     *
+     * @param string $name The header name to look up, e.g. `Accept-Language`.
+     * @param string|null $default The value to return if `$name` isn't present.
+     * @return string|null The header's value, or `$default`.
+     */
+    public function header(string $name, ?string $default = null): ?string
+    {
+        return $this->headers[$name] ?? $default;
     }
 }

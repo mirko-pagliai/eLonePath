@@ -6,7 +6,6 @@ require dirname(__DIR__) . '/vendor/autoload.php';
 require dirname(__DIR__) . '/config/bootstrap.php';
 
 use Elone\Core\Command\ExtractMessagesCommand;
-use Gettext\Scanner\PhpScanner;
 use Symfony\Component\Console\Application;
 
 if (!class_exists(Application::class)) {
@@ -64,9 +63,7 @@ function discoverConsoleCommands(): array
 $application = new Application();
 
 // Core is a mandatory dependency, wired in directly — the discovery below is only for optional packages.
-if (class_exists(PhpScanner::class)) {
-    $application->addCommand(new ExtractMessagesCommand());
-}
+$application->addCommand(new ExtractMessagesCommand());
 
 foreach (discoverConsoleCommands() as $commandClass) {
     if (class_exists($commandClass)) {

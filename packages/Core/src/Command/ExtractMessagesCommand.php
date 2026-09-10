@@ -24,23 +24,51 @@ use Symfony\Component\Console\Style\SymfonyStyle;
     // this short description is shown when running "php bin/console list"
     description: 'Scans for __()/__d() calls and updates the .pot template for each domain found',
 )]
-final class ExtractMessagesCommand extends Command
+class ExtractMessagesCommand extends Command
 {
+    /**
+     * @return bool
+     * @internal Checks if `gettext/php-scanner` is available.
+     */
+    protected function checkHasPhpScanner(): bool
+    {
+        return class_exists(PhpScanner::class);
+    }
+
     /**
      * Scans `$root` for `__()`/`__d()` calls and writes a `.pot` file per domain found into `$localesDir`.
      *
      * @param \Symfony\Component\Console\Style\SymfonyStyle $io
      * @param string|null $root Directory to scan for `__()`/`__d()` calls. Defaults to `ROOT`.
      * @param string|null $localesDir Directory to write `.pot` files into. Defaults to `LOCALES`.
-     * @return int `Command::SUCCESS`.
+     * @return int `Command::SUCCESS`, or `Command::FAILURE` if `gettext/php-scanner` isn't installed, or
+     * `$localesDir` doesn't exist and can't be created, or isn't writable.
      */
     public function __invoke(
         SymfonyStyle $io,
         #[Option('Directory to scan for __()/__d() calls; defaults to `ROOT`')] ?string $root = null,
         #[Option('Directory to write .pot files into; defaults to `LOCALES`')] ?string $localesDir = null,
     ): int {
+        if (!$this->checkHasPhpScanner()) {
+            $io->error('gettext/gettext and gettext/php-scanner are required to run this command.');
+
+            return Command::FAILURE;
+        }
+
         $root ??= ROOT;
         $localesDir ??= LOCALES;
+
+        if (!is_dir($localesDir) && !mkdir($localesDir, recursive: true) && !is_dir($localesDir)) {
+            $io->error("Unable to create directory `$localesDir`.");
+
+            return Command::FAILURE;
+        }
+
+        if (!is_writable($localesDir)) {
+            $io->error("Directory `$localesDir` is not writable.");
+
+            return Command::FAILURE;
+        }
 
         $files = iterator_to_array(new PhpFileFinder()->find($root), false);
 

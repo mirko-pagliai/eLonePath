@@ -14,6 +14,7 @@
 	"require-dev": {
 		"cakephp/cakephp-codesniffer": "^5.3.2",
 		"elone/debugger": "*",
+		"gettext/php-scanner": "^2.0",
 		"josegonzalez/dotenv": "4.0.0",
 		"phpstan/phpstan": "^2.2",
 		"phpunit/phpunit": "^13.2",

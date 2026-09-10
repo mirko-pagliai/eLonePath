@@ -45,7 +45,11 @@ class ExtractMessagesCommandTest extends TestCase
     {
         parent::tearDown();
 
-        $this->removeDirectory($this->outputDir);
+        if (is_dir($this->outputDir)) {
+            $this->removeDirectory($this->outputDir);
+        } else {
+            @unlink($this->outputDir);
+        }
     }
 
     /**
@@ -148,6 +152,87 @@ class ExtractMessagesCommandTest extends TestCase
         $this->assertStringContainsString(
             'msgid "Something went wrong."',
             file_get_contents("$this->outputDir/errors.pot"),
+        );
+    }
+
+    /**
+     * If `$localesDir` doesn't exist yet, `__invoke()` creates it — this fixture starts from a path one level
+     * below `$this->outputDir` that has never been created, proving that, not just that an already-existing
+     * directory gets written into.
+     *
+     * @link \Elone\Core\Command\ExtractMessagesCommand::__invoke()
+     */
+    #[Test]
+    public function testInvokeCreatesLocalesDirWhenMissing(): void
+    {
+        $freshDir = "$this->outputDir/not-created-yet";
+        $this->assertDirectoryDoesNotExist($freshDir);
+
+        $application = new Application();
+        $application->addCommand(new ExtractMessagesCommand());
+        $tester = new CommandTester($application->find('i18n:extract'));
+        $tester->execute([
+            '--root' => __DIR__ . '/../../test_app/templates',
+            '--locales-dir' => $freshDir,
+        ]);
+
+        $this->assertSame(Command::SUCCESS, $tester->getStatusCode());
+        $this->assertFileExists("$freshDir/default.pot");
+    }
+
+    /**
+     * `$localesDir` pointing at a path that's already a *file* can't be turned into a directory — `mkdir()`
+     * fails, and stays failed, so `__invoke()` must report it rather than crash on the `file_put_contents()`
+     * calls further down.
+     *
+     * @link \Elone\Core\Command\ExtractMessagesCommand::__invoke()
+     */
+    #[Test]
+    public function testInvokeFailsWhenLocalesDirCannotBeCreated(): void
+    {
+        $blockedPath = "$this->outputDir/blocked";
+        file_put_contents($blockedPath, '');
+
+        $application = new Application();
+        $application->addCommand(new ExtractMessagesCommand());
+        $tester = new CommandTester($application->find('i18n:extract'));
+        $tester->execute([
+            '--root' => __DIR__ . '/../../test_app/templates',
+            '--locales-dir' => $blockedPath,
+        ]);
+
+        $this->assertSame(Command::FAILURE, $tester->getStatusCode());
+        $this->assertStringContainsString('Unable to create directory', $tester->getDisplay());
+    }
+
+    /**
+     * `checkHasPhpScanner()` overridden to force the "package missing" state — the same technique
+     * `HtmlHelperTest::testMarkdownPackageIsMissing()` uses for `checkHasMarkdown()`. `gettext/php-scanner` is
+     * an installed dev dependency during a normal test run, so this is the only way to exercise this branch.
+     * `setName()` is needed because `#[AsCommand]` isn't inherited by an anonymous subclass.
+     *
+     * @link \Elone\Core\Command\ExtractMessagesCommand::__invoke()
+     */
+    #[Test]
+    public function testInvokeFailsWhenPhpScannerIsMissing(): void
+    {
+        $command = new class () extends ExtractMessagesCommand {
+            protected function checkHasPhpScanner(): bool
+            {
+                return false;
+            }
+        };
+        $command->setName('i18n:extract');
+
+        $application = new Application();
+        $application->addCommand($command);
+        $tester = new CommandTester($application->find('i18n:extract'));
+        $tester->execute([]);
+
+        $this->assertSame(Command::FAILURE, $tester->getStatusCode());
+        $this->assertStringContainsString(
+            'gettext/gettext and gettext/php-scanner are required',
+            $tester->getDisplay(),
         );
     }
 

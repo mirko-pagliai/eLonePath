@@ -15,22 +15,26 @@ use PHPUnit\Framework\TestCase;
 class DomainDiscovererTest extends TestCase
 {
     /**
-     * `'default'` is always present, even though neither fixture calls `__d('default', ...)` explicitly — it's
-     * what a bare `__()` call is assigned to, so `PhpScanner` always needs it declared. `Two.php`'s non-literal
-     * `__d()` call contributes no domain: there's nothing to read a name from.
+     * `'default'` is always present, even though none of the fixtures call `__d('default', ...)` explicitly —
+     * it's what a bare `__()` call is assigned to, so `PhpScanner` always needs it declared. `i18n-two.php`'s
+     * non-literal `__()` call contributes no domain: there's nothing to read a name from.
      *
      * @link \Elone\Core\Console\DomainDiscoverer::discover()
      */
     #[Test]
     public function testDiscoverFindsEveryLiteralDomainPlusDefault(): void
     {
-        $fixtures = __DIR__ . '/../../test_app/i18n';
+        $fixtures = TEST_APP . '/templates';
         $discoverer = new DomainDiscoverer();
 
-        $domains = $discoverer->discover(["$fixtures/One.php", "$fixtures/Two.php"]);
+        $domains = $discoverer->discover([
+            "$fixtures/i18n-one.php",
+            "$fixtures/i18n-two.php",
+            "$fixtures/i18n-plural.php",
+        ]);
         sort($domains);
 
-        $this->assertSame(['default', 'validation'], $domains);
+        $this->assertSame(['default', 'errors', 'validation'], $domains);
     }
 
     /**

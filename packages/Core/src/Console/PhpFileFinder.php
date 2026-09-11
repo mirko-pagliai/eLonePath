@@ -9,14 +9,16 @@ use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 
 /**
- * Finds every `.php` file under a directory, skipping `vendor/`, `node_modules/`, and `.git/` wherever they occur.
+ * Finds every `.php` file under `$root`'s own `src/` and `templates/` subdirectories — the two places
+ * translatable strings actually live. Anything else under `$root` (`vendor/`, `tests/`, `resources/`, and so
+ * on) is never looked at in the first place, rather than walked and then excluded by name.
  */
 final readonly class PhpFileFinder
 {
     /**
      * @var list<string>
      */
-    private const array SKIPPED_DIRECTORIES = ['vendor', 'node_modules', '.git'];
+    private const array DIRECTORIES = ['src', 'templates'];
 
     /**
      * @param string $root
@@ -24,8 +26,25 @@ final readonly class PhpFileFinder
      */
     public function find(string $root): Generator
     {
+        foreach (self::DIRECTORIES as $directory) {
+            $path = "$root/$directory";
+
+            if (!is_dir($path)) {
+                continue;
+            }
+
+            yield from $this->findInDirectory($path);
+        }
+    }
+
+    /**
+     * @param string $directory
+     * @return \Generator<string>
+     */
+    private function findInDirectory(string $directory): Generator
+    {
         $iterator = new RecursiveIteratorIterator(
-            new RecursiveDirectoryIterator($root, FilesystemIterator::SKIP_DOTS),
+            new RecursiveDirectoryIterator($directory, FilesystemIterator::SKIP_DOTS),
         );
 
         foreach ($iterator as $file) {
@@ -34,28 +53,7 @@ final readonly class PhpFileFinder
                 continue;
             }
 
-            if ($this->isSkipped($file->getPathname())) {
-                continue;
-            }
-
             yield $file->getPathname();
         }
-    }
-
-    /**
-     * Checks whether `$path` falls under one of `SKIPPED_DIRECTORIES`.
-     *
-     * @param string $path
-     * @return bool
-     */
-    private function isSkipped(string $path): bool
-    {
-        foreach (self::SKIPPED_DIRECTORIES as $skipped) {
-            if (str_contains($path, "/$skipped/")) {
-                return true;
-            }
-        }
-
-        return false;
     }
 }

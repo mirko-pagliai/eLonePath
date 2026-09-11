@@ -20,9 +20,11 @@ class ExtractMessagesCommandTest extends TestCase
     /**
      * The `.pot` files this test produces are generated output, not fixtures — they get a fresh temporary
      * directory each run and are cleaned up in `tearDown()`. The PHP source scanned for `__()`/`__d()` calls is
-     * the opposite: static, checked-in fixtures under `tests/test_app/templates` — the same directory other
-     * tests already use for Dispatcher/View fixtures, mixed in among files with no `__()`/`__d()` calls at all,
-     * the same as a real app's templates would be.
+     * the opposite: static, checked-in fixtures under `tests/test_app/templates` — `--root` points at
+     * `tests/test_app` itself; `PhpFileFinder` looks at its `templates/` (and `src/`) subdirectories on its own.
+     * The rest of `templates/` — real Dispatcher/View fixtures other tests already use, with no `__()`/`__d()`
+     * calls at all — is scanned right alongside the i18n ones and contributes nothing, the same as a real app's
+     * templates would be.
      */
     private string $outputDir;
 
@@ -172,7 +174,7 @@ class ExtractMessagesCommandTest extends TestCase
         $application->addCommand(new ExtractMessagesCommand());
         $tester = new CommandTester($application->find('i18n:extract'));
         $tester->execute([
-            '--root' => __DIR__ . '/../../test_app/templates',
+            '--root' => TEST_APP,
             '--locales-dir' => $freshDir,
         ]);
 
@@ -197,7 +199,7 @@ class ExtractMessagesCommandTest extends TestCase
         $application->addCommand(new ExtractMessagesCommand());
         $tester = new CommandTester($application->find('i18n:extract'));
         $tester->execute([
-            '--root' => __DIR__ . '/../../test_app/templates',
+            '--root' => TEST_APP,
             '--locales-dir' => $blockedPath,
         ]);
 
@@ -237,7 +239,7 @@ class ExtractMessagesCommandTest extends TestCase
     }
 
     /**
-     * Runs `i18n:extract` against `tests/test_app/templates`, writing into `$this->outputDir`.
+     * Runs `i18n:extract` against `tests/test_app`, writing into `$this->outputDir`.
      *
      * @return \Symfony\Component\Console\Tester\CommandTester
      */
@@ -248,7 +250,7 @@ class ExtractMessagesCommandTest extends TestCase
 
         $tester = new CommandTester($application->find('i18n:extract'));
         $tester->execute([
-            '--root' => __DIR__ . '/../../test_app/templates',
+            '--root' => TEST_APP,
             '--locales-dir' => $this->outputDir,
         ]);
 

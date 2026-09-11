@@ -58,10 +58,18 @@ class ExtractMessagesCommand extends Command
         $root ??= ROOT;
         $localesDir ??= LOCALES;
 
-        if (!is_dir($localesDir) && !mkdir($localesDir, recursive: true) && !is_dir($localesDir)) {
-            $io->error("Unable to create directory `$localesDir`.");
+        if (!is_dir($localesDir)) {
+            if (file_exists($localesDir)) {
+                $io->error("Unable to create directory `$localesDir`: a file already exists at that path.");
 
-            return Command::FAILURE;
+                return Command::FAILURE;
+            }
+
+            if (!mkdir($localesDir, recursive: true) && !is_dir($localesDir)) {
+                $io->error("Unable to create directory `$localesDir`.");
+
+                return Command::FAILURE;
+            }
         }
 
         if (!is_writable($localesDir)) {

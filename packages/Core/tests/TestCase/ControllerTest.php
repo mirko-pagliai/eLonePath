@@ -29,10 +29,6 @@ class ControllerTest extends TestCase
     public function testConstructBuildsBaseViewByDefault(): void
     {
         $controller = new class extends Controller {
-            public function getView(): View
-            {
-                return $this->view;
-            }
         };
 
         $this->assertInstanceOf(View::class, $controller->getView());
@@ -49,10 +45,6 @@ class ControllerTest extends TestCase
     {
         $request = new Request('GET', '/');
         $controller = new class ($request) extends Controller {
-            public function getView(): View
-            {
-                return $this->view;
-            }
         };
 
         $this->assertSame($request, $controller->getView()->getRequest());
@@ -72,11 +64,6 @@ class ControllerTest extends TestCase
             protected static function viewClass(): string
             {
                 return CustomView::class;
-            }
-
-            public function getView(): View
-            {
-                return $this->view;
             }
         };
 
@@ -103,11 +90,6 @@ class ControllerTest extends TestCase
             {
                 return CustomView::class;
             }
-
-            public function getView(): View
-            {
-                return $this->view;
-            }
         };
 
         $this->assertSame($view, $controller->getView());
@@ -130,11 +112,6 @@ class ControllerTest extends TestCase
             public function set(array $data): static
             {
                 return parent::set($data);
-            }
-
-            public function getView(): View
-            {
-                return $this->view;
             }
         };
 

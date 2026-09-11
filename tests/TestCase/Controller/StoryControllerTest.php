@@ -7,8 +7,9 @@ use App\Controller\StoryController;
 use App\Story\Character;
 use App\Story\Combat\CombatRoundResult;
 use App\Story\Enemy;
+use App\Story\Game;
 use App\Story\GameState;
-use App\View\AppView;
+use App\Story\Nodes\Node;
 use Elone\Core\Exception\HttpException;
 use Elone\Core\Exception\MethodNotAllowedException;
 use Elone\Core\Server\Request;
@@ -24,22 +25,9 @@ use RuntimeException;
 #[CoversClass(StoryController::class)]
 class StoryControllerTest extends TestCase
 {
-    /**
-     * `StoryController` isn't anonymous-subclassed for every test the way `ControllerTest`'s targets are — it's
-     * a concrete class most tests use as-is — but a handful still need `getView()` to inspect what an action
-     * `set()`, the same pattern `ControllerTest` already uses.
-     */
     private function makeController(Request $request): StoryController
     {
-        return new class ($request) extends StoryController {
-            public function getView(): AppView
-            {
-                /** @var \App\View\AppView $view */
-                $view = $this->view;
-
-                return $view;
-            }
-        };
+        return new StoryController($request);
     }
 
     private function samplePlayer(): Character
@@ -58,7 +46,10 @@ class StoryControllerTest extends TestCase
         $result = $controller->character('requires-character');
 
         $this->assertNull($result);
-        $this->assertSame('requires-character', $controller->getView()->get('game')->gameId);
+
+        $game = $controller->getView()->get('game');
+        $this->assertInstanceOf(Game::class, $game);
+        $this->assertSame('requires-character', $game->gameId);
         $this->assertNull($controller->getView()->get('error'));
     }
 
@@ -101,6 +92,7 @@ class StoryControllerTest extends TestCase
         $this->assertStringStartsWith('/story/start/requires-character?state=', $location);
 
         parse_str((string)parse_url($location, PHP_URL_QUERY), $query);
+        $this->assertIsString($query['state']);
         $state = GameState::fromQueryValue($query['state']);
         $this->assertSame(9, $state->player->strength);
         $this->assertSame(5, $state->player->agility);
@@ -181,6 +173,7 @@ class StoryControllerTest extends TestCase
         $this->assertStringStartsWith('/story/start/requires-character?state=', $location);
 
         parse_str((string)parse_url($location, PHP_URL_QUERY), $query);
+        $this->assertIsString($query['state']);
         $state = GameState::fromQueryValue($query['state']);
         $this->assertSame(Character::DEFAULT_MAX_LIFE_POINTS, $state->player->maxLifePoints);
     }
@@ -229,7 +222,10 @@ class StoryControllerTest extends TestCase
         $result = $controller->start('mini-quest');
 
         $this->assertNull($result);
-        $this->assertSame('mini-quest', $controller->getView()->get('game')->gameId);
+
+        $game = $controller->getView()->get('game');
+        $this->assertInstanceOf(Game::class, $game);
+        $this->assertSame('mini-quest', $game->gameId);
     }
 
     /**
@@ -265,6 +261,7 @@ class StoryControllerTest extends TestCase
 
         $response = $controller->start('no-preface');
 
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertSame(
             '/story/chapter/no-preface/1?' . http_build_query(['state' => $state->toQueryValue()]),
             $response->headers()['Location'],
@@ -284,6 +281,7 @@ class StoryControllerTest extends TestCase
 
         $response = $controller->start('no-preface');
 
+        $this->assertInstanceOf(Response::class, $response);
         $this->assertSame('/story/chapter/no-preface/1', $response->headers()['Location']);
     }
 
@@ -297,8 +295,13 @@ class StoryControllerTest extends TestCase
 
         $controller->chapter('mini-quest', 1);
 
-        $this->assertSame('mini-quest', $controller->getView()->get('game')->gameId);
-        $this->assertSame(1, $controller->getView()->get('node')->id);
+        $game = $controller->getView()->get('game');
+        $this->assertInstanceOf(Game::class, $game);
+        $this->assertSame('mini-quest', $game->gameId);
+
+        $node = $controller->getView()->get('node');
+        $this->assertInstanceOf(Node::class, $node);
+        $this->assertSame(1, $node->id);
     }
 
     /**
@@ -369,7 +372,10 @@ class StoryControllerTest extends TestCase
         // node 2's dice check: minimum 1, so any roll (1-6) succeeds, landing on target_success (3).
         $this->assertTrue($controller->getView()->get('success'));
         $this->assertSame(3, $controller->getView()->get('target'));
-        $this->assertCount(1, $controller->getView()->get('rolls'));
+
+        $rolls = $controller->getView()->get('rolls');
+        $this->assertIsArray($rolls);
+        $this->assertCount(1, $rolls);
         $this->assertGreaterThanOrEqual(1, $controller->getView()->get('total'));
     }
 
@@ -545,6 +551,7 @@ class StoryControllerTest extends TestCase
         }
 
         $enemy = $controller->getView()->get('enemy');
+        $this->assertInstanceOf(Enemy::class, $enemy);
         $this->assertSame(10, $enemy->maxLifePoints);
         $this->assertLessThanOrEqual(3, $enemy->lifePoints);
     }
@@ -593,7 +600,9 @@ class StoryControllerTest extends TestCase
 
         // Neither side was defeated this round — a parry, or the player landed a hit that didn't finish the
         // enemy off. Either way, the player wasn't the one hit, so they're still at their starting 1 life point.
-        $this->assertSame(1, $controller->getView()->get('character')->lifePoints);
+        $character = $controller->getView()->get('character');
+        $this->assertInstanceOf(Character::class, $character);
+        $this->assertSame(1, $character->lifePoints);
     }
 
     /**

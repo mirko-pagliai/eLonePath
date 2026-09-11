@@ -39,6 +39,16 @@ abstract class Controller
     }
 
     /**
+     * The `View` this controller renders through.
+     *
+     * @return \Elone\Core\View\View
+     */
+    public function getView(): View
+    {
+        return $this->view;
+    }
+
+    /**
      * The `View` class to instantiate when none is explicitly given to the constructor. Override this in a subclass —
      * the app's own `AppController`, typically — to use a `View` subclass that loads additional helpers; `Controller`
      * itself only knows the base `View`, not any app-specific one.

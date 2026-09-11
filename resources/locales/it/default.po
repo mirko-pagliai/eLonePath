@@ -1,0 +1,22 @@
+# LANGUAGE translation of eLonePath
+# Copyright 2026 Mirko Pagliai <mirko.pagliai@gmail.com>
+#
+
+msgid ""
+msgstr ""
+"Content-Transfer-Encoding: 8bit\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Language: \n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"MIME-Version: 1.0\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"POT-Creation-Date: 2026-09-11 11:07+0200\n"
+"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"X-Domain: default\n"
+
+#: /home/mirko/PhpstormProjects/eLonePath/templates/Pages/home.php:43
+msgid "Go to stories"
+msgstr "Vai alle storie"

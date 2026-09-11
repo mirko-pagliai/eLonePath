@@ -40,7 +40,7 @@ declare(strict_types=1);
 
 <div class="text-center">
     <?= $this->Html->link(
-        text: 'Le storie',
+        text: __('Go to stories'),
         url: ['controller' => 'Pages', 'action' => 'stories'],
         options: ['class' => 'elone-button fs-4'],
     ) ?>

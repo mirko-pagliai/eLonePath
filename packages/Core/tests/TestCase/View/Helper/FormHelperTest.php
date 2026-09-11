@@ -8,6 +8,7 @@ use Elone\Core\View\Helper\FormHelper;
 use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
+use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -30,20 +31,11 @@ class FormHelperTest extends TestCase
      * @link \Elone\Core\View\Helper\FormHelper::create()
      */
     #[Test]
-    public function testCreateWithRoute(): void
+    #[TestWith([['controller' => 'Pages', 'action' => 'postOnly']])]
+    #[TestWith(['/pages/postOnly'])]
+    public function testCreate(string|array $url): void
     {
-        $result = $this->helper->create(['controller' => 'Pages', 'action' => 'postOnly']);
-
-        $this->assertSame('<form method="post" action="/pages/postOnly">', $result);
-    }
-
-    /**
-     * @link \Elone\Core\View\Helper\FormHelper::create()
-     */
-    #[Test]
-    public function testCreateWithStringUrl(): void
-    {
-        $result = $this->helper->create('/pages/postOnly');
+        $result = $this->helper->create($url);
 
         $this->assertSame('<form method="post" action="/pages/postOnly">', $result);
     }
@@ -70,6 +62,50 @@ class FormHelperTest extends TestCase
     {
         $this->expectException(RouteNotFoundException::class);
         $this->helper->create([]);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::hidden()
+     */
+    #[Test]
+    public function testHidden(): void
+    {
+        $result = $this->helper->hidden('token', 'abc123');
+
+        $this->assertSame('<input type="hidden" id="token" name="token" value="abc123">', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::hidden()
+     */
+    #[Test]
+    public function testHiddenEscapesValue(): void
+    {
+        $result = $this->helper->hidden('name', 'A & "B"');
+
+        $this->assertSame('<input type="hidden" id="name" name="name" value="A &amp; &quot;B&quot;">', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::label()
+     */
+    #[Test]
+    public function testLabel(): void
+    {
+        $result = $this->helper->label('name', 'Name');
+
+        $this->assertSame('<label for="name" class="form-label">Name</label>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::label()
+     */
+    #[Test]
+    public function testLabelEscapesForAndText(): void
+    {
+        $result = $this->helper->label('a"b', 'A & B');
+
+        $this->assertSame('<label for="a&quot;b" class="form-label">A &amp; B</label>', $result);
     }
 
     /**
@@ -247,27 +283,5 @@ class FormHelperTest extends TestCase
     public function testResetWithCustomLabel(): void
     {
         $this->assertSame('<button type="reset">Clear</button>', $this->helper->reset('Clear'));
-    }
-
-    /**
-     * @link \Elone\Core\View\Helper\FormHelper::hidden()
-     */
-    #[Test]
-    public function testHidden(): void
-    {
-        $result = $this->helper->hidden('token', 'abc123');
-
-        $this->assertSame('<input type="hidden" id="token" name="token" value="abc123">', $result);
-    }
-
-    /**
-     * @link \Elone\Core\View\Helper\FormHelper::hidden()
-     */
-    #[Test]
-    public function testHiddenEscapesValue(): void
-    {
-        $result = $this->helper->hidden('name', 'A & "B"');
-
-        $this->assertSame('<input type="hidden" id="name" name="name" value="A &amp; &quot;B&quot;">', $result);
     }
 }

@@ -147,6 +147,16 @@ class HtmlHelperTest extends TestCase
     }
 
     /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::link()
+     */
+    #[Test]
+    public function testLinkWithIcon(): void
+    {
+        $result = $this->helper->link('Home', '/', ['icon' => 'house', 'class' => 'nav-link']);
+        $this->assertSame('<a href="/" class="nav-link"><i class="bi bi-house"></i> Home</a>', $result);
+    }
+
+    /**
      * `$query` on `link()` carries through to the underlying `url()`/`Route::resolve()` call, appended to the
      * `href` — separate from `$options`, which only ever becomes HTML attributes.
      *
@@ -158,9 +168,9 @@ class HtmlHelperTest extends TestCase
         $result = $this->helper->link(
             'Go',
             ['controller' => 'Pages', 'action' => 'view', '123'],
-            query: ['state' => 'abc123'],
+            query: ['ref' => 'abc123'],
         );
-        $this->assertSame('<a href="/pages/view/123?state=abc123">Go</a>', $result);
+        $this->assertSame('<a href="/pages/view/123?ref=abc123">Go</a>', $result);
     }
 
     /**
@@ -195,5 +205,55 @@ class HtmlHelperTest extends TestCase
             'Package `michelf/php-markdown` is required to use `' . HtmlHelper::class . '::markdown()`.',
         );
         $htmlHelper->markdown('');
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::tag()
+     */
+    #[Test]
+    public function testTag(): void
+    {
+        $result = $this->helper->tag('span', 'Badge');
+        $this->assertSame('<span>Badge</span>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::tag()
+     */
+    #[Test]
+    public function testTagWithOptions(): void
+    {
+        $result = $this->helper->tag('span', 'Badge', ['class' => 'badge text-bg-primary']);
+        $this->assertSame('<span class="badge text-bg-primary">Badge</span>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::tag()
+     */
+    #[Test]
+    public function testTagEscapesTextByDefault(): void
+    {
+        $result = $this->helper->tag('span', 'A & B');
+        $this->assertSame('<span>A &amp; B</span>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::tag()
+     */
+    #[Test]
+    public function testTagWithEscapeFalseRendersRawText(): void
+    {
+        $result = $this->helper->tag('span', '<strong>Bold</strong>', ['escape' => false]);
+        $this->assertSame('<span><strong>Bold</strong></span>', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\HtmlHelper::tag()
+     */
+    #[Test]
+    public function testTagWithIcon(): void
+    {
+        $result = $this->helper->tag('span', 'Warning', ['icon' => 'exclamation-triangle']);
+        $this->assertSame('<span><i class="bi bi-exclamation-triangle"></i> Warning</span>', $result);
     }
 }

@@ -68,15 +68,16 @@ class HtmlHelper extends Helper
      * or external URL as a string (`/`, `https://example.com`), or a route array to build one; `$query` appends a
      * querystring the same way `url()` does.
      *
-     * `$options` accepts one known key, `escape` (bool, default `true`): whether `$text` is HTML-escaped before being
-     * inserted. Leave it on for anything that isn't fully trusted, developer-written markup — content sourced from
-     * data — and turn it off only to embed literal HTML you wrote yourself, such as an icon. Every other
-     * key in `$options` is applied as an HTML attribute on the `<a>` tag (`class`, `id`, `target`, and so on).
+     * `$options` accepts two known keys: `escape` (bool, default `true`) — whether `$text` is HTML-escaped before
+     * being inserted; leave it on for anything that isn't fully trusted, developer-written markup — content
+     * sourced from data — and turn it off only to embed literal HTML you wrote yourself. `icon` (string) —
+     * prepends the named icon to `$text`, see `icon()`. Every other key in `$options` is applied as an HTML
+     * attribute on the `<a>` tag (`class`, `id`, `target`, and so on).
      *
      * @param string $text The text (or, with `escape: false`, raw HTML) to display within the anchor tag.
      * @param array<string|int, string|int|float|bool>|string $url A literal URL/path, or a route array (see
      *  `url()`).
-     * @param array<string, string|int|float|bool> $options See above — `escape`, plus any HTML attribute.
+     * @param array<string, string|int|float|bool> $options See above — `escape`, `icon`, plus any HTML attribute.
      * @param array<string, string|int|float|bool> $query Appended to `$url` as a querystring — see `url()`.
      * @return string The rendered HTML `<a>` tag.
      * @throws \Elone\Core\Exception\RouteNotFoundException If `$url` is an array route with invalid or missing
@@ -87,14 +88,59 @@ class HtmlHelper extends Helper
         $escape = (bool)($options['escape'] ?? true);
         unset($options['escape']);
 
+        $text = $this->prependIcon($escape ? h($text) : $text, $options);
+
         $htmlAttributes = $this->parseHtmlAttributes($options);
 
         return sprintf(
             '<a href="%s"%s>%s</a>',
             h($this->url($url, $query), ENT_QUOTES),
             $htmlAttributes,
-            $escape ? h($text) : $text,
+            $text,
         );
+    }
+
+    /**
+     * Builds a generic `<$name>...</$name>` tag, for anything not covered by a more specific method.
+     *
+     * `$options` accepts the same `escape` and `icon` keys as `link()` — see there. Every other key is applied as
+     * an HTML attribute on the tag.
+     *
+     * @param string $name The tag name, e.g. `'span'`, `'p'`, `'h1'`.
+     * @param string $text The tag's text content (or, with `escape: false`, raw HTML).
+     * @param array<string, string|int|float|bool> $options See above — `escape`, `icon`, plus any HTML attribute.
+     * @return string The rendered `<$name>...</$name>` tag.
+     */
+    public function tag(string $name, string $text, array $options = []): string
+    {
+        $escape = (bool)($options['escape'] ?? true);
+        unset($options['escape']);
+
+        $text = $this->prependIcon($escape ? h($text) : $text, $options);
+
+        $htmlAttributes = $this->parseHtmlAttributes($options);
+
+        return sprintf('<%s%s>%s</%s>', h($name, ENT_QUOTES), $htmlAttributes, $text, h($name, ENT_QUOTES));
+    }
+
+    /**
+     * If `$options` has an `icon` key, removes it and returns `$text` with the corresponding icon — built via
+     * `icon()` — prepended. Returns `$text` unchanged otherwise.
+     *
+     * @param string $text
+     * @param array<string, string|int|float|bool> $options
+     * @return string
+     */
+    private function prependIcon(string $text, array &$options): string
+    {
+        if (!isset($options['icon'])) {
+            return $text;
+        }
+
+        $icon = (string)$options['icon'];
+        unset($options['icon']);
+
+        return $this->icon($icon) . ' ' . $text;
     }
 
     /**

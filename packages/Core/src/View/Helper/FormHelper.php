@@ -31,6 +31,37 @@ final class FormHelper extends Helper
     }
 
     /**
+     * A hidden `<input>` — for carrying a value along with the form without showing it to the user.
+     *
+     * @param string $name Both the field's `name` and `id` attribute.
+     * @param string $value The field's value.
+     * @param array<string, string|int|float|bool> $options Extra `<input>` attributes.
+     * @return string The rendered `<input type="hidden">` tag.
+     */
+    public function hidden(string $name, string $value, array $options = []): string
+    {
+        $attributes = $this->parseHtmlAttributes(['id' => $name, 'name' => $name, 'value' => $value, ...$options]);
+
+        return "<input type=\"hidden\"$attributes>";
+    }
+
+    /**
+     * A `<label>` tag pointing at `$for` via its `for` attribute.
+     *
+     * @param string $for The `id`/`name` of the field this label is for.
+     * @param string $text The visible label text.
+     * @return string The rendered `<label>` tag.
+     */
+    public function label(string $for, string $text): string
+    {
+        return sprintf(
+            '<label for="%s" class="form-label">%s</label>',
+            h($for, ENT_QUOTES),
+            h($text),
+        );
+    }
+
+    /**
      * A single labeled `<input>`, wrapped in a `.mb-3` div.
      *
      * @param string $name Both the field's `name`/`id` attribute and, via `for`, what its `<label>` points to.
@@ -51,28 +82,11 @@ final class FormHelper extends Helper
         $attributes = $this->parseHtmlAttributes(['id' => $name, 'name' => $name, ...$options]);
 
         return sprintf(
-            '<div class="mb-3"><label for="%s" class="form-label">%s</label>'
-            . '<input type="%s" class="form-control"%s></div>',
-            h($name, ENT_QUOTES),
-            h($label),
+            '<div class="mb-3">%s<input type="%s" class="form-control"%s></div>',
+            $this->label($name, $label),
             h($type, ENT_QUOTES),
             $attributes,
         );
-    }
-
-    /**
-     * A hidden `<input>` — for carrying a value along with the form without showing it to the user.
-     *
-     * @param string $name Both the field's `name` and `id` attribute.
-     * @param string $value The field's value.
-     * @param array<string, string|int|float|bool> $options Extra `<input>` attributes.
-     * @return string The rendered `<input type="hidden">` tag.
-     */
-    public function hidden(string $name, string $value, array $options = []): string
-    {
-        $attributes = $this->parseHtmlAttributes(['id' => $name, 'name' => $name, 'value' => $value, ...$options]);
-
-        return "<input type=\"hidden\"$attributes>";
     }
 
     /**

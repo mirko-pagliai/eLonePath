@@ -45,8 +45,8 @@ class ExtractMessagesCommandTest extends TestCase
     {
         if (is_dir($this->outputDir)) {
             $this->removeDirectory($this->outputDir);
-        } else {
-            @unlink($this->outputDir);
+        } elseif (file_exists($this->outputDir)) {
+            unlink($this->outputDir);
         }
     }
 

@@ -38,8 +38,9 @@ final class Translator
         self::$initialized = true;
 
         $loader = new PoLoader();
+        $localeDir = rtrim(LOCALES, '/') . "/$locale";
 
-        foreach (glob(LOCALES . "$locale/*.po") ?: [] as $file) {
+        foreach (glob("$localeDir/*.po") ?: [] as $file) {
             $domain = basename($file, '.po');
 
             self::$catalogues[$domain] = $loader->loadFile($file, Translations::create($domain));

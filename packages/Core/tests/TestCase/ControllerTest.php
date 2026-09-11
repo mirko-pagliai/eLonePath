@@ -39,6 +39,26 @@ class ControllerTest extends TestCase
     }
 
     /**
+     * The `View` built internally (no explicit `View` given) gets the same `Request` the controller itself was
+     * built with — this is what lets a helper like `FormHelper::input()` read the current request's own data.
+     *
+     * @link \Elone\Core\Controller::__construct()
+     */
+    #[Test]
+    public function testConstructPassesTheRequestToTheViewItBuilds(): void
+    {
+        $request = new Request('GET', '/');
+        $controller = new class ($request) extends Controller {
+            public function getView(): View
+            {
+                return $this->view;
+            }
+        };
+
+        $this->assertSame($request, $controller->getView()->getRequest());
+    }
+
+    /**
      * A subclass overriding `viewClass()` — the app's own `AppController`, in practice — gets an instance of that
      * class, not the base `View`, when no `View` is given explicitly.
      *

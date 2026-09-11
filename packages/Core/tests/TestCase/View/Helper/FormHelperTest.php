@@ -4,11 +4,11 @@ declare(strict_types=1);
 namespace Elone\Core\Test\View\Helper;
 
 use Elone\Core\Exception\RouteNotFoundException;
+use Elone\Core\Server\Request;
 use Elone\Core\View\Helper\FormHelper;
 use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
-use PHPUnit\Framework\Attributes\TestWith;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -31,11 +31,20 @@ class FormHelperTest extends TestCase
      * @link \Elone\Core\View\Helper\FormHelper::create()
      */
     #[Test]
-    #[TestWith([['controller' => 'Pages', 'action' => 'postOnly']])]
-    #[TestWith(['/pages/postOnly'])]
-    public function testCreate(string|array $url): void
+    public function testCreateWithRoute(): void
     {
-        $result = $this->helper->create($url);
+        $result = $this->helper->create(['controller' => 'Pages', 'action' => 'postOnly']);
+
+        $this->assertSame('<form method="post" action="/pages/postOnly">', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::create()
+     */
+    #[Test]
+    public function testCreateWithStringUrl(): void
+    {
+        $result = $this->helper->create('/pages/postOnly');
 
         $this->assertSame('<form method="post" action="/pages/postOnly">', $result);
     }
@@ -62,28 +71,6 @@ class FormHelperTest extends TestCase
     {
         $this->expectException(RouteNotFoundException::class);
         $this->helper->create([]);
-    }
-
-    /**
-     * @link \Elone\Core\View\Helper\FormHelper::hidden()
-     */
-    #[Test]
-    public function testHidden(): void
-    {
-        $result = $this->helper->hidden('token', 'abc123');
-
-        $this->assertSame('<input type="hidden" id="token" name="token" value="abc123">', $result);
-    }
-
-    /**
-     * @link \Elone\Core\View\Helper\FormHelper::hidden()
-     */
-    #[Test]
-    public function testHiddenEscapesValue(): void
-    {
-        $result = $this->helper->hidden('name', 'A & "B"');
-
-        $this->assertSame('<input type="hidden" id="name" name="name" value="A &amp; &quot;B&quot;">', $result);
     }
 
     /**
@@ -172,6 +159,67 @@ class FormHelperTest extends TestCase
         $result = $this->helper->input('name', 'A & B');
 
         $this->assertStringContainsString('<label for="name" class="form-label">A &amp; B</label>', $result);
+    }
+
+    /**
+     * With no `value` given explicitly, the field is pre-filled from the current request's own submitted data —
+     * this is what makes a form re-show what was typed after a failed validation.
+     *
+     * @link \Elone\Core\View\Helper\FormHelper::input()
+     */
+    #[Test]
+    public function testInputPrefillsValueFromTheRequest(): void
+    {
+        $request = new Request('POST', '/', ['strength' => '7']);
+        $helper = new FormHelper(new View($request));
+
+        $result = $helper->input('strength', 'Forza');
+
+        $this->assertStringContainsString('value="7"', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::input()
+     */
+    #[Test]
+    public function testInputWithNoMatchingRequestDataHasNoValue(): void
+    {
+        $request = new Request('POST', '/', ['other' => '7']);
+        $helper = new FormHelper(new View($request));
+
+        $result = $helper->input('strength', 'Forza');
+
+        $this->assertStringNotContainsString('value=', $result);
+    }
+
+    /**
+     * A `View` built with no request at all — `$this->helper`, from `setUp()` — has nothing to pre-fill from.
+     *
+     * @link \Elone\Core\View\Helper\FormHelper::input()
+     */
+    #[Test]
+    public function testInputWithNoRequestHasNoValue(): void
+    {
+        $result = $this->helper->input('strength', 'Forza');
+
+        $this->assertStringNotContainsString('value=', $result);
+    }
+
+    /**
+     * An explicit `value` in `$options` wins over whatever the current request's own data has for that field.
+     *
+     * @link \Elone\Core\View\Helper\FormHelper::input()
+     */
+    #[Test]
+    public function testInputExplicitValueOverridesTheRequest(): void
+    {
+        $request = new Request('POST', '/', ['strength' => '7']);
+        $helper = new FormHelper(new View($request));
+
+        $result = $helper->input('strength', 'Forza', ['value' => '99']);
+
+        $this->assertStringContainsString('value="99"', $result);
+        $this->assertStringNotContainsString('value="7"', $result);
     }
 
     /**
@@ -283,5 +331,27 @@ class FormHelperTest extends TestCase
     public function testResetWithCustomLabel(): void
     {
         $this->assertSame('<button type="reset">Clear</button>', $this->helper->reset('Clear'));
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::hidden()
+     */
+    #[Test]
+    public function testHidden(): void
+    {
+        $result = $this->helper->hidden('token', 'abc123');
+
+        $this->assertSame('<input type="hidden" id="token" name="token" value="abc123">', $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\FormHelper::hidden()
+     */
+    #[Test]
+    public function testHiddenEscapesValue(): void
+    {
+        $result = $this->helper->hidden('name', 'A & "B"');
+
+        $this->assertSame('<input type="hidden" id="name" name="name" value="A &amp; &quot;B&quot;">', $result);
     }
 }

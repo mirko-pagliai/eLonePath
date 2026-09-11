@@ -47,7 +47,7 @@ class View
      *
      * @return \Elone\Core\Server\Request|null
      */
-    public function request(): ?Request
+    public function getRequest(): ?Request
     {
         return $this->request;
     }

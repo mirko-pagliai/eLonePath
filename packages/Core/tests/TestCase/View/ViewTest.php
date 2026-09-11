@@ -5,6 +5,7 @@ namespace Elone\Core\Test\View;
 
 use Elone\Core\Exception\HelperNotFoundException;
 use Elone\Core\Exception\TemplateNotFoundException;
+use Elone\Core\Server\Request;
 use Elone\Core\View\Helper\Helper;
 use Elone\Core\View\View;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -18,6 +19,33 @@ use TypeError;
 #[CoversClass(View::class)]
 class ViewTest extends TestCase
 {
+    /**
+     * @link \Elone\Core\View\View::__construct()
+     * @link \Elone\Core\View\View::getRequest()
+     */
+    #[Test]
+    public function testGetRequestReturnsTheRequestPassedToTheConstructor(): void
+    {
+        $request = new Request('GET', '/');
+        $view = new View($request);
+
+        $this->assertSame($request, $view->getRequest());
+    }
+
+    /**
+     * A `View` built with no request at all — `ErrorHandler`'s own, for instance — has none to return.
+     *
+     * @link \Elone\Core\View\View::__construct()
+     * @link \Elone\Core\View\View::getRequest()
+     */
+    #[Test]
+    public function testGetRequestWithNoRequestReturnsNull(): void
+    {
+        $view = new View();
+
+        $this->assertNull($view->getRequest());
+    }
+
     /**
      * Loading a real `Helper` subclass makes it accessible under the name it was loaded as. Calls `__get()`
      * explicitly rather than through the magic `$view->Greeting` syntax — the two are identical at runtime, but
@@ -155,10 +183,11 @@ class ViewTest extends TestCase
     }
 
     /**
-     * Regression test: `$this->data` used to get cleared *before* the template was evaluated, so a helper the template
-     * itself calls (reading `get('state')`) could never see anything `set()` for that same render — `get()` always
-     * returned `null` regardless of what had just been `set()`. `probe.php` calls a helper that reads `get('state')`
-     * from inside the very render that `set()` it, which is exactly the path that used to fail.
+     * Regression test: `$this->data` used to get cleared *before* the template was evaluated, so a helper the
+     * template itself calls (reading `get('state')`) could never see anything `set()` for that same render —
+     * `get()` always returned `null` regardless of what had just been `set()`. `probe.php` calls a helper that
+     * reads `get('state')` from inside the very render that `set()` it, which is exactly the path that used to
+     * fail.
      *
      * @link \Elone\Core\View\View::render()
      * @link \Elone\Core\View\View::get()
@@ -205,9 +234,9 @@ class ViewTest extends TestCase
     /**
      * Test for the `element()` method.
      *
-     * `greeting.php` deliberately passes `name` as a data key — the exact key that used to collide with `element()`'s
-     * own `$name` parameter before `evaluate()` isolated the extraction scope. This is a regression test for that bug,
-     * not just a happy-path check.
+     * `greeting.php` deliberately passes `name` as a data key — the exact key that used to collide with
+     * `element()`'s own `$name` parameter before `evaluate()` isolated the extraction scope. This is a regression
+     * test for that bug, not just a happy-path check.
      *
      * @link \Elone\Core\View\View::element()
      */

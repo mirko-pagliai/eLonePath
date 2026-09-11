@@ -65,7 +65,7 @@ final class FormHelper extends Helper
         unset($options['type']);
 
         if (!array_key_exists('value', $options)) {
-            $value = $this->view->request()?->dataParam($name);
+            $value = $this->view->getRequest()?->dataParam($name);
             if ($value !== null) {
                 $options['value'] = $value;
             }

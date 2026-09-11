@@ -5,6 +5,7 @@ namespace Test\View;
 
 use App\View\AppView;
 use App\View\Helper\StoryHelper;
+use Elone\Core\Server\Request;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -38,5 +39,17 @@ class AppViewTest extends TestCase
         $view = new AppView();
 
         $this->assertSame('<i class="bi bi-github"></i>', $view->Html->icon('github'));
+    }
+
+    /**
+     * @link \App\View\AppView::__construct()
+     */
+    #[Test]
+    public function testConstructPassesTheRequestToTheParent(): void
+    {
+        $request = new Request('GET', '/');
+        $view = new AppView($request);
+
+        $this->assertSame($request, $view->getRequest());
     }
 }

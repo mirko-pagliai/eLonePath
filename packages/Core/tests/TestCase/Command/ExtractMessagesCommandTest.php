@@ -92,10 +92,12 @@ class ExtractMessagesCommandTest extends TestCase
         $this->assertSame(Command::SUCCESS, $tester->getStatusCode());
 
         $defaultPot = file_get_contents("$this->outputDir/default.pot");
+        $this->assertIsString($defaultPot);
         $this->assertStringContainsString('msgid "Welcome back"', $defaultPot);
         $this->assertSame(1, substr_count($defaultPot, 'msgid "Welcome back"'));
 
         $validationPot = file_get_contents("$this->outputDir/validation.pot");
+        $this->assertIsString($validationPot);
         $this->assertStringContainsString('msgid "The {0} attribute is required."', $validationPot);
     }
 
@@ -108,10 +110,10 @@ class ExtractMessagesCommandTest extends TestCase
         $tester = $this->execute();
 
         $this->assertSame(Command::SUCCESS, $tester->getStatusCode());
-        $this->assertStringNotContainsString(
-            'not a literal',
-            file_get_contents("$this->outputDir/default.pot"),
-        );
+
+        $defaultPot = file_get_contents("$this->outputDir/default.pot");
+        $this->assertIsString($defaultPot);
+        $this->assertStringNotContainsString('not a literal', $defaultPot);
     }
 
     /**
@@ -127,9 +129,12 @@ class ExtractMessagesCommandTest extends TestCase
         $tester = $this->execute();
 
         $this->assertSame(Command::SUCCESS, $tester->getStatusCode());
+
+        $defaultPot = file_get_contents("$this->outputDir/default.pot");
+        $this->assertIsString($defaultPot);
         $this->assertStringContainsString(
             'msgid "{count, plural, one {You have one message} other {You have # messages}}"',
-            file_get_contents("$this->outputDir/default.pot"),
+            $defaultPot,
         );
     }
 
@@ -147,10 +152,10 @@ class ExtractMessagesCommandTest extends TestCase
 
         $this->assertSame(Command::SUCCESS, $tester->getStatusCode());
         $this->assertFileExists("$this->outputDir/errors.pot");
-        $this->assertStringContainsString(
-            'msgid "Something went wrong."',
-            file_get_contents("$this->outputDir/errors.pot"),
-        );
+
+        $errorsPot = file_get_contents("$this->outputDir/errors.pot");
+        $this->assertIsString($errorsPot);
+        $this->assertStringContainsString('msgid "Something went wrong."', $errorsPot);
     }
 
     /**

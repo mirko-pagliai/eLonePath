@@ -66,7 +66,7 @@ final class FormHelper extends Helper
 
         if (!array_key_exists('value', $options)) {
             $value = $this->view->getRequest()?->dataParam($name);
-            if ($value !== null) {
+            if (is_scalar($value)) {
                 $options['value'] = $value;
             }
         }

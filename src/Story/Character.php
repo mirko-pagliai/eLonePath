@@ -116,9 +116,11 @@ final class Character implements Arrayable
 
         $sum = $this->strength + $this->agility + $this->perception + $this->willpower;
         if ($sum !== self::TOTAL_ATTRIBUTE_POINTS) {
-            throw new RuntimeException(
-                'The sum of the character\'s attributes must be ' . self::TOTAL_ATTRIBUTE_POINTS . ", got `$sum`.",
-            );
+            throw new RuntimeException(__(
+                "The sum of the character's attributes must be {0}, got {1}.",
+                self::TOTAL_ATTRIBUTE_POINTS,
+                $sum,
+            ));
         }
     }
 

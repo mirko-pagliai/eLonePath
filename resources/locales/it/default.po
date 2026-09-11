@@ -17,6 +17,9 @@ msgstr ""
 "Report-Msgid-Bugs-To: \n"
 "X-Domain: default\n"
 
+msgid "The sum of the character's attributes must be {0}, got {1}."
+msgstr "La somma degli attributi del personaggio deve essere {0}, mentre è {1}."
+
 #: /home/mirko/PhpstormProjects/eLonePath/templates/Pages/home.php:43
 msgid "Go to stories"
 msgstr "Vai alle storie"

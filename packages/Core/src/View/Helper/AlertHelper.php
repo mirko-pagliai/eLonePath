@@ -8,7 +8,7 @@ use InvalidArgumentException;
 /**
  * Builds a Bootstrap alert — the eight basic color variants from
  * https://getbootstrap.com/docs/5.3/components/alerts/#examples, nothing more elaborate (no dismiss button, no
- * icon, no `alert-link` styling) until an actual use in this app calls for it.
+ * icon, no `alert-link` styling).
  */
 final class AlertHelper extends Helper
 {

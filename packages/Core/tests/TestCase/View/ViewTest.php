@@ -155,11 +155,10 @@ class ViewTest extends TestCase
     }
 
     /**
-     * Regression test: `$this->data` used to get cleared *before* the template was evaluated, so a helper the
-     * template itself calls (e.g. `App\View\Helper\StoryHelper::link()`, reading `get('state')`) could never see
-     * anything `set()` for that same render — `get()` always returned `null` regardless of what had just been
-     * `set()`. `probe.php` calls a helper that reads `get('state')` from inside the very render that `set()` it,
-     * which is exactly the path that used to fail.
+     * Regression test: `$this->data` used to get cleared *before* the template was evaluated, so a helper the template
+     * itself calls (reading `get('state')`) could never see anything `set()` for that same render — `get()` always
+     * returned `null` regardless of what had just been `set()`. `probe.php` calls a helper that reads `get('state')`
+     * from inside the very render that `set()` it, which is exactly the path that used to fail.
      *
      * @link \Elone\Core\View\View::render()
      * @link \Elone\Core\View\View::get()
@@ -206,9 +205,9 @@ class ViewTest extends TestCase
     /**
      * Test for the `element()` method.
      *
-     * `greeting.php` deliberately passes `name` as a data key — the exact key that used to collide with
-     * `element()`'s own `$name` parameter before `evaluate()` isolated the extraction scope. This is a regression
-     * test for that bug, not just a happy-path check.
+     * `greeting.php` deliberately passes `name` as a data key — the exact key that used to collide with `element()`'s
+     * own `$name` parameter before `evaluate()` isolated the extraction scope. This is a regression test for that bug,
+     * not just a happy-path check.
      *
      * @link \Elone\Core\View\View::element()
      */

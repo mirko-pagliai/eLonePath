@@ -53,9 +53,7 @@ readonly class Route
             throw new RouteNotFoundException("`$controllerClass` must extend `" . Controller::class . '`.');
         }
 
-        // An abstract class (the app's own AppController, or any other abstract base) is never a real, dispatchable
-        // controller — treated the same as "not found" rather than a distinct case, so a probing request can't tell
-        // the two apart.
+        // An abstract controller class is never actually dispatchable — treated the same as "not found".
         if (new ReflectionClass($controllerClass)->isAbstract()) {
             throw new ControllerNotFoundException("Controller not found: `$controllerClass`.");
         }
@@ -112,13 +110,7 @@ readonly class Route
      * An array is treated as a route and built into one: `controller` (required) and `action` (defaults to
      * `index`) as string keys, with additional integer keys as route parameters.
      *
-     * `$query` is deliberately a separate parameter, not a key inside `$route` itself — `$route`'s own validation
-     * rejects any string key besides `controller`/`action` specifically to catch typos in a route array (a
-     * misspelled key fails loudly instead of silently becoming a query parameter no one asked for); keeping
-     * `$query` outside that array means this protection doesn't need to make an exception for it.
-     *
-     * The one place this logic lives — `HtmlHelper::url()` and `Controller::redirect()` both delegate to this
-     * instead of each having their own copy of it.
+     * The one place this logic lives — `HtmlHelper::url()` and `Controller::redirect()` both delegate to it.
      *
      * @param array<string|int, string|int|float|bool>|string $route
      * @param array<string, string|int|float|bool> $query Appended as `?key=value&...` (or `&key=value&...` if
@@ -143,11 +135,7 @@ readonly class Route
         $action = $route['action'] ?? 'index';
 
         if (!is_string($controller) || !is_string($action)) {
-            // Only with debug on: the values themselves might be anything at all (an array is the most common
-            // mistake — a nested route array passed where a single controller/action pair was expected), and
-            // seeing exactly what was passed is far more useful for tracking the bug down than a generic message.
-            // Kept out of the message otherwise, since it's the caller's own data and might not be meant to be
-            // shown to whoever eventually sees the error page.
+            // Only with debug on: the values might be anything, an array being the most common mistake.
             if (APP['debug']) {
                 $describe = static fn(mixed $value): string => json_encode($value) ?: 'unserializable value';
 

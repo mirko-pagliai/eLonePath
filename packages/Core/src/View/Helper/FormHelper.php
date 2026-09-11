@@ -5,19 +5,14 @@ namespace Elone\Core\View\Helper;
 
 /**
  * Builds a `<form>`, one labeled input at a time — `create()`/`end()` open and close the tag, `input()` wraps a
- * single labeled field in the same `.mb-3` div `templates/Story/character.php` already hand-wrote, `submit()`,
- * `reset()`, and `hidden()` cover the other pieces almost every form needs. Deliberately minimal beyond that: no
- * label-from-field-name guessing, no validation-aware error display, no select/checkbox/radio helpers — those
- * get built the moment an actual form in this app needs one, not before.
- *
- * Generic enough to live here, in Core, alongside `HtmlHelper` — nothing about opening a `<form>` tag or wrapping
- * a labeled `<input>` is specific to this app's own story/character concerns.
+ * single labeled field in a `.mb-3` div, `submit()`, `reset()`, and `hidden()` cover the other pieces almost
+ * every form needs. No label-from-field-name guessing, no validation-aware error display, no
+ * select/checkbox/radio helpers.
  */
 final class FormHelper extends Helper
 {
     /**
-     * Opens a `<form>` tag that POSTs to `$url` — no application built on this framework has needed another kind
-     * of form yet, so `method="post"` isn't a parameter.
+     * Opens a `<form>` tag that POSTs to `$url` — `method="post"` isn't a parameter, it's always POST.
      *
      * @param array<string|int, string|int|float|bool>|string $url A literal URL/path, or a route array — see
      *  `Elone\Core\Routing\Route::resolve()`.
@@ -36,7 +31,7 @@ final class FormHelper extends Helper
     }
 
     /**
-     * A single labeled `<input>`, wrapped in the same `mb-3` div every field in this app already uses.
+     * A single labeled `<input>`, wrapped in a `.mb-3` div.
      *
      * @param string $name Both the field's `name`/`id` attribute and, via `for`, what its `<label>` points to.
      * @param string $label The visible label text.

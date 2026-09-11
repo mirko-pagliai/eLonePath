@@ -36,6 +36,13 @@ final class ErrorHandler
         $this->logger = $logger ?? error_log(...);
     }
 
+    /**
+     * Turns `$exception` into a `Response` — the exception's own status/message if it's an `HttpException`,
+     * `500`/generic otherwise. Logs it first, unless `debug` is on.
+     *
+     * @param \Throwable $exception
+     * @return \Elone\Core\Server\Response
+     */
     public function handle(Throwable $exception): Response
     {
         if ($exception instanceof HttpException) {

@@ -111,10 +111,10 @@ class RequestTest extends TestCase
     #[Test]
     public function testData(): void
     {
-        $request = new Request('POST', '/story/character/mini-quest', ['strength' => '9', 'agility' => '5']);
+        $request = new Request('POST', '/users/1/edit', ['name' => 'Ada', 'role' => 'admin']);
 
-        $this->assertSame(['strength' => '9', 'agility' => '5'], $request->data());
-        $this->assertSame('9', $request->dataParam('strength'));
+        $this->assertSame(['name' => 'Ada', 'role' => 'admin'], $request->data());
+        $this->assertSame('Ada', $request->dataParam('name'));
         $this->assertNull($request->dataParam('missing'));
         $this->assertSame('default', $request->dataParam('missing', 'default'));
     }
@@ -122,7 +122,7 @@ class RequestTest extends TestCase
     /**
      * `data()` and `queryParams()` are deliberately independent — a value posted in the body doesn't leak into
      * the query params, and vice versa, even when a request genuinely has both (a POST to a URL that also
-     * carries its own querystring, e.g. `?state=...`).
+     * carries its own querystring, e.g. `?ref=...`).
      *
      * @link \Elone\Core\Server\Request::__construct()
      * @link \Elone\Core\Server\Request::data()
@@ -131,10 +131,10 @@ class RequestTest extends TestCase
     #[Test]
     public function testDataAndQueryParamsAreIndependent(): void
     {
-        $request = new Request('POST', '/story/character/mini-quest?state=abc123', ['strength' => '9']);
+        $request = new Request('POST', '/users/1/edit?ref=abc123', ['name' => 'Ada']);
 
-        $this->assertSame(['strength' => '9'], $request->data());
-        $this->assertSame(['state' => 'abc123'], $request->queryParams());
+        $this->assertSame(['name' => 'Ada'], $request->data());
+        $this->assertSame(['ref' => 'abc123'], $request->queryParams());
     }
 
     /**
@@ -165,12 +165,12 @@ class RequestTest extends TestCase
     public function testCreateFromGlobalsPopulatesDataFromPost(): void
     {
         $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_SERVER['REQUEST_URI'] = '/story/character/mini-quest';
-        $_POST = ['strength' => '9', 'agility' => '5'];
+        $_SERVER['REQUEST_URI'] = '/users/1/edit';
+        $_POST = ['name' => 'Ada', 'role' => 'admin'];
 
         $request = Request::createFromGlobals();
 
-        $this->assertSame(['strength' => '9', 'agility' => '5'], $request->data());
+        $this->assertSame(['name' => 'Ada', 'role' => 'admin'], $request->data());
     }
 
     /**

@@ -69,8 +69,8 @@ class HtmlHelper extends Helper
      * querystring the same way `url()` does.
      *
      * `$options` accepts one known key, `escape` (bool, default `true`): whether `$text` is HTML-escaped before being
-     * inserted. Leave it on for anything that isn't fully trusted, developer-written markup — story content, anything
-     * sourced from data — and turn it off only to embed literal HTML you wrote yourself, such as an icon. Every other
+     * inserted. Leave it on for anything that isn't fully trusted, developer-written markup — content sourced from
+     * data — and turn it off only to embed literal HTML you wrote yourself, such as an icon. Every other
      * key in `$options` is applied as an HTML attribute on the `<a>` tag (`class`, `id`, `target`, and so on).
      *
      * @param string $text The text (or, with `escape: false`, raw HTML) to display within the anchor tag.

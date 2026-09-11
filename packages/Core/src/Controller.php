@@ -163,7 +163,7 @@ abstract class Controller
      * ```
      * return $this->redirect('/');
      * return $this->redirect(['controller' => 'Pages', 'action' => 'home']);
-     * return $this->redirect(['controller' => 'Story', 'action' => 'start', $storyId], query: ['state' => $state]);
+     * return $this->redirect(['controller' => 'Pages', 'action' => 'view', $id], query: ['sort' => 'name']);
      * ```
      *
      * @param array<string|int, string|int|float|bool>|string $url A literal URL/path, or a route array.

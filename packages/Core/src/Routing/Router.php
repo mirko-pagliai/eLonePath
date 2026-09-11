@@ -6,6 +6,9 @@ namespace Elone\Core\Routing;
 use Elone\Core\Server\Request;
 use Elone\Core\Utility\WordCase;
 
+/**
+ * Resolves a `Request` into a `Route`.
+ */
 final class Router
 {
     /**
@@ -13,6 +16,8 @@ final class Router
      *
      * @param \Elone\Core\Server\Request $request The incoming request containing the path to be dispatched.
      * @return \Elone\Core\Routing\Route Returns the resolved route for the given request.
+     * @throws \Elone\Core\Exception\ControllerNotFoundException If the controller doesn't exist, or is abstract.
+     * @throws \Elone\Core\Exception\ActionNotFoundException If the action doesn't exist, or isn't public.
      */
     public function dispatch(Request $request): Route
     {
@@ -36,7 +41,12 @@ final class Router
      * Builds a `Route` from an already-resolved controller/action/params — the counterpart to `dispatch()`, which
      * derives these from a `Request` first.
      *
+     * @param string $controller
+     * @param string $action
      * @param list<string> $params
+     * @return \Elone\Core\Routing\Route
+     * @throws \Elone\Core\Exception\ControllerNotFoundException If the controller doesn't exist, or is abstract.
+     * @throws \Elone\Core\Exception\ActionNotFoundException If the action doesn't exist, or isn't public.
      */
     public function resolve(string $controller, string $action, array $params = []): Route
     {
@@ -44,6 +54,7 @@ final class Router
     }
 
     /**
+     * @param string $path
      * @return list<string>
      */
     private function segments(string $path): array

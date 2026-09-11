@@ -61,10 +61,9 @@ class View
     }
 
     /**
-     * Retrieves a previously `set()` value. Also what a helper reads to see the current page's own data (e.g.
-     * `App\View\Helper\StoryHelper::link()` reading the `state` key) — this only works while the template that
-     * data was `set()` for is still being evaluated, i.e. from within a helper call made by that template itself;
-     * see `render()`.
+     * Retrieves a previously `set()` value. Also, what a helper reads to see the current page's own data —
+     * this only works while the template that data was `set()` for is still being evaluated, i.e. from within
+     * a helper call made by that template itself; see `render()`.
      *
      * @param string $name The key to look up.
      * @param mixed $default The value to return if `$name` isn't present.
@@ -94,7 +93,7 @@ class View
      *
      * Example:
      * ```
-     * <?= $this->element('story-title', ['game' => $game]) ?>
+     * <?= $this->element('user-card', ['user' => $user]) ?>
      * ```
      *
      * Unlike `render()`, an element never gets wrapped in a layout, and it only sees the data explicitly passed to
@@ -120,11 +119,9 @@ class View
      * Renders `$template` and, unless `$layout` is `null`, wraps the result in the given layout.
      *
      * `$this->data` (everything `set()` before this call) stays available — via `get()` — for the whole
-     * duration of the template's own evaluation, so a helper the template calls (e.g.
-     * `App\View\Helper\StoryHelper::link()`, reading the current `state`) can see it too; it's only cleared once
-     * the template itself has finished, ready for whatever the next `render()` call sets. The layout never reads
-     * `$this->data` directly either way — it gets the same values explicitly, as a local copy, alongside
-     * `content`.
+     * duration of the template's own evaluation, so a helper the template calls can see it too; it's only
+     * cleared once the template itself has finished. The layout never reads `$this->data` directly either way —
+     * it gets the same values explicitly, as a local copy, alongside `content`.
      *
      * @param string $template The name of the template to render, relative to `TEMPLATES` (without extension).
      * @param string|null $layout The name of the layout to wrap the content in. Defaults to `'default'`. Pass

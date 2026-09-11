@@ -291,8 +291,8 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * `$query` is what lets an action carry a value (`?state=...`, most commonly in this app) into the page it
-     * redirects to — this is the one behavior the four tests above don't exercise, since none of them pass it.
+     * `$query` is what lets an action carry a value along into the page it redirects to — this is the one
+     * behavior the four tests above don't exercise, since none of them pass it.
      *
      * @link \Elone\Core\Controller::redirect()
      */
@@ -306,8 +306,8 @@ class ControllerTest extends TestCase
             }
         };
 
-        $response = $controller->redirect(['controller' => 'Pages', 'action' => 'home'], query: ['state' => 'abc123']);
+        $response = $controller->redirect(['controller' => 'Pages', 'action' => 'home'], query: ['ref' => 'abc123']);
 
-        $this->assertSame(['Location' => '/pages/home?state=abc123'], $response->headers());
+        $this->assertSame(['Location' => '/pages/home?ref=abc123'], $response->headers());
     }
 }

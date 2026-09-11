@@ -33,8 +33,6 @@ class ExtractMessagesCommandTest extends TestCase
      */
     protected function setUp(): void
     {
-        parent::setUp();
-
         $this->outputDir = sys_get_temp_dir() . '/extract-messages-command-test-' . uniqid();
 
         mkdir($this->outputDir, recursive: true);
@@ -45,8 +43,6 @@ class ExtractMessagesCommandTest extends TestCase
      */
     protected function tearDown(): void
     {
-        parent::tearDown();
-
         if (is_dir($this->outputDir)) {
             $this->removeDirectory($this->outputDir);
         } else {

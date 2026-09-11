@@ -36,7 +36,8 @@ class ExtractMessagesCommand extends Command
     }
 
     /**
-     * Scans `$root` for `__()`/`__d()` calls and writes a `.pot` file per domain found into `$localesDir`.
+     * Scans `$root` for `__()`/`__d()` calls and writes a `.pot` file per domain found into `$localesDir`. Asks
+     * before overwriting a `.pot` file that already exists, defaulting to yes.
      *
      * @param \Symfony\Component\Console\Style\SymfonyStyle $io
      * @param string|null $root Directory to scan for `__()`/`__d()` calls. Defaults to `ROOT`.
@@ -46,8 +47,8 @@ class ExtractMessagesCommand extends Command
      */
     public function __invoke(
         SymfonyStyle $io,
-        #[Option('Directory to scan for __()/__d() calls; defaults to `ROOT`')] ?string $root = null,
-        #[Option('Directory to write .pot files into; defaults to `LOCALES`')] ?string $localesDir = null,
+        #[Option('Directory to scan for __()/__d() calls; defaults to `' . ROOT . '`')] ?string $root = null,
+        #[Option('Directory to write .pot files into; defaults to `' . LOCALES . '`')] ?string $localesDir = null,
     ): int {
         if (!$this->checkHasPhpScanner()) {
             $io->error('gettext/gettext and gettext/php-scanner are required to run this command.');
@@ -105,15 +106,45 @@ class ExtractMessagesCommand extends Command
 
             $path = "$localesDir/$domain.pot";
 
+            if (file_exists($path) && !$io->confirm("`$path` already exists. Overwrite it?", true)) {
+                continue;
+            }
+
+            $this->setStandardHeaders($scanned);
+
             file_put_contents($path, $generator->generateString($scanned));
 
             if ($io->isVerbose()) {
-                $io->writeln("$domain.pot: " . count($scanned) . ' message(s) found in code');
+                $io->writeln("Wrote $path");
             }
         }
 
         $io->success('Extraction complete.');
 
         return Command::SUCCESS;
+    }
+
+    /**
+     * Sets the standard gettext PO header fields `xgettext` itself would — the ones tools like Poedit or
+     * Crowdin expect to find, filled in with the same placeholder values `xgettext` leaves for an unconfigured
+     * project.
+     *
+     * @param \Gettext\Translations $translations
+     * @return void
+     */
+    private function setStandardHeaders(Translations $translations): void
+    {
+        $translations->getHeaders()
+            ->set('Project-Id-Version', 'PACKAGE VERSION')
+            ->set('Report-Msgid-Bugs-To', '')
+            ->set('POT-Creation-Date', date('Y-m-d H:iO'))
+            ->set('PO-Revision-Date', 'YEAR-MO-DA HO:MI+ZONE')
+            ->set('Last-Translator', 'FULL NAME <EMAIL@ADDRESS>')
+            ->set('Language-Team', 'LANGUAGE <LL@li.org>')
+            ->setLanguage('')
+            ->set('MIME-Version', '1.0')
+            ->set('Content-Type', 'text/plain; charset=UTF-8')
+            ->set('Content-Transfer-Encoding', '8bit')
+            ->set('Plural-Forms', 'nplurals=INTEGER; plural=EXPRESSION;');
     }
 }

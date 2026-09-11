@@ -4,10 +4,11 @@
 	"license": "MIT",
 	"require": {
 		"php": "^8.4",
-		"symfony/translation": "^8.1"
+		"ext-intl": "*",
+		"gettext/gettext": "^5.5"
 	},
 	"suggest": {
-		"symfony/console": "Needed to run console commands",
+		"symfony/console": "Needed to run console commands, e.g. `i18n:extract`",
 		"gettext/php-scanner": "Needed to run the `i18n:extract` console command",
 		"michelf/php-markdown": "Markdown parser. Necessary if you want to use `HtmlHelper::markdown()`"
 	},

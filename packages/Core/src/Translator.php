@@ -3,19 +3,27 @@ declare(strict_types=1);
 
 namespace Elone\Core;
 
-use Symfony\Component\Translation\Loader\PoFileLoader;
-use Symfony\Component\Translation\Translator as SymfonyTranslator;
+use Gettext\Loader\PoLoader;
+use Gettext\Translations;
+use MessageFormatter;
+use RuntimeException;
 
 /**
  * Handles language translation functionality for the application.
  *
- * This class uses the Symfony Translator component for managing translations.
- *
- * It allows initialization with a specific locale and supports loading translation resources from PO files.
+ * Loads `.po` files via `gettext/gettext`, and resolves ICU message patterns (placeholders, plurals) via PHP's
+ * own `MessageFormatter`.
  */
 final class Translator
 {
-    private static SymfonyTranslator $translator;
+    /**
+     * @var array<string, \Gettext\Translations>
+     */
+    private static array $catalogues = [];
+
+    private static string $locale = 'en';
+
+    private static bool $initialized = false;
 
     /**
      * Initializes the translator with the specified locale and loads translation resources.
@@ -25,20 +33,16 @@ final class Translator
      */
     public static function init(string $locale): void
     {
-        self::$translator = new SymfonyTranslator(locale: $locale);
-        self::$translator->addLoader(format: 'po', loader: new PoFileLoader());
+        self::$locale = $locale;
+        self::$catalogues = [];
+        self::$initialized = true;
 
-        $files = glob(LOCALES . "$locale/*.po") ?: [];
+        $loader = new PoLoader();
 
-        foreach ($files as $file) {
+        foreach (glob(LOCALES . "$locale/*.po") ?: [] as $file) {
             $domain = basename($file, '.po');
 
-            self::$translator->addResource(
-                format: 'po',
-                resource: $file,
-                locale: $locale,
-                domain: $domain . '+intl-icu',
-            );
+            self::$catalogues[$domain] = $loader->loadFile($file, Translations::create($domain));
         }
     }
 
@@ -49,17 +53,40 @@ final class Translator
      * @param string $string The string to be translated.
      * @param string|int ...$args The arguments to replace placeholders in the string.
      * @return string The translated string with placeholders replaced by the provided arguments.
+     * @throws \RuntimeException If the resolved pattern is not a valid ICU message.
      */
     public static function translate(string $domain, string $string, string|int ...$args): string
     {
-        if (!isset(self::$translator)) {
+        if (!self::$initialized) {
             self::init('en');
         }
 
-        return self::$translator->trans(
-            id: $string,
-            parameters: $args,
-            domain: $domain . '+intl-icu',
-        );
+        $pattern = self::lookup($domain, $string);
+
+        $result = new MessageFormatter(self::$locale, $pattern)->format(array_values($args));
+        if ($result === false) {
+            throw new RuntimeException("Failed to format the message pattern `$pattern`.");
+        }
+
+        return $result;
+    }
+
+    /**
+     * Finds `$string`'s own translation within `$domain`, falling back to `$string` itself when it isn't found
+     * or hasn't been translated yet.
+     *
+     * @param string $domain The domain to look `$string` up in.
+     * @param string $string The string to look up.
+     * @return string The translated pattern, or `$string` itself.
+     */
+    private static function lookup(string $domain, string $string): string
+    {
+        $translation = (self::$catalogues[$domain] ?? null)?->find(null, $string);
+
+        if ($translation === null || !$translation->isTranslated()) {
+            return $string;
+        }
+
+        return $translation->getTranslation() ?? $string;
     }
 }

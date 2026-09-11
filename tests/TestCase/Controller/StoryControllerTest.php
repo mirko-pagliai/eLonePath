@@ -130,7 +130,7 @@ class StoryControllerTest extends TestCase
 
         $this->assertNull($result);
         $this->assertSame(
-            "The sum of the character's attributes must be 20, got `21`.",
+            "The sum of the character's attributes must be 20, got 21.",
             $controller->getView()->get('error'),
         );
     }
@@ -156,7 +156,7 @@ class StoryControllerTest extends TestCase
 
         $this->assertNull($result);
         $this->assertSame(
-            'The strength attribute must be between 4 and 10, got `0`.',
+            'The "strength" attribute must be between 4 and 10, got 0.',
             $controller->getView()->get('error'),
         );
     }

@@ -74,7 +74,7 @@ class CharacterTest extends TestCase
     #[Test]
     public function testConstructWithMaxLifePointsTooLow(): void
     {
-        $this->expectExceptionMessageIs('The maxLifePoints attribute must be at least 1, got `0`.');
+        $this->expectExceptionMessageIs('The maxLifePoints attribute must be at least 1, got 0.');
 
         new Character(maxLifePoints: 0, lifePoints: 0, strength: 10, agility: 6, perception: 2, willpower: 2);
     }
@@ -100,7 +100,7 @@ class CharacterTest extends TestCase
     #[Test]
     public function testConstructWithNegativeLifePoints(): void
     {
-        $this->expectExceptionMessageIs('The lifePoints attribute must be between 0 and maxLifePoints (20), got `-1`.');
+        $this->expectExceptionMessageIs('The lifePoints attribute must be between 0 and maxLifePoints (20), got -1.');
 
         new Character(maxLifePoints: 20, lifePoints: -1, strength: 10, agility: 6, perception: 2, willpower: 2);
     }
@@ -111,7 +111,7 @@ class CharacterTest extends TestCase
     #[Test]
     public function testConstructWithLifePointsAboveMax(): void
     {
-        $this->expectExceptionMessageIs('The lifePoints attribute must be between 0 and maxLifePoints (20), got `25`.');
+        $this->expectExceptionMessageIs('The lifePoints attribute must be between 0 and maxLifePoints (20), got 25.');
 
         new Character(maxLifePoints: 20, lifePoints: 25, strength: 10, agility: 6, perception: 2, willpower: 2);
     }
@@ -124,7 +124,7 @@ class CharacterTest extends TestCase
     #[TestWith([11])]
     public function testConstructWithStrengthOutOfRange(int $strength): void
     {
-        $this->expectExceptionMessageIs("The strength attribute must be between 4 and 10, got `$strength`.");
+        $this->expectExceptionMessageIs("The \"strength\" attribute must be between 4 and 10, got $strength.");
 
         new Character(maxLifePoints: 20, lifePoints: 20, strength: $strength, agility: 7, perception: 3, willpower: 3);
     }
@@ -137,7 +137,7 @@ class CharacterTest extends TestCase
     #[TestWith([11])]
     public function testConstructWithAgilityOutOfRange(int $agility): void
     {
-        $this->expectExceptionMessageIs("The agility attribute must be between 4 and 10, got `$agility`.");
+        $this->expectExceptionMessageIs("The \"agility\" attribute must be between 4 and 10, got $agility.");
 
         new Character(maxLifePoints: 20, lifePoints: 20, strength: 7, agility: $agility, perception: 3, willpower: 3);
     }
@@ -150,7 +150,7 @@ class CharacterTest extends TestCase
     #[TestWith([6])]
     public function testConstructWithPerceptionOutOfRange(int $perception): void
     {
-        $this->expectExceptionMessageIs("The perception attribute must be between 1 and 5, got `$perception`.");
+        $this->expectExceptionMessageIs("The \"perception\" attribute must be between 1 and 5, got $perception.");
 
         new Character(
             maxLifePoints: 20,
@@ -170,7 +170,7 @@ class CharacterTest extends TestCase
     #[TestWith([6])]
     public function testConstructWithWillpowerOutOfRange(int $willpower): void
     {
-        $this->expectExceptionMessageIs("The willpower attribute must be between 1 and 5, got `$willpower`.");
+        $this->expectExceptionMessageIs("The \"willpower\" attribute must be between 1 and 5, got $willpower.");
 
         new Character(
             maxLifePoints: 20,
@@ -188,7 +188,7 @@ class CharacterTest extends TestCase
     #[Test]
     public function testConstructWithInvalidSum(): void
     {
-        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got `10`.");
+        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got 10.");
 
         new Character(maxLifePoints: 20, lifePoints: 20, strength: 4, agility: 4, perception: 1, willpower: 1);
     }
@@ -414,7 +414,7 @@ class CharacterTest extends TestCase
     #[Test]
     public function testCreateFromArrayWithInvalidDataThrows(): void
     {
-        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got `10`.");
+        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got 10.");
 
         Character::createFromArray([
             'max_life_points' => 20,

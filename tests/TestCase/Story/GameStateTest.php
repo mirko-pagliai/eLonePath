@@ -201,8 +201,7 @@ class GameStateTest extends TestCase
             'willpower' => 1,
         ];
 
-        $this->expectException(RuntimeException::class);
-        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got `10`.");
+        $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got 10.");
         GameState::fromQueryValue(base64_encode(json_encode(['player' => $playerData])));
     }
 

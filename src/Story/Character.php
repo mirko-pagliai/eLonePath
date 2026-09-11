@@ -88,30 +88,56 @@ final class Character implements Arrayable
         protected(set) readonly int $willpower,
     ) {
         if ($this->maxLifePoints < 1) {
-            throw new RuntimeException("The maxLifePoints attribute must be at least 1, got `$this->maxLifePoints`.");
+            throw new RuntimeException(
+                "The maxLifePoints attribute must be at least 1, got $this->maxLifePoints.",
+            );
         }
 
         if ($this->lifePoints < 0 || $this->lifePoints > $this->maxLifePoints) {
             throw new RuntimeException(
                 "The lifePoints attribute must be between 0 and maxLifePoints ($this->maxLifePoints), " .
-                "got `$this->lifePoints`.",
+                "got $this->lifePoints.",
             );
         }
 
         if ($this->strength < 4 || $this->strength > 10) {
-            throw new RuntimeException("The strength attribute must be between 4 and 10, got `$this->strength`.");
+            throw new RuntimeException(__(
+                'The "{0}" attribute must be between {1} and {2}, got {3}.',
+                lcfirst(__('Strength')),
+                4,
+                10,
+                $this->strength,
+            ));
         }
 
         if ($this->agility < 4 || $this->agility > 10) {
-            throw new RuntimeException("The agility attribute must be between 4 and 10, got `$this->agility`.");
+            throw new RuntimeException(__(
+                'The "{0}" attribute must be between {1} and {2}, got {3}.',
+                lcfirst(__('Agility')),
+                4,
+                10,
+                $this->agility,
+            ));
         }
 
         if ($this->perception < 1 || $this->perception > 5) {
-            throw new RuntimeException("The perception attribute must be between 1 and 5, got `$this->perception`.");
+            throw new RuntimeException(__(
+                'The "{0}" attribute must be between {1} and {2}, got {3}.',
+                lcfirst(__('Perception')),
+                1,
+                5,
+                $this->perception,
+            ));
         }
 
         if ($this->willpower < 1 || $this->willpower > 5) {
-            throw new RuntimeException("The willpower attribute must be between 1 and 5, got `$this->willpower`.");
+            throw new RuntimeException(__(
+                'The "{0}" attribute must be between {1} and {2}, got {3}.',
+                lcfirst(__('Willpower')),
+                1,
+                5,
+                $this->willpower,
+            ));
         }
 
         $sum = $this->strength + $this->agility + $this->perception + $this->willpower;

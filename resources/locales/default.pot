@@ -7,13 +7,36 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"POT-Creation-Date: 2026-09-11 20:32+0200\n"
+"POT-Creation-Date: 2026-09-11 21:12+0200\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "X-Domain: default\n"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:119
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:102
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:112
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:122
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:132
+msgid "The \"{0}\" attribute must be between {1} and {2}, got {3}."
+msgstr ""
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:104
+msgid "Strength"
+msgstr ""
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:114
+msgid "Agility"
+msgstr ""
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:124
+msgid "Perception"
+msgstr ""
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:134
+msgid "Willpower"
+msgstr ""
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:143
 msgid "The sum of the character's attributes must be {0}, got {1}."
 msgstr ""
 

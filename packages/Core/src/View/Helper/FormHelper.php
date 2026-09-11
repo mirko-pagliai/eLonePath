@@ -31,21 +31,6 @@ final class FormHelper extends Helper
     }
 
     /**
-     * A hidden `<input>` — for carrying a value along with the form without showing it to the user.
-     *
-     * @param string $name Both the field's `name` and `id` attribute.
-     * @param string $value The field's value.
-     * @param array<string, string|int|float|bool> $options Extra `<input>` attributes.
-     * @return string The rendered `<input type="hidden">` tag.
-     */
-    public function hidden(string $name, string $value, array $options = []): string
-    {
-        $attributes = $this->parseHtmlAttributes(['id' => $name, 'name' => $name, 'value' => $value, ...$options]);
-
-        return "<input type=\"hidden\"$attributes>";
-    }
-
-    /**
      * A `<label>` tag pointing at `$for` via its `for` attribute.
      *
      * @param string $for The `id`/`name` of the field this label is for.
@@ -64,16 +49,27 @@ final class FormHelper extends Helper
     /**
      * A single labeled `<input>`, wrapped in a `.mb-3` div.
      *
+     * Unless `$options` already has its own `value`, the field is pre-filled from the current request's own
+     * submitted data — under `$name` — if there is one. This is what makes a form re-show what was typed after
+     * a failed validation, without the controller or template having to wire it up.
+     *
      * @param string $name Both the field's `name`/`id` attribute and, via `for`, what its `<label>` points to.
      * @param string $label The visible label text.
      * @param array<string, string|int|float|bool> $options Extra `<input>` attributes — `type` (defaults to
-     *  `'text'`), `min`, `max`, `required`, and so on.
+     *  `'text'`), `min`, `max`, `required`, `value`, and so on.
      * @return string The rendered `<div class="mb-3">...</div>` block.
      */
     public function input(string $name, string $label, array $options = []): string
     {
         $type = (string)($options['type'] ?? 'text');
         unset($options['type']);
+
+        if (!array_key_exists('value', $options)) {
+            $value = $this->view->request()?->dataParam($name);
+            if ($value !== null) {
+                $options['value'] = $value;
+            }
+        }
 
         if (($options['required'] ?? false) === true) {
             $options['required'] = 'required';
@@ -87,6 +83,21 @@ final class FormHelper extends Helper
             h($type, ENT_QUOTES),
             $attributes,
         );
+    }
+
+    /**
+     * A hidden `<input>` — for carrying a value along with the form without showing it to the user.
+     *
+     * @param string $name Both the field's `name` and `id` attribute.
+     * @param string $value The field's value.
+     * @param array<string, string|int|float|bool> $options Extra `<input>` attributes.
+     * @return string The rendered `<input type="hidden">` tag.
+     */
+    public function hidden(string $name, string $value, array $options = []): string
+    {
+        $attributes = $this->parseHtmlAttributes(['id' => $name, 'name' => $name, 'value' => $value, ...$options]);
+
+        return "<input type=\"hidden\"$attributes>";
     }
 
     /**

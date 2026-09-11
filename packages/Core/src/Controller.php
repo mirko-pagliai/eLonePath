@@ -34,7 +34,7 @@ abstract class Controller
             $this->view = $view;
         } else {
             $viewClass = static::viewClass();
-            $this->view = new $viewClass();
+            $this->view = new $viewClass($this->request);
         }
     }
 

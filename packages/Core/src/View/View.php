@@ -6,6 +6,7 @@ namespace Elone\Core\View;
 use Elone\Core\Exception\HelperNotFoundException;
 use Elone\Core\Exception\LayoutNotFoundException;
 use Elone\Core\Exception\TemplateNotFoundException;
+use Elone\Core\Server\Request;
 use Elone\Core\View\Helper\Helper;
 use Throwable;
 
@@ -32,6 +33,24 @@ class View
      * @var array<string, mixed>
      */
     private array $data = [];
+
+    /**
+     * @param \Elone\Core\Server\Request|null $request The current request, if any — `null` for a `View` built
+     *  outside a real request, e.g. `ErrorHandler`'s own.
+     */
+    public function __construct(private readonly ?Request $request = null)
+    {
+    }
+
+    /**
+     * The current request, if this `View` was built with one — `null` otherwise.
+     *
+     * @return \Elone\Core\Server\Request|null
+     */
+    public function request(): ?Request
+    {
+        return $this->request;
+    }
 
     /**
      * Registers `$helper` under `$name`, making it available in templates as `$this->$name`. Only a `Helper` subclass

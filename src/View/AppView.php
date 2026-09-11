@@ -4,6 +4,7 @@ declare(strict_types=1);
 namespace App\View;
 
 use App\View\Helper\StoryHelper;
+use Elone\Core\Server\Request;
 use Elone\Core\View\Helper\AlertHelper;
 use Elone\Core\View\Helper\FormHelper;
 use Elone\Core\View\Helper\HtmlHelper;
@@ -19,8 +20,10 @@ use Elone\Core\View\View;
  */
 class AppView extends View
 {
-    public function __construct()
+    public function __construct(?Request $request = null)
     {
+        parent::__construct($request);
+
         $this->loadHelper(name: 'Html', helper: new HtmlHelper($this));
         $this->loadHelper(name: 'Story', helper: new StoryHelper($this));
         $this->loadHelper(name: 'Form', helper: new FormHelper($this));

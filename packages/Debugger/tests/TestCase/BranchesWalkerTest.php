@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Debugger\Test;
+namespace Elone\Debugger\Test\TestCase;
 
 use App\Story\Game;
 use Elone\Debugger\BranchesWalker;

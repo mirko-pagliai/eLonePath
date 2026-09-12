@@ -9,7 +9,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Elone\\Debugger\\Test\\": "tests/TestCase/",
+			"Elone\\Debugger\\Test\\TestCase\\": "tests/TestCase/",
 			"TestApp\\": "tests/test_app/src"
 		}
 	},

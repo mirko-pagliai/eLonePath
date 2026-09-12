@@ -3,16 +3,66 @@ declare(strict_types=1);
 
 namespace Elone\Core\View\Helper;
 
+use Elone\Core\View\View;
+
 /**
  * Builds a `<form>`, one labeled input at a time — `create()`/`end()` open and close the tag, `input()` wraps a
  * single labeled field in a `.mb-3` div, `submit()`, `reset()`, and `hidden()` cover the other pieces almost
  * every form needs. No label-from-field-name guessing, no validation-aware error display, no
  * select/checkbox/radio helpers.
+ *
+ * Every method builds its markup from `$templates`, not a hardcoded string — pass a `templates` override to the
+ * constructor to customize one or more entries, e.g. `new FormHelper($view, ['templates' => ['label' => '...']])`.
  */
 final class FormHelper extends Helper
 {
     /**
-     * Opens a `<form>` tag that POSTs to `$url` — `method="post"` isn't a parameter, it's always POST.
+     * @var array<string, string>
+     */
+    protected array $templates = [
+        'button' => '<button type="{{type}}"{{attrs}}>{{text}}</button>',
+        'formStart' => '<form method="post" action="{{action}}"{{attrs}}>',
+        'formEnd' => '</form>',
+        'hiddenInput' => '<input type="hidden"{{attrs}}>',
+        'input' => '<input type="{{type}}" class="form-control"{{attrs}}>',
+        'inputContainer' => '<div class="mb-3 {{type}}{{required}}">{{label}}{{input}}</div>',
+        'label' => '<label{{attrs}}>{{text}}</label>',
+    ];
+
+    /**
+     * @param \Elone\Core\View\View $view
+     * @param array{templates?: array<string, string>, ...<string, mixed>} $config Currently the only supported key is
+     * `templates`: overrides for one or more of the default `$templates` entries — entries not mentioned there keep
+     * their default.
+     */
+    public function __construct(View $view, array $config = [])
+    {
+        parent::__construct($view);
+
+        $this->templates = [...$this->templates, ...($config['templates'] ?? [])];
+    }
+
+    /**
+     * Renders `$this->templates[$name]`, replacing each `{{key}}` placeholder with `$data[key]` — or with an
+     * empty string, for a placeholder `$data` doesn't have an entry for.
+     *
+     * @param string $name A key into `$this->templates`.
+     * @param array<string, string> $data
+     * @return string
+     */
+    private function formatTemplate(string $name, array $data): string
+    {
+        $search = array_map(
+            callback: static fn(string $key): string => "{{{$key}}}",
+            array: array_keys($data),
+        );
+
+        return str_replace(search: $search, replace: array_values($data), subject: $this->templates[$name]);
+    }
+
+    /**
+     * Opens a `<form>` tag that POSTs to `$url` — `method="post"` isn't a parameter, it's always POST. See
+     * `$templates['formStart']`.
      *
      * @param array<string|int, string|int|float|bool>|string $url A literal URL/path, or a route array — see
      *  `Elone\Core\Routing\Route::resolve()`.
@@ -23,15 +73,14 @@ final class FormHelper extends Helper
      */
     public function create(array|string $url, array $options = []): string
     {
-        return sprintf(
-            '<form method="post" action="%s"%s>',
-            h($this->url($url), ENT_QUOTES),
-            $this->parseHtmlAttributes($options),
-        );
+        return $this->formatTemplate('formStart', [
+            'action' => h($this->url($url), ENT_QUOTES),
+            'attrs' => $this->parseHtmlAttributes($options),
+        ]);
     }
 
     /**
-     * A `<label>` tag pointing at `$for` via its `for` attribute.
+     * A `<label>` tag pointing at `$for` via its `for` attribute — see `$templates['label']`.
      *
      * @param string $for The `id`/`name` of the field this label is for.
      * @param string $text The visible label text.
@@ -39,15 +88,16 @@ final class FormHelper extends Helper
      */
     public function label(string $for, string $text): string
     {
-        return sprintf(
-            '<label for="%s" class="form-label">%s</label>',
-            h($for, ENT_QUOTES),
-            h($text),
-        );
+        return $this->formatTemplate('label', [
+            'attrs' => $this->parseHtmlAttributes(['for' => $for, 'class' => 'form-label']),
+            'text' => h($text),
+        ]);
     }
 
     /**
-     * A single labeled `<input>`, wrapped in a `.mb-3` div.
+     * A single labeled `<input>`, wrapped via `$templates['inputContainer']` — the `<input>` tag itself comes
+     * from `$templates['input']`. The container's own class always includes `$type` (`mb-3 text`, `mb-3
+     * number`, and so on), plus `required` when the field is one.
      *
      * Unless `$options` already has its own `value`, the field is pre-filled from the current request's own
      * submitted data — under `$name` — if there is one. This is what makes a form re-show what was typed after
@@ -57,7 +107,7 @@ final class FormHelper extends Helper
      * @param string $label The visible label text.
      * @param array<string, string|int|float|bool> $options Extra `<input>` attributes — `type` (defaults to
      *  `'text'`), `min`, `max`, `required`, `value`, and so on.
-     * @return string The rendered `<div class="mb-3">...</div>` block.
+     * @return string The rendered container block.
      */
     public function input(string $name, string $label, array $options = []): string
     {
@@ -71,39 +121,46 @@ final class FormHelper extends Helper
             }
         }
 
-        if (($options['required'] ?? false) === true) {
+        $required = ($options['required'] ?? false) === true;
+        if ($required) {
             $options['required'] = 'required';
         }
 
         $attributes = $this->parseHtmlAttributes(['id' => $name, 'name' => $name, ...$options]);
 
-        return sprintf(
-            '<div class="mb-3">%s<input type="%s" class="form-control"%s></div>',
-            $this->label($name, $label),
-            h($type, ENT_QUOTES),
-            $attributes,
-        );
+        $input = $this->formatTemplate('input', [
+            'type' => h($type, ENT_QUOTES),
+            'attrs' => $attributes,
+        ]);
+
+        return $this->formatTemplate('inputContainer', [
+            'type' => h($type, ENT_QUOTES),
+            'required' => $required ? ' required' : '',
+            'label' => $this->label($name, $label),
+            'input' => $input,
+        ]);
     }
 
     /**
-     * A hidden `<input>` — for carrying a value along with the form without showing it to the user.
+     * A hidden `<input>` — for carrying a value along with the form without showing it to the user. See
+     * `$templates['hiddenInput']`.
      *
      * @param string $name Both the field's `name` and `id` attribute.
      * @param string $value The field's value.
      * @param array<string, string|int|float|bool> $options Extra `<input>` attributes.
-     * @return string The rendered `<input type="hidden">` tag.
+     * @return string The rendered hidden `<input>` tag.
      */
     public function hidden(string $name, string $value, array $options = []): string
     {
         $attributes = $this->parseHtmlAttributes(['id' => $name, 'name' => $name, 'value' => $value, ...$options]);
 
-        return "<input type=\"hidden\"$attributes>";
+        return $this->formatTemplate('hiddenInput', ['attrs' => $attributes]);
     }
 
     /**
      * A generic `<button>` — what `submit()` and `reset()` both build on. `type` defaults to `'button'`: a bare
      * HTML `<button>` defaults to `'submit'`, which silently submits the enclosing form — surprising for
-     * anything that isn't meant to (a button wired to its own JS handler, say).
+     * anything that isn't meant to (a button wired to its own JS handler, say). See `$templates['button']`.
      *
      * @param string $label The button's visible text (or, with `escape: false`, raw HTML).
      * @param array<string, string|int|float|bool> $options Extra `<button>` attributes — `type`, `class`, and so
@@ -118,12 +175,11 @@ final class FormHelper extends Helper
         $escape = (bool)($options['escape'] ?? true);
         unset($options['escape']);
 
-        return sprintf(
-            '<button type="%s"%s>%s</button>',
-            h($type, ENT_QUOTES),
-            $this->parseHtmlAttributes($options),
-            $escape ? h($label) : $label,
-        );
+        return $this->formatTemplate('button', [
+            'type' => h($type, ENT_QUOTES),
+            'attrs' => $this->parseHtmlAttributes($options),
+            'text' => $escape ? h($label) : $label,
+        ]);
     }
 
     /**
@@ -151,10 +207,12 @@ final class FormHelper extends Helper
     }
 
     /**
-     * Closes a `<form>` opened with `create()`.
+     * Closes a `<form>` opened with `create()` — see `$templates['formEnd']`.
+     *
+     * @return string
      */
     public function end(): string
     {
-        return '</form>';
+        return $this->formatTemplate('formEnd', []);
     }
 }

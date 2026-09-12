@@ -96,6 +96,74 @@ class FormHelperTest extends TestCase
     }
 
     /**
+     * A `templates` override passed to the constructor replaces the default markup for that entry — the rest of
+     * `label()`'s behavior (escaping, `for` from `$for`) is unaffected.
+     *
+     * @link \Elone\Core\View\Helper\FormHelper::__construct()
+     * @link \Elone\Core\View\Helper\FormHelper::label()
+     */
+    #[Test]
+    public function testConstructWithTemplatesOverridesLabel(): void
+    {
+        $helper = new FormHelper(new View(), ['templates' => ['label' => '<label{{attrs}}>{{text}}</label><br>']]);
+
+        $result = $helper->label('name', 'Name');
+
+        $this->assertSame('<label for="name" class="form-label">Name</label><br>', $result);
+    }
+
+    /**
+     * With no `templates` override, the default markup is used — the existing, unchanged behavior.
+     *
+     * @link \Elone\Core\View\Helper\FormHelper::__construct()
+     * @link \Elone\Core\View\Helper\FormHelper::label()
+     */
+    #[Test]
+    public function testConstructWithNoTemplatesUsesDefaults(): void
+    {
+        $helper = new FormHelper(new View());
+
+        $this->assertSame('<label for="name" class="form-label">Name</label>', $helper->label('name', 'Name'));
+    }
+
+    /**
+     * Every method builds its markup from `$templates`, not a hardcoded string — one override per entry,
+     * verified against the method that uses it.
+     *
+     * @link \Elone\Core\View\Helper\FormHelper::__construct()
+     * @link \Elone\Core\View\Helper\FormHelper::create()
+     * @link \Elone\Core\View\Helper\FormHelper::input()
+     * @link \Elone\Core\View\Helper\FormHelper::hidden()
+     * @link \Elone\Core\View\Helper\FormHelper::button()
+     * @link \Elone\Core\View\Helper\FormHelper::end()
+     */
+    #[Test]
+    public function testConstructWithTemplatesOverridesEveryEntry(): void
+    {
+        $helper = new FormHelper(new View(), ['templates' => [
+            'formStart' => '<form data-turbo="false" action="{{action}}"{{attrs}}>',
+            'input' => '<input type="{{type}}" class="custom-input"{{attrs}}>',
+            'inputContainer' => '<p>{{label}} {{input}}</p>',
+            'hiddenInput' => '<input type="hidden" data-secret="true"{{attrs}}>',
+            'button' => '<button class="btn"{{attrs}}>{{text}}</button>',
+            'formEnd' => '<!-- end --></form>',
+        ]]);
+
+        $this->assertSame('<form data-turbo="false" action="/x">', $helper->create('/x'));
+        $this->assertSame(
+            '<p><label for="name" class="form-label">Name</label> '
+            . '<input type="text" class="custom-input" id="name" name="name"></p>',
+            $helper->input('name', 'Name'),
+        );
+        $this->assertSame(
+            '<input type="hidden" data-secret="true" id="token" name="token" value="abc">',
+            $helper->hidden('token', 'abc'),
+        );
+        $this->assertSame('<button class="btn">Go</button>', $helper->button('Go'));
+        $this->assertSame('<!-- end --></form>', $helper->end());
+    }
+
+    /**
      * @link \Elone\Core\View\Helper\FormHelper::input()
      */
     #[Test]
@@ -104,10 +172,26 @@ class FormHelperTest extends TestCase
         $result = $this->helper->input('name', 'Name');
 
         $this->assertSame(
-            '<div class="mb-3"><label for="name" class="form-label">Name</label>'
+            '<div class="mb-3 text"><label for="name" class="form-label">Name</label>'
             . '<input type="text" class="form-control" id="name" name="name"></div>',
             $result,
         );
+    }
+
+    /**
+     * The container's own class always includes `$type`, plus `required` only when the field is one — this is
+     * what lets CSS (or a screen reader's own field-type conventions) target either independently.
+     *
+     * @link \Elone\Core\View\Helper\FormHelper::input()
+     */
+    #[Test]
+    public function testInputContainerClassReflectsTypeAndRequired(): void
+    {
+        $required = $this->helper->input('country', 'Country', ['type' => 'select', 'required' => true]);
+        $this->assertStringStartsWith('<div class="mb-3 select required">', $required);
+
+        $notRequired = $this->helper->input('name', 'Name');
+        $this->assertStringStartsWith('<div class="mb-3 text">', $notRequired);
     }
 
     /**
@@ -123,7 +207,7 @@ class FormHelperTest extends TestCase
         );
 
         $this->assertSame(
-            '<div class="mb-3"><label for="age" class="form-label">Age</label>'
+            '<div class="mb-3 number required"><label for="age" class="form-label">Age</label>'
             . '<input type="number" class="form-control" id="age" name="age" min="1" required="required"></div>',
             $result,
         );
@@ -142,8 +226,9 @@ class FormHelperTest extends TestCase
         );
 
         $this->assertSame(
-            '<div class="mb-3"><label for="age" class="form-label">Age</label>'
-            . '<input type="number" class="form-control" id="age" name="age" min="18" max="99" required="required"></div>',
+            '<div class="mb-3 number required"><label for="age" class="form-label">Age</label>'
+            . '<input type="number" class="form-control" id="age" name="age" min="18" max="99" required="required">'
+            . '</div>',
             $result,
         );
     }
@@ -244,7 +329,7 @@ class FormHelperTest extends TestCase
     public function testFullFormSequence(): void
     {
         $expected = '<form method="post" action="/pages/postOnly">'
-            . '<div class="mb-3"><label for="age" class="form-label">Age</label>'
+            . '<div class="mb-3 number required"><label for="age" class="form-label">Age</label>'
             . '<input type="number" class="form-control" id="age" name="age" required="required"></div>'
             . '</form>';
 

@@ -29,10 +29,10 @@ if ($error) {
 
 <?php
 echo $this->Form->create(['controller' => 'Story', 'action' => 'character', $game->gameId]);
-echo $this->Form->input('strength', 'Forza', ['type' => 'number', 'min' => 4, 'max' => 10, 'required' => true]);
-echo $this->Form->input('agility', 'Agilità', ['type' => 'number', 'min' => 4, 'max' => 10, 'required' => true]);
-echo $this->Form->input('perception', 'Percezione', ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true]);
-echo $this->Form->input('willpower', 'Volontà', ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true]);
+echo $this->Form->control('strength', 'Forza', ['type' => 'number', 'min' => 4, 'max' => 10, 'required' => true]);
+echo $this->Form->control('agility', 'Agilità', ['type' => 'number', 'min' => 4, 'max' => 10, 'required' => true]);
+echo $this->Form->control('perception', 'Percezione', ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true]);
+echo $this->Form->control('willpower', 'Volontà', ['type' => 'number', 'min' => 1, 'max' => 5, 'required' => true]);
 echo $this->Form->submit('Crea personaggio', ['class' => 'elone-button fs-4']);
 echo $this->Form->end();
 ?>

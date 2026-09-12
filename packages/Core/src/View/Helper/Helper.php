@@ -11,12 +11,24 @@ use Elone\Core\View\View;
  * Any other helper this one needs (e.g. `$this->view->Html`) is reached lazily via `__get()`, not at construction
  * time.
  *
- * Only a class extending this one can be registered via `View::loadHelper()`; `Helper` itself is abstract.
+ * Only a class extending this one can be registered via `View::loadHelper()`.
  */
 abstract class Helper
 {
-    public function __construct(protected readonly View $view)
+    /**
+     * @var array<string, mixed>
+     */
+    protected array $config = [];
+
+    /**
+     * @param \Elone\Core\View\View $view
+     * @param array<string, mixed> $config Merged recursively into `$config`'s own default.
+     */
+    public function __construct(protected readonly View $view, array $config = [])
     {
+        /** @var array<string, mixed> $merged */
+        $merged = array_replace_recursive($this->config, $config);
+        $this->config = $merged;
     }
 
     /**

@@ -18,6 +18,47 @@ use PHPUnit\Framework\TestCase;
 class HelperTest extends TestCase
 {
     /**
+     * `$config` is helper-specific — `Helper` itself does nothing with it beyond storing it for a subclass to
+     * read, which is what `FormHelper`'s own `templates` support builds on.
+     *
+     * @link \Elone\Core\View\Helper\Helper::__construct()
+     */
+    #[Test]
+    public function testConstructStoresConfig(): void
+    {
+        $helper = new class (new View(), ['key' => 'value']) extends Helper {
+            /**
+             * @return array<string, mixed>
+             */
+            public function getConfig(): array
+            {
+                return $this->config;
+            }
+        };
+
+        $this->assertSame(['key' => 'value'], $helper->getConfig());
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\Helper::__construct()
+     */
+    #[Test]
+    public function testConstructWithNoConfigDefaultsToEmpty(): void
+    {
+        $helper = new class (new View()) extends Helper {
+            /**
+             * @return array<string, mixed>
+             */
+            public function getConfig(): array
+            {
+                return $this->config;
+            }
+        };
+
+        $this->assertSame([], $helper->getConfig());
+    }
+
+    /**
      * @link \Elone\Core\View\Helper\Helper::__get()
      */
     #[Test]

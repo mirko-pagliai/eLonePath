@@ -24,9 +24,16 @@ class AppView extends View
     {
         parent::__construct($request);
 
+        // Helpers from core.
         $this->loadHelper(name: 'Html', helper: new HtmlHelper($this));
-        $this->loadHelper(name: 'Story', helper: new StoryHelper($this));
-        $this->loadHelper(name: 'Form', helper: new FormHelper($this));
+        $this->loadHelper(name: 'Form', helper: new FormHelper(view: $this, config: [
+            'templates' => [
+                'input' => '<input type="{{type}}" class="form-control form-control-lg"{{attrs}}>',
+            ],
+        ]));
         $this->loadHelper(name: 'Alert', helper: new AlertHelper($this));
+
+        // Helpers from app.
+        $this->loadHelper(name: 'Story', helper: new StoryHelper($this));
     }
 }

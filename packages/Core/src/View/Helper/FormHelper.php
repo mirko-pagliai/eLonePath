@@ -3,66 +3,57 @@ declare(strict_types=1);
 
 namespace Elone\Core\View\Helper;
 
-use Elone\Core\View\View;
-
 /**
  * Builds a `<form>`, one labeled input at a time — `create()`/`end()` open and close the tag, `input()` wraps a
  * single labeled field in a `.mb-3` div, `submit()`, `reset()`, and `hidden()` cover the other pieces almost
  * every form needs. No label-from-field-name guessing, no validation-aware error display, no
  * select/checkbox/radio helpers.
  *
- * Every method builds its markup from `$templates`, not a hardcoded string — pass a `templates` override to the
- * constructor to customize one or more entries, e.g. `new FormHelper($view, ['templates' => ['label' => '...']])`.
+ * Every method builds its markup from `$config['templates']`, not a hardcoded string — give the constructor a
+ * `templates` override to customize one or more entries.
  */
 final class FormHelper extends Helper
 {
     /**
-     * @var array<string, string>
+     * @var array<string, mixed>
      */
-    protected array $templates = [
-        'button' => '<button type="{{type}}"{{attrs}}>{{text}}</button>',
-        'formStart' => '<form method="post" action="{{action}}"{{attrs}}>',
-        'formEnd' => '</form>',
-        'hiddenInput' => '<input type="hidden"{{attrs}}>',
-        'input' => '<input type="{{type}}" class="form-control"{{attrs}}>',
-        'inputContainer' => '<div class="mb-3 {{type}}{{required}}">{{label}}{{input}}</div>',
-        'label' => '<label{{attrs}}>{{text}}</label>',
+    protected array $config = [
+        'templates' => [
+            'button' => '<button type="{{type}}"{{attrs}}>{{text}}</button>',
+            'formStart' => '<form method="post" action="{{action}}"{{attrs}}>',
+            'formEnd' => '</form>',
+            'hiddenInput' => '<input type="hidden"{{attrs}}>',
+            'input' => '<input type="{{type}}" class="form-control"{{attrs}}>',
+            'label' => '<label{{attrs}}>{{text}}</label>',
+            'inputContainer' => '<div class="mb-3 {{type}}{{required}}">{{label}}{{input}}</div>',
+        ],
     ];
 
     /**
-     * @param \Elone\Core\View\View $view
-     * @param array{templates?: array<string, string>, ...<string, mixed>} $config Currently the only supported key is
-     * `templates`: overrides for one or more of the default `$templates` entries — entries not mentioned there keep
-     * their default.
-     */
-    public function __construct(View $view, array $config = [])
-    {
-        parent::__construct($view);
-
-        $this->templates = [...$this->templates, ...($config['templates'] ?? [])];
-    }
-
-    /**
-     * Renders `$this->templates[$name]`, replacing each `{{key}}` placeholder with `$data[key]` — or with an
-     * empty string, for a placeholder `$data` doesn't have an entry for.
+     * Renders `$config['templates'][$name]`, replacing each `{{key}}` placeholder with `$data[key]` — or with
+     * an empty string, for a placeholder `$data` doesn't have an entry for.
      *
-     * @param string $name A key into `$this->templates`.
+     * @param string $name A key into `$config['templates']`.
      * @param array<string, string> $data
      * @return string
      */
     private function formatTemplate(string $name, array $data): string
     {
+        /** @var array<string, string> $templates */
+        $templates = $this->config['templates'];
+
         $search = array_map(
             callback: static fn(string $key): string => "{{{$key}}}",
             array: array_keys($data),
         );
 
-        return str_replace(search: $search, replace: array_values($data), subject: $this->templates[$name]);
+        return str_replace(search: $search, replace: array_values($data), subject: $templates[$name]);
     }
 
     /**
-     * Opens a `<form>` tag that POSTs to `$url` — `method="post"` isn't a parameter, it's always POST. See
-     * `$templates['formStart']`.
+     * Opens a `<form>` tag that POSTs to `$url` — `method="post"` isn't a parameter, it's always POST.
+     *
+     * See `$config['templates']['formStart']`.
      *
      * @param array<string|int, string|int|float|bool>|string $url A literal URL/path, or a route array — see
      *  `Elone\Core\Routing\Route::resolve()`.
@@ -80,7 +71,9 @@ final class FormHelper extends Helper
     }
 
     /**
-     * A `<label>` tag pointing at `$for` via its `for` attribute — see `$templates['label']`.
+     * A `<label>` tag pointing at `$for` via its `for` attribute.
+     *
+     * See `$config['templates']['label']`.
      *
      * @param string $for The `id`/`name` of the field this label is for.
      * @param string $text The visible label text.
@@ -95,9 +88,9 @@ final class FormHelper extends Helper
     }
 
     /**
-     * A single labeled `<input>`, wrapped via `$templates['inputContainer']` — the `<input>` tag itself comes
-     * from `$templates['input']`. The container's own class always includes `$type` (`mb-3 text`, `mb-3
-     * number`, and so on), plus `required` when the field is one.
+     * A single labeled `<input>`, wrapped via `$config['templates']['inputContainer']` — the `<input>` tag
+     * itself comes from `$config['templates']['input']`. The container's own class always includes `$type`
+     * (`mb-3 text`, `mb-3 number`, and so on), plus `required` when the field is one.
      *
      * Unless `$options` already has its own `value`, the field is pre-filled from the current request's own
      * submitted data — under `$name` — if there is one. This is what makes a form re-show what was typed after
@@ -142,8 +135,9 @@ final class FormHelper extends Helper
     }
 
     /**
-     * A hidden `<input>` — for carrying a value along with the form without showing it to the user. See
-     * `$templates['hiddenInput']`.
+     * A hidden `<input>` — for carrying a value along with the form without showing it to the user.
+     *
+     * See `$config['templates']['hiddenInput']`.
      *
      * @param string $name Both the field's `name` and `id` attribute.
      * @param string $value The field's value.
@@ -159,8 +153,9 @@ final class FormHelper extends Helper
 
     /**
      * A generic `<button>` — what `submit()` and `reset()` both build on. `type` defaults to `'button'`: a bare
-     * HTML `<button>` defaults to `'submit'`, which silently submits the enclosing form — surprising for
-     * anything that isn't meant to (a button wired to its own JS handler, say). See `$templates['button']`.
+     * HTML `<button>` defaults to `'submit'`, which silently submits the enclosing form.
+     *
+     * See `$config['templates']['button']`.
      *
      * @param string $label The button's visible text (or, with `escape: false`, raw HTML).
      * @param array<string, string|int|float|bool> $options Extra `<button>` attributes — `type`, `class`, and so
@@ -183,7 +178,7 @@ final class FormHelper extends Helper
     }
 
     /**
-     * A submit button — see `button()`.
+     * A submit button.
      *
      * @param string $label The button's visible text.
      * @param array<string, string|int|float|bool> $options Extra `<button>` attributes.
@@ -195,7 +190,7 @@ final class FormHelper extends Helper
     }
 
     /**
-     * A reset button — see `button()`.
+     * A reset button.
      *
      * @param string $label The button's visible text.
      * @param array<string, string|int|float|bool> $options Extra `<button>` attributes.
@@ -207,7 +202,9 @@ final class FormHelper extends Helper
     }
 
     /**
-     * Closes a `<form>` opened with `create()` — see `$templates['formEnd']`.
+     * Closes a `<form>` opened with `create()`.
+     *
+     * See `$config['templates']['formEnd']`.
      *
      * @return string
      */

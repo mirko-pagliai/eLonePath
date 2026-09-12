@@ -5,13 +5,21 @@ namespace Elone\Core\View\Helper;
 
 use Elone\Core\Routing\Route;
 use Elone\Core\View\View;
+use RuntimeException;
 
 /**
- * Base class every helper extends. Takes the `View` itself, not any specific other helper, in its constructor.
- * Any other helper this one needs (e.g. `$this->view->Html`) is reached lazily via `__get()`, not at construction
- * time.
+ * Base class every helper extends.
  *
- * Only a class extending this one can be registered via `View::loadHelper()`.
+ * `$config` is helper-specific — what keys are meaningful, if any, depends on the helper, which declares its own
+ * defaults by overriding the property.
+ *
+ * A `templates` key, for one, is what `FormHelper` (and any other helper that builds its markup from
+ * `formatTemplate()`) gives a default for and reads back to build its markup.
+ *
+ * Whatever the constructor is given is merged into those defaults recursively, so overriding one nested entry
+ * (`$config['templates']['label']`, say) leaves every other entry, at every level, untouched.
+ *
+ * Only a class extending this one can be registered via `View::loadHelper()`; `Helper` itself is abstract.
  */
 abstract class Helper
 {
@@ -40,6 +48,35 @@ abstract class Helper
     public function __get(string $name): Helper
     {
         return $this->view->{$name};
+    }
+
+    /**
+     * Renders `$config['templates'][$name]`, replacing each `{{key}}` placeholder with `$data[key]` — or with
+     * an empty string, for a placeholder `$data` doesn't have an entry for. Assumes the subclass declares its
+     * own `$config['templates']` default — `Helper`'s own is empty.
+     *
+     * @param string $name A key into `$config['templates']`.
+     * @param array<string, string> $data
+     * @return string
+     * @throws \RuntimeException If `$name`'s own template isn't a valid pattern.
+     */
+    protected function formatTemplate(string $name, array $data): string
+    {
+        /** @var array<string, string> $templates */
+        $templates = $this->config['templates'];
+        $template = $templates[$name];
+
+        $result = preg_replace_callback(
+            pattern: '/\{\{(\w+)\}\}/',
+            callback: static fn(array $matches): string => $data[$matches[1]] ?? '',
+            subject: $template,
+        );
+
+        if ($result === null) {
+            throw new RuntimeException("Failed to render the `$name` template.");
+        }
+
+        return $result;
     }
 
     /**

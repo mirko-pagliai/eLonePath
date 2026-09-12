@@ -18,9 +18,6 @@ use PHPUnit\Framework\TestCase;
 class HelperTest extends TestCase
 {
     /**
-     * `$config` is helper-specific — `Helper` itself does nothing with it beyond storing it for a subclass to
-     * read, which is what `FormHelper`'s own `templates` support builds on.
-     *
      * @link \Elone\Core\View\Helper\Helper::__construct()
      */
     #[Test]
@@ -76,6 +73,47 @@ class HelperTest extends TestCase
         $result = $helper->Other;
 
         $this->assertSame($otherHelper, $result);
+    }
+
+    /**
+     * @link \Elone\Core\View\Helper\Helper::formatTemplate()
+     */
+    #[Test]
+    public function testFormatTemplateReplacesPlaceholders(): void
+    {
+        $helper = new class (new View(), [
+            'templates' => ['greeting' => 'Hello, {{name}}! You are {{age}}.'],
+        ]) extends Helper {
+            public function formatTemplate(string $name, array $data): string
+            {
+                return parent::formatTemplate($name, $data);
+            }
+        };
+
+        $result = $helper->formatTemplate('greeting', ['name' => 'Ada', 'age' => '36']);
+
+        $this->assertSame('Hello, Ada! You are 36.', $result);
+    }
+
+    /**
+     * A placeholder `$data` has no entry for is replaced with an empty string, not left as `{{...}}` in the
+     * output.
+     *
+     * @link \Elone\Core\View\Helper\Helper::formatTemplate()
+     */
+    #[Test]
+    public function testFormatTemplateWithMissingDataKeyUsesEmptyString(): void
+    {
+        $helper = new class (new View(), ['templates' => ['greeting' => 'Hello, {{name}}!{{suffix}}']]) extends Helper {
+            public function formatTemplate(string $name, array $data): string
+            {
+                return parent::formatTemplate($name, $data);
+            }
+        };
+
+        $result = $helper->formatTemplate('greeting', ['name' => 'Ada']);
+
+        $this->assertSame('Hello, Ada!', $result);
     }
 
     /**

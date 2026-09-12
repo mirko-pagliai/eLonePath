@@ -109,4 +109,23 @@ class AlertHelperTest extends TestCase
 
         $this->assertSame('<div class="alert alert-warning" role="alert">A &amp; B</div>', $result);
     }
+
+    /**
+     * A `templates` override passed to the constructor replaces the default markup — the rest of `render()`'s
+     * behavior (variant validation, class merging, escaping) is unaffected.
+     *
+     * @link \Elone\Core\View\Helper\AlertHelper::__construct()
+     * @link \Elone\Core\View\Helper\AlertHelper::render()
+     */
+    #[Test]
+    public function testConstructWithTemplatesOverridesAlert(): void
+    {
+        $helper = new AlertHelper(new View(), ['templates' => [
+            'alert' => '<div class="{{class}}" role="alert"{{attrs}}><strong>{{message}}</strong></div>',
+        ]]);
+
+        $result = $helper->render('info', 'Note');
+
+        $this->assertSame('<div class="alert alert-info" role="alert"><strong>Note</strong></div>', $result);
+    }
 }

@@ -27,8 +27,8 @@ final class FormHelper extends Helper
         'templates' => [
             'button' => '<button type="{{type}}"{{attrs}}>{{text}}</button>',
             'check' => '<input class="form-check-input" type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}}"{{attrs}}>',
-            'checkLabel' => '<label{{attrs}}>{{text}}</label>',
             'checkContainer' => '<div class="form-check">{{input}}{{label}}</div>',
+            'checkLabel' => '<label{{attrs}}>{{text}}</label>',
             'formStart' => '<form method="post" action="{{action}}"{{attrs}}>',
             'formEnd' => '</form>',
             'hiddenInput' => '<input type="hidden"{{attrs}}>',
@@ -39,27 +39,6 @@ final class FormHelper extends Helper
             'select' => '<select class="form-select"{{attrs}}>{{options}}</select>',
         ],
     ];
-
-    /**
-     * Renders `$config['templates'][$name]`, replacing each `{{key}}` placeholder with `$data[key]` — or with
-     * an empty string, for a placeholder `$data` doesn't have an entry for.
-     *
-     * @param string $name A key into `$config['templates']`.
-     * @param array<string, string> $data
-     * @return string
-     */
-    private function formatTemplate(string $name, array $data): string
-    {
-        /** @var array<string, string> $templates */
-        $templates = $this->config['templates'];
-
-        $search = array_map(
-            callback: static fn(string $key): string => "{{{$key}}}",
-            array: array_keys($data),
-        );
-
-        return str_replace(search: $search, replace: array_values($data), subject: $templates[$name]);
-    }
 
     /**
      * Opens a `<form>` tag that POSTs to `$url` — `method="post"` isn't a parameter, it's always POST.
@@ -296,7 +275,9 @@ final class FormHelper extends Helper
     }
 
     /**
-     * The `type: 'checkbox'` branch of `control()`. See `$config['templates']['checkContainer']`.
+     * The `type: 'checkbox'` branch of `control()`.
+     *
+     * See `$config['templates']['checkContainer']`.
      *
      * @param string $name
      * @param string $label

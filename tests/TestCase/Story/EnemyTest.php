@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Story;
+namespace Test\TestCase\Story;
 
 use App\Story\Combat\Combatant;
 use App\Story\Enemy;

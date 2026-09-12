@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Controller;
+namespace Test\TestCase\Controller;
 
 use App\Controller\StoryController;
 use App\Story\Character;

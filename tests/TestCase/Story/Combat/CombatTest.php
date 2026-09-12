@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Story\Combat;
+namespace Test\TestCase\Story\Combat;
 
 use App\Story\Combat\Combat;
 use App\Story\Combat\Combatant;

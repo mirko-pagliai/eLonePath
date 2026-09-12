@@ -12,7 +12,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Core",
-                "reference": "2d74f38bcfce20838023cff4b710a3578d8822b7"
+                "reference": "47ca81cb0b45671902c6d504993cde507eca6170"
             },
             "require": {
                 "ext-intl": "*",
@@ -44,7 +44,7 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Elone\\Core\\Test\\": "tests/TestCase/",
+                    "Elone\\Core\\Test\\TestCase\\": "tests/TestCase/",
                     "TestApp\\": "tests/test_app/src"
                 }
             },
@@ -575,7 +575,7 @@
             "dist": {
                 "type": "path",
                 "url": "packages/Debugger",
-                "reference": "046876aba4f52a8ecbc97b84e04d85e971ff4f3f"
+                "reference": "7e82b9034630d40c3cbeb79fba3a9c2aeb154262"
             },
             "require": {
                 "php": "^8.4",
@@ -601,7 +601,7 @@
             },
             "autoload-dev": {
                 "psr-4": {
-                    "Elone\\Debugger\\Test\\": "tests/TestCase/",
+                    "Elone\\Debugger\\Test\\TestCase\\": "tests/TestCase/",
                     "TestApp\\": "tests/test_app/src"
                 }
             },

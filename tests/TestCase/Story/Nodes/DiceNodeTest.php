@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Story\Nodes;
+namespace Test\TestCase\Story\Nodes;
 
 use App\Story\Nodes\DiceNode;
 use PHPUnit\Framework\Attributes\CoversClass;

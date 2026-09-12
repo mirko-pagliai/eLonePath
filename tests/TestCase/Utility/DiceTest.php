@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Utility;
+namespace Test\TestCase\Utility;
 
 use App\Utility\Dice;
 use PHPUnit\Framework\Attributes\CoversClass;

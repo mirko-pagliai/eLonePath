@@ -41,7 +41,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Test\\": "tests/TestCase/"
+			"Test\\TestCase\\": "tests/TestCase/"
 		}
 	},
 	"scripts": {

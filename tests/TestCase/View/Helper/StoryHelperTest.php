@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\View\Helper;
+namespace Test\TestCase\View\Helper;
 
 use App\View\AppView;
 use App\View\Helper\StoryHelper;

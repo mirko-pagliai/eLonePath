@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Test\Controller;
+namespace Test\TestCase\Controller;
 
 use App\Controller\PagesController;
 use Elone\Core\Server\Request;

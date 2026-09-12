@@ -1,0 +1,10 @@
+<IfModule mod_rewrite.c>
+    RewriteEngine On
+
+    # File e cartelle realmente esistenti (CSS, JS, immagini, ecc.) vengono serviti direttamente da Apache.
+    RewriteCond %{REQUEST_FILENAME} !-f
+    RewriteCond %{REQUEST_FILENAME} !-d
+
+    # Tutto il resto passa dal front controller, che se ne occupa tramite il router dell'app.
+    RewriteRule ^ index.php [L]
+</IfModule>

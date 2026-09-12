@@ -7,37 +7,65 @@ msgstr ""
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "MIME-Version: 1.0\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"POT-Creation-Date: 2026-09-11 21:12+0200\n"
+"POT-Creation-Date: 2026-09-12 16:05+0200\n"
 "Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
 "X-Domain: default\n"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:102
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:112
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:122
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:132
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:104
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:114
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:124
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:134
 msgid "The \"{0}\" attribute must be between {1} and {2}, got {3}."
 msgstr ""
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:104
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:106
 msgid "Strength"
 msgstr ""
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:114
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:116
 msgid "Agility"
 msgstr ""
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:124
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:126
 msgid "Perception"
 msgstr ""
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:134
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:136
 msgid "Willpower"
 msgstr ""
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:143
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:145
 msgid "The sum of the character's attributes must be {0}, got {1}."
+msgstr ""
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:29
+msgid "Very easy"
+msgstr ""
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:30
+msgid "Easy"
+msgstr ""
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:31
+msgid "Medium"
+msgstr ""
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:32
+msgid "Difficult"
+msgstr ""
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:33
+msgid "Very difficult"
+msgstr ""
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryGenre.php:23
+msgid "Science fiction"
+msgstr ""
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryGenre.php:24
+msgid "Medieval fantasy"
 msgstr ""
 
 #: /home/mirko/PhpstormProjects/eLonePath/templates/Pages/home.php:43

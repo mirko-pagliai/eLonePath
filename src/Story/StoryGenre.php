@@ -20,8 +20,8 @@ enum StoryGenre: string implements LabeledEnum
     public function label(): string
     {
         return match ($this) {
-            self::SCIENCE_FICTION => 'Science fiction',
-            self::MEDIEVAL_FANTASY => 'Medieval fantasy',
+            self::SCIENCE_FICTION => __('Science fiction'),
+            self::MEDIEVAL_FANTASY => __('Medieval fantasy'),
         };
     }
 }

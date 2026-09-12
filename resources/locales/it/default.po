@@ -1,48 +1,77 @@
 # LANGUAGE translation of eLonePath
-# Copyright 2026 Mirko Pagliai <mirko.pagliai@gmail.com>
+# SPDX-FileCopyrightText: 2026 Mirko Pagliai <mirko.pagliai@gmail.com>
 #
-
 msgid ""
 msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Content-Type: text/plain; charset=UTF-8\n"
-"Language: \n"
-"Language-Team: LANGUAGE <LL@li.org>\n"
-"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language: it_IT\n"
+"Language-Team: Italian <kde-i18n-it@kde.org>\n"
+"Last-Translator: Mirko Pagliai <mirko.pagliai@gmail.com>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
-"POT-Creation-Date: 2026-09-11 21:12+0200\n"
-"Plural-Forms: nplurals=INTEGER; plural=EXPRESSION;\n"
-"Project-Id-Version: PACKAGE VERSION\n"
+"PO-Revision-Date: 2026-09-12 16:09+0200\n"
+"POT-Creation-Date: 2026-09-12 16:05+0200\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+"Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "X-Domain: default\n"
+"X-Generator: Lokalize 25.04.0\n"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:102
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:112
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:122
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:132
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:104
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:114
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:124
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:134
 msgid "The \"{0}\" attribute must be between {1} and {2}, got {3}."
 msgstr "L'attributo \"{0}\" deve essere compreso tra {1} e {2}, mentre è {3}."
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:104
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:106
 msgid "Strength"
 msgstr "Forza"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:114
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:116
 msgid "Agility"
 msgstr "Agilità"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:124
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:126
 msgid "Perception"
 msgstr "Percezione"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:134
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:136
 msgid "Willpower"
 msgstr "Volontà"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:143
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:145
 msgid "The sum of the character's attributes must be {0}, got {1}."
-msgstr "La somma degli attributi del personaggio deve essere {0}, mentre è {1}."
+msgstr ""
+"La somma degli attributi del personaggio deve essere {0}, mentre è {1}."
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:29
+msgid "Very easy"
+msgstr "Molto facile"
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:30
+msgid "Easy"
+msgstr "Facile"
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:31
+msgid "Medium"
+msgstr "Medio"
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:32
+msgid "Difficult"
+msgstr "Difficile"
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:33
+msgid "Very difficult"
+msgstr "Molto difficile"
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryGenre.php:23
+msgid "Science fiction"
+msgstr "Fantascientifico"
+
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryGenre.php:24
+msgid "Medieval fantasy"
+msgstr "Fantasy-medioevale"
 
 #: /home/mirko/PhpstormProjects/eLonePath/templates/Pages/home.php:43
 msgid "Go to stories"

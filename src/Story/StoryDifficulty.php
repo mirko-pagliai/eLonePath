@@ -26,11 +26,11 @@ enum StoryDifficulty: string implements LabeledEnum
     public function label(): string
     {
         return match ($this) {
-            self::VERY_EASY => 'Very easy',
-            self::EASY => 'Easy',
-            self::MEDIUM => 'Medium',
-            self::DIFFICULT => 'Difficult',
-            self::VERY_DIFFICULT => 'Very difficult',
+            self::VERY_EASY => __('Very easy'),
+            self::EASY => __('Easy'),
+            self::MEDIUM => __('Medium'),
+            self::DIFFICULT => __('Difficult'),
+            self::VERY_DIFFICULT => __('Very difficult'),
         };
     }
 }

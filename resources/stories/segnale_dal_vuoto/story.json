@@ -1,159 +1,475 @@
 {
-    "game": {
-        "id": "segnale_dal_vuoto",
-        "title": "Segnale dal Vuoto",
-        "author": "Mirko Pagliai - mirko.pagliai@gmail.com",
-        "translators": "",
-        "description": "Una stazione di ricerca alla deriva, un segnale di soccorso senza voce, e qualcosa a bordo che non dovrebbe più essere vivo.",
-        "language": "it",
-        "version": "1.0-alpha",
-        "preface": "Sei ai comandi della *Vela Sottile*, una piccola nave da ricognizione ai margini dello spazio conosciuto.\n\nUn segnale di soccorso, debole e ripetuto, ti porta fino alla **Kairos** — una stazione di ricerca alla deriva, silenziosa da mesi.\n\nNon hai intenzione di restarci a lungo.\n\n## Buona fortuna, pilota.",
-        "genre": "science_fiction",
-        "difficulty": "medium",
-        "requires_character": true
-    },
-    "nodes": {
-        "1": {
-            "type": "passage",
-            "content": "Il segnale è debole, intermittente, ripetuto in loop da ore: una richiesta di soccorso automatica, priva ormai di qualunque voce umana dietro.\n\nLa tua nave da ricognizione, la **Vela Sottile**, lo intercetta ai margini della fascia di detriti. La fonte è una stazione di ricerca alla deriva — la **Kairos** — silenziosa da mesi secondo i registri pubblici.\n\nTi avvicini per un rilievo di routine. Poi, senza preavviso, un frammento di scafo alla deriva colpisce il propulsore principale. Gli allarmi si accendono tutti insieme.\n\n**Propulsore fuori uso. Riserve d'ossigeno: 6 ore.**\n\nL'unica fonte di componenti compatibili nel raggio di soccorso è la Kairos stessa. Aggancia il portello di emergenza e ti prepari a entrare.",
-            "choices": [
-                {
-                    "content": "Se vuoi entrare dal corridoio principale, vai a pagina {{page}}",
-                    "target": 2
-                },
-                {
-                    "content": "Se vuoi entrare dai cunicoli di servizio, vai a pagina {{page}}",
-                    "target": 3
-                }
-            ]
+  "game": {
+    "id": "segnale_dal_vuoto",
+    "title": "Segnale dal Vuoto",
+    "author": "Mirko Pagliai - mirko.pagliai@gmail.com",
+    "translators": "",
+    "description": "Una stazione di ricerca alla deriva, un segnale di soccorso senza voce, e qualcosa a bordo che non dovrebbe più essere vivo.",
+    "language": "it",
+    "version": "1.0-alpha",
+    "preface": "Sei ai comandi della *Vela Sottile*, una piccola nave da ricognizione ai margini dello spazio conosciuto.\n\nUn segnale di soccorso, debole e ripetuto, ti porta fino alla **Kairos** — una stazione di ricerca alla deriva, silenziosa da mesi.\n\nNon hai intenzione di restarci a lungo.\n\n## Buona fortuna, pilota.",
+    "genre": "science_fiction",
+    "difficulty": "medium",
+    "requires_character": true
+  },
+  "nodes": {
+    "1": {
+      "type": "passage",
+      "content": "![Approccio alla Kairos](1.jpg)\n\nIl segnale è debole, intermittente, ripetuto in loop da ore: una richiesta di soccorso automatica, priva ormai di qualunque voce umana dietro.\n\nLa tua nave da ricognizione, la **Vela Sottile**, lo intercetta ai margini della fascia di detriti. La fonte è una stazione di ricerca alla deriva — la **Kairos** — silenziosa da mesi secondo i registri pubblici.\n\nTi avvicini per un rilievo di routine. Poi, senza preavviso, un frammento di scafo alla deriva colpisce il propulsore principale. Gli allarmi si accendono tutti insieme.\n\n**Propulsore fuori uso. Riserve d'ossigeno: 6 ore.**\n\nL'unica fonte di componenti compatibili nel raggio di soccorso è la Kairos stessa. Aggancia il portello di emergenza e ti prepari a entrare.",
+      "choices": [
+        {
+          "content": "Se vuoi entrare dal corridoio principale, vai a pagina {{page}}",
+          "target": 2
         },
-        "2": {
-            "type": "passage",
-            "content": "Il corridoio principale è ampio, ma le luci di emergenza pulsano deboli, rosse, a intervalli irregolari.\n\nPannelli divelti pendono dal soffitto. In un punto, il pavimento metallico è inciso da lunghi solchi paralleli, come se qualcosa di pesante fosse stato trascinato — o avesse trascinato qualcun altro.\n\nNon c'è alcun corpo. Non c'è alcun segno recente di vita.\n\nUn ronzio meccanico rompe il silenzio, proveniente da dietro una porta scorrevole bloccata a metà. Qualcosa, dall'altra parte, si sta muovendo.",
-            "choices": [
-                {
-                    "content": "Se vuoi forzare la porta, vai a pagina {{page}}",
-                    "target": 5
-                }
-            ]
-        },
-        "3": {
-            "type": "passage",
-            "content": "I cunicoli di servizio sono stretti, a malapena sufficienti per farti strada. Fasci di cavi recisi pendono dalle pareti, alcuni ancora scintillanti di scariche residue.\n\nDopo una decina di metri il cunicolo si apre su un vano di manutenzione sospeso: una **passerella metallica** attraversa un pozzo tecnico buio, di cui non riesci a vedere il fondo. Metà della struttura è visibilmente compromessa, piegata verso il basso, tenuta da bulloni che scricchiolano a ogni tuo passo di avvicinamento.\n\nNon hai altra strada per proseguire.",
-            "choices": [
-                {
-                    "content": "Se vuoi attraversare la passerella, vai a pagina {{page}}",
-                    "target": 4
-                }
-            ]
-        },
-        "4": {
-            "type": "dice",
-            "content": "Ti fermi sul bordo del pozzo tecnico, valutando il punto più stabile della struttura danneggiata.\n\nUn passo alla volta, cercando di distribuire il peso, provi ad attraversare la passerella prima che ceda del tutto.",
-            "dice": {
-                "required_rolls": 1,
-                "minimum": 3,
-                "target_success": 6,
-                "target_failure": 13
-            }
-        },
-        "5": {
-            "type": "combat",
-            "content": "Forzi la porta quel tanto che basta per intrufolarti.\n\nAll'interno, un **drone di sicurezza** ti individua immediatamente. Il suo modulo ottico principale è in frantumi — ruota a vuoto sopra un secondo occhio ausiliario, più piccolo, che ora ti fissa fisso.\n\nI suoi bracci articolati, un tempo pensati per la manutenzione, terminano in utensili da taglio riconvertiti in modo grezzo. La sua unità vocale, danneggiata, ripete lo stesso comando distorto in loop: *«Intruso rilevato. Intruso rilevato.»*\n\nNon ha intenzione di lasciarti passare.",
-            "combat": {
-                "enemy_name": "Drone di sicurezza malfunzionante",
-                "enemy_max_life_points": 12,
-                "enemy_strength": 6,
-                "enemy_agility": 4,
-                "target_victory": 6,
-                "target_defeat": 14
-            }
-        },
-        "6": {
-            "type": "passage",
-            "content": "Con il drone ormai fermo, ti prendi un momento per riprendere fiato prima di proseguire.\n\nIl corridoio sbocca in un ampio **snodo centrale**, dal quale si dipartono diversi settori della stazione. Una mappa olografica, semi-funzionante, sfarfalla accanto a un pannello di controllo.\n\nDue percorsi sembrano ancora accessibili: la **stiva di carico**, verso poppa, e la **plancia di comando**, verso prua. Da entrambi provengono i componenti che ti servono per riparare il propulsore — ma il tempo stringe.",
-            "choices": [
-                {
-                    "content": "Se vuoi dirigerti verso la stiva di carico, vai a pagina {{page}}",
-                    "target": 7
-                },
-                {
-                    "content": "Se vuoi dirigerti verso la plancia di comando, vai a pagina {{page}}",
-                    "target": 8
-                }
-            ]
-        },
-        "7": {
-            "type": "passage",
-            "content": "La stiva di carico è enorme, semibuia, costellata di container sigillati con codici che non riconosci.\n\nUno di essi, al centro del vano, è diverso dagli altri: **squarciato dall'interno**, non dall'esterno. Il sigillo di biocontenimento pende inerte, reciso.\n\nSul terminale di carico accanto al container trovi l'ultima voce del registro merci, datata mesi prima: *\"Campione BX-19, classificazione: sconosciuta. Origine: recupero in campo detriti. Protocollo di contenimento livello massimo. Comportamento del campione: **imprevedibile oltre le stime iniziali**.\"*\n\nRecuperi comunque i componenti che ti servono, ma la sensazione di essere osservato non ti abbandona per tutto il tempo.",
-            "choices": [
-                {
-                    "content": "Se vuoi proseguire verso i settori interni, vai a pagina {{page}}",
-                    "target": 9
-                }
-            ]
-        },
-        "8": {
-            "type": "passage",
-            "content": "La plancia di comando è stranamente intatta, come se l'equipaggio l'avesse abbandonata in fretta ma senza violenza.\n\nRecuperi i componenti da una consolle laterale. Prima di andartene, un display secondario attira la tua attenzione: l'ultimo registro vocale del comandante, mai trasmesso.\n\n*\"...non è più contenuto. Ha imparato a imitare le voci dell'equipaggio attraverso l'interfono. Se state ricevendo questo messaggio, non fidatevi di nulla che sentite chiamarvi per nome. Non è più—\"*\n\nLa registrazione si interrompe di netto.",
-            "choices": [
-                {
-                    "content": "Se vuoi proseguire verso i settori interni, vai a pagina {{page}}",
-                    "target": 9
-                }
-            ]
-        },
-        "9": {
-            "type": "combat",
-            "content": "Una voce familiare ti chiama per nome dal fondo del corridoio.\n\nNon conosci nessuno, a bordo della Kairos. Non dovrebbe conoscere il tuo nome nessuno, a bordo della Kairos.\n\nQuando la **cosa** emerge dall'oscurità, ciò che resta di una forma umana è a malapena riconoscibile sotto gli strati di tessuto organico che si sono richiusi, mutati, attorno a quello che una volta era un membro dell'equipaggio. Si muove in modo sbagliato — troppe articolazioni, in punti dove non dovrebbero essercene.\n\nContinua a chiamarti per nome, con una voce che non è più una voce.",
-            "combat": {
-                "enemy_name": "L'Ospite",
-                "enemy_max_life_points": 30,
-                "enemy_strength": 5,
-                "enemy_agility": 5,
-                "target_victory": 10,
-                "target_defeat": 15
-            }
-        },
-        "10": {
-            "type": "passage",
-            "content": "Ti allontani il più in fretta possibile, i componenti stretti al petto.\n\nLa baia delle capsule di fuga è esattamente dove i registri della stazione la indicano. Una sola capsula risulta ancora operativa, anche se i suoi indicatori lampeggiano in giallo, non in verde.\n\nInserisci i componenti recuperati nel vano del propulsore d'emergenza. Il sistema si avvia con un ronzio incerto.\n\nAlle tue spalle, in fondo al corridoio da cui sei appena arrivato, senti qualcosa muoversi di nuovo.",
-            "choices": [
-                {
-                    "content": "Se vuoi avviare la sequenza di distacco, vai a pagina {{page}}",
-                    "target": 11
-                }
-            ]
-        },
-        "11": {
-            "type": "dice",
-            "content": "Le mani ti tremano sui comandi. La sequenza di distacco richiede una calibrazione manuale precisa — non c'è tempo per un secondo tentativo.\n\nInspiri a fondo e avvii la procedura.",
-            "dice": {
-                "required_rolls": 1,
-                "minimum": 4,
-                "target_success": 12,
-                "target_failure": 16
-            }
-        },
-        "12": {
-            "type": "victory",
-            "content": "La capsula si stacca dalla Kairos un istante prima che qualcosa colpisca lo scafo esterno, proprio dove ti trovavi.\n\nAttraverso l'oblò, guardi la stazione rimpicciolire fino a diventare un puntino tra i detriti, silenziosa come l'hai trovata.\n\nI sistemi della capsula segnalano una rotta di intercettazione verso la Vela Sottile. Sei vivo — e, questa volta, non hai lasciato nulla a bordo che possa chiamarti per nome."
-        },
-        "13": {
-            "type": "defeat",
-            "content": "Un bullone cede sotto il tuo peso.\n\nLa passerella si piega di colpo, e per un istante ti aggrappi al metallo con tutte le forze che hai — poi anche quello scivola via dalle tue dita.\n\nIl pozzo tecnico non ha fondo visibile, e non ne troverai mai uno.\n\nL'ultima cosa che senti, prima del buio, è l'eco del tuo stesso allarme d'ossigeno, sempre più lontano."
-        },
-        "14": {
-            "type": "defeat",
-            "content": "L'utensile da taglio del drone trova un varco nell'armatura leggera della tua tuta.\n\nIl dolore è immediato, poi stranamente lontano.\n\n*\"Intruso neutralizzato\"*, ripete la voce distorta, più e più volte, mentre l'allarme dell'ossigeno della tua tuta inizia a lampeggiare, inascoltato.\n\nLa Kairos resta silenziosa come prima che tu arrivassi. Un corpo in più non farà differenza."
-        },
-        "15": {
-            "type": "defeat",
-            "content": "Le braccia troppo lunghe ti raggiungono prima che tu riesca a divincolarti.\n\nLa voce continua a chiamarti per nome, sempre più vicina, sempre più simile a qualcuno che conosci — anche se sai che non può essere vero.\n\nQuando i tessuti mutati ti si richiudono addosso, per un istante ti chiedi se anche tu, un giorno, chiamerai qualcun altro per nome.\n\nPoi non ti chiedi più nulla."
-        },
-        "16": {
-            "type": "defeat",
-            "content": "La sequenza di calibrazione fallisce proprio mentre i passi, dietro di te, si fanno più vicini.\n\nProvi a riavviarla, ma il tempo per un secondo tentativo non c'è mai stato davvero.\n\nL'oblò della capsula, ancora agganciata alla Kairos, si oscura un istante prima che tu smetta di guardare attraverso di esso."
+        {
+          "content": "Se vuoi entrare dai cunicoli di servizio, vai a pagina {{page}}",
+          "target": 3
         }
+      ]
+    },
+    "2": {
+      "type": "passage",
+      "content": "![Corridoio principale della Kairos](2.jpg)\n\nIl corridoio principale è ampio, ma l'illuminazione di emergenza è spenta quasi ovunque: restano solo pochi pannelli ancora attivi, che si accendono a intervalli irregolari.\n\nPannelli divelti pendono dal soffitto. In un punto, il pavimento metallico è segnato da lunghe strisce scure, ormai secche, che si allontanano verso il fondo del corridoio.\n\nNon c'è alcun corpo. Non c'è alcun segno recente di vita.\n\nUn ronzio meccanico rompe il silenzio, proveniente da dietro una porta scorrevole bloccata a metà. Qualcosa, dall'altra parte, si sta muovendo.",
+      "choices": [
+        {
+          "content": "Se vuoi forzare la porta, vai a pagina {{page}}",
+          "target": 5
+        }
+      ]
+    },
+    "3": {
+      "type": "passage",
+      "content": "![Cunicoli di servizio](3.jpg)\n\nI cunicoli di servizio sono stretti, a malapena sufficienti per farti strada. Fasci di cavi recisi pendono dalle pareti, alcuni ancora scintillanti di scariche residue.\n\nDopo una decina di metri il cunicolo si apre su un vano di manutenzione sospeso: una **passerella metallica** attraversa un pozzo tecnico buio, di cui non riesci a vedere il fondo. Metà della struttura è visibilmente compromessa, piegata verso il basso, tenuta da bulloni che scricchiolano a ogni tuo passo di avvicinamento.\n\nNon hai altra strada per proseguire.",
+      "choices": [
+        {
+          "content": "Se vuoi attraversare la passerella, vai a pagina {{page}}",
+          "target": 4
+        }
+      ]
+    },
+    "4": {
+      "type": "dice",
+      "content": "Ti fermi sul bordo del pozzo tecnico, valutando il punto più stabile della struttura danneggiata.\n\nUn passo alla volta, cercando di distribuire il peso, provi ad attraversare la passerella prima che ceda del tutto.",
+      "dice": {
+        "required_rolls": 1,
+        "minimum": 3,
+        "target_success": 6,
+        "target_failure": 13
+      }
+    },
+    "5": {
+      "type": "combat",
+      "content": "![Drone di sicurezza](5.jpg)\n\nForzi la porta quel tanto che basta per intrufolarti.\n\nAll'interno, un **drone di sicurezza** ti individua immediatamente. Il suo modulo ottico principale è in frantumi — ruota a vuoto sopra un secondo occhio ausiliario, più piccolo, che ora ti fissa fisso.\n\nI suoi bracci articolati, un tempo pensati per la manutenzione, terminano in utensili da taglio riconvertiti in modo grezzo. La sua unità vocale, danneggiata, ripete lo stesso comando distorto in loop: *«Intruso rilevato. Intruso rilevato.»*\n\nNon ha intenzione di lasciarti passare.",
+      "combat": {
+        "enemy_name": "Drone di sicurezza malfunzionante",
+        "enemy_max_life_points": 12,
+        "enemy_strength": 6,
+        "enemy_agility": 4,
+        "target_victory": 6,
+        "target_defeat": 14
+      }
+    },
+    "6": {
+      "type": "passage",
+      "content": "![Snodo centrale](6.jpg)\n\nTi prendi un momento per riprendere fiato prima di proseguire.\n\nIl corridoio sbocca in un ampio **snodo centrale**, dal quale si dipartono diversi settori della stazione. Una mappa olografica, semi-funzionante, sfarfalla accanto a un pannello di controllo.\n\nDue percorsi sembrano ancora accessibili: la **stiva di carico**, verso poppa, e la **plancia di comando**, verso prua. Da entrambi provengono i componenti che ti servono per riparare il propulsore — ma il tempo stringe.",
+      "choices": [
+        {
+          "content": "Se vuoi raggiungere la stiva di carico, vai a pagina {{page}}",
+          "target": 7
+        },
+        {
+          "content": "Se vuoi raggiungere la plancia di comando, vai a pagina {{page}}",
+          "target": 8
+        }
+      ]
+    },
+    "7": {
+      "type": "passage",
+      "content": "![Stiva di carico](7.jpg)\n\nLa stiva di carico è enorme, semibuia, costellata di container sigillati con codici che non riconosci.\n\nUno di essi, al centro del vano, è diverso dagli altri: **squarciato dall'interno**, non dall'esterno. Il sigillo di biocontenimento pende inerte, reciso.\n\nSul terminale di carico accanto al container trovi l'ultima voce del registro merci, datata mesi prima: *\"Campione BX-19, classificazione: sconosciuta. Origine: recupero in campo detriti. Protocollo di contenimento livello massimo. Comportamento del campione: **imprevedibile oltre le stime iniziali**.\"*\n\nRecuperi comunque i componenti che ti servono, ma la sensazione di essere osservato non ti abbandona per tutto il tempo.",
+      "choices": [
+        {
+          "content": "Se vuoi esaminare il container squarciato, vai a pagina {{page}}",
+          "target": 17
+        },
+        {
+          "content": "Se vuoi seguire le tracce lasciate sul pavimento, vai a pagina {{page}}",
+          "target": 18
+        }
+      ]
+    },
+    "8": {
+      "type": "passage",
+      "content": "![Plancia di comando](8.jpg)\n\nLa plancia di comando è stranamente intatta, come se l'equipaggio l'avesse abbandonata in fretta ma senza violenza.\n\nRecuperi i componenti da una consolle laterale. Prima di andartene, un display secondario attira la tua attenzione: l'ultimo registro vocale del comandante, mai trasmesso.\n\n*\"...non è più contenuto. Ha imparato a imitare le voci dell'equipaggio attraverso l'interfono. Se state ricevendo questo messaggio, non fidatevi di nulla che sentite chiamarvi per nome. Non è più—\"*\n\nLa registrazione si interrompe di netto.",
+      "choices": [
+        {
+          "content": "Se vuoi controllare il sistema di comunicazione, vai a pagina {{page}}",
+          "target": 19
+        },
+        {
+          "content": "Se vuoi cercare informazioni negli alloggi del comandante, vai a pagina {{page}}",
+          "target": 20
+        }
+      ]
+    },
+    "9": {
+      "type": "combat",
+      "content": "![L'Ospite](9.jpg)\n\nAttraverso una finestra di osservazione rinforzata intravedi una sagoma, immobile, monitorata da apparecchiature ancora attive.\n\nPoi una voce familiare ti chiama per nome dal fondo del corridoio, e la sagoma smette di essere immobile.\n\nNon conosci nessuno, a bordo della Kairos. Non dovrebbe conoscere il tuo nome nessuno, a bordo della Kairos.\n\nQuando la **cosa** emerge dall'oscurità, ciò che resta di una forma umana è a malapena riconoscibile sotto gli strati di tessuto organico che si sono richiusi, mutati, attorno a quello che una volta era un membro dell'equipaggio. Si muove in modo sbagliato — troppe articolazioni, in punti dove non dovrebbero essercene.\n\nContinua a chiamarti per nome, con una voce che non è più una voce.",
+      "combat": {
+        "enemy_name": "L'Ospite",
+        "enemy_max_life_points": 30,
+        "enemy_strength": 5,
+        "enemy_agility": 5,
+        "target_victory": 38,
+        "target_defeat": 15
+      }
+    },
+    "10": {
+      "type": "passage",
+      "content": "Ti allontani il più in fretta possibile, i componenti stretti al petto.\n\nLa baia delle capsule di fuga è esattamente dove i registri della stazione la indicano. Una sola capsula risulta ancora operativa, anche se i suoi indicatori lampeggiano in giallo, non in verde.\n\nInserisci i componenti recuperati nel vano del propulsore d'emergenza. Il sistema si avvia con un ronzio incerto.\n\nAlle tue spalle, in fondo al corridoio da cui sei appena arrivato, senti qualcosa muoversi di nuovo.",
+      "choices": [
+        {
+          "content": "Se vuoi tentare subito il distacco, vai a pagina {{page}}",
+          "target": 11
+        },
+        {
+          "content": "Se vuoi controllare il pannello della baia prima di partire, vai a pagina {{page}}",
+          "target": 39
+        }
+      ]
+    },
+    "11": {
+      "type": "dice",
+      "content": "Le mani ti tremano sui comandi. La sequenza di distacco richiede una calibrazione manuale precisa — non c'è tempo per un secondo tentativo.\n\nInspiri a fondo e avvii la procedura.",
+      "dice": {
+        "required_rolls": 1,
+        "minimum": 4,
+        "target_success": 12,
+        "target_failure": 16
+      }
+    },
+    "12": {
+      "type": "victory",
+      "content": "La capsula si stacca dalla Kairos un istante prima che qualcosa colpisca lo scafo esterno, proprio dove ti trovavi.\n\nAttraverso l'oblò, guardi la stazione rimpicciolire fino a diventare un puntino tra i detriti, silenziosa come l'hai trovata.\n\nI sistemi della capsula segnalano una rotta di intercettazione verso la Vela Sottile. Sei vivo — e, questa volta, non hai lasciato nulla a bordo che possa chiamarti per nome."
+    },
+    "13": {
+      "type": "defeat",
+      "content": "![Fine della corsa](generic_death.jpg)\n\nUn bullone cede sotto il tuo peso.\n\nLa passerella si piega di colpo, e per un istante ti aggrappi al metallo con tutte le forze che hai — poi anche quello scivola via dalle tue dita.\n\nIl pozzo tecnico non ha fondo visibile, e non ne troverai mai uno.\n\nL'ultima cosa che senti, prima del buio, è l'eco del tuo stesso allarme d'ossigeno, sempre più lontano."
+    },
+    "14": {
+      "type": "defeat",
+      "content": "![Fine della corsa](generic_death.jpg)\n\nL'utensile da taglio del drone trova un varco nell'armatura leggera della tua tuta.\n\nIl dolore è immediato, poi stranamente lontano.\n\n*\"Intruso neutralizzato\"*, ripete la voce distorta, più e più volte, mentre l'allarme dell'ossigeno della tua tuta inizia a lampeggiare, inascoltato.\n\nLa Kairos resta silenziosa come prima che tu arrivassi. Un corpo in più non farà differenza."
+    },
+    "15": {
+      "type": "defeat",
+      "content": "![Fine della corsa](generic_death.jpg)\n\nLe braccia troppo lunghe ti raggiungono prima che tu riesca a divincolarti.\n\nLa voce continua a chiamarti per nome, sempre più vicina, sempre più simile a qualcuno che conosci — anche se sai che non può essere vero.\n\nQuando i tessuti mutati ti si richiudono addosso, per un istante ti chiedi se anche tu, un giorno, chiamerai qualcun altro per nome.\n\nPoi non ti chiedi più nulla."
+    },
+    "16": {
+      "type": "defeat",
+      "content": "![Fine della corsa](generic_death.jpg)\n\nLa sequenza di calibrazione fallisce proprio mentre i passi, dietro di te, si fanno più vicini.\n\nProvi a riavviarla, ma il tempo per un secondo tentativo non c'è mai stato davvero.\n\nL'oblò della capsula, ancora agganciata alla Kairos, si oscura un istante prima che tu smetta di guardare attraverso di esso."
+    },
+    "17": {
+      "type": "passage",
+      "content": "Apri il pannello secondario del container. Il sistema di contenimento è ancora alimentato da una batteria autonoma.\n\nAll'interno non c'è più il campione. Restano soltanto residui trasparenti sulle pareti e una serie di sensori bruciati.\n\nUno dei registri, però, è leggibile: BX-19 non reagiva soltanto agli stimoli esterni. **Registrava pattern sonori e neurologici**.\n\nUn'altra voce indica un trasferimento verso il settore di ricerca biologica, avvenuto poco prima della perdita di contenimento.\n\nSe il campione è davvero passato di lì, potrebbe esserci qualcosa che spiega cosa è successo all'equipaggio.",
+      "choices": [
+        {
+          "content": "Se vuoi seguire il trasferimento verso i laboratori, vai a pagina {{page}}",
+          "target": 21
+        },
+        {
+          "content": "Se vuoi cercare un accesso più diretto al settore di ricerca, vai a pagina {{page}}",
+          "target": 22
+        }
+      ]
+    },
+    "18": {
+      "type": "passage",
+      "content": "Le tracce sul pavimento non sembrano lasciate da un carrello. Sono irregolari, intervallate da impronte di scarpe e da strisciate scure che terminano davanti a una porta di servizio.\n\nLa porta conduce verso gli alloggi dell'equipaggio.\n\nPer un istante senti qualcuno respirare dall'altra parte.\n\nPoi una voce, molto bassa, pronuncia il tuo nome.\n\nTi ricordi immediatamente l'avvertimento del comandante.",
+      "choices": [
+        {
+          "content": "Se vuoi entrare negli alloggi, vai a pagina {{page}}",
+          "target": 23
+        },
+        {
+          "content": "Se vuoi tornare verso il settore di ricerca, vai a pagina {{page}}",
+          "target": 21
+        }
+      ]
+    },
+    "19": {
+      "type": "passage",
+      "content": "Il sistema di comunicazione è ancora collegato all'antenna esterna. Il segnale di soccorso parte da qui, ma qualcosa non torna: il messaggio non è stato registrato dall'equipaggio.\n\nÈ stato **generato automaticamente dopo la perdita di contenimento**.\n\nTra i pacchetti di dati trovi anche una sequenza incompleta del comandante. Parla di una procedura di quarantena che avrebbe dovuto isolare il settore biologico, ma che non è mai stata completata.\n\nIl resto dei dati è protetto da un accesso locale.",
+      "choices": [
+        {
+          "content": "Se vuoi tentare di decifrare i dati protetti, vai a pagina {{page}}",
+          "target": 24
+        },
+        {
+          "content": "Se vuoi raggiungere fisicamente il settore di quarantena, vai a pagina {{page}}",
+          "target": 25
+        }
+      ]
+    },
+    "20": {
+      "type": "passage",
+      "content": "La cabina del comandante è vuota. Sul tavolo trovi una console portatile ancora alimentata.\n\nL'ultimo appunto scritto non parla dell'Ospite. Parla del segnale.\n\n*\"Se la quarantena fallisce, il sistema continuerà a trasmettere. Non è una richiesta di aiuto. È un'esca per attirare una nave abbastanza vicina da fornire energia, massa e un nuovo ospite.\"*\n\nSotto la frase compare una mappa del settore tecnico della Kairos.",
+      "choices": [
+        {
+          "content": "Se vuoi studiare la mappa e cercare una via sicura, vai a pagina {{page}}",
+          "target": 26
+        },
+        {
+          "content": "Se vuoi cercare i dati della quarantena, vai a pagina {{page}}",
+          "target": 25
+        }
+      ]
+    },
+    "21": {
+      "type": "dice",
+      "content": "Il corridoio verso i laboratori è chiuso da una paratia magnetica. Il pannello locale accetta ancora comandi manuali, ma il sistema di sicurezza è instabile.\n\nProvi a forzare l'apertura senza riattivare l'intero settore.",
+      "dice": {
+        "required_rolls": 1,
+        "minimum": 4,
+        "target_success": 27,
+        "target_failure": 28
+      }
+    },
+    "22": {
+      "type": "passage",
+      "content": "Trovi un ascensore di servizio che porta direttamente ai laboratori. La cabina è ferma a metà corsa, ma il portello può essere aperto a mano.\n\nScendi attraverso il vano e raggiungi un piccolo corridoio tecnico che sbuca dietro le paratie del laboratorio.\n\nDa lì proviene un odore metallico, quasi dolciastro.\n\nLa porta è socchiusa.",
+      "choices": [
+        {
+          "content": "Se vuoi entrare nei laboratori, vai a pagina {{page}}",
+          "target": 27
+        },
+        {
+          "content": "Se vuoi cercare una via alternativa verso la quarantena, vai a pagina {{page}}",
+          "target": 29
+        }
+      ]
+    },
+    "23": {
+      "type": "passage",
+      "content": "Gli alloggi sono immersi nel buio. Alcune porte sono aperte, altre sono state forzate dall'interno.\n\nIn una cabina trovi una parete coperta di registrazioni vocali. Non sono file audio: sono trascrizioni automatiche di conversazioni dell'equipaggio.\n\nLe ultime righe appartengono a persone diverse, ma riportano tutte la stessa frase: **«Mi ha chiamato con la voce di...»**\n\nLa frase cambia ogni volta. L'ultima parola è stata cancellata dal sistema.",
+      "choices": [
+        {
+          "content": "Se vuoi raggiungere l'infermeria, vai a pagina {{page}}",
+          "target": 29
+        },
+        {
+          "content": "Se vuoi seguire una voce proveniente dal corridoio, vai a pagina {{page}}",
+          "target": 30
+        }
+      ]
+    },
+    "24": {
+      "type": "dice",
+      "content": "Il codice è danneggiato, ma una parte del registro può essere ricostruita confrontando le frequenze del segnale.\n\nSe riesci a separare il messaggio automatico dai rumori di fondo, potresti capire da quale settore è partito il primo allarme.",
+      "dice": {
+        "required_rolls": 2,
+        "minimum": 7,
+        "target_success": 31,
+        "target_failure": 32
+      }
+    },
+    "25": {
+      "type": "passage",
+      "content": "Il registro di sicurezza conferma che il settore biologico è stato isolato manualmente.\n\nMa il blocco non è stato chiuso dall'esterno: qualcuno ha **disattivato la quarantena dall'interno**.\n\nL'ultima tessera utilizzata apparteneva al comandante.\n\nLa stessa registrazione mostra un percorso di servizio che collega il laboratorio alla camera di quarantena.",
+      "choices": [
+        {
+          "content": "Se vuoi seguire il percorso di servizio, vai a pagina {{page}}",
+          "target": 33
+        },
+        {
+          "content": "Se vuoi raggiungere la camera di quarantena passando dal laboratorio, vai a pagina {{page}}",
+          "target": 27
+        }
+      ]
+    },
+    "26": {
+      "type": "passage",
+      "content": "La mappa indica un corridoio tecnico che aggira i settori occupati e raggiunge il nucleo della stazione.\n\nLungo il percorso trovi un pannello di manutenzione con ancora una linea di alimentazione attiva. Riattivarla potrebbe sbloccare le porte automatiche, ma anche risvegliare sistemi che preferiresti lasciare spenti.",
+      "choices": [
+        {
+          "content": "Se vuoi riattivare la linea di alimentazione, vai a pagina {{page}}",
+          "target": 34
+        },
+        {
+          "content": "Se vuoi proseguire senza toccare nulla, vai a pagina {{page}}",
+          "target": 33
+        }
+      ]
+    },
+    "27": {
+      "type": "passage",
+      "content": "![Laboratorio biologico](27.jpg)\n\nIl laboratorio è silenzioso, sorprendentemente ordinato — come se nessuno lo avesse più toccato da mesi.\n\nI monitor mostrano ancora grafici congelati mesi fa. Al centro della stanza resta una camera di contenimento vuota.\n\nSul pavimento trovi una registrazione di emergenza. Il ricercatore parla con voce affaticata: **BX-19 non imita semplicemente le persone. Impara da loro.**\n\nL'ultima frase è quasi sussurrata: *«Se comincia a usare il tuo nome, non sta cercando di spaventarti. Sta cercando di convincerti che ti conosce.»*",
+      "choices": [
+        {
+          "content": "Se vuoi raggiungere la camera di quarantena, vai a pagina {{page}}",
+          "target": 35
+        },
+        {
+          "content": "Se vuoi cercare i dati originali del campione, vai a pagina {{page}}",
+          "target": 36
+        }
+      ]
+    },
+    "28": {
+      "type": "defeat",
+      "content": "![Fine della corsa](generic_death.jpg)\n\nLa paratia reagisce al tentativo di apertura con un impulso elettrico.\n\nLe luci del laboratorio si accendono tutte insieme.\n\nPer un istante senti il sistema di ventilazione ripartire. Poi senti un'altra cosa: passi nudi sul metallo, dall'altra parte della porta.\n\nLa serratura scatta.\n\nHai appena aperto la strada a qualcosa che non aveva bisogno di entrare."
+    },
+    "29": {
+      "type": "passage",
+      "content": "L'infermeria contiene tre lettini e un armadio medico rovesciato. Su uno dei monitor è rimasto congelato l'ultimo rapporto autoptico.\n\nIl tessuto prelevato da un membro dell'equipaggio presenta una struttura anomala, ma non completamente estranea: conserva tracce riconoscibili dell'organizzazione cellulare originale.\n\nIl rapporto termina con una nota: **la mutazione sembra seguire la memoria del soggetto**.\n\nNon è una spiegazione. Ma è abbastanza per capire perché l'Ospite conosca le voci dell'equipaggio.",
+      "choices": [
+        {
+          "content": "Se vuoi raggiungere il settore di quarantena, vai a pagina {{page}}",
+          "target": 33
+        },
+        {
+          "content": "Se vuoi seguire il corridoio verso il nucleo della stazione, vai a pagina {{page}}",
+          "target": 34
+        }
+      ]
+    },
+    "30": {
+      "type": "dice",
+      "content": "La voce ti guida attraverso un corridoio secondario.\n\nNon puoi vedere chi parla. Ogni volta che svolti, la voce è già più avanti.\n\nPoi pronuncia una frase che nessun estraneo potrebbe conoscere.\n\nTi fermi. Devi decidere se continuare a seguirla o riconoscere la trappola prima che sia troppo tardi.",
+      "dice": {
+        "required_rolls": 1,
+        "minimum": 4,
+        "target_success": 33,
+        "target_failure": 15
+      }
+    },
+    "31": {
+      "type": "passage",
+      "content": "Separando il segnale riesci a ricostruire la sequenza originale.\n\nLa richiesta di soccorso non è stata inviata per salvare l'equipaggio. È stata trasmessa **dopo** la perdita di contenimento e contiene un impulso di risposta destinato alle navi in avvicinamento.\n\nLa Kairos non sta chiedendo aiuto.\n\nSta aspettando che qualcuno salga a bordo.\n\nIl registro indica inoltre che il sistema di quarantena può essere raggiunto dal settore biologico.",
+      "choices": [
+        {
+          "content": "Se vuoi raggiungere il settore biologico, vai a pagina {{page}}",
+          "target": 35
+        },
+        {
+          "content": "Se vuoi seguire il percorso tecnico fino alla quarantena, vai a pagina {{page}}",
+          "target": 33
+        }
+      ]
+    },
+    "32": {
+      "type": "passage",
+      "content": "Il tentativo di decodifica fallisce, ma il terminale restituisce una parte della mappa.\n\nNon sai cosa contenga il segnale originale. Sai però dove si trova il sistema che lo trasmette: vicino al settore biologico.\n\nLa stessa mappa mostra un percorso secondario verso la quarantena.",
+      "choices": [
+        {
+          "content": "Se vuoi raggiungere il settore biologico, vai a pagina {{page}}",
+          "target": 35
+        },
+        {
+          "content": "Se vuoi prendere il percorso secondario, vai a pagina {{page}}",
+          "target": 33
+        }
+      ]
+    },
+    "33": {
+      "type": "passage",
+      "content": "Il percorso di servizio è quasi completamente al buio. Le porte automatiche sono bloccate in posizione aperta e, sulle pareti, compaiono strisce scure lasciate da qualcosa che è passato più volte.\n\nRaggiungi infine una porta con la scritta **QUARANTENA BIOLOGICA**.\n\nIl pannello indica che il blocco interno è ancora attivo.\n\nDall'altra parte senti un colpo.\n\nPoi un altro.\n\nQualcosa sa che sei qui.",
+      "choices": [
+        {
+          "content": "Se vuoi entrare nella quarantena, vai a pagina {{page}}",
+          "target": 35
+        },
+        {
+          "content": "Se vuoi aggirare la porta passando dal nucleo tecnico, vai a pagina {{page}}",
+          "target": 34
+        }
+      ]
+    },
+    "34": {
+      "type": "dice",
+      "content": "![Nucleo tecnico](34.jpg)\n\nIl pannello del nucleo tecnico controlla parte dell'alimentazione della Kairos.\n\nPuoi riattivare il circuito che alimenta la baia delle capsule, ma devi farlo senza riavviare l'intera rete della stazione.\n\nUn errore potrebbe richiudere le porte di sicurezza — oppure riaccendere i sistemi di contenimento.",
+      "dice": {
+        "required_rolls": 1,
+        "minimum": 4,
+        "target_success": 37,
+        "target_failure": 42
+      }
+    },
+    "35": {
+      "type": "passage",
+      "content": "![Camera di quarantena](35.jpg)\n\nLa camera di quarantena è separata dal resto della stazione da due porte stagne.\n\nAttraverso il vetro rinforzato vedi un lettino medico ancora al centro della stanza, come se fosse stato usato di recente. Accanto, una seconda camera di contenimento, più piccola.\n\nÈ aperta.\n\nSul vetro trovi una serie di impronte dall'interno. Non sono tutte umane.\n\nPoi l'interfono si accende.\n\nUna voce ti chiama per nome.\n\nQuesta volta è la tua stessa voce.",
+      "choices": [
+        {
+          "content": "Se vuoi affrontare ciò che sta arrivando, vai a pagina {{page}}",
+          "target": 9
+        },
+        {
+          "content": "Se vuoi cercare un'uscita laterale prima che arrivi, vai a pagina {{page}}",
+          "target": 37
+        }
+      ]
+    },
+    "36": {
+      "type": "passage",
+      "content": "I dati originali del campione sono conservati in un archivio isolato.\n\nLa classificazione \"origine: recupero in campo detriti\" è falsa: il BX-19 non è stato trovato alla deriva. È stato recuperato da un relitto che aveva già mostrato **segni di contaminazione biologica**.\n\nIl rapporto finale suggerisce che il campione abbia raggiunto la Kairos proprio grazie a una procedura di recupero automatica.\n\nL'ultima riga è stata scritta dal comandante: *\"Se il segnale continua a trasmettere, distruggete la stazione. Non lasciate che qualcuno risponda.\"*",
+      "choices": [
+        {
+          "content": "Se vuoi raggiungere la quarantena, vai a pagina {{page}}",
+          "target": 35
+        },
+        {
+          "content": "Se vuoi raggiungere il nucleo e interrompere il segnale, vai a pagina {{page}}",
+          "target": 34
+        }
+      ]
+    },
+    "37": {
+      "type": "passage",
+      "content": "Trovi un corridoio secondario che conduce alla baia delle capsule.\n\nLa porta è chiusa, ma il pannello locale è alimentato. Puoi raggiungere la capsula senza attraversare di nuovo il settore centrale.\n\nDietro di te, dall'interfono, arriva una voce calma.\n\n«Non devi avere paura.»\n\nÈ la voce del comandante.\n\nPoi cambia.\n\nDiventa la tua.",
+      "choices": [
+        {
+          "content": "Se vuoi raggiungere la capsula, vai a pagina {{page}}",
+          "target": 10
+        },
+        {
+          "content": "Se vuoi tornare al settore di quarantena e affrontare l'Ospite, vai a pagina {{page}}",
+          "target": 9
+        }
+      ]
+    },
+    "38": {
+      "type": "passage",
+      "content": "![Kairos in allarme](38.jpg)\n\nL'Ospite crolla sul pavimento, ma non sei abbastanza ingenuo da credere che sia finita.\n\nLe luci della Kairos cambiano colore. Una dopo l'altra, le porte stagne iniziano a chiudersi.\n\nSul pannello compare una procedura automatica: **QUARANTENA FALLITA — PURGA DEL SETTORE BIOLOGICO**.\n\nHai finalmente una via per la capsula. Ma hai anche davanti il terminale centrale che controlla il segnale di soccorso.\n\nSe lasci la stazione così com'è, il segnale continuerà a trasmettere.",
+      "choices": [
+        {
+          "content": "Se vuoi andare direttamente alla capsula, vai a pagina {{page}}",
+          "target": 10
+        },
+        {
+          "content": "Se vuoi interrompere il segnale prima di fuggire, vai a pagina {{page}}",
+          "target": 39
+        }
+      ]
+    },
+    "39": {
+      "type": "dice",
+      "content": "Raggiungi il terminale centrale della baia.\n\nIl sistema è in modalità di emergenza e accetta un solo comando: puoi interrompere la trasmissione e copiare sul computer della capsula gli ultimi dati della Kairos.\n\nIl conto alla rovescia della purga è già iniziato.\n\nHai tempo per un solo tentativo.",
+      "dice": {
+        "required_rolls": 2,
+        "minimum": 7,
+        "target_success": 40,
+        "target_failure": 41
+      }
+    },
+    "40": {
+      "type": "victory",
+      "content": "![Fuga dalla Kairos](40.jpg)\n\nIl segnale si interrompe.\n\nPer un istante, nella stazione torna il silenzio assoluto. Poi la capsula si stacca dalla Kairos mentre il settore biologico viene inghiottito dalla procedura di purga.\n\nNel computer di bordo ora hai una copia dei dati sul BX-19, compresa l'informazione più inquietante: **la Kairos non è stata la prima stazione a riceverlo**.\n\nMentre la capsula prende la rotta verso la Vela Sottile, cancelli dal sistema il protocollo automatico che avrebbe potuto trasmettere di nuovo il segnale.\n\nNon sai da dove provenisse davvero il campione.\n\nMa sai che, per ora, nessuno risponderà alla Kairos."
+    },
+    "41": {
+      "type": "defeat",
+      "content": "![Fine della corsa](generic_death.jpg)\n\nIl comando non passa in tempo.\n\nIl conto alla rovescia della purga arriva a zero mentre le tue dita sono ancora sul pannello.\n\nIl settore biologico — e tutto ciò che vi si trova, te compreso — viene inghiottito dalla procedura di sicurezza della Kairos.\n\nDa qualche parte, il segnale continua a trasmettere."
+    },
+    "42": {
+      "type": "defeat",
+      "content": "![Fine della corsa](generic_death.jpg)\n\nIl circuito si riattiva nel modo sbagliato.\n\nDa qualche parte nella stazione, un relè richiude una porta di sicurezza — proprio quella che stavi per attraversare.\n\nIl pannello davanti a te lampeggia un solo messaggio: **SISTEMA DI CONTENIMENTO RIATTIVATO**.\n\nPoi, oltre la porta ormai sigillata, senti qualcosa muoversi verso di te."
     }
+  }
 }

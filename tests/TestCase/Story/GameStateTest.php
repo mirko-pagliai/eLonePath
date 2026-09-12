@@ -148,11 +148,13 @@ class GameStateTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageIs('Invalid game state: missing player data.');
-        GameState::fromQueryValue(base64_encode(json_encode(['enemyLifePoints' => 5])));
+        $json = json_encode(['enemyLifePoints' => 5]);
+        $this->assertIsString($json);
+        GameState::fromQueryValue(base64_encode($json));
     }
 
     /**
-     * A malformed `player` value — valid-game JSON, valid-game top-level shape, but `player` isn't itself the object
+     * A malformed `player` value — valid JSON, valid top-level shape, but `player` isn't itself the object
      * `Character::createFromArray()` expects — is rejected the same way as a missing key entirely, rather than
      * reaching `Character::createFromArray()` with something it can't use.
      *
@@ -163,7 +165,9 @@ class GameStateTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageIs('Invalid game state: missing player data.');
-        GameState::fromQueryValue(base64_encode(json_encode(['player' => 'not-an-array'])));
+        $json = json_encode(['player' => 'not-an-array']);
+        $this->assertIsString($json);
+        GameState::fromQueryValue(base64_encode($json));
     }
 
     /**
@@ -179,7 +183,9 @@ class GameStateTest extends TestCase
     {
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageIs('Invalid game state: malformed player data.');
-        GameState::fromQueryValue(base64_encode(json_encode(['player' => ['max_life_points' => 20]])));
+        $json = json_encode(['player' => ['max_life_points' => 20]]);
+        $this->assertIsString($json);
+        GameState::fromQueryValue(base64_encode($json));
     }
 
     /**
@@ -202,7 +208,9 @@ class GameStateTest extends TestCase
         ];
 
         $this->expectExceptionMessageIs("The sum of the character's attributes must be 20, got 10.");
-        GameState::fromQueryValue(base64_encode(json_encode(['player' => $playerData])));
+        $json = json_encode(['player' => $playerData]);
+        $this->assertIsString($json);
+        GameState::fromQueryValue(base64_encode($json));
     }
 
     /**
@@ -216,7 +224,9 @@ class GameStateTest extends TestCase
     {
         $data = ['player' => $this->samplePlayer()->toArray(), 'enemyLifePoints' => 'not-an-int'];
 
-        $decoded = GameState::fromQueryValue(base64_encode(json_encode($data)));
+        $json = json_encode($data);
+        $this->assertIsString($json);
+        $decoded = GameState::fromQueryValue(base64_encode($json));
 
         $this->assertNull($decoded->enemyLifePoints);
     }

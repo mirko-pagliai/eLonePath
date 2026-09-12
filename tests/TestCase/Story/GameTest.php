@@ -14,12 +14,14 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * GameTest.
+ *
+ * @phpstan-import-type GameData from \App\Story\Game
  */
 #[CoversClass(Game::class)]
 class GameTest extends TestCase
 {
     /**
-     * @return array<string, mixed>
+     * @return GameData
      */
     private function sampleData(): array
     {

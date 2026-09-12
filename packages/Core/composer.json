@@ -31,7 +31,7 @@
 	},
 	"autoload-dev": {
 		"psr-4": {
-			"Elone\\Core\\Test\\": "tests/TestCase/",
+			"Elone\\Core\\Test\\TestCase\\": "tests/TestCase/",
 			"TestApp\\": "tests/test_app/src"
 		}
 	},

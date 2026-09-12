@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Test\View;
+namespace Elone\Core\Test\TestCase\View;
 
 use Elone\Core\Exception\HelperNotFoundException;
 use Elone\Core\Exception\TemplateNotFoundException;

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Test\Utility;
+namespace Elone\Core\Test\TestCase\Utility;
 
 use Elone\Core\Utility\WordCase;
 use PHPUnit\Framework\Attributes\CoversClass;

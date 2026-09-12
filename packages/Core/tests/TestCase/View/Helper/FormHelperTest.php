@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Test\View\Helper;
+namespace Elone\Core\Test\TestCase\View\Helper;
 
 use Elone\Core\Exception\RouteNotFoundException;
 use Elone\Core\Server\Request;

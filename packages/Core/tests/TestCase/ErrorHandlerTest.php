@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Test;
+namespace Elone\Core\Test\TestCase;
 
 use Closure;
 use Elone\Core\ErrorHandler;

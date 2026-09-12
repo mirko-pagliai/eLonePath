@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Test;
+namespace Elone\Core\Test\TestCase;
 
 use Elone\Core\Translator;
 use PHPUnit\Framework\Attributes\CoversClass;

@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Test\Console;
+namespace Elone\Core\Test\TestCase\Console;
 
 use Elone\Core\Console\PhpFileFinder;
 use PHPUnit\Framework\Attributes\CoversClass;

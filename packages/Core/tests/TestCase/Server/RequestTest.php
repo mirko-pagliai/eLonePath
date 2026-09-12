@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Test\Server;
+namespace Elone\Core\Test\TestCase\Server;
 
 use Elone\Core\Exception\MethodNotAllowedException;
 use Elone\Core\Server\Request;

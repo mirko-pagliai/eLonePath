@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Test\Command;
+namespace Elone\Core\Test\TestCase\Command;
 
 use Elone\Core\Command\ExtractMessagesCommand;
 use PHPUnit\Framework\Attributes\CoversClass;

@@ -2,7 +2,7 @@
   "game": {
     "id": "segnale_dal_vuoto",
     "title": "Segnale dal Vuoto",
-    "author": "Mirko Pagliai - mirko.pagliai[at]gmail[dot]com",
+    "author": "Mirko Pagliai - mirko.pagliai@gmail.com",
     "translators": "",
     "description": "Una stazione di ricerca alla deriva, un segnale di soccorso senza voce, e qualcosa a bordo che non dovrebbe più essere vivo.",
     "language": "it",
@@ -116,8 +116,8 @@
       "content": "![L'Ospite](9.jpg)\n\nAttraverso una finestra di osservazione rinforzata intravedi una sagoma, immobile, monitorata da apparecchiature ancora attive.\n\nPoi una voce familiare ti chiama per nome dal fondo del corridoio, e la sagoma smette di essere immobile.\n\nNon conosci nessuno, a bordo della Kairos. Non dovrebbe conoscere il tuo nome nessuno, a bordo della Kairos.\n\nQuando la **cosa** emerge dall'oscurità, ciò che resta di una forma umana è a malapena riconoscibile sotto gli strati di tessuto organico che si sono richiusi, mutati, attorno a quello che una volta era un membro dell'equipaggio. Si muove in modo sbagliato — troppe articolazioni, in punti dove non dovrebbero essercene.\n\nContinua a chiamarti per nome, con una voce che non è più una voce.",
       "combat": {
         "enemy_name": "L'Ospite",
-        "enemy_max_life_points": 30,
-        "enemy_strength": 5,
+        "enemy_max_life_points": 24,
+        "enemy_strength": 4,
         "enemy_agility": 5,
         "target_victory": 38,
         "target_defeat": 15
@@ -142,7 +142,7 @@
       "content": "Le mani ti tremano sui comandi. La sequenza di distacco richiede una calibrazione manuale precisa — non c'è tempo per un secondo tentativo.\n\nInspiri a fondo e avvii la procedura.",
       "dice": {
         "required_rolls": 1,
-        "minimum": 4,
+        "minimum": 3,
         "target_success": 12,
         "target_failure": 16
       }
@@ -228,7 +228,7 @@
       "content": "Il corridoio verso i laboratori è chiuso da una paratia magnetica. Il pannello locale accetta ancora comandi manuali, ma il sistema di sicurezza è instabile.\n\nProvi a forzare l'apertura senza riattivare l'intero settore.",
       "dice": {
         "required_rolls": 1,
-        "minimum": 4,
+        "minimum": 3,
         "target_success": 27,
         "target_failure": 28
       }
@@ -336,7 +336,7 @@
       "content": "La voce ti guida attraverso un corridoio secondario.\n\nNon puoi vedere chi parla. Ogni volta che svolti, la voce è già più avanti.\n\nPoi pronuncia una frase che nessun estraneo potrebbe conoscere.\n\nTi fermi. Devi decidere se continuare a seguirla o riconoscere la trappola prima che sia troppo tardi.",
       "dice": {
         "required_rolls": 1,
-        "minimum": 4,
+        "minimum": 3,
         "target_success": 33,
         "target_failure": 15
       }
@@ -388,7 +388,7 @@
       "content": "![Nucleo tecnico](34.jpg)\n\nIl pannello del nucleo tecnico controlla parte dell'alimentazione della Kairos.\n\nPuoi riattivare il circuito che alimenta la baia delle capsule, ma devi farlo senza riavviare l'intera rete della stazione.\n\nUn errore potrebbe richiudere le porte di sicurezza — oppure riaccendere i sistemi di contenimento.",
       "dice": {
         "required_rolls": 1,
-        "minimum": 4,
+        "minimum": 3,
         "target_success": 37,
         "target_failure": 42
       }

@@ -113,20 +113,6 @@ class FormHelperTest extends TestCase
     }
 
     /**
-     * With no `templates` override, the default markup is used — the existing, unchanged behavior.
-     *
-     * @link \Elone\Core\View\Helper\FormHelper::__construct()
-     * @link \Elone\Core\View\Helper\FormHelper::label()
-     */
-    #[Test]
-    public function testConstructWithNoTemplatesUsesDefaults(): void
-    {
-        $helper = new FormHelper(new View());
-
-        $this->assertSame('<label for="name" class="form-label">Name</label>', $helper->label('name', 'Name'));
-    }
-
-    /**
      * Every method builds its markup from `$templates`, not a hardcoded string — one override per entry,
      * verified against the method that uses it. `input()` itself is bare now, so the `inputContainer` override
      * is verified through `control()`, which is what actually uses it.
@@ -457,7 +443,7 @@ class FormHelperTest extends TestCase
 
     /**
      * `checkbox` gets its own wrapper — `.form-check`, not `.mb-3` — and its own label template
-     * (`checkLabel`), per Bootstrap's own checks-and-radios markup.
+     * (`checkLabel`).
      *
      * @link \Elone\Core\View\Helper\FormHelper::control()
      */

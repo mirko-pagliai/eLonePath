@@ -138,6 +138,8 @@ final class FormHelper extends Helper
     /**
      * A bare `<select>`.
      *
+     * See `$config['templates']['select']` (each `<option>` comes from `$config['templates']['option']`).
+     *
      * Unless `$options` already has its own `value`, the selected option is read from the current request's own
      * submitted data — under `$name` — if there is one, the same way `input()`'s own value is.
      *
@@ -183,10 +185,13 @@ final class FormHelper extends Helper
     /**
      * A bare checkbox `<input>`.
      *
+     * See `$config['templates']['check']`.
+     *
      * @param string $name Both the field's `name` and `id` attribute.
      * @param string $value The value submitted when this checkbox is checked — unchecked, it submits nothing
      *  at all, per how HTML checkboxes always behave.
-     * @param array<string, string|int|float|bool> $options Extra attributes — `checked` (bool) marks it pre-checked.
+     * @param array<string, string|int|float|bool> $options Extra attributes — `checked` (bool, marks it
+     *  pre-checked).
      * @return string The rendered tag.
      */
     public function checkbox(string $name, string $value = '1', array $options = []): string
@@ -206,6 +211,8 @@ final class FormHelper extends Helper
 
     /**
      * One bare radio `<input>`.
+     *
+     * See `$config['templates']['check']` — the same template `checkbox()` uses, with `type: 'radio'`.
      *
      * @param string $name Shared by every radio in the same group — only the checked one's `$value` is
      *  submitted under it.
@@ -234,10 +241,12 @@ final class FormHelper extends Helper
 
     /**
      * A complete, labeled field — the counterpart to `input()`/`select()`/`checkbox()`/`radio()`, which each
-     * build only the bare field. Picks which of those to call from `$options['type']` (defaults to `'text'`),
-     * then wraps the result in `$config['templates']['inputContainer']` alongside `label()`'s own output —
-     * except for `'checkbox'`, wrapped in `$config['templates']['checkWrapper']` instead, per Bootstrap's own
-     * checks-and-radios markup, and `'radio'`, which builds one such block per `$options['choices']` entry.
+     * build only the bare field.
+     *
+     * Picks which of those to call from `$options['type']` (defaults to `'text'`), then wraps the result in
+     * `$config['templates']['inputContainer']` alongside `label()`'s own output — except for `'checkbox'`,
+     * wrapped in `$config['templates']['checkWrapper']` instead, and `'radio'`, which builds one such block per
+     * `$options['choices']` entry before wrapping all of them together in `inputContainer`.
      *
      * @param string $name Both the field's `name`/`id` attribute (or, for `'radio'`, every choice's shared
      *  `name`) and, via `for`, what its `<label>` points to.
@@ -287,7 +296,7 @@ final class FormHelper extends Helper
     }
 
     /**
-     * The `type: 'checkbox'` branch of `control()`.
+     * The `type: 'checkbox'` branch of `control()`. See `$config['templates']['checkWrapper']`.
      *
      * @param string $name
      * @param string $label
@@ -311,7 +320,8 @@ final class FormHelper extends Helper
 
     /**
      * The `type: 'radio'` branch of `control()` — one `.form-check` block per `$choices` entry, all sharing
-     * `$name`, wrapped together in `$config['templates']['inputContainer']`.
+     * `$name`, wrapped together in `$config['templates']['inputContainer']`. Each block itself uses
+     * `$config['templates']['checkWrapper']`, the same as `checkboxControl()`.
      *
      * @param string $name
      * @param string $label
@@ -441,7 +451,7 @@ final class FormHelper extends Helper
      *
      * See `$config['templates']['formEnd']`.
      *
-     * @return string
+     * @return string The closing tag.
      */
     public function end(): string
     {

@@ -36,6 +36,23 @@ body {
     color: var(--elone-ink);
 }
 
+/**
+ * Form labels
+ */
+form .form-label {
+    font-weight: bold;
+}
+
+/**
+ * Form labels for required inputs
+ */
+form .required .form-label::after {
+    color: #e32;
+    content: ' *';
+    font-family: serif;
+    font-size: 80%;
+}
+
 article {
     /** max-width: 900px; */
     background: radial-gradient(

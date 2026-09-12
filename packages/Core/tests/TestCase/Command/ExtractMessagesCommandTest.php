@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace Elone\Core\Test\TestCase\Command;
+namespace Elone\Core\Test\Command;
 
 use Elone\Core\Command\ExtractMessagesCommand;
 use PHPUnit\Framework\Attributes\CoversClass;
@@ -206,6 +206,68 @@ class ExtractMessagesCommandTest extends TestCase
 
         $this->assertSame(Command::FAILURE, $tester->getStatusCode());
         $this->assertStringContainsString('Unable to create directory', $tester->getDisplay());
+    }
+
+    /**
+     * With `--force`, an existing `.pot` file is overwritten without asking. Run interactively with no input
+     * available: if `confirm()` were still being called, this would fail instead of succeeding — that's the
+     * proof the question never gets asked, not just that it gets auto-answered.
+     *
+     * @link \Elone\Core\Command\ExtractMessagesCommand::__invoke()
+     */
+    #[Test]
+    public function testInvokeWithForceOverwritesWithoutAsking(): void
+    {
+        $tester = $this->execute();
+        $this->assertSame(Command::SUCCESS, $tester->getStatusCode());
+
+        // Corrompo il file esistente, per essere certa che la seconda esecuzione lo riscriva davvero.
+        file_put_contents("$this->outputDir/default.pot", 'not a real .pot file');
+
+        $application = new Application();
+        $application->addCommand(new ExtractMessagesCommand());
+        $tester2 = new CommandTester($application->find('i18n:extract'));
+        $tester2->setInputs([]);
+        $tester2->execute(
+            ['--root' => TEST_APP, '--locales-dir' => $this->outputDir, '--force' => true],
+            ['interactive' => true],
+        );
+
+        $this->assertSame(Command::SUCCESS, $tester2->getStatusCode());
+
+        $defaultPot = file_get_contents("$this->outputDir/default.pot");
+        $this->assertIsString($defaultPot);
+        $this->assertStringNotContainsString('not a real .pot file', $defaultPot);
+        $this->assertStringContainsString('msgid "Welcome back"', $defaultPot);
+    }
+
+    /**
+     * The short `-f` alias behaves exactly like `--force`.
+     *
+     * @link \Elone\Core\Command\ExtractMessagesCommand::__invoke()
+     */
+    #[Test]
+    public function testInvokeWithShortForceOptionOverwritesWithoutAsking(): void
+    {
+        $tester = $this->execute();
+        $this->assertSame(Command::SUCCESS, $tester->getStatusCode());
+
+        file_put_contents("$this->outputDir/default.pot", 'not a real .pot file');
+
+        $application = new Application();
+        $application->addCommand(new ExtractMessagesCommand());
+        $tester2 = new CommandTester($application->find('i18n:extract'));
+        $tester2->setInputs([]);
+        $tester2->execute(
+            ['--root' => TEST_APP, '--locales-dir' => $this->outputDir, '-f' => true],
+            ['interactive' => true],
+        );
+
+        $this->assertSame(Command::SUCCESS, $tester2->getStatusCode());
+
+        $defaultPot = file_get_contents("$this->outputDir/default.pot");
+        $this->assertIsString($defaultPot);
+        $this->assertStringNotContainsString('not a real .pot file', $defaultPot);
     }
 
     /**

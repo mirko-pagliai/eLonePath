@@ -37,11 +37,13 @@ class ExtractMessagesCommand extends Command
 
     /**
      * Scans `$root` for `__()`/`__d()` calls and writes a `.pot` file per domain found into `$localesDir`. Asks
-     * before overwriting a `.pot` file that already exists, defaulting to yes.
+     * before overwriting a `.pot` file that already exists, defaulting to yes — unless `$force` is set, which
+     * skips the question and always overwrites.
      *
      * @param \Symfony\Component\Console\Style\SymfonyStyle $io
      * @param string|null $root Directory to scan for `__()`/`__d()` calls. Defaults to `ROOT`.
      * @param string|null $localesDir Directory to write `.pot` files into. Defaults to `LOCALES`.
+     * @param bool $force Overwrite an existing `.pot` file without asking.
      * @return int `Command::SUCCESS`, or `Command::FAILURE` if `gettext/php-scanner` isn't installed, or
      * `$localesDir` doesn't exist and can't be created, or isn't writable.
      */
@@ -49,6 +51,7 @@ class ExtractMessagesCommand extends Command
         SymfonyStyle $io,
         #[Option('Directory to scan for __()/__d() calls; defaults to `' . ROOT . '`')] ?string $root = null,
         #[Option('Directory to write .pot files into; defaults to `' . LOCALES . '`')] ?string $localesDir = null,
+        #[Option(description: 'Overwrite existing .pot files without asking.', shortcut: 'f')] bool $force = false,
     ): int {
         if (!$this->checkHasPhpScanner()) {
             $io->error('gettext/gettext and gettext/php-scanner are required to run this command.');
@@ -106,7 +109,7 @@ class ExtractMessagesCommand extends Command
 
             $path = "$localesDir/$domain.pot";
 
-            if (file_exists($path) && !$io->confirm("`$path` already exists. Overwrite it?", true)) {
+            if (!$force && file_exists($path) && !$io->confirm("`$path` already exists. Overwrite it?", true)) {
                 continue;
             }
 

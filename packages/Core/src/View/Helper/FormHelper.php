@@ -28,7 +28,7 @@ final class FormHelper extends Helper
             'button' => '<button type="{{type}}"{{attrs}}>{{text}}</button>',
             'check' => '<input class="form-check-input" type="{{type}}" id="{{id}}" name="{{name}}" value="{{value}}"{{attrs}}>',
             'checkLabel' => '<label{{attrs}}>{{text}}</label>',
-            'checkWrapper' => '<div class="form-check">{{input}}{{label}}</div>',
+            'checkContainer' => '<div class="form-check">{{input}}{{label}}</div>',
             'formStart' => '<form method="post" action="{{action}}"{{attrs}}>',
             'formEnd' => '</form>',
             'hiddenInput' => '<input type="hidden"{{attrs}}>',
@@ -245,7 +245,7 @@ final class FormHelper extends Helper
      *
      * Picks which of those to call from `$options['type']` (defaults to `'text'`), then wraps the result in
      * `$config['templates']['inputContainer']` alongside `label()`'s own output — except for `'checkbox'`,
-     * wrapped in `$config['templates']['checkWrapper']` instead, and `'radio'`, which builds one such block per
+     * wrapped in `$config['templates']['checkContainer']` instead, and `'radio'`, which builds one such block per
      * `$options['choices']` entry before wrapping all of them together in `inputContainer`.
      *
      * @param string $name Both the field's `name`/`id` attribute (or, for `'radio'`, every choice's shared
@@ -296,7 +296,7 @@ final class FormHelper extends Helper
     }
 
     /**
-     * The `type: 'checkbox'` branch of `control()`. See `$config['templates']['checkWrapper']`.
+     * The `type: 'checkbox'` branch of `control()`. See `$config['templates']['checkContainer']`.
      *
      * @param string $name
      * @param string $label
@@ -312,7 +312,7 @@ final class FormHelper extends Helper
         /** @var array<string, string|int|float|bool> $options */
         $input = $this->checkbox($name, $value, $options);
 
-        return $this->formatTemplate('checkWrapper', [
+        return $this->formatTemplate('checkContainer', [
             'input' => $input,
             'label' => $this->checkLabel($name, $label),
         ]);
@@ -321,7 +321,7 @@ final class FormHelper extends Helper
     /**
      * The `type: 'radio'` branch of `control()` — one `.form-check` block per `$choices` entry, all sharing
      * `$name`, wrapped together in `$config['templates']['inputContainer']`. Each block itself uses
-     * `$config['templates']['checkWrapper']`, the same as `checkboxControl()`.
+     * `$config['templates']['checkContainer']`, the same as `checkboxControl()`.
      *
      * @param string $name
      * @param string $label
@@ -351,7 +351,7 @@ final class FormHelper extends Helper
             $id = (string)($choiceOptions['id'] ?? "$name-$choiceValue");
             $checkLabel = $this->checkLabel($id, (string)$text);
 
-            $html .= $this->formatTemplate('checkWrapper', ['input' => $input, 'label' => $checkLabel]);
+            $html .= $this->formatTemplate('checkContainer', ['input' => $input, 'label' => $checkLabel]);
         }
 
         return $this->formatTemplate('inputContainer', [

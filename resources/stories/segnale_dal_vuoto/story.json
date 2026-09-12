@@ -71,15 +71,11 @@
     },
     "6": {
       "type": "passage",
-      "content": "![Snodo centrale](6.jpg)\n\nTi prendi un momento per riprendere fiato prima di proseguire.\n\nIl corridoio sbocca in un ampio **snodo centrale**, dal quale si dipartono diversi settori della stazione. Una mappa olografica, semi-funzionante, sfarfalla accanto a un pannello di controllo.\n\nDue percorsi sembrano ancora accessibili: la **stiva di carico**, verso poppa, e la **plancia di comando**, verso prua. Da entrambi provengono i componenti che ti servono per riparare il propulsore — ma il tempo stringe.",
+      "content": "![Snodo centrale](6.jpg)\n\nTi prendi un momento per riprendere fiato prima di proseguire.\n\nIl corridoio sbocca in un ampio **snodo centrale**, dal quale si dipartono diversi settori della stazione. Una mappa olografica, semi-funzionante, sfarfalla accanto a un pannello di controllo.\n\nPoi la mappa si spegne di scatto. Nessun suono, nessuna sirena — solo una luce rossa che comincia a pulsare lungo tutto il corridoio, lenta e regolare. Qualcosa, da qualche parte nella stazione, ti ha appena classificato come una minaccia.",
       "choices": [
         {
-          "content": "Se vuoi raggiungere la stiva di carico, vai a pagina {{page}}",
-          "target": 7
-        },
-        {
-          "content": "Se vuoi raggiungere la plancia di comando, vai a pagina {{page}}",
-          "target": 8
+          "content": "Vai a pagina {{page}}",
+          "target": 43
         }
       ]
     },
@@ -470,6 +466,36 @@
     "42": {
       "type": "defeat",
       "content": "![Fine della corsa](generic_death.jpg)\n\nIl circuito si riattiva nel modo sbagliato.\n\nDa qualche parte nella stazione, un relè richiude una porta di sicurezza — proprio quella che stavi per attraversare.\n\nIl pannello davanti a te lampeggia un solo messaggio: **SISTEMA DI CONTENIMENTO RIATTIVATO**.\n\nPoi, oltre la porta ormai sigillata, senti qualcosa muoversi verso di te."
+    },
+    "43": {
+      "type": "combat",
+      "content": "Dalle grate del soffitto scende un'unità che non hai ancora visto: più snella del drone incontrato prima, i movimenti privi di qualunque esitazione. Non è danneggiata, non è malfunzionante. È stata mandata apposta.\n\nUn modulo sul suo dorso proietta un messaggio, ripetuto in loop sulle pareti del corridoio:\n\n**CONTAMINAZIONE RILEVATA — PROCEDURA DI CONTENIMENTO ATTIVA.**\n\nNon ti sta chiedendo di fermarti. Ti ha già considerato neutralizzato.",
+      "combat": {
+        "enemy_name": "Sentinella di quarantena",
+        "enemy_max_life_points": 12,
+        "enemy_strength": 5,
+        "enemy_agility": 6,
+        "target_victory": 44,
+        "target_defeat": 45
+      }
+    },
+    "44": {
+      "type": "passage",
+      "content": "La sentinella si accascia con un ultimo scatto meccanico, poi tace del tutto.\n\nDue percorsi sembrano ancora accessibili: la **stiva di carico**, verso poppa, e la **plancia di comando**, verso prua. Da entrambi provengono i componenti che ti servono per riparare il propulsore — ma il tempo stringe.",
+      "choices": [
+        {
+          "content": "Se vuoi raggiungere la stiva di carico, vai a pagina {{page}}",
+          "target": 7
+        },
+        {
+          "content": "Se vuoi raggiungere la plancia di comando, vai a pagina {{page}}",
+          "target": 8
+        }
+      ]
+    },
+    "45": {
+      "type": "defeat",
+      "content": "![Fine della corsa](generic_death.jpg)\n\nNon hai mai avuto la possibilità di raggiungere né la stiva né la plancia.\n\nLa sentinella non si ferma quando smetti di muoverti. Continua a farlo per te, un ultimo colpo dopo l'altro, finché il messaggio sul suo dorso non cambia:\n\n**MINACCIA NEUTRALIZZATA.**"
     }
   }
 }

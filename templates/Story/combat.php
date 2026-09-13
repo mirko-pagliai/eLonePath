@@ -29,12 +29,14 @@ echo $this->element(name: 'character_sheet', data: ['character' => $character]);
         <div>
             <p class="mb-1">Tu</p>
 
-            <?php foreach ($result->playerDice as $roll) : ?>
-                <?= $this->Html->icon(
+            <?php
+            foreach ($result->playerDice as $roll) {
+                echo $this->Html->icon(
                     name: "dice-$roll",
                     options: ['class' => 'mx-1', 'style' => 'font-size: 3rem'],
-                ) ?>
-            <?php endforeach; ?>
+                );
+            }
+            ?>
 
             <p class="fs-2 mb-0">
                 Totale: <strong><?= $result->playerDiceTotal ?></strong>
@@ -42,14 +44,18 @@ echo $this->element(name: 'character_sheet', data: ['character' => $character]);
         </div>
 
         <div>
-            <p class="mb-1">Nemico (<em><?= h($node->enemyName) ?>)</em></p>
+            <p class="mb-1">
+                <?= h($node->enemyName) ?><br />
+            </p>
 
-            <?php foreach ($result->enemyDice as $roll) : ?>
-                <?= $this->Html->icon(
+            <?php
+            foreach ($result->enemyDice as $roll) {
+                echo $this->Html->icon(
                     name: "dice-$roll",
                     options: ['class' => 'mx-1', 'style' => 'font-size: 3rem'],
-                ) ?>
-            <?php endforeach; ?>
+                );
+            }
+            ?>
 
             <p class="fs-2 mb-0">
                 Totale: <strong><?= $result->enemyDiceTotal ?></strong>
@@ -73,8 +79,11 @@ echo $this->element(name: 'character_sheet', data: ['character' => $character]);
     </p>
 
     <?= $this->Story->link(
-        text: $this->Html->icon('bi-crosshair', ['class' => 'me-1']) . 'Continua a combattere',
+        text: 'Continua a combattere',
         url: ['controller' => 'Story', 'action' => 'combat', $game->gameId, $node->id],
-        options: ['class' => 'elone-button d-inline-block px-3 py-2'],
+        options: [
+            'class' => 'elone-button d-inline-block px-3 py-2',
+            'icon' => 'bi-crosshair',
+        ],
     ) ?>
 </section>

@@ -469,7 +469,7 @@
     },
     "43": {
       "type": "combat",
-      "content": "Dalle grate del soffitto scende un'unità che non hai ancora visto: più snella del drone incontrato prima, i movimenti privi di qualunque esitazione. Non è danneggiata, non è malfunzionante. È stata mandata apposta.\n\nUn modulo sul suo dorso proietta un messaggio, ripetuto in loop sulle pareti del corridoio:\n\n**CONTAMINAZIONE RILEVATA — PROCEDURA DI CONTENIMENTO ATTIVA.**\n\nNon ti sta chiedendo di fermarti. Ti ha già considerato neutralizzato.",
+      "content": "![Sentinella di quarantena](43.jpg)\n\nDalle grate del soffitto scende un'unità che non hai ancora visto: più snella del drone incontrato prima, i movimenti privi di qualunque esitazione. Non è danneggiata, non è malfunzionante. È stata mandata apposta.\n\nUn modulo sulla parente al suo fianco proietta un messaggio, ripetuto in loop sulle pareti del corridoio:\n\n**CONTAMINAZIONE RILEVATA — PROCEDURA DI CONTENIMENTO ATTIVA.**\n\nNon ti sta chiedendo di fermarti. Ti ha già considerato neutralizzato.",
       "combat": {
         "enemy_name": "Sentinella di quarantena",
         "enemy_max_life_points": 12,

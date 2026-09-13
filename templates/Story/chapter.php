@@ -73,20 +73,22 @@ if ($character) {
 <?php endif; ?>
 
 <?php if ($node instanceof CombatNode) : ?>
-    <div id="story-combat-intro" class="mt-4 text-center">
+    <div id="story-combat-intro" class="mt-4">
         <p class="fs-3">
             Un nemico ti sbarra la strada: <strong><?= h($node->enemyName) ?></strong>
             (<?= $node->enemyMaxLifePoints ?> punti vita).
         </p>
 
-        <?= $this->Story->link(
-            text: $this->Html->icon('bi-crosshair', ['class' => 'me-1']) . ' Affronta il nemico',
-            url: ['controller' => 'Story', 'action' => 'combat', $game->gameId, $node->id],
-            options: [
-                'class' => 'elone-button',
-                'escape' => false,
-            ],
-        ) ?>
+        <div class="text-center">
+            <?= $this->Story->link(
+                text: $this->Html->icon('bi-crosshair', ['class' => 'me-1']) . ' Affronta il nemico',
+                url: ['controller' => 'Story', 'action' => 'combat', $game->gameId, $node->id],
+                options: [
+                    'class' => 'elone-button',
+                    'escape' => false,
+                ],
+            ) ?>
+        </div>
     </div>
 <?php endif; ?>
 

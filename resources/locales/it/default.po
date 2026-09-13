@@ -17,6 +17,27 @@ msgstr ""
 "X-Domain: default\n"
 "X-Generator: Lokalize 25.04.0\n"
 
+msgid "Life points: {0} / {1}"
+msgstr "Punti vita: {0} / {1}"
+
+msgid "Strength: {0}"
+msgstr "Forza: {0}"
+
+msgid "Agility: {0}"
+msgstr "Agilità: {0}"
+
+msgid "Perception: {0}"
+msgstr "Percezione: {0}"
+
+msgid "Willpower: {0}"
+msgstr "Volontà: {0}"
+
+msgid "Your character"
+msgstr "Il tuo personaggio"
+
+msgid "Return to home"
+msgstr "Ritorna alla home"
+
 #: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:104
 #: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:114
 #: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:124

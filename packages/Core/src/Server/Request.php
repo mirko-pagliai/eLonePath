@@ -156,27 +156,25 @@ final class Request
     }
 
     /**
-     * Returns every query string parameter parsed from the URI given to the constructor. Keys are usually strings, but
-     * PHP coerces a purely numeric key (e.g. from `?123=abc`) to an integer, so the array key type is `array-key`
-     * (`int|string`) rather than just `string`.
-     *
-     * @return array<array-key, mixed> The query string parameters, as an associative array.
-     */
-    public function queryParams(): array
-    {
-        return $this->queryParams;
-    }
-
-    /**
-     * Returns a single query string parameter by name.
+     * Retrieves a query parameter by name.
      *
      * @param string $name The parameter name to look up.
      * @param mixed $default The value to return if `$name` isn't present.
      * @return mixed The parameter's value, or `$default`.
      */
-    public function queryParam(string $name, mixed $default = null): mixed
+    public function getQuery(string $name, mixed $default = null): mixed
     {
         return $this->queryParams[$name] ?? $default;
+    }
+
+    /**
+     * Retrieves all query parameters of the current request.
+     *
+     * @return array<array-key, mixed> The query string parameters, as an associative array.
+     */
+    public function getQueryParams(): array
+    {
+        return $this->queryParams;
     }
 
     /**

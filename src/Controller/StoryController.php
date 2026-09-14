@@ -58,7 +58,7 @@ class StoryController extends AppController
      */
     protected function propagateState(): ?Character
     {
-        $stateValue = $this->queryParam('state');
+        $stateValue = $this->getQuery('state');
         $stateValue = is_string($stateValue) ? $stateValue : null;
 
         $character = $stateValue !== null ? GameState::fromQueryValue($stateValue)->player : null;
@@ -201,7 +201,7 @@ class StoryController extends AppController
             return $response;
         }
 
-        $stateValue = $this->queryParam('state');
+        $stateValue = $this->getQuery('state');
 
         // If the game does not have a preface, redirects to the first chapter
         if (!$game->preface) {
@@ -312,7 +312,7 @@ class StoryController extends AppController
             throw new RuntimeException("No character found for `$storyId` — create one before fighting.");
         }
 
-        $stateValue = $this->queryParam('state');
+        $stateValue = $this->getQuery('state');
         assert(is_string($stateValue));
         $state = GameState::fromQueryValue($stateValue);
 

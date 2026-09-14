@@ -59,19 +59,19 @@ class RequestTest extends TestCase
 
     /**
      * @link \Elone\Core\Server\Request::__construct()
-     * @link \Elone\Core\Server\Request::queryParams()
-     * @link \Elone\Core\Server\Request::queryParam()
+     * @link \Elone\Core\Server\Request::getQueryParams()
+     * @link \Elone\Core\Server\Request::getQuery()
      */
     #[Test]
-    public function testQueryParams(): void
+    public function testGetQueryParams(): void
     {
         $request = new Request('GET', '/pages/view/123?foo=bar');
 
         $this->assertSame('/pages/view/123', $request->path());
-        $this->assertSame(['foo' => 'bar'], $request->queryParams());
-        $this->assertSame('bar', $request->queryParam('foo'));
-        $this->assertNull($request->queryParam('missing'));
-        $this->assertSame('default', $request->queryParam('missing', 'default'));
+        $this->assertSame(['foo' => 'bar'], $request->getQueryParams());
+        $this->assertSame('bar', $request->getQuery('foo'));
+        $this->assertNull($request->getQuery('missing'));
+        $this->assertSame('default', $request->getQuery('missing', 'default'));
     }
 
     /**
@@ -82,7 +82,7 @@ class RequestTest extends TestCase
     {
         $request = new Request('GET', '/pages/home');
 
-        $this->assertSame([], $request->queryParams());
+        $this->assertSame([], $request->getQueryParams());
     }
 
     /**
@@ -120,21 +120,21 @@ class RequestTest extends TestCase
     }
 
     /**
-     * `data()` and `queryParams()` are deliberately independent — a value posted in the body doesn't leak into
+     * `data()` and `getQueryParams()` are deliberately independent — a value posted in the body doesn't leak into
      * the query params, and vice versa, even when a request genuinely has both (a POST to a URL that also
      * carries its own querystring, e.g. `?ref=...`).
      *
      * @link \Elone\Core\Server\Request::__construct()
      * @link \Elone\Core\Server\Request::data()
-     * @link \Elone\Core\Server\Request::queryParams()
+     * @link \Elone\Core\Server\Request::getQueryParams()
      */
     #[Test]
-    public function testDataAndQueryParamsAreIndependent(): void
+    public function testDataAndGetQueryParamsAreIndependent(): void
     {
         $request = new Request('POST', '/users/1/edit?ref=abc123', ['name' => 'Ada']);
 
         $this->assertSame(['name' => 'Ada'], $request->data());
-        $this->assertSame(['ref' => 'abc123'], $request->queryParams());
+        $this->assertSame(['ref' => 'abc123'], $request->getQueryParams());
     }
 
     /**
@@ -150,7 +150,7 @@ class RequestTest extends TestCase
 
         $this->assertSame('POST', $request->method());
         $this->assertSame('/pages/view/123', $request->path());
-        $this->assertSame(['foo' => 'bar'], $request->queryParams());
+        $this->assertSame(['foo' => 'bar'], $request->getQueryParams());
     }
 
     /**
@@ -185,7 +185,7 @@ class RequestTest extends TestCase
 
         $this->assertSame('GET', $request->method());
         $this->assertSame('/', $request->path());
-        $this->assertSame([], $request->queryParams());
+        $this->assertSame([], $request->getQueryParams());
     }
 
     /**

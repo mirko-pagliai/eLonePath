@@ -120,25 +120,25 @@ abstract class Controller
     }
 
     /**
-     * Retrieves all query string parameters of the current request.
-     *
-     * @return array<array-key, mixed> The query string parameters, as an associative array.
-     */
-    protected function queryParams(): array
-    {
-        return $this->request->queryParams();
-    }
-
-    /**
-     * Retrieves a single query string parameter of the current request, or `$default` if it isn't present.
+     * Retrieves a query parameter by name.
      *
      * @param string $name The parameter name to look up.
      * @param mixed $default The value to return if `$name` isn't present.
      * @return mixed The parameter's value, or `$default`.
      */
-    protected function queryParam(string $name, mixed $default = null): mixed
+    protected function getQuery(string $name, mixed $default = null): mixed
     {
-        return $this->request->queryParam($name, $default);
+        return $this->request->getQuery($name, $default);
+    }
+
+    /**
+     * Retrieves all query parameters of the current request.
+     *
+     * @return array<array-key, mixed> The query parameters, as an associative array.
+     */
+    protected function getQueryParams(): array
+    {
+        return $this->request->getQueryParams();
     }
 
     /**

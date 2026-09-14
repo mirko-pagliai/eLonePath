@@ -161,30 +161,30 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * @link \Elone\Core\Controller::queryParams()
-     * @link \Elone\Core\Controller::queryParam()
+     * @link \Elone\Core\Controller::getQueryParams()
+     * @link \Elone\Core\Controller::getQuery()
      */
     #[Test]
-    public function testQueryParams(): void
+    public function testGetQueryParams(): void
     {
         $request = new Request('GET', '/?foo=bar');
 
         $controller = new class (request: $request) extends Controller {
-            public function queryParams(): array
+            public function getQueryParams(): array
             {
-                return parent::queryParams();
+                return parent::getQueryParams();
             }
 
-            public function queryParam(string $name, mixed $default = null): mixed
+            public function getQuery(string $name, mixed $default = null): mixed
             {
-                return parent::queryParam($name, $default);
+                return parent::getQuery($name, $default);
             }
         };
 
-        $this->assertSame(['foo' => 'bar'], $controller->queryParams());
-        $this->assertSame('bar', $controller->queryParam('foo'));
-        $this->assertNull($controller->queryParam('missing'));
-        $this->assertSame('default', $controller->queryParam('missing', 'default'));
+        $this->assertSame(['foo' => 'bar'], $controller->getQueryParams());
+        $this->assertSame('bar', $controller->getQuery('foo'));
+        $this->assertNull($controller->getQuery('missing'));
+        $this->assertSame('default', $controller->getQuery('missing', 'default'));
     }
 
     /**

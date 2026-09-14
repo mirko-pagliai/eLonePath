@@ -7,10 +7,6 @@ if (!defined('ROOT')) {
     define('ROOT', dirname(__DIR__));
 }
 
-if (!defined('APP')) {
-    define('APP', require ROOT . '/config/config.php');
-}
-
 const LOCALES = ROOT . '/resources/locales';
 
 if (!defined('STORIES')) {
@@ -28,5 +24,7 @@ if (file_exists($envFile) && class_exists(Loader::class)) {
         ->parse()
         ->toEnv();
 }
+
+define('APP', require ROOT . '/config/config.php');
 
 require ROOT . '/packages/Core/config/bootstrap.php';

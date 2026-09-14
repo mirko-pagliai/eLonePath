@@ -30,11 +30,14 @@ final class PagesController extends AppController
      */
     public function docs(): void
     {
-        $files = glob(DOCS . '/it/*.md');
+        $files = glob(DOCS . '/it/*.md') ?: [];
 
         $files = array_map(
             callback: function (string $path): array {
-                $content = file_get_contents($path);
+                $content = file_get_contents($path) ?: '';
+                if (trim($content) === '') {
+                    throw new LogicException("The content of `$path` is empty.");
+                }
 
                 $firstLine = strtok($content, "\n");
                 if (!$firstLine || !str_starts_with($firstLine, '# ')) {

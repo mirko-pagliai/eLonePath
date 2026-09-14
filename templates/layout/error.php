@@ -6,13 +6,6 @@ declare(strict_types=1);
  * @var string $message
  * @var int $status
  */
-
-$icon = match (true) {
-    $status >= 500 => 'bi-bug',
-    $status === 404 => 'bi-question-circle',
-    $status >= 400 => 'bi-exclamation-triangle',
-    default => 'bi-exclamation-circle',
-};
 ?>
 
 <!doctype html>

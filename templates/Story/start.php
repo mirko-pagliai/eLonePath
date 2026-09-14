@@ -9,7 +9,7 @@ declare(strict_types=1);
  */
 ?>
 
-<article class="min-vh-100 p-4 p-lg-5">
+<article class="p-4 pt-5 p-xl-5">
     <?php
     /** @link templates/element/chapter_header.php */
     echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'subtitle' => 'Introduzione']);

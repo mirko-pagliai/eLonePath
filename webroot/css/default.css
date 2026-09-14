@@ -66,6 +66,12 @@ main article {
     );
 }
 
+@media (max-width: 1199px) {
+    main article {
+        min-height: 100dvh;
+    }
+}
+
 main a {
     color: var(--elone-ink);
     text-decoration-color: var(--elone-ink) !important;

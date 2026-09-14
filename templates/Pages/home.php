@@ -8,7 +8,7 @@ declare(strict_types=1);
  */
 ?>
 
-<article class="min-vh-100 p-4 p-lg-5">
+<article class="p-4 pt-5 p-xl-5">
     <?= $this->Html->image(
         path: '/img/logo-600.png',
         options: ['class' => 'd-block img-fluid mb-5 mx-auto'],

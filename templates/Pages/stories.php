@@ -30,32 +30,32 @@ declare(strict_types=1);
 
         <div class="d-flex flex-row gap-4 fs-5">
             <div>
-                Genere: <?= lcfirst($game->genre->label()) ?>
+                <?= __('Genre: {0}', lcfirst($game->genre->label())) ?>
             </div>
 
             <div>
-                Difficoltà: <?= lcfirst($game->difficulty->label()) ?>
+                <?= __('Difficulty: {0}', lcfirst($game->difficulty->label())) ?>
             </div>
 
             <?php if ($game->requiresCharacter) : ?>
             <div>
-                Richiede la creazione di un personaggio
+                <?= __('Requires character creation') ?>
             </div>
             <?php endif; ?>
         </div>
 
         <div class="fs-5 text-body-secondary">
-            Autori: <?= h($game->author) ?>
+            <?= __('Authors: {0}', h($game->author)) ?>
         </div>
 
         <?php if ($game->translators) : ?>
-            <div class="fs-5 text-body-secondary">
-                Traduttori: <?= h($game->translators) ?>
-            </div>
+        <div class="fs-5 text-body-secondary">
+            <?= __('Translators: {0}', h($game->translators)) ?>
+        </div>
         <?php endif; ?>
 
         <div class="fs-5">
-            (lingua <?= h($game->language) ?>, versione <?= h($game->version) ?>)
+            <?= __('Language {0}, version {1}', h($game->language), h($game->version)) ?>
         </div>
     </li>
     <?php endforeach; ?>

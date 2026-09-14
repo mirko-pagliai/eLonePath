@@ -1,6 +1,4 @@
-# LANGUAGE translation of eLonePath
 # SPDX-FileCopyrightText: 2026 Mirko Pagliai <mirko.pagliai@gmail.com>
-#
 msgid ""
 msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
@@ -9,37 +7,41 @@ msgstr ""
 "Language-Team: Italian <kde-i18n-it@kde.org>\n"
 "Last-Translator: Mirko Pagliai <mirko.pagliai@gmail.com>\n"
 "MIME-Version: 1.0\n"
-"PO-Revision-Date: 2026-09-12 16:09+0200\n"
-"POT-Creation-Date: 2026-09-12 16:05+0200\n"
+"PO-Revision-Date: 2026-09-14 18:01+0200\n"
+"POT-Creation-Date: 2026-09-14 16:00+0000\n"
 "Plural-Forms: nplurals=2; plural=(n != 1);\n"
 "Project-Id-Version: \n"
 "Report-Msgid-Bugs-To: \n"
 "X-Domain: default\n"
 "X-Generator: Lokalize 25.04.0\n"
 
-msgid "Error {0}"
-msgstr "Errore {0}"
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryGenre.php:23
+msgid "Science fiction"
+msgstr "Fantascientifico"
 
-msgid "Life points: {0} / {1}"
-msgstr "Punti vita: {0} / {1}"
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryGenre.php:24
+msgid "Medieval fantasy"
+msgstr "Fantasy-medioevale"
 
-msgid "Strength: {0}"
-msgstr "Forza: {0}"
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:29
+msgid "Very easy"
+msgstr "Molto facile"
 
-msgid "Agility: {0}"
-msgstr "Agilità: {0}"
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:30
+msgid "Easy"
+msgstr "Facile"
 
-msgid "Perception: {0}"
-msgstr "Percezione: {0}"
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:31
+msgid "Medium"
+msgstr "Media"
 
-msgid "Willpower: {0}"
-msgstr "Volontà: {0}"
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:32
+msgid "Difficult"
+msgstr "Difficile"
 
-msgid "Your character"
-msgstr "Il tuo personaggio"
-
-msgid "Return to home"
-msgstr "Ritorna alla home"
+#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:33
+msgid "Very difficult"
+msgstr "Molto difficile"
 
 #: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:104
 #: /home/mirko/PhpstormProjects/eLonePath/src/Story/Character.php:114
@@ -69,34 +71,63 @@ msgid "The sum of the character's attributes must be {0}, got {1}."
 msgstr ""
 "La somma degli attributi del personaggio deve essere {0}, mentre è {1}."
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:29
-msgid "Very easy"
-msgstr "Molto facile"
+#: /home/mirko/PhpstormProjects/eLonePath/templates/element/character_sheet.php:13
+msgid "Your character"
+msgstr "Il tuo personaggio"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:30
-msgid "Easy"
-msgstr "Facile"
+#: /home/mirko/PhpstormProjects/eLonePath/templates/element/character_sheet.php:25
+msgid "Strength: {0}"
+msgstr "Forza: {0}"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:31
-msgid "Medium"
-msgstr "Medio"
+#: /home/mirko/PhpstormProjects/eLonePath/templates/element/character_sheet.php:29
+msgid "Agility: {0}"
+msgstr "Agilità: {0}"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:32
-msgid "Difficult"
-msgstr "Difficile"
+#: /home/mirko/PhpstormProjects/eLonePath/templates/element/character_sheet.php:33
+msgid "Perception: {0}"
+msgstr "Percezione: {0}"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryDifficulty.php:33
-msgid "Very difficult"
-msgstr "Molto difficile"
+#: /home/mirko/PhpstormProjects/eLonePath/templates/element/character_sheet.php:37
+msgid "Willpower: {0}"
+msgstr "Volontà: {0}"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryGenre.php:23
-msgid "Science fiction"
-msgstr "Fantascientifico"
+#: /home/mirko/PhpstormProjects/eLonePath/templates/element/character_sheet.php:41
+msgid "Life points: {0} / {1}"
+msgstr "Punti vita: {0} / {1}"
 
-#: /home/mirko/PhpstormProjects/eLonePath/src/Story/StoryGenre.php:24
-msgid "Medieval fantasy"
-msgstr "Fantasy-medioevale"
+#: /home/mirko/PhpstormProjects/eLonePath/templates/error/500.php:13
+#: /home/mirko/PhpstormProjects/eLonePath/templates/error/400.php:13
+msgid "Error {0}"
+msgstr "Errore {0}"
+
+#: /home/mirko/PhpstormProjects/eLonePath/templates/Story/chapter.php:125
+msgid "Return to home"
+msgstr "Ritorna alla home"
 
 #: /home/mirko/PhpstormProjects/eLonePath/templates/Pages/home.php:43
 msgid "Go to stories"
 msgstr "Vai alle storie"
+
+#: /home/mirko/PhpstormProjects/eLonePath/templates/Pages/stories.php:33
+msgid "Genre: {0}"
+msgstr "Genere: {0}"
+
+#: /home/mirko/PhpstormProjects/eLonePath/templates/Pages/stories.php:37
+msgid "Difficulty: {0}"
+msgstr "Difficoltà: {0}"
+
+#: /home/mirko/PhpstormProjects/eLonePath/templates/Pages/stories.php:42
+msgid "Requires character creation"
+msgstr "Richiede la creazione di un personaggio"
+
+#: /home/mirko/PhpstormProjects/eLonePath/templates/Pages/stories.php:48
+msgid "Authors: {0}"
+msgstr "Autori: {0}"
+
+#: /home/mirko/PhpstormProjects/eLonePath/templates/Pages/stories.php:53
+msgid "Translators: {0}"
+msgstr "Traduttori: {0}"
+
+#: /home/mirko/PhpstormProjects/eLonePath/templates/Pages/stories.php:58
+msgid "Language {0}, version {1}"
+msgstr "Lingua {0}, versione {1}"

@@ -39,10 +39,10 @@ declare(strict_types=1);
 
             <div>
                 <?= __(
-                'Life points: {0} / {1}',
-                "<strong>$character->lifePoints</strong>",
-                "<strong>$character->maxLifePoints</strong>",
-            ) ?>
+                    'Life points: {0} / {1}',
+                    "<strong>$character->lifePoints</strong>",
+                    "<strong>$character->maxLifePoints</strong>",
+                ) ?>
             </div>
         </div>
     </div>

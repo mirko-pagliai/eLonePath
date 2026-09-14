@@ -65,6 +65,7 @@ article {
 
 article a {
     color: var(--elone-ink);
+    text-decoration-color: var(--elone-ink) !important;
 }
 
 .ff-cinzel {

@@ -25,10 +25,8 @@ declare(strict_types=1);
         <title>eLone Path</title>
     </head>
     <body class="min-vh-100">
-        <main class="container fs-4 p-0 pt-lg-5 pb-lg-4" style="max-width: 960px">
-                <?= $content ?>
-            <article class="mx-auto ">
-            </article>
+        <main class="fs-4 mx-auto p-0 pt-lg-5 pb-lg-4" style="max-width: 960px">
+            <?= $content ?>
         </main>
     </body>
     <script src="/assets/js/bootstrap.bundle.min.js"></script>

@@ -57,7 +57,7 @@ form .required .form-label::after {
     font-size: 80%;
 }
 
-main {
+main article {
     background: radial-gradient(
         ellipse at center,
         var(--elone-paper) 0%,

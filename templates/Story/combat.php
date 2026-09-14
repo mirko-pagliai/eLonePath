@@ -14,76 +14,81 @@ declare(strict_types=1);
 
 use App\Story\Combat\CombatHit;
 
-/** @link templates/element/chapter_header.php */
-echo $this->element(
-    name: 'chapter_header',
-    data: ['title' => $game->title, 'subtitle' => "Combattimento contro {$node->enemyName}"],
-);
-
-/** @link templates/element/character_sheet.php */
-echo $this->element(name: 'character_sheet', data: ['character' => $character]);
 ?>
 
-<section id="combat-round" class="fs-4 mb-4 text-center">
-    <div class="d-flex justify-content-center gap-5 mb-4">
-        <div>
-            <p class="mb-1">Tu</p>
+<article class="p-4 p-lg-5">
+    <?php
+    /** @link templates/element/chapter_header.php */
+    echo $this->element(
+        name: 'chapter_header',
+        data: ['title' => $game->title, 'subtitle' => "Combattimento contro {$node->enemyName}"],
+    );
 
-            <?php
-            foreach ($result->playerDice as $roll) {
-                echo $this->Html->icon(
-                    name: "dice-$roll",
-                    options: ['class' => 'mx-1', 'style' => 'font-size: 3rem'],
-                );
-            }
-            ?>
+    /** @link templates/element/character_sheet.php */
+    echo $this->element(name: 'character_sheet', data: ['character' => $character]);
+    ?>
 
-            <p class="fs-2 mb-0">
-                Totale: <strong><?= $result->playerDiceTotal ?></strong>
-            </p>
+    <section id="combat-round" class="fs-4 mb-4 text-center">
+        <div class="d-flex justify-content-center gap-5 mb-4">
+            <div>
+                <p class="mb-1">Tu</p>
+
+                <?php
+                foreach ($result->playerDice as $roll) {
+                    echo $this->Html->icon(
+                        name: "dice-$roll",
+                        options: ['class' => 'mx-1', 'style' => 'font-size: 3rem'],
+                    );
+                }
+                ?>
+
+                <p class="fs-2 mb-0">
+                    Totale: <strong><?= $result->playerDiceTotal ?></strong>
+                </p>
+            </div>
+
+            <div>
+                <p class="mb-1">
+                    <?= h($node->enemyName) ?><br />
+                </p>
+
+                <?php
+                foreach ($result->enemyDice as $roll) {
+                    echo $this->Html->icon(
+                        name: "dice-$roll",
+                        options: ['class' => 'mx-1', 'style' => 'font-size: 3rem'],
+                    );
+                }
+                ?>
+
+                <p class="fs-2 mb-0">
+                    Totale: <strong><?= $result->enemyDiceTotal ?></strong>
+                </p>
+            </div>
         </div>
 
-        <div>
-            <p class="mb-1">
-                <?= h($node->enemyName) ?><br />
-            </p>
+        <p class="fs-3 fst-italic mb-4">
+            <?php if ($result->hit === CombatHit::Player) : ?>
+                Colpisci per <strong><?= $result->damage ?></strong> danni!
+            <?php elseif ($result->hit === CombatHit::Enemy) : ?>
+                Vieni colpito per <strong><?= $result->damage ?></strong> danni.
+            <?php else : ?>
+                Nessuno dei due colpisce: è una parata.
+            <?php endif; ?>
+        </p>
 
-            <?php
-            foreach ($result->enemyDice as $roll) {
-                echo $this->Html->icon(
-                    name: "dice-$roll",
-                    options: ['class' => 'mx-1', 'style' => 'font-size: 3rem'],
-                );
-            }
-            ?>
+        <p class="fs-4 mb-4">
+            <?= h($node->enemyName) ?>:
+            <strong><?= $enemy->lifePoints ?> / <?= $enemy->maxLifePoints ?></strong> punti vita
+        </p>
 
-            <p class="fs-2 mb-0">
-                Totale: <strong><?= $result->enemyDiceTotal ?></strong>
-            </p>
-        </div>
-    </div>
-
-    <p class="fs-3 fst-italic mb-4">
-        <?php if ($result->hit === CombatHit::Player) : ?>
-            Colpisci per <strong><?= $result->damage ?></strong> danni!
-        <?php elseif ($result->hit === CombatHit::Enemy) : ?>
-            Vieni colpito per <strong><?= $result->damage ?></strong> danni.
-        <?php else : ?>
-            Nessuno dei due colpisce: è una parata.
-        <?php endif; ?>
-    </p>
-
-    <p class="fs-4 mb-4">
-        <?= h($node->enemyName) ?>:
-        <strong><?= $enemy->lifePoints ?> / <?= $enemy->maxLifePoints ?></strong> punti vita
-    </p>
-
-    <?= $this->Story->link(
-        text: 'Continua a combattere',
-        url: ['controller' => 'Story', 'action' => 'combat', $game->gameId, $node->id],
-        options: [
-            'class' => 'elone-button d-inline-block px-3 py-2',
-            'icon' => 'bi-crosshair',
-        ],
-    ) ?>
-</section>
+        <?= $this->Story->link(
+            text: 'Continua a combattere',
+            url: ['controller' => 'Story', 'action' => 'combat', $game->gameId, $node->id],
+            options: [
+                'class' => 'elone-button d-inline-block px-3 py-2',
+                'icon' => 'bi-crosshair',
+            ],
+        ) ?>
+    </section>
+</article>

@@ -16,7 +16,7 @@ declare(strict_types=1);
     ?>
 
     <?php if ($files) : ?>
-    <ul>
+    <ul class="mb-0">
         <?php foreach ($files as $file) : ?>
         <li>
             <?= $this->Html->link(

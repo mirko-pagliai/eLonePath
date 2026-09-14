@@ -17,6 +17,9 @@ msgstr ""
 "X-Domain: default\n"
 "X-Generator: Lokalize 25.04.0\n"
 
+msgid "Error {0}"
+msgstr "Errore {0}"
+
 msgid "Life points: {0} / {1}"
 msgstr "Punti vita: {0} / {1}"
 

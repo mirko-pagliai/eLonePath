@@ -9,27 +9,34 @@ declare(strict_types=1);
  */
 ?>
 
-<h1><?= $status ?> <?= h($message) ?></h1>
+<h2>
+    <i class="bi bi-exclamation-triangle"></i> <?= __('Error {0}', $status) ?>
+</h2>
+
+<div class="fs-5">
+    <?= h($message) ?>
+</div>
 
 <?php if ($debug) : ?>
-    <hr>
+    <hr />
 
-    <p>
+    <div>
         <strong>Exception:</strong>
-        <?= h($exception::class) ?>
-    </p>
+        <code><?= h($exception::class) ?></code>
+    </div>
 
-    <p>
+    <div>
         <strong>File:</strong>
-        <?= h($exception->getFile()) ?>
-    </p>
+        <code><?= h($exception->getFile()) ?></code>
+    </div>
 
-    <p>
+    <div>
         <strong>Line:</strong>
-        <?= $exception->getLine() ?>
-    </p>
+        <code><?= $exception->getLine() ?></code>
+    </div>
 
-    <h2>Stack trace</h2>
-
-    <pre><?= h($exception->getTraceAsString()) ?></pre>
+    <div class="mt-3">
+        <h5>Stack trace</h5>
+        <pre><?= $exception->getTraceAsString() ?></pre>
+    </div>
 <?php endif; ?>

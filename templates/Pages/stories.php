@@ -9,7 +9,7 @@ declare(strict_types=1);
  */
 ?>
 
-<article class="p-4 p-lg-5">
+<article class="min-vh-100 p-4 p-lg-5">
     <h1 class="display-5 mb-4 text-center">
         eLone Path
     </h1>

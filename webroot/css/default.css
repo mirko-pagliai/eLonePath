@@ -63,6 +63,10 @@ article {
     );
 }
 
+article a {
+    color: var(--elone-ink);
+}
+
 .ff-cinzel {
     font-family: "Cinzel", serif;
 }
@@ -86,10 +90,6 @@ article {
     display: block;
     margin: 0 auto 2rem;
     max-width: 100%;
-}
-
-#story-choices a {
-    color: var(--elone-ink);
 }
 
 #story-choices a:hover {
@@ -120,10 +120,6 @@ article {
 
 #stories-list li:hover {
     background-color: rgba(105, 69, 47, 0.1);
-}
-
-#stories-list a {
-    color: var(--elone-ink);
 }
 
 #story-victory {

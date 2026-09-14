@@ -54,7 +54,7 @@ final class Translator
      * @param string $string The string to be translated.
      * @param string|int ...$args The arguments to replace placeholders in the string.
      * @return string The translated string with placeholders replaced by the provided arguments.
-     * @throws \RuntimeException If the resolved pattern is not a valid ICU message.
+     * @throws \RuntimeException|\IntlException If the resolved pattern is not a valid ICU message.
      */
     public static function translate(string $domain, string $string, string|int ...$args): string
     {

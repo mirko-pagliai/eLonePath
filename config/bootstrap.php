@@ -25,6 +25,8 @@ if (file_exists($envFile) && class_exists(Loader::class)) {
         ->toEnv();
 }
 
-define('APP', require ROOT . '/config/config.php');
+if (!defined('APP')) {
+    define('APP', require ROOT . '/config/config.php');
+}
 
 require ROOT . '/packages/Core/config/bootstrap.php';

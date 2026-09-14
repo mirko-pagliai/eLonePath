@@ -25,7 +25,7 @@ declare(strict_types=1);
         <title>eLone Path</title>
     </head>
     <body>
-        <main class="fs-4 mx-auto min-vh-100" style="max-width: 960px;">
+        <main class="fs-4 mx-auto" style="max-width: 960px;">
             <?= $content ?>
         </main>
     </body>

@@ -38,7 +38,7 @@ declare(strict_types=1);
             </div>
 
             <div>
-                <?= __(
+            <?= __(
                 'Life points: {0} / {1}',
                 "<strong>$character->lifePoints</strong>",
                 "<strong>$character->maxLifePoints</strong>",

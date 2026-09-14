@@ -126,15 +126,23 @@ use App\Story\Nodes\VictoryNode;
 
 <footer class="d-flex justify-content-end fs-5 gap-4 my-4 text-end">
     <?php
-    echo $this->Html->link(text: __('Return to home'), url: '/', options: [
-        'class' => 'link-light text-decoration-none',
-        'icon' => 'bi-arrow-left-short',
-    ]);
+    echo $this->Html->link(
+        text: __('Return to home'),
+        url: '/',
+        options: [
+            'class' => 'link-light text-decoration-none',
+            'icon' => 'bi-arrow-left-short',
+        ],
+    );
 
-    echo $this->Html->link(text: 'Github', url: 'https://github.com/mirko-pagliai/eLonePath', options: [
-        'class' => 'link-light text-decoration-none',
-        'icon' => 'bi-github',
-        'target' => '_blank',
-    ])
+    echo $this->Html->link(
+        text: 'Github',
+        url: 'https://github.com/mirko-pagliai/eLonePath',
+        options: [
+            'class' => 'link-light text-decoration-none',
+            'icon' => 'bi-github',
+            'target' => '_blank',
+        ],
+    )
     ?>
 </footer>

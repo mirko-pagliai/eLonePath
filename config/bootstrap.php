@@ -11,6 +11,8 @@ if (!defined('APP')) {
     define('APP', require ROOT . '/config/config.php');
 }
 
+const DOCS = ROOT . '/resources/docs';
+
 const LOCALES = ROOT . '/resources/locales';
 
 if (!defined('STORIES')) {

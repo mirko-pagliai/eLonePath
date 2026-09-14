@@ -94,6 +94,10 @@ main blockquote {
     max-width: 100%;
 }
 
+#story-choices a {
+    color: var(--elone-ink);
+}
+
 #story-choices a:hover {
     background-color: rgba(105, 69, 47, 0.1);
 }

@@ -14,25 +14,27 @@ if (!$title) {
 }
 ?>
 
-<header class="d-flex justify-content-end mb-5">
-    <div class="d-flex flex-column align-self-center text-end">
-        <h2 class="fs-4 fw-bolder m-0">eLonePath</h2>
+<header class="float-end mb-5 text-end">
+    <div class="d-flex flex-row">
+        <div>
+            <h2 class="fs-4 fw-bolder m-0">eLonePath</h2>
 
-        <h3 class="ff-cinzel m-0">
-            <?= h($title) ?>
-        </h3>
-
-        <?php if ($subtitle) : ?>
-        <hr class="border-2 my-1" />
-
-        <div class="story-page fs-4">
-            <?= h($subtitle) ?>
+            <h3 class="ff-cinzel m-0">
+                <?= h($title) ?>
+            </h3>
         </div>
-        <?php endif; ?>
+
+        <?= $this->Html->image(path: '/img/icons/icon-192.png', options: [
+            'class' => 'ms-1',
+            'style' => 'max-height: 62px',
+        ]) ?>
     </div>
 
-    <?= $this->Html->image(path: '/img/icons/icon-192.png', options: [
-        'class' => 'ms-1',
-        'style' => 'max-height: 70px',
-    ]) ?>
+    <?php if ($subtitle) : ?>
+    <hr class="border-2 my-2 "/>
+
+    <div style="color: var(--elone-muted);">
+        <?= h($subtitle) ?>
+    </div>
+    <?php endif; ?>
 </header>

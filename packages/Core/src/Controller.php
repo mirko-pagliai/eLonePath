@@ -142,16 +142,6 @@ abstract class Controller
     }
 
     /**
-     * Retrieves all request body fields of the current request — a POST form submission, most commonly.
-     *
-     * @return array<array-key, mixed> The request body fields, as an associative array.
-     */
-    protected function data(): array
-    {
-        return $this->request->data();
-    }
-
-    /**
      * Retrieves a single request body field of the current request, or `$default` if it isn't present.
      *
      * @param string $name The field name to look up.

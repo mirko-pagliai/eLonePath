@@ -178,17 +178,6 @@ final class Request
     }
 
     /**
-     * Returns every field in the request body — a POST form submission, most commonly. Populated from PHP's own
-     * `$_POST` when built via `createFromGlobals()`.
-     *
-     * @return array<array-key, mixed> The request body fields, as an associative array.
-     */
-    public function data(): array
-    {
-        return $this->data;
-    }
-
-    /**
      * Returns a single request body field by name.
      *
      * @param string $name The field name to look up.

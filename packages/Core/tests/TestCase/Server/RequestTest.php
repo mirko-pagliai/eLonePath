@@ -90,7 +90,6 @@ class RequestTest extends TestCase
      * body fields at all.
      *
      * @link \Elone\Core\Server\Request::__construct()
-     * @link \Elone\Core\Server\Request::data()
      * @link \Elone\Core\Server\Request::dataParam()
      */
     #[Test]
@@ -98,14 +97,12 @@ class RequestTest extends TestCase
     {
         $request = new Request('GET', '/');
 
-        $this->assertSame([], $request->data());
         $this->assertNull($request->dataParam('missing'));
         $this->assertSame('default', $request->dataParam('missing', 'default'));
     }
 
     /**
      * @link \Elone\Core\Server\Request::__construct()
-     * @link \Elone\Core\Server\Request::data()
      * @link \Elone\Core\Server\Request::dataParam()
      */
     #[Test]
@@ -113,28 +110,9 @@ class RequestTest extends TestCase
     {
         $request = new Request('POST', '/users/1/edit', ['name' => 'Ada', 'role' => 'admin']);
 
-        $this->assertSame(['name' => 'Ada', 'role' => 'admin'], $request->data());
         $this->assertSame('Ada', $request->dataParam('name'));
         $this->assertNull($request->dataParam('missing'));
         $this->assertSame('default', $request->dataParam('missing', 'default'));
-    }
-
-    /**
-     * `data()` and `getQueryParams()` are deliberately independent — a value posted in the body doesn't leak into
-     * the query params, and vice versa, even when a request genuinely has both (a POST to a URL that also
-     * carries its own querystring, e.g. `?ref=...`).
-     *
-     * @link \Elone\Core\Server\Request::__construct()
-     * @link \Elone\Core\Server\Request::data()
-     * @link \Elone\Core\Server\Request::getQueryParams()
-     */
-    #[Test]
-    public function testDataAndGetQueryParamsAreIndependent(): void
-    {
-        $request = new Request('POST', '/users/1/edit?ref=abc123', ['name' => 'Ada']);
-
-        $this->assertSame(['name' => 'Ada'], $request->data());
-        $this->assertSame(['ref' => 'abc123'], $request->getQueryParams());
     }
 
     /**
@@ -151,26 +129,6 @@ class RequestTest extends TestCase
         $this->assertSame('POST', $request->method());
         $this->assertSame('/pages/view/123', $request->path());
         $this->assertSame(['foo' => 'bar'], $request->getQueryParams());
-    }
-
-    /**
-     * `createFromGlobals()` populates `data()` from PHP's own `$_POST` — this is what a real POST submission
-     * actually goes through, unlike every other test here, which builds a `Request` directly with `$data` given
-     * by hand.
-     *
-     * @link \Elone\Core\Server\Request::createFromGlobals()
-     * @link \Elone\Core\Server\Request::data()
-     */
-    #[Test]
-    public function testCreateFromGlobalsPopulatesDataFromPost(): void
-    {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_SERVER['REQUEST_URI'] = '/users/1/edit';
-        $_POST = ['name' => 'Ada', 'role' => 'admin'];
-
-        $request = Request::createFromGlobals();
-
-        $this->assertSame(['name' => 'Ada', 'role' => 'admin'], $request->data());
     }
 
     /**

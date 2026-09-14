@@ -188,33 +188,6 @@ class ControllerTest extends TestCase
     }
 
     /**
-     * @link \Elone\Core\Controller::data()
-     * @link \Elone\Core\Controller::dataParam()
-     */
-    #[Test]
-    public function testData(): void
-    {
-        $request = new Request('POST', '/', ['foo' => 'bar']);
-
-        $controller = new class (request: $request) extends Controller {
-            public function data(): array
-            {
-                return parent::data();
-            }
-
-            public function dataParam(string $name, mixed $default = null): mixed
-            {
-                return parent::dataParam($name, $default);
-            }
-        };
-
-        $this->assertSame(['foo' => 'bar'], $controller->data());
-        $this->assertSame('bar', $controller->dataParam('foo'));
-        $this->assertNull($controller->dataParam('missing'));
-        $this->assertSame('default', $controller->dataParam('missing', 'default'));
-    }
-
-    /**
      * @link \Elone\Core\Controller::redirect()
      */
     #[Test]

@@ -41,7 +41,7 @@ class StoryController extends AppController
      */
     private function intDataParam(string $name): int
     {
-        $value = $this->dataParam($name);
+        $value = $this->getData($name);
 
         return is_numeric($value) ? (int)$value : 0;
     }

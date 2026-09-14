@@ -90,29 +90,29 @@ class RequestTest extends TestCase
      * body fields at all.
      *
      * @link \Elone\Core\Server\Request::__construct()
-     * @link \Elone\Core\Server\Request::dataParam()
+     * @link \Elone\Core\Server\Request::getData()
      */
     #[Test]
-    public function testDataDefaultsToEmpty(): void
+    public function testGetDataDefaultsToEmpty(): void
     {
         $request = new Request('GET', '/');
 
-        $this->assertNull($request->dataParam('missing'));
-        $this->assertSame('default', $request->dataParam('missing', 'default'));
+        $this->assertNull($request->getData('missing'));
+        $this->assertSame('default', $request->getData('missing', 'default'));
     }
 
     /**
      * @link \Elone\Core\Server\Request::__construct()
-     * @link \Elone\Core\Server\Request::dataParam()
+     * @link \Elone\Core\Server\Request::getData()
      */
     #[Test]
-    public function testData(): void
+    public function testGetData(): void
     {
         $request = new Request('POST', '/users/1/edit', ['name' => 'Ada', 'role' => 'admin']);
 
-        $this->assertSame('Ada', $request->dataParam('name'));
-        $this->assertNull($request->dataParam('missing'));
-        $this->assertSame('default', $request->dataParam('missing', 'default'));
+        $this->assertSame('Ada', $request->getData('name'));
+        $this->assertNull($request->getData('missing'));
+        $this->assertSame('default', $request->getData('missing', 'default'));
     }
 
     /**

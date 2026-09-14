@@ -142,15 +142,15 @@ abstract class Controller
     }
 
     /**
-     * Retrieves a single request body field of the current request, or `$default` if it isn't present.
+     * Retrieves a single request body data by name.
      *
-     * @param string $name The field name to look up.
+     * @param string $name The data name to look up.
      * @param mixed $default The value to return if `$name` isn't present.
-     * @return mixed The field's value, or `$default`.
+     * @return mixed The data's value, or `$default`.
      */
-    protected function dataParam(string $name, mixed $default = null): mixed
+    protected function getData(string $name, mixed $default = null): mixed
     {
-        return $this->request->dataParam($name, $default);
+        return $this->request->getData($name, $default);
     }
 
     /**

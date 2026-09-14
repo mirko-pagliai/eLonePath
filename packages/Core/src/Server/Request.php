@@ -178,13 +178,13 @@ final class Request
     }
 
     /**
-     * Returns a single request body field by name.
+     * Retrieves a single request body data by name.
      *
-     * @param string $name The field name to look up.
+     * @param string $name The data name to look up.
      * @param mixed $default The value to return if `$name` isn't present.
-     * @return mixed The field's value, or `$default`.
+     * @return mixed The data's value, or `$default`.
      */
-    public function dataParam(string $name, mixed $default = null): mixed
+    public function getData(string $name, mixed $default = null): mixed
     {
         return $this->data[$name] ?? $default;
     }

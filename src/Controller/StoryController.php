@@ -241,7 +241,9 @@ class StoryController extends AppController
     }
 
     /**
-     * Rolls the dice for a `DiceNode` and shows the outcome, with a link to whichever node it points to.
+     * Rolls the dice for a `DiceNode` and shows the outcome, with a link to whichever node it points to. With a
+     * character whose `perception` meets the node's own `perceptionBypass` (when it declares one), the check is
+     * skipped entirely — no roll happens, the outcome is an automatic success.
      *
      * @param string $storyId
      * @param int $nodeNumber
@@ -266,12 +268,23 @@ class StoryController extends AppController
             throw new RuntimeException("Node `$nodeNumber` in `$storyId` is not a dice check.");
         }
 
-        $rolls = new Dice()->rollMultiple($node->requiredRolls);
-        $total = array_sum($rolls);
-        $success = $node->isSuccess($total);
-        $target = $node->targetFor($total);
+        $perceptionBypassed = $character !== null
+            && $node->perceptionBypass !== null
+            && $character->perception >= $node->perceptionBypass;
 
-        $this->set(compact('game', 'rolls', 'total', 'success', 'target'));
+        if ($perceptionBypassed) {
+            $rolls = [];
+            $total = 0;
+            $success = true;
+            $target = $node->targetSuccess;
+        } else {
+            $rolls = new Dice()->rollMultiple($node->requiredRolls);
+            $total = array_sum($rolls);
+            $success = $node->isSuccess($total);
+            $target = $node->targetFor($total);
+        }
+
+        $this->set(compact('game', 'rolls', 'total', 'success', 'target', 'perceptionBypassed'));
 
         return null;
     }

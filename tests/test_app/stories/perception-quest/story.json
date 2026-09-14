@@ -1,0 +1,34 @@
+{
+    "game": {
+        "id": "perception-quest",
+        "title": "Perception Quest",
+        "author": "Test Author",
+        "description": "A fixture for testing the perception-based dice bypass.",
+        "language": "en",
+        "version": "1.0",
+        "genre": "science_fiction",
+        "difficulty": "easy",
+        "requires_character": true
+    },
+    "nodes": {
+        "1": {
+            "type": "dice",
+            "content": "A dice check with a perception bypass.",
+            "dice": {
+                "required_rolls": 1,
+                "minimum": 4,
+                "target_success": 2,
+                "target_failure": 3,
+                "perception_bypass": 4
+            }
+        },
+        "2": {
+            "type": "victory",
+            "content": "You succeeded."
+        },
+        "3": {
+            "type": "defeat",
+            "content": "You failed."
+        }
+    }
+}

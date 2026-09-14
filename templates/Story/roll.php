@@ -8,6 +8,7 @@ declare(strict_types=1);
  * @var bool $success
  * @var int $target
  * @var int $total
+ * @var bool $perceptionBypassed
  * @var \App\View\AppView $this
  *
  * @link \App\Controller\StoryController::roll()
@@ -26,6 +27,12 @@ declare(strict_types=1);
     ?>
 
     <section id="dice-result" class="fs-4 mb-4 text-center">
+        <?php if ($perceptionBypassed) : ?>
+        <p class="fs-2 fst-italic mb-4">
+            La tua <em>oercezione</em> ti permette di individuare il pericolo prima ancora di correrlo.
+        </p>
+        <?php else : ?>
+
         <p class="mb-2">
             <?php foreach ($rolls as $roll) : ?>
                 <?= $this->Html->icon(
@@ -38,6 +45,7 @@ declare(strict_types=1);
         <p class="fs-2">
             Totale: <strong><?= $total ?></strong>
         </p>
+        <?php endif; ?>
 
         <p class="fs-2 fst-italic mb-4">
         <?php if ($success) : ?>

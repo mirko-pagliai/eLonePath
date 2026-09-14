@@ -12,6 +12,7 @@ namespace App\Story\Nodes;
  *         minimum: int,
  *         target_success: int,
  *         target_failure: int,
+ *         perception_bypass?: int,
  *     },
  * }
  */
@@ -25,6 +26,7 @@ class DiceNode extends Node
         protected(set) readonly int $minimum,
         protected(set) readonly int $targetSuccess,
         protected(set) readonly int $targetFailure,
+        protected(set) readonly ?int $perceptionBypass = null,
     ) {
         parent::__construct($id, $gameId, $content);
     }
@@ -50,15 +52,21 @@ class DiceNode extends Node
      */
     public function toArray(): array
     {
+        $dice = [
+            'required_rolls' => $this->requiredRolls,
+            'minimum' => $this->minimum,
+            'target_success' => $this->targetSuccess,
+            'target_failure' => $this->targetFailure,
+        ];
+
+        if ($this->perceptionBypass !== null) {
+            $dice['perception_bypass'] = $this->perceptionBypass;
+        }
+
         return [
             'content' => $this->content,
             'type' => 'dice',
-            'dice' => [
-                'required_rolls' => $this->requiredRolls,
-                'minimum' => $this->minimum,
-                'target_success' => $this->targetSuccess,
-                'target_failure' => $this->targetFailure,
-            ],
+            'dice' => $dice,
         ];
     }
 
@@ -75,6 +83,7 @@ class DiceNode extends Node
             minimum: $data['dice']['minimum'],
             targetSuccess: $data['dice']['target_success'],
             targetFailure: $data['dice']['target_failure'],
+            perceptionBypass: $data['dice']['perception_bypass'] ?? null,
         );
     }
 }

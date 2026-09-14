@@ -417,6 +417,52 @@ class StoryControllerTest extends TestCase
     }
 
     /**
+     * With `perception` at or above the node's own `perceptionBypass`, the check is skipped entirely — no dice
+     * are rolled, the outcome is an automatic success.
+     *
+     * @link \App\Controller\StoryController::roll()
+     */
+    #[Test]
+    public function testRollWithSufficientPerceptionBypassesTheRoll(): void
+    {
+        $player = Character::createNew(maxLifePoints: 20, strength: 9, agility: 4, perception: 4, willpower: 3);
+        $state = new GameState(player: $player);
+        $controller = $this->makeController(
+            new Request('GET', "/story/roll/perception-quest/1?state={$state->toQueryValue()}"),
+        );
+
+        $controller->roll('perception-quest', 1);
+
+        $this->assertTrue($controller->getView()->get('perceptionBypassed'));
+        $this->assertSame([], $controller->getView()->get('rolls'));
+        $this->assertTrue($controller->getView()->get('success'));
+        $this->assertSame(2, $controller->getView()->get('target'));
+    }
+
+    /**
+     * With `perception` below the node's own `perceptionBypass`, the check happens normally — the dice are
+     * actually rolled.
+     *
+     * @link \App\Controller\StoryController::roll()
+     */
+    #[Test]
+    public function testRollWithInsufficientPerceptionRollsNormally(): void
+    {
+        $player = Character::createNew(maxLifePoints: 20, strength: 9, agility: 5, perception: 3, willpower: 3);
+        $state = new GameState(player: $player);
+        $controller = $this->makeController(
+            new Request('GET', "/story/roll/perception-quest/1?state={$state->toQueryValue()}"),
+        );
+
+        $controller->roll('perception-quest', 1);
+
+        $this->assertFalse($controller->getView()->get('perceptionBypassed'));
+        $rolls = $controller->getView()->get('rolls');
+        $this->assertIsArray($rolls);
+        $this->assertCount(1, $rolls);
+    }
+
+    /**
      * `combat()` only makes sense for a `CombatNode` — calling it against, say, the passage at node 1, throws
      * instead of silently doing nothing.
      *

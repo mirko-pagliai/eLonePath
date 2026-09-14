@@ -128,7 +128,7 @@ abstract class Controller
      */
     protected function getQuery(string $name, mixed $default = null): mixed
     {
-        return $this->request->getQuery($name, $default);
+        return $this->request->getQuery(name: $name, default: $default);
     }
 
     /**
@@ -150,7 +150,7 @@ abstract class Controller
      */
     protected function getData(string $name, mixed $default = null): mixed
     {
-        return $this->request->getData($name, $default);
+        return $this->request->getData(name: $name, default: $default);
     }
 
     /**

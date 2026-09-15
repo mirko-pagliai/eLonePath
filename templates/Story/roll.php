@@ -32,7 +32,6 @@ declare(strict_types=1);
             La tua <em>oercezione</em> ti permette di individuare il pericolo prima ancora di correrlo.
         </p>
         <?php else : ?>
-
         <p class="mb-2">
             <?php foreach ($rolls as $roll) : ?>
                 <?= $this->Html->icon(

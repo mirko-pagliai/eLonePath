@@ -45,7 +45,7 @@ final class PagesController extends AppController
                     throw new LogicException("The content of `$path` is empty.");
                 }
 
-                $firstLine = strtok($content, "\n");
+                $firstLine = strtok($content, PHP_EOL);
                 if (!$firstLine || !str_starts_with($firstLine, '# ')) {
                     throw new LogicException("The first line of `$path` is not a valid title.");
                 }

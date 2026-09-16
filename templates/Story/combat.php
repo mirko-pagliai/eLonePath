@@ -7,16 +7,16 @@ declare(strict_types=1);
  * @var \App\Story\Game $game
  * @var \App\Story\Nodes\CombatNode $node
  * @var \App\Story\Combat\CombatRoundResult $result
+ * @var int $freeStrikeDamage
  * @var \App\View\AppView $this
  *
  * @link \App\Controller\StoryController::combat()
  */
 
 use App\Story\Combat\CombatHit;
-
 ?>
 
-<article class="p-4 pt-5 p-xl-5">
+<article class="p-4 p-md-5">
     <?php
     /** @link templates/element/chapter_header.php */
     echo $this->element(
@@ -29,6 +29,13 @@ use App\Story\Combat\CombatHit;
     ?>
 
     <section id="combat-round" class="fs-4 mb-4 text-center">
+        <?php if ($freeStrikeDamage > 0) : ?>
+        <p class="fs-3 fst-italic mb-4">
+            La tua Volontà ti permette di colpire per primo, prima ancora che lo scontro abbia inizio:
+            infliggi <strong><?= $freeStrikeDamage ?></strong> danni.
+        </p>
+        <?php endif; ?>
+
         <div class="d-flex justify-content-center gap-5 mb-4">
             <div>
                 <p class="mb-1">Tu</p>

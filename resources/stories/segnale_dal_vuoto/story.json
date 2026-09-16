@@ -113,11 +113,12 @@
       "content": "![L'Ospite](9.jpg)\n\nAttraverso una finestra di osservazione rinforzata intravedi una sagoma, immobile, monitorata da apparecchiature ancora attive.\n\nPoi una voce familiare ti chiama per nome dal fondo del corridoio, e la sagoma smette di essere immobile.\n\nNon conosci nessuno, a bordo della Kairos. Non dovrebbe conoscere il tuo nome nessuno, a bordo della Kairos.\n\nQuando la **cosa** emerge dall'oscurità, ciò che resta di una forma umana è a malapena riconoscibile sotto gli strati di tessuto organico che si sono richiusi, mutati, attorno a quello che una volta era un membro dell'equipaggio. Si muove in modo sbagliato — troppe articolazioni, in punti dove non dovrebbero essercene.\n\nContinua a chiamarti per nome, con una voce che non è più una voce.",
       "combat": {
         "enemy_name": "L'Ospite",
-        "enemy_max_life_points": 24,
+        "enemy_max_life_points": 32,
         "enemy_strength": 4,
         "enemy_agility": 5,
         "target_victory": 38,
-        "target_defeat": 15
+        "target_defeat": 15,
+        "frightening_threshold": 4
       }
     },
     "10": {

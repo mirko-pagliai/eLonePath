@@ -249,6 +249,7 @@ class StoryController extends AppController
      * @param int $nodeNumber
      * @return \Elone\Core\Server\Response|null Returns a redirect to `character()` if this story requires one and
      * none is present; `null` otherwise, to render the roll's outcome.
+     * @throws \RuntimeException If the node isn't a `DiceNode`.
      * @throws \Random\RandomException
      * @link templates/Story/roll.php
      */
@@ -290,10 +291,11 @@ class StoryController extends AppController
     }
 
     /**
-     * Resolves one round of combat against a `CombatNode`'s enemy, and shows the outcome — the same "GET
-     * computes and shows a result" idiom `roll()` uses for a dice check, just repeated round after round instead
-     * of resolved in one shot: the enemy's current life points travel in `GameState::$enemyLifePoints`, absent
-     * on the first round against this node (the enemy starts at the full health the node itself declares) and
+     * Resolves a single round of combat against a `CombatNode`, redirecting once either side is defeated. The
+     * enemy's own life points travel in `GameState::$enemyLifePoints` across requests — absent on the first
+     * round against this node (the enemy starts at the full health the node itself declares, minus a free
+     * opening strike if the node itself declares a `frighteningThreshold` and the character's `willpower`
+     * meets it) and
      * present on every round after, updated each time.
      *
      * Ends the fight the moment either side reaches `0` life points, redirecting to whichever of the node's own
@@ -302,8 +304,9 @@ class StoryController extends AppController
      *
      * @param string $storyId
      * @param int $nodeNumber
-     * @return \Elone\Core\Server\Response|null Returns a redirect once the fight ends; `null` otherwise, to show
-     * this round's outcome with a link to continue the same fight.
+     * @return \Elone\Core\Server\Response|null Returns a redirect once the fight ends — including when a free
+     * strike alone defeats the enemy before any dice are rolled; `null` otherwise, to show this round's outcome
+     * with a link to continue the same fight.
      * @throws \RuntimeException If the node isn't a `CombatNode`, or if no character is present in the request —
      * a fight can't be resolved without one.
      * @throws \Random\RandomException
@@ -329,13 +332,28 @@ class StoryController extends AppController
         assert(is_string($stateValue));
         $state = GameState::fromQueryValue($stateValue);
 
+        $isFirstRound = $state->enemyLifePoints === null;
+
+        $freeStrikeDamage = 0;
+        $freeStrikeThreshold = $node->frighteningThreshold;
+        if ($isFirstRound && $freeStrikeThreshold !== null && $character->willpower >= $freeStrikeThreshold) {
+            $freeStrikeDamage = $character->strength;
+        }
+
         $enemy = new Enemy(
             name: $node->enemyName,
             maxLifePoints: $node->enemyMaxLifePoints,
-            lifePoints: $state->enemyLifePoints ?? $node->enemyMaxLifePoints,
+            lifePoints: $state->enemyLifePoints ?? max(0, $node->enemyMaxLifePoints - $freeStrikeDamage),
             strength: $node->enemyStrength,
             agility: $node->enemyAgility,
         );
+
+        if ($enemy->isDefeated()) {
+            return $this->redirect(
+                url: ['controller' => 'Story', 'action' => 'chapter', $storyId, $node->targetVictory],
+                query: ['state' => new GameState(player: $character)->toQueryValue()],
+            );
+        }
 
         $playerDice = new Dice()->rollDouble();
         $enemyDice = new Dice()->rollDouble();
@@ -376,6 +394,7 @@ class StoryController extends AppController
             'result' => $result,
             'character' => $character,
             'state' => $newState->toQueryValue(),
+            'freeStrikeDamage' => $freeStrikeDamage,
         ]);
 
         return null;

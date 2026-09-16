@@ -29,7 +29,8 @@ final class PagesController extends AppController
      * first line declares.
      *
      * @return void
-     * @throws \LogicException If a documentation file is empty, or its first line isn't a valid `# Title`.
+     * @throws \LogicException If no documentation file exists for the current locale, if a documentation
+     * file is empty, or if its first line isn't a valid `# Title`.
      * @link templates/Pages/docs.php
      */
     public function docs(): void
@@ -37,6 +38,10 @@ final class PagesController extends AppController
         $locale = Translator::getLocale();
 
         $files = glob(DOCS . "/$locale/*.md") ?: [];
+
+        if (!$files) {
+            throw new LogicException("No documentation files found for locale `$locale`.");
+        }
 
         $files = array_map(
             callback: function (string $path): array {

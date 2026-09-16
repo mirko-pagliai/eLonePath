@@ -31,6 +31,19 @@
         "3": {
             "type": "defeat",
             "content": "You lost."
+        },
+        "4": {
+            "type": "combat",
+            "content": "A combat against a frightening enemy weak enough for the free strike alone to defeat it.",
+            "combat": {
+                "enemy_name": "Frail Frightening Enemy",
+                "enemy_max_life_points": 8,
+                "enemy_strength": 3,
+                "enemy_agility": 3,
+                "target_victory": 2,
+                "target_defeat": 3,
+                "frightening_threshold": 4
+            }
         }
     }
 }

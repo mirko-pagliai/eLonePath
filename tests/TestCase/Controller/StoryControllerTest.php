@@ -569,6 +569,28 @@ class StoryControllerTest extends TestCase
     }
 
     /**
+     * When the free strike alone brings the enemy down to 0, `combat()` redirects straight to victory — no
+     * round is resolved at all, so the player can never take damage from an enemy already defeated before the
+     * fight properly began.
+     *
+     * @link \App\Controller\StoryController::combat()
+     */
+    #[Test]
+    public function testCombatWithFreeStrikeAloneDefeatingTheEnemyRedirectsToVictoryImmediately(): void
+    {
+        $player = Character::createNew(maxLifePoints: 20, strength: 10, agility: 4, perception: 2, willpower: 4);
+        $state = new GameState(player: $player);
+        $controller = $this->makeController(
+            new Request('GET', "/story/combat/frightening-quest/4?state={$state->toQueryValue()}"),
+        );
+
+        $response = $controller->combat('frightening-quest', 4);
+
+        $this->assertNotNull($response);
+        $this->assertStringStartsWith('/story/chapter/frightening-quest/2', $response->headers()['Location']);
+    }
+
+    /**
      * One round, whatever its real-dice outcome, either redirects (the round ended the fight) or leaves the
      * view holding a consistent, fully-typed set of round data — this doesn't pin down *who* wins, since that
      * depends on genuine randomness `combat()` has no way to fake for a test (a public action reached by URL

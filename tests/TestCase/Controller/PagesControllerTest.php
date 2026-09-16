@@ -102,19 +102,53 @@ class PagesControllerTest extends TestCase
     }
 
     /**
-     * A locale with no documentation directory of its own lists no files — not an error, just nothing found.
+     * A locale with no documentation directory of its own is treated the same way as a malformed file — a bug
+     * to catch loudly, not an empty list to render silently.
      *
      * @link \App\Controller\PagesController::docs()
      */
     #[Test]
-    public function testDocsWithNoFilesForLocaleReturnsEmptyArray(): void
+    public function testDocsWithNoFilesForLocaleThrows(): void
     {
         Translator::init('fr');
         $controller = new PagesController(new Request('GET', '/pages/docs'));
 
+        $this->expectExceptionMessageIs('No documentation files found for locale `fr`.');
         $controller->docs();
+    }
 
-        $this->assertSame([], $controller->getView()->get('files'));
+    /**
+     * A malformed documentation file — here, an empty one — is a bug in the documentation itself, not
+     * something a real user could ever trigger from a URL; it fails loudly rather than being silently skipped,
+     * so it gets caught during development instead of shipping a broken listing.
+     *
+     * @link \App\Controller\PagesController::docs()
+     */
+    #[Test]
+    public function testDocsWithEmptyFileThrows(): void
+    {
+        Translator::init('empty-test');
+        $controller = new PagesController(new Request('GET', '/pages/docs'));
+
+        $this->expectExceptionMessageIs('The content of `' . DOCS . '/empty-test/broken.md` is empty.');
+        $controller->docs();
+    }
+
+    /**
+     * Same idea, different malformation: content is present, but its first line isn't a `# Title`.
+     *
+     * @link \App\Controller\PagesController::docs()
+     */
+    #[Test]
+    public function testDocsWithInvalidFirstLineThrows(): void
+    {
+        Translator::init('bad-title-test');
+        $controller = new PagesController(new Request('GET', '/pages/docs'));
+
+        $this->expectExceptionMessageIs(
+            'The first line of `' . DOCS . '/bad-title-test/broken.md` is not a valid title.',
+        );
+        $controller->docs();
     }
 
     /**
@@ -184,12 +218,8 @@ class PagesControllerTest extends TestCase
         Translator::init('it');
         $controller = new PagesController(new Request('GET', '/pages/doc/does-not-exist'));
 
-        try {
-            $controller->doc('does-not-exist');
-            $this->fail('Expected a DocumentNotFoundException.');
-        } catch (DocumentNotFoundException $exception) {
-            $this->assertSame(404, $exception->statusCode());
-            $this->assertStringContainsString('does-not-exist.md` does not exist.', $exception->getMessage());
-        }
+        $this->expectException(DocumentNotFoundException::class);
+        $this->expectExceptionMessageIs('The file `' . DOCS . '/it/does-not-exist.md` does not exist.');
+        $controller->doc('does-not-exist');
     }
 }

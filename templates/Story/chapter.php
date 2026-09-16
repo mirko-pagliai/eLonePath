@@ -136,6 +136,15 @@ use App\Story\Nodes\VictoryNode;
     );
 
     echo $this->Html->link(
+        text: __('Documentation'),
+        url: ['controller' => 'Pages', 'action' => 'docs'],
+        options: [
+            'class' => 'link-light text-decoration-none',
+            'icon' => 'bi-journal-text',
+        ],
+    );
+
+    echo $this->Html->link(
         text: 'Github',
         url: 'https://github.com/mirko-pagliai/eLonePath',
         options: [

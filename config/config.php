@@ -22,4 +22,8 @@ return [
     // Whether error pages show the exception's own message, class, and trace. Never leave this `true` in
     // production.
     'debug' => filter_var(env('APP_DEBUG', false), FILTER_VALIDATE_BOOL),
+
+    // What locale a request falls back to when it doesn't ask for one (no `Accept-Language` header, or one
+    // nothing available matches) — see `Dispatcher::detectLocale()`.
+    'defaultLocale' => env('APP_DEFAULT_LOCALE', 'en'),
 ];

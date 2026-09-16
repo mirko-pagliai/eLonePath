@@ -25,8 +25,19 @@ declare(strict_types=1);
     </p>
 
     <p class="mb-4">
-        <strong>Forza</strong> e <strong>Agilità</strong> vanno da 4 a 10 ciascuna.<br />
-        <strong>Percezione</strong> e <strong>Volontà</strong> vanno da 1 a 5 ciascuna.<br />
+        <strong>Forza</strong> e <strong>agilità</strong> decidono l'esito degli scontri, colpo dopo colpo.<br />
+        <strong>Percezione</strong> e <strong>volontà</strong> contano prima che il pericolo si presenti — a
+        seconda della storia, possono farti evitare un rischio o colpire per primo contro un nemico che incute
+        davvero paura. Trovi i dettagli nella
+        <?= $this->Html->link(
+            text: 'documentazione sul combattimento',
+            url: ['controller' => 'Pages', 'action' => 'doc', 'combat'],
+        ) ?>.
+    </p>
+
+    <p class="mb-4">
+        <strong>Forza</strong> e <strong>agilità</strong> vanno da 4 a 10 ciascuna.<br />
+        <strong>Percezione</strong> e <strong>volontà</strong> vanno da 1 a 5 ciascuna.<br />
         La somma dei quattro deve fare esattamente 20.
     </p>
 

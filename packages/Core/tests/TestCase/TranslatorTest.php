@@ -111,4 +111,17 @@ class TranslatorTest extends TestCase
         $result = Translator::translate('default', 'Good morning');
         $this->assertSame($expected, $result);
     }
+
+    /**
+     * @link \Elone\Core\Translator::getLocale()
+     * @link \Elone\Core\Translator::init()
+     */
+    public function testGetLocaleReturnsWhatInitWasLastCalledWith(): void
+    {
+        Translator::init('it');
+        $this->assertSame('it', Translator::getLocale());
+
+        Translator::init('fr');
+        $this->assertSame('fr', Translator::getLocale());
+    }
 }

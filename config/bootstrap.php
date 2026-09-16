@@ -7,6 +7,10 @@ if (!defined('ROOT')) {
     define('ROOT', dirname(__DIR__));
 }
 
+if (!defined('DOCS')) {
+    define('DOCS', ROOT . '/resources/docs');
+}
+
 const LOCALES = ROOT . '/resources/locales';
 
 if (!defined('STORIES')) {

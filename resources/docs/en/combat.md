@@ -9,7 +9,7 @@ Your character has four attributes — strength, agility, perception, and willpo
 - **Strength** — how much damage you deal when you hit.
 - **Agility** — how quick you are to strike first and dodge attacks.
 
-**Perception** and **willpower** do not affect the combat calculation: they are the attributes that matter *before* the fight — noticing an ambush, resisting the fear of a terrifying enemy — and that a story may choose to reward in its own way, if circumstances require it. On the battlefield, however, Strength and Agility are what decide the outcome.
+**Perception** and **willpower** do not affect the combat calculation: they are the attributes that matter *before* the fight — noticing a danger, resisting the fear of a terrifying enemy. The "Perception and Willpower" section below explains exactly how.
 
 Your enemy also has their own Strength and Agility, as well as their own Hit Points: you will find them described, or implied, in the text that introduces them.
 
@@ -35,3 +35,13 @@ Damage taken is deducted from the Hit Points of whoever receives it.
 The fight continues, one assault after another, until one of the two combatants reaches **zero Hit Points**. At that point, the battle is decided, and the story continues toward the outcome that awaits you — victory or defeat — by turning the page as always.
 
 There is no limit to the number of assaults: a fight between opponents who are closely matched in Strength and Agility can go on for a long time, made up of blows, parries, and more blows, before fortune clearly tips to one side.
+
+## Perception and Willpower
+
+Perception and willpower never enter the damage calculation, but they can still change how a danger plays out — in their own way, before the real risk even arrives.
+
+**Perception** — some challenges, when a story calls for it, can be overcome without even rolling the dice: if your Perception is high enough, the danger doesn't catch you by surprise, and the challenge is treated as automatically passed.
+
+**Willpower** — against an enemy written to genuinely inspire fear, a sufficiently high Willpower lets you strike first, before the assault itself even begins: a single free hit, equal to your Strength, that the enemy takes before it can defend itself.
+
+In both cases, it's the story itself that decides where — and how much — these two attributes truly matter.

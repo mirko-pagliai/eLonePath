@@ -48,6 +48,16 @@ final class Translator
     }
 
     /**
+     * The locale `init()` was last called with — `'en'` if `init()` hasn't been called yet at all.
+     *
+     * @return string
+     */
+    public static function getLocale(): string
+    {
+        return self::$locale;
+    }
+
+    /**
      * Translates the given string within the specified domain, replacing placeholders with the provided arguments.
      *
      * @param string $domain The domain to use for translation.

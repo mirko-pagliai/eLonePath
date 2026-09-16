@@ -6,7 +6,10 @@ if (!defined('DS')) {
 }
 
 if (!defined('APP')) {
-    define('APP', ['debug' => false]);
+    define('APP', [
+        'debug' => false,
+        'defaultLocale' => 'en',
+    ]);
 }
 
 if (!defined('APP_NAMESPACE')) {

@@ -68,6 +68,30 @@ class DispatcherTest extends TestCase
     }
 
     /**
+     * With no `Accept-Language` header at all, `detectLocale()` falls back to `$defaultLocale` — which itself
+     * defaults to `APP['defaultLocale']`, but can be overridden, per instance, independent of `APP`'s own value.
+     * This is what an app building on this core, wanting a fallback other than `'en'`, would set in its own
+     * `config/config.php` — passing it explicitly here is what proves the fallback is actually read from the
+     * constructor argument, not hardcoded.
+     *
+     * @link \Elone\Core\Dispatcher::__construct()
+     * @link \Elone\Core\Dispatcher::detectLocale()
+     */
+    #[Test]
+    public function testDetectLocaleWithCustomDefaultLocale(): void
+    {
+        $dispatcher = new readonly class (defaultLocale: 'it') extends Dispatcher {
+            public function detectLocale(Request $request): string
+            {
+                return parent::detectLocale($request);
+            }
+        };
+        $request = new Request('GET', '/');
+
+        $this->assertSame('it', $dispatcher->detectLocale($request));
+    }
+
+    /**
      * Distinct from the case above: a multi-word action name (`someActionName()`) proves the action portion of
      * the template path is converted to snake_case, not just used verbatim like the controller portion is —
      * `UsersSettings/some_action_name.php`, not `UsersSettings/someActionName.php`.

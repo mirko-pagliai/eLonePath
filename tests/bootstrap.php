@@ -11,6 +11,8 @@ ini_set('intl.default_locale', 'en_US');
 
 const TEST_APP = ROOT . '/tests/test_app';
 
+const DOCS = TEST_APP . '/docs';
+
 const STORIES = TEST_APP . '/stories';
 
 const WEBROOT = ROOT . '/tests/test_app/webroot';

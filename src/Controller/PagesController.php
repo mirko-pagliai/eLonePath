@@ -3,7 +3,9 @@ declare(strict_types=1);
 
 namespace App\Controller;
 
+use App\Exception\DocumentNotFoundException;
 use App\Story\Game;
+use Elone\Core\Translator;
 use LogicException;
 use Symfony\Component\Finder\Finder;
 
@@ -23,14 +25,18 @@ final class PagesController extends AppController
     }
 
     /**
-     * Scans for documentation files, processes their content, and extracts relevant metadata.
+     * Lists the documentation pages available in the current request's own locale, each with the title its
+     * first line declares.
      *
      * @return void
+     * @throws \LogicException If a documentation file is empty, or its first line isn't a valid `# Title`.
      * @link templates/Pages/docs.php
      */
     public function docs(): void
     {
-        $files = glob(DOCS . '/it/*.md') ?: [];
+        $locale = Translator::getLocale();
+
+        $files = glob(DOCS . "/$locale/*.md") ?: [];
 
         $files = array_map(
             callback: function (string $path): array {
@@ -56,29 +62,28 @@ final class PagesController extends AppController
     }
 
     /**
-     * Loads and processes documentation content based on the provided basename.
+     * Loads and shows a single documentation page, from the current request's own locale.
      *
      * @param string $basename The base name of the documentation file to load.
      * @return void
-     * @throws \LogicException If the basename contains invalid characters or if the specified file does not exist.
-     * @link templates/Pages/docs.php
+     * @throws \App\Exception\DocumentNotFoundException If `$basename` contains anything other than letters,
+     * digits, hyphens or underscores, or if no file matches it in the current locale.
+     * @link templates/Pages/doc.php
      */
     public function doc(string $basename): void
     {
-        foreach (['.', '/', '\\'] as $char) {
-            if (str_contains($basename, $char)) {
-                throw new LogicException("The basename `$basename` contains invalid characters.");
-            }
+        if (preg_match('/^[A-Za-z0-9_-]+$/', $basename) !== 1) {
+            throw new DocumentNotFoundException("The basename `$basename` contains invalid characters.");
         }
 
-        $dir = DOCS . '/it';
+        $locale = Translator::getLocale();
 
-        $file = $dir . '/' . $basename . '.md';
+        $file = DOCS . "/$locale/$basename.md";
         if (!file_exists($file)) {
-            throw new LogicException("The file `$file` does not exist.");
+            throw new DocumentNotFoundException("The file `$file` does not exist.");
         }
 
-        $content = file_get_contents($file);
+        $content = file_get_contents($file) ?: '';
 
         $this->set(compact('content'));
     }

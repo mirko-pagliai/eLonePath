@@ -7,7 +7,9 @@ if (!defined('ROOT')) {
     define('ROOT', dirname(__DIR__));
 }
 
-const DOCS = ROOT . '/resources/docs';
+if (!defined('DOCS')) {
+    define('DOCS', ROOT . '/resources/docs');
+}
 
 const LOCALES = ROOT . '/resources/locales';
 

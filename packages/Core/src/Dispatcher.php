@@ -21,6 +21,14 @@ use ReflectionParameter;
 readonly class Dispatcher
 {
     /**
+     * @param string $defaultLocale What `detectLocale()` falls back to when a request doesn't ask for a locale,
+     *  or asks for one nothing is available for. Defaults to `APP['defaultLocale']`.
+     */
+    public function __construct(private string $defaultLocale = APP['defaultLocale'])
+    {
+    }
+
+    /**
      * Dispatches a request to the appropriate controller/action, resolving method arguments and generating a
      * response. Also initializes `Translator` with `detectLocale()`'s own pick for this request — done here, not
      * in the app's bootstrap, since `dispatch()` is the earliest point with a `Request` to read.
@@ -62,23 +70,21 @@ readonly class Dispatcher
      *
      * @param \Elone\Core\Server\Request $request The current HTTP request object.
      * @return string The primary language `$request` asks for (e.g. `'it'`, from `it-IT` or `it_IT` alike), or
-     * `'en'` if it doesn't ask for one at all.
+     * `$defaultLocale` if it doesn't ask for one at all.
      */
     protected function detectLocale(Request $request): string
     {
-        $defaultLocale = 'en';
-
         $header = $request->getHeader('Accept-Language');
         if ($header === null) {
-            return $defaultLocale;
+            return $this->defaultLocale;
         }
 
         $locale = Locale::acceptFromHttp($header);
         if ($locale === false) {
-            return $defaultLocale;
+            return $this->defaultLocale;
         }
 
-        return Locale::getPrimaryLanguage($locale) ?? $defaultLocale;
+        return Locale::getPrimaryLanguage($locale) ?? $this->defaultLocale;
     }
 
     /**

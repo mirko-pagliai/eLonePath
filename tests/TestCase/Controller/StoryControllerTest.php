@@ -417,6 +417,52 @@ class StoryControllerTest extends TestCase
     }
 
     /**
+     * With `perception` at or above the node's own `perceptionBypass`, the check is skipped entirely — no dice
+     * are rolled, the outcome is an automatic success.
+     *
+     * @link \App\Controller\StoryController::roll()
+     */
+    #[Test]
+    public function testRollWithSufficientPerceptionBypassesTheRoll(): void
+    {
+        $player = Character::createNew(maxLifePoints: 20, strength: 9, agility: 4, perception: 4, willpower: 3);
+        $state = new GameState(player: $player);
+        $controller = $this->makeController(
+            new Request('GET', "/story/roll/perception-quest/1?state={$state->toQueryValue()}"),
+        );
+
+        $controller->roll('perception-quest', 1);
+
+        $this->assertTrue($controller->getView()->get('perceptionBypassed'));
+        $this->assertSame([], $controller->getView()->get('rolls'));
+        $this->assertTrue($controller->getView()->get('success'));
+        $this->assertSame(2, $controller->getView()->get('target'));
+    }
+
+    /**
+     * With `perception` below the node's own `perceptionBypass`, the check happens normally — the dice are
+     * actually rolled.
+     *
+     * @link \App\Controller\StoryController::roll()
+     */
+    #[Test]
+    public function testRollWithInsufficientPerceptionRollsNormally(): void
+    {
+        $player = Character::createNew(maxLifePoints: 20, strength: 9, agility: 5, perception: 3, willpower: 3);
+        $state = new GameState(player: $player);
+        $controller = $this->makeController(
+            new Request('GET', "/story/roll/perception-quest/1?state={$state->toQueryValue()}"),
+        );
+
+        $controller->roll('perception-quest', 1);
+
+        $this->assertFalse($controller->getView()->get('perceptionBypassed'));
+        $rolls = $controller->getView()->get('rolls');
+        $this->assertIsArray($rolls);
+        $this->assertCount(1, $rolls);
+    }
+
+    /**
      * `combat()` only makes sense for a `CombatNode` — calling it against, say, the passage at node 1, throws
      * instead of silently doing nothing.
      *
@@ -450,6 +496,76 @@ class StoryControllerTest extends TestCase
         $this->expectException(RuntimeException::class);
         $this->expectExceptionMessageIs('No character found for `combat-quest` — create one before fighting.');
         $controller->combat('combat-quest', 1);
+    }
+
+    /**
+     * Against a `frightening` enemy, with `willpower` at or above the threshold, the character lands a free
+     * opening strike — the enemy starts the fight already down by the character's own `strength`, before any
+     * dice are rolled.
+     *
+     * @link \App\Controller\StoryController::combat()
+     */
+    #[Test]
+    public function testCombatWithFrighteningEnemyAndSufficientWillpowerAppliesFreeStrike(): void
+    {
+        $player = Character::createNew(maxLifePoints: 20, strength: 7, agility: 5, perception: 3, willpower: 5);
+        $state = new GameState(player: $player);
+        $controller = $this->makeController(
+            new Request('GET', "/story/combat/frightening-quest/1?state={$state->toQueryValue()}"),
+        );
+
+        $controller->combat('frightening-quest', 1);
+
+        $this->assertSame(7, $controller->getView()->get('freeStrikeDamage'));
+
+        $enemy = $controller->getView()->get('enemy');
+        $this->assertInstanceOf(Enemy::class, $enemy);
+        // 20 PV massimi - 7 di colpo gratuito = 13, poi ridotti ulteriormente se il round lo assegna al giocatore;
+        // in ogni caso, mai sopra 13 — a riprova che il colpo gratuito è stato applicato prima del round.
+        $this->assertLessThanOrEqual(13, $enemy->lifePoints);
+    }
+
+    /**
+     * Same enemy, but `willpower` below the threshold — no free strike, the enemy starts at full health.
+     *
+     * @link \App\Controller\StoryController::combat()
+     */
+    #[Test]
+    public function testCombatWithFrighteningEnemyAndInsufficientWillpowerAppliesNoFreeStrike(): void
+    {
+        $player = Character::createNew(maxLifePoints: 20, strength: 7, agility: 7, perception: 3, willpower: 3);
+        $state = new GameState(player: $player);
+        $controller = $this->makeController(
+            new Request('GET', "/story/combat/frightening-quest/1?state={$state->toQueryValue()}"),
+        );
+
+        $controller->combat('frightening-quest', 1);
+
+        $this->assertSame(0, $controller->getView()->get('freeStrikeDamage'));
+
+        $enemy = $controller->getView()->get('enemy');
+        $this->assertInstanceOf(Enemy::class, $enemy);
+        $this->assertGreaterThanOrEqual(13, $enemy->lifePoints);
+    }
+
+    /**
+     * The free strike only ever happens once, on the fight's first round — a second `combat()` call against the
+     * same node, with the enemy's own life points already carried in `state`, doesn't apply it again.
+     *
+     * @link \App\Controller\StoryController::combat()
+     */
+    #[Test]
+    public function testCombatFreeStrikeDoesNotRepeatOnSubsequentRounds(): void
+    {
+        $player = Character::createNew(maxLifePoints: 20, strength: 7, agility: 5, perception: 3, willpower: 5);
+        $state = new GameState(player: $player, enemyLifePoints: 13);
+        $controller = $this->makeController(
+            new Request('GET', "/story/combat/frightening-quest/1?state={$state->toQueryValue()}"),
+        );
+
+        $controller->combat('frightening-quest', 1);
+
+        $this->assertSame(0, $controller->getView()->get('freeStrikeDamage'));
     }
 
     /**

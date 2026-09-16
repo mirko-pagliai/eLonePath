@@ -96,7 +96,7 @@ final class FormHelper extends Helper
         unset($options['type']);
 
         if (!array_key_exists('value', $options)) {
-            $value = $this->view->getRequest()?->dataParam($name);
+            $value = $this->view->getRequest()?->getData($name);
             if (is_scalar($value)) {
                 $options['value'] = $value;
             }
@@ -131,7 +131,7 @@ final class FormHelper extends Helper
     public function select(string $name, array $choices, array $options = []): string
     {
         if (!array_key_exists('value', $options)) {
-            $value = $this->view->getRequest()?->dataParam($name);
+            $value = $this->view->getRequest()?->getData($name);
             if (is_scalar($value)) {
                 $options['value'] = $value;
             }

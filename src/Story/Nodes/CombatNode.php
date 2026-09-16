@@ -14,6 +14,7 @@ namespace App\Story\Nodes;
  *         enemy_agility: int,
  *         target_victory: int,
  *         target_defeat: int,
+ *         frightening_threshold?: int,
  *     },
  * }
  */
@@ -29,6 +30,7 @@ class CombatNode extends Node
         protected(set) readonly int $enemyAgility,
         protected(set) readonly int $targetVictory,
         protected(set) readonly int $targetDefeat,
+        protected(set) readonly ?int $frighteningThreshold = null,
     ) {
         parent::__construct($id, $gameId, $content);
     }
@@ -38,17 +40,23 @@ class CombatNode extends Node
      */
     public function toArray(): array
     {
+        $combat = [
+            'enemy_name' => $this->enemyName,
+            'enemy_max_life_points' => $this->enemyMaxLifePoints,
+            'enemy_strength' => $this->enemyStrength,
+            'enemy_agility' => $this->enemyAgility,
+            'target_victory' => $this->targetVictory,
+            'target_defeat' => $this->targetDefeat,
+        ];
+
+        if ($this->frighteningThreshold !== null) {
+            $combat['frightening_threshold'] = $this->frighteningThreshold;
+        }
+
         return [
             'content' => $this->content,
             'type' => 'combat',
-            'combat' => [
-                'enemy_name' => $this->enemyName,
-                'enemy_max_life_points' => $this->enemyMaxLifePoints,
-                'enemy_strength' => $this->enemyStrength,
-                'enemy_agility' => $this->enemyAgility,
-                'target_victory' => $this->targetVictory,
-                'target_defeat' => $this->targetDefeat,
-            ],
+            'combat' => $combat,
         ];
     }
 
@@ -67,6 +75,7 @@ class CombatNode extends Node
             enemyAgility: $data['combat']['enemy_agility'],
             targetVictory: $data['combat']['target_victory'],
             targetDefeat: $data['combat']['target_defeat'],
+            frighteningThreshold: $data['combat']['frightening_threshold'] ?? null,
         );
     }
 }

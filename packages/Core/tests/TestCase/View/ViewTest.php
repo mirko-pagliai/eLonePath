@@ -8,6 +8,7 @@ use Elone\Core\Exception\TemplateNotFoundException;
 use Elone\Core\Server\Request;
 use Elone\Core\View\Helper\Helper;
 use Elone\Core\View\View;
+use LogicException;
 use PHPUnit\Framework\Attributes\CoversClass;
 use PHPUnit\Framework\Attributes\Test;
 use PHPUnit\Framework\TestCase;
@@ -229,6 +230,330 @@ class ViewTest extends TestCase
         $view->render('Pages/home');
 
         $this->assertNull($view->get('key1'));
+    }
+
+    /**
+     * `start()`/`end()` capture whatever is echoed between them into the named block — readable back with
+     * `fetch()`, independent of any template rendering.
+     *
+     * @link \Elone\Core\View\View::start()
+     * @link \Elone\Core\View\View::end()
+     * @link \Elone\Core\View\View::fetch()
+     */
+    #[Test]
+    public function testStartEndCapturesIntoNamedBlock(): void
+    {
+        $view = new View();
+
+        $view->start('greeting');
+        echo 'captured text';
+        $view->end();
+
+        $this->assertSame('captured text', $view->fetch('greeting'));
+    }
+
+    /**
+     * A second `start()`/`end()` pair on the same block replaces its content — `start()` isn't cumulative on
+     * its own; `append()`/`prepend()` are what add to an existing block.
+     *
+     * @link \Elone\Core\View\View::start()
+     * @link \Elone\Core\View\View::end()
+     */
+    #[Test]
+    public function testStartEndReplacesExistingBlockContent(): void
+    {
+        $view = new View();
+
+        $view->start('greeting');
+        echo 'first';
+        $view->end();
+
+        $view->start('greeting');
+        echo 'second';
+        $view->end();
+
+        $this->assertSame('second', $view->fetch('greeting'));
+    }
+
+    /**
+     * @link \Elone\Core\View\View::assign()
+     */
+    #[Test]
+    public function testAssignSetsBlockDirectly(): void
+    {
+        $view = new View();
+
+        $view->assign('title', 'Page Title');
+
+        $this->assertSame('Page Title', $view->fetch('title'));
+    }
+
+    /**
+     * @link \Elone\Core\View\View::assign()
+     */
+    #[Test]
+    public function testAssignReplacesExistingBlockContent(): void
+    {
+        $view = new View();
+
+        $view->assign('title', 'First');
+        $view->assign('title', 'Second');
+
+        $this->assertSame('Second', $view->fetch('title'));
+    }
+
+    /**
+     * With a value given directly, `append()` adds it to the block without capturing anything.
+     *
+     * @link \Elone\Core\View\View::append()
+     */
+    #[Test]
+    public function testAppendWithValueAppendsDirectly(): void
+    {
+        $view = new View();
+        $view->assign('list', 'A');
+
+        $view->append('list', 'B');
+
+        $this->assertSame('AB', $view->fetch('list'));
+    }
+
+    /**
+     * With no value, `append()` starts capturing instead — the matching `end()` call adds whatever was echoed
+     * after whatever the block already held.
+     *
+     * @link \Elone\Core\View\View::append()
+     */
+    #[Test]
+    public function testAppendWithoutValueCapturesAndAppends(): void
+    {
+        $view = new View();
+        $view->assign('list', 'A');
+
+        $view->append('list');
+        echo 'B';
+        $view->end();
+
+        $this->assertSame('AB', $view->fetch('list'));
+    }
+
+    /**
+     * `append()` on a block that doesn't exist yet behaves like `assign()` — nothing to append after.
+     *
+     * @link \Elone\Core\View\View::append()
+     */
+    #[Test]
+    public function testAppendWithValueOnMissingBlockActsLikeAssign(): void
+    {
+        $view = new View();
+
+        $view->append('list', 'only');
+
+        $this->assertSame('only', $view->fetch('list'));
+    }
+
+    /**
+     * With a value given directly, `prepend()` adds it before the block without capturing anything.
+     *
+     * @link \Elone\Core\View\View::prepend()
+     */
+    #[Test]
+    public function testPrependWithValuePrependsDirectly(): void
+    {
+        $view = new View();
+        $view->assign('list', 'B');
+
+        $view->prepend('list', 'A');
+
+        $this->assertSame('AB', $view->fetch('list'));
+    }
+
+    /**
+     * With no value, `prepend()` starts capturing instead — the matching `end()` call adds whatever was echoed
+     * before whatever the block already held.
+     *
+     * @link \Elone\Core\View\View::prepend()
+     */
+    #[Test]
+    public function testPrependWithoutValueCapturesAndPrepends(): void
+    {
+        $view = new View();
+        $view->assign('list', 'B');
+
+        $view->prepend('list');
+        echo 'A';
+        $view->end();
+
+        $this->assertSame('AB', $view->fetch('list'));
+    }
+
+    /**
+     * @link \Elone\Core\View\View::reset()
+     */
+    #[Test]
+    public function testResetClearsBlock(): void
+    {
+        $view = new View();
+        $view->assign('title', 'Something');
+
+        $view->reset('title');
+
+        $this->assertSame('', $view->fetch('title'));
+    }
+
+    /**
+     * `reset()` on a block that was never set doesn't throw — nothing to clear either way.
+     *
+     * @link \Elone\Core\View\View::reset()
+     */
+    #[Test]
+    public function testResetOnMissingBlockDoesNothing(): void
+    {
+        $view = new View();
+
+        $view->reset('never-set');
+
+        $this->assertSame('', $view->fetch('never-set'));
+    }
+
+    /**
+     * @link \Elone\Core\View\View::fetch()
+     */
+    #[Test]
+    public function testFetchWithMissingBlockReturnsEmptyStringByDefault(): void
+    {
+        $view = new View();
+
+        $this->assertSame('', $view->fetch('never-set'));
+    }
+
+    /**
+     * @link \Elone\Core\View\View::fetch()
+     */
+    #[Test]
+    public function testFetchWithMissingBlockReturnsGivenDefault(): void
+    {
+        $view = new View();
+
+        $this->assertSame('Fallback', $view->fetch('never-set', 'Fallback'));
+    }
+
+    /**
+     * @link \Elone\Core\View\View::end()
+     */
+    #[Test]
+    public function testEndWithNoOpenCaptureThrows(): void
+    {
+        $view = new View();
+
+        $this->expectException(LogicException::class);
+        $this->expectExceptionMessageIs('end() called with no matching start(), append(), or prepend() open.');
+        $view->end();
+    }
+
+    /**
+     * A template that calls `extend()` hands its own rendering off to the named parent — the parent's own
+     * output is what `render()` ultimately returns, with the extending template's output available to it as
+     * the `content` block.
+     *
+     * @link \Elone\Core\View\View::extend()
+     * @link \Elone\Core\View\View::render()
+     */
+    #[Test]
+    public function testExtendRendersTheParentWithContentBlock(): void
+    {
+        $view = new View();
+
+        /** @link packages/Core/tests/test_app/templates/Pages/extend-simple.php */
+        /** @link packages/Core/tests/test_app/templates/common/panel.php */
+        $result = $view->render('Pages/extend-simple', null);
+
+        $this->assertStringContainsString('Simple extended body.', $result);
+    }
+
+    /**
+     * Every block a template defines before (or instead of) letting its own output become `content` — here,
+     * `title` via `assign()` and `sidebar` via `start()`/`end()` — is still readable by the parent it
+     * `extend()`s to.
+     *
+     * @link \Elone\Core\View\View::extend()
+     * @link \Elone\Core\View\View::render()
+     */
+    #[Test]
+    public function testExtendLetsParentReadBlocksTheChildDefined(): void
+    {
+        $view = new View();
+
+        /** @link packages/Core/tests/test_app/templates/Pages/extend-with-blocks.php */
+        /** @link packages/Core/tests/test_app/templates/common/panel.php */
+        $result = $view->render('Pages/extend-with-blocks', null);
+
+        $this->assertStringContainsString('<h1>Extended Title</h1>', $result);
+        $this->assertStringContainsString('Body text.', $result);
+        $this->assertStringContainsString('<aside>Sidebar text.</aside>', $result);
+    }
+
+    /**
+     * `extend()` chains: a template extending to a parent that itself calls `extend()` again is followed all
+     * the way to the end, each step's own output becoming the next step's `content`.
+     *
+     * @link \Elone\Core\View\View::extend()
+     * @link \Elone\Core\View\View::render()
+     */
+    #[Test]
+    public function testExtendChainsThroughMultipleLevels(): void
+    {
+        $view = new View();
+
+        /** @link packages/Core/tests/test_app/templates/Pages/extend-chained.php */
+        /** @link packages/Core/tests/test_app/templates/common/chain-inner.php */
+        /** @link packages/Core/tests/test_app/templates/common/chain-outer.php */
+        $result = $view->render('Pages/extend-chained', null);
+
+        $this->assertStringContainsString('[OUTER]', $result);
+        $this->assertStringContainsString('[INNER]', $result);
+        $this->assertStringContainsString('Leaf.', $result);
+        $this->assertStringContainsString('[/INNER]', $result);
+        $this->assertStringContainsString('[/OUTER]', $result);
+        $this->assertLessThan(strpos($result, '[/OUTER]'), strpos($result, '[/INNER]'));
+    }
+
+    /**
+     * A layout can `fetch('content')` to get the rendered template's own output, the same way it can already
+     * read it as a plain `$content` variable — this doesn't require the template itself to have called
+     * `extend()` at all.
+     *
+     * @link \Elone\Core\View\View::render()
+     * @link \Elone\Core\View\View::fetch()
+     */
+    #[Test]
+    public function testLayoutCanFetchContentWithoutTheTemplateExtendingAnything(): void
+    {
+        $view = new View();
+
+        /** @link packages/Core/tests/test_app/templates/Pages/home.php */
+        /** @link packages/Core/tests/test_app/templates/layout/default.php */
+        $result = $view->render('Pages/home');
+
+        $this->assertStringContainsString('Home page.', $result);
+    }
+
+    /**
+     * Every block set during one `render()` call — directly, or via a followed `extend()` chain — is gone by
+     * the time the next, separate `render()` call on the same `View` instance runs; the same way `$this->data`
+     * is cleared between calls.
+     *
+     * @link \Elone\Core\View\View::render()
+     */
+    #[Test]
+    public function testRenderClearsBlocksAfterEvaluation(): void
+    {
+        $view = new View();
+        $view->render('Pages/extend-with-blocks', null);
+
+        $result = $view->render('Pages/home', null);
+
+        $this->assertStringNotContainsString('Sidebar text.', $result);
     }
 
     /**

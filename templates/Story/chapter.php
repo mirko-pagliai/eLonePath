@@ -17,7 +17,7 @@ use App\Story\Nodes\PassageNode;
 use App\Story\Nodes\VictoryNode;
 ?>
 
-<article class="min-vh-100 p-4 p-lg-5">
+<article class="p-4 pt-5 p-xl-5">
     <?php
     /** @link templates/element/chapter_header.php */
     echo $this->element(name: 'chapter_header', data: ['title' => $game->title, 'subtitle' => "Pagina $node->id"]);
@@ -124,7 +124,7 @@ use App\Story\Nodes\VictoryNode;
     <?php endif; ?>
 </article>
 
-<footer class="d-flex justify-content-end fs-5 gap-4 my-4 text-end">
+<footer class="container-xl d-flex justify-content-end fs-5 column-gap-4 my-4 px-4 text-end">
     <?php
     echo $this->Html->link(
         text: __('Return to home'),

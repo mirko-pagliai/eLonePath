@@ -9,18 +9,18 @@ declare(strict_types=1);
  */
 ?>
 
-<article class="min-vh-100 p-4 p-lg-5">
+<article class="p-4 pt-5 p-xl-5">
     <h1 class="display-5 mb-4 text-center">
         eLone Path
     </h1>
 
-    <ul>
+    <ul class="mb-0">
         <?php foreach ($stories as $game) : ?>
-        <li class="position-relative py-3 px-1">
+        <li class="position-relative pb-3">
             <?= $this->Html->link(
                 text: $game->title,
                 url: ['controller' => 'Story', 'action' => 'character', $game->gameId],
-                options: ['class' => 'd-block fs-2 stretched-link text-decoration-none'],
+                options: ['class' => 'd-block fs-2 stretched-link'],
             ) ?>
 
             <?php if ($game->description) : ?>
@@ -29,7 +29,7 @@ declare(strict_types=1);
             </div>
             <?php endif; ?>
 
-            <div class="d-flex flex-row gap-4 fs-5">
+            <div class="d-flex flex-wrap column-gap-4 fs-5 mt-2">
                 <div>
                     <?= __('Genre: {0}', lcfirst($game->genre->label())) ?>
                 </div>
@@ -45,7 +45,7 @@ declare(strict_types=1);
                 <?php endif; ?>
             </div>
 
-            <div class="fs-5 text-body-secondary">
+            <div class="fs-5 mt-2 text-body-secondary">
                 <?= __('Authors: {0}', h($game->author)) ?>
             </div>
 

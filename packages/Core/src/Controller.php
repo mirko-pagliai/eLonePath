@@ -120,47 +120,37 @@ abstract class Controller
     }
 
     /**
-     * Retrieves all query string parameters of the current request.
-     *
-     * @return array<array-key, mixed> The query string parameters, as an associative array.
-     */
-    protected function queryParams(): array
-    {
-        return $this->request->queryParams();
-    }
-
-    /**
-     * Retrieves a single query string parameter of the current request, or `$default` if it isn't present.
+     * Retrieves a query parameter by name.
      *
      * @param string $name The parameter name to look up.
      * @param mixed $default The value to return if `$name` isn't present.
      * @return mixed The parameter's value, or `$default`.
      */
-    protected function queryParam(string $name, mixed $default = null): mixed
+    protected function getQuery(string $name, mixed $default = null): mixed
     {
-        return $this->request->queryParam($name, $default);
+        return $this->request->getQuery(name: $name, default: $default);
     }
 
     /**
-     * Retrieves all request body fields of the current request — a POST form submission, most commonly.
+     * Retrieves all query parameters of the current request.
      *
-     * @return array<array-key, mixed> The request body fields, as an associative array.
+     * @return array<array-key, mixed> The query parameters, as an associative array.
      */
-    protected function data(): array
+    protected function getQueryParams(): array
     {
-        return $this->request->data();
+        return $this->request->getQueryParams();
     }
 
     /**
-     * Retrieves a single request body field of the current request, or `$default` if it isn't present.
+     * Retrieves a single request body data by name.
      *
-     * @param string $name The field name to look up.
+     * @param string $name The data name to look up.
      * @param mixed $default The value to return if `$name` isn't present.
-     * @return mixed The field's value, or `$default`.
+     * @return mixed The data's value, or `$default`.
      */
-    protected function dataParam(string $name, mixed $default = null): mixed
+    protected function getData(string $name, mixed $default = null): mixed
     {
-        return $this->request->dataParam($name, $default);
+        return $this->request->getData(name: $name, default: $default);
     }
 
     /**

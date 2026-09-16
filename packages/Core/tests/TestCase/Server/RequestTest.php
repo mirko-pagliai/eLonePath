@@ -59,19 +59,19 @@ class RequestTest extends TestCase
 
     /**
      * @link \Elone\Core\Server\Request::__construct()
-     * @link \Elone\Core\Server\Request::queryParams()
-     * @link \Elone\Core\Server\Request::queryParam()
+     * @link \Elone\Core\Server\Request::getQueryParams()
+     * @link \Elone\Core\Server\Request::getQuery()
      */
     #[Test]
-    public function testQueryParams(): void
+    public function testGetQueryParams(): void
     {
         $request = new Request('GET', '/pages/view/123?foo=bar');
 
         $this->assertSame('/pages/view/123', $request->path());
-        $this->assertSame(['foo' => 'bar'], $request->queryParams());
-        $this->assertSame('bar', $request->queryParam('foo'));
-        $this->assertNull($request->queryParam('missing'));
-        $this->assertSame('default', $request->queryParam('missing', 'default'));
+        $this->assertSame(['foo' => 'bar'], $request->getQueryParams());
+        $this->assertSame('bar', $request->getQuery('foo'));
+        $this->assertNull($request->getQuery('missing'));
+        $this->assertSame('default', $request->getQuery('missing', 'default'));
     }
 
     /**
@@ -82,7 +82,7 @@ class RequestTest extends TestCase
     {
         $request = new Request('GET', '/pages/home');
 
-        $this->assertSame([], $request->queryParams());
+        $this->assertSame([], $request->getQueryParams());
     }
 
     /**
@@ -90,51 +90,29 @@ class RequestTest extends TestCase
      * body fields at all.
      *
      * @link \Elone\Core\Server\Request::__construct()
-     * @link \Elone\Core\Server\Request::data()
-     * @link \Elone\Core\Server\Request::dataParam()
+     * @link \Elone\Core\Server\Request::getData()
      */
     #[Test]
-    public function testDataDefaultsToEmpty(): void
+    public function testGetDataDefaultsToEmpty(): void
     {
         $request = new Request('GET', '/');
 
-        $this->assertSame([], $request->data());
-        $this->assertNull($request->dataParam('missing'));
-        $this->assertSame('default', $request->dataParam('missing', 'default'));
+        $this->assertNull($request->getData('missing'));
+        $this->assertSame('default', $request->getData('missing', 'default'));
     }
 
     /**
      * @link \Elone\Core\Server\Request::__construct()
-     * @link \Elone\Core\Server\Request::data()
-     * @link \Elone\Core\Server\Request::dataParam()
+     * @link \Elone\Core\Server\Request::getData()
      */
     #[Test]
-    public function testData(): void
+    public function testGetData(): void
     {
         $request = new Request('POST', '/users/1/edit', ['name' => 'Ada', 'role' => 'admin']);
 
-        $this->assertSame(['name' => 'Ada', 'role' => 'admin'], $request->data());
-        $this->assertSame('Ada', $request->dataParam('name'));
-        $this->assertNull($request->dataParam('missing'));
-        $this->assertSame('default', $request->dataParam('missing', 'default'));
-    }
-
-    /**
-     * `data()` and `queryParams()` are deliberately independent — a value posted in the body doesn't leak into
-     * the query params, and vice versa, even when a request genuinely has both (a POST to a URL that also
-     * carries its own querystring, e.g. `?ref=...`).
-     *
-     * @link \Elone\Core\Server\Request::__construct()
-     * @link \Elone\Core\Server\Request::data()
-     * @link \Elone\Core\Server\Request::queryParams()
-     */
-    #[Test]
-    public function testDataAndQueryParamsAreIndependent(): void
-    {
-        $request = new Request('POST', '/users/1/edit?ref=abc123', ['name' => 'Ada']);
-
-        $this->assertSame(['name' => 'Ada'], $request->data());
-        $this->assertSame(['ref' => 'abc123'], $request->queryParams());
+        $this->assertSame('Ada', $request->getData('name'));
+        $this->assertNull($request->getData('missing'));
+        $this->assertSame('default', $request->getData('missing', 'default'));
     }
 
     /**
@@ -150,27 +128,7 @@ class RequestTest extends TestCase
 
         $this->assertSame('POST', $request->method());
         $this->assertSame('/pages/view/123', $request->path());
-        $this->assertSame(['foo' => 'bar'], $request->queryParams());
-    }
-
-    /**
-     * `createFromGlobals()` populates `data()` from PHP's own `$_POST` — this is what a real POST submission
-     * actually goes through, unlike every other test here, which builds a `Request` directly with `$data` given
-     * by hand.
-     *
-     * @link \Elone\Core\Server\Request::createFromGlobals()
-     * @link \Elone\Core\Server\Request::data()
-     */
-    #[Test]
-    public function testCreateFromGlobalsPopulatesDataFromPost(): void
-    {
-        $_SERVER['REQUEST_METHOD'] = 'POST';
-        $_SERVER['REQUEST_URI'] = '/users/1/edit';
-        $_POST = ['name' => 'Ada', 'role' => 'admin'];
-
-        $request = Request::createFromGlobals();
-
-        $this->assertSame(['name' => 'Ada', 'role' => 'admin'], $request->data());
+        $this->assertSame(['foo' => 'bar'], $request->getQueryParams());
     }
 
     /**
@@ -185,7 +143,7 @@ class RequestTest extends TestCase
 
         $this->assertSame('GET', $request->method());
         $this->assertSame('/', $request->path());
-        $this->assertSame([], $request->queryParams());
+        $this->assertSame([], $request->getQueryParams());
     }
 
     /**

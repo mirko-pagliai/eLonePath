@@ -156,48 +156,35 @@ final class Request
     }
 
     /**
-     * Returns every query string parameter parsed from the URI given to the constructor. Keys are usually strings, but
-     * PHP coerces a purely numeric key (e.g. from `?123=abc`) to an integer, so the array key type is `array-key`
-     * (`int|string`) rather than just `string`.
-     *
-     * @return array<array-key, mixed> The query string parameters, as an associative array.
-     */
-    public function queryParams(): array
-    {
-        return $this->queryParams;
-    }
-
-    /**
-     * Returns a single query string parameter by name.
+     * Retrieves a query parameter by name.
      *
      * @param string $name The parameter name to look up.
      * @param mixed $default The value to return if `$name` isn't present.
      * @return mixed The parameter's value, or `$default`.
      */
-    public function queryParam(string $name, mixed $default = null): mixed
+    public function getQuery(string $name, mixed $default = null): mixed
     {
         return $this->queryParams[$name] ?? $default;
     }
 
     /**
-     * Returns every field in the request body — a POST form submission, most commonly. Populated from PHP's own
-     * `$_POST` when built via `createFromGlobals()`.
+     * Retrieves all query parameters of the current request.
      *
-     * @return array<array-key, mixed> The request body fields, as an associative array.
+     * @return array<array-key, mixed> The query string parameters, as an associative array.
      */
-    public function data(): array
+    public function getQueryParams(): array
     {
-        return $this->data;
+        return $this->queryParams;
     }
 
     /**
-     * Returns a single request body field by name.
+     * Retrieves a single request body data by name.
      *
-     * @param string $name The field name to look up.
+     * @param string $name The data name to look up.
      * @param mixed $default The value to return if `$name` isn't present.
-     * @return mixed The field's value, or `$default`.
+     * @return mixed The data's value, or `$default`.
      */
-    public function dataParam(string $name, mixed $default = null): mixed
+    public function getData(string $name, mixed $default = null): mixed
     {
         return $this->data[$name] ?? $default;
     }

@@ -52,9 +52,10 @@
       "content": "Ti fermi sul bordo del pozzo tecnico, valutando il punto più stabile della struttura danneggiata.\n\nUn passo alla volta, cercando di distribuire il peso, provi ad attraversare la passerella prima che ceda del tutto.",
       "dice": {
         "required_rolls": 1,
-        "minimum": 3,
+        "minimum": 4,
         "target_success": 6,
-        "target_failure": 13
+        "target_failure": 13,
+        "perception_bypass": 4
       }
     },
     "5": {
@@ -112,11 +113,12 @@
       "content": "![L'Ospite](9.jpg)\n\nAttraverso una finestra di osservazione rinforzata intravedi una sagoma, immobile, monitorata da apparecchiature ancora attive.\n\nPoi una voce familiare ti chiama per nome dal fondo del corridoio, e la sagoma smette di essere immobile.\n\nNon conosci nessuno, a bordo della Kairos. Non dovrebbe conoscere il tuo nome nessuno, a bordo della Kairos.\n\nQuando la **cosa** emerge dall'oscurità, ciò che resta di una forma umana è a malapena riconoscibile sotto gli strati di tessuto organico che si sono richiusi, mutati, attorno a quello che una volta era un membro dell'equipaggio. Si muove in modo sbagliato — troppe articolazioni, in punti dove non dovrebbero essercene.\n\nContinua a chiamarti per nome, con una voce che non è più una voce.",
       "combat": {
         "enemy_name": "L'Ospite",
-        "enemy_max_life_points": 24,
+        "enemy_max_life_points": 32,
         "enemy_strength": 4,
         "enemy_agility": 5,
         "target_victory": 38,
-        "target_defeat": 15
+        "target_defeat": 15,
+        "frightening_threshold": 4
       }
     },
     "10": {
@@ -224,9 +226,10 @@
       "content": "Il corridoio verso i laboratori è chiuso da una paratia magnetica. Il pannello locale accetta ancora comandi manuali, ma il sistema di sicurezza è instabile.\n\nProvi a forzare l'apertura senza riattivare l'intero settore.",
       "dice": {
         "required_rolls": 1,
-        "minimum": 3,
+        "minimum": 4,
         "target_success": 27,
-        "target_failure": 28
+        "target_failure": 28,
+        "perception_bypass": 4
       }
     },
     "22": {
@@ -384,9 +387,10 @@
       "content": "![Nucleo tecnico](34.jpg)\n\nIl pannello del nucleo tecnico controlla parte dell'alimentazione della Kairos.\n\nPuoi riattivare il circuito che alimenta la baia delle capsule, ma devi farlo senza riavviare l'intera rete della stazione.\n\nUn errore potrebbe richiudere le porte di sicurezza — oppure riaccendere i sistemi di contenimento.",
       "dice": {
         "required_rolls": 1,
-        "minimum": 3,
+        "minimum": 4,
         "target_success": 37,
-        "target_failure": 42
+        "target_failure": 42,
+        "perception_bypass": 4
       }
     },
     "35": {
@@ -469,7 +473,7 @@
     },
     "43": {
       "type": "combat",
-      "content": "![Sentinella di quarantena](43.jpg)\n\nDalle grate del soffitto scende un'unità che non hai ancora visto: più snella del drone incontrato prima, i movimenti privi di qualunque esitazione. Non è danneggiata, non è malfunzionante. È stata mandata apposta.\n\nUn modulo sulla parente al suo fianco proietta un messaggio, ripetuto in loop sulle pareti del corridoio:\n\n**CONTAMINAZIONE RILEVATA — PROCEDURA DI CONTENIMENTO ATTIVA.**\n\nNon ti sta chiedendo di fermarti. Ti ha già considerato neutralizzato.",
+      "content": "![Sentinella di quarantena](43.jpg)\n\nDalle grate del soffitto scende un'unità che non hai ancora visto: più snella del drone incontrato prima, i movimenti privi di qualunque esitazione. Non è danneggiata, non è malfunzionante. È stata mandata apposta.\n\nUn modulo sulla parete al suo fianco proietta un messaggio, ripetuto in loop sulle pareti del corridoio:\n\n**CONTAMINAZIONE RILEVATA — PROCEDURA DI CONTENIMENTO ATTIVA.**\n\nNon ti sta chiedendo di fermarti. Ti ha già considerato neutralizzato.",
       "combat": {
         "enemy_name": "Sentinella di quarantena",
         "enemy_max_life_points": 12,

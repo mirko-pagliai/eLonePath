@@ -4,10 +4,10 @@
         "title": "La Torre oltre il Bosco",
         "author": "Mirko Pagliai - mirko.pagliai[at]gmail[dot]com",
         "translators": "",
-        "description": "Solo una piccola storia per cominciare...",
+        "description": "Demo base",
         "language": "it",
         "version": "1.0-alpha",
-        "preface": "Questa è una storia breve e semplice, ideata per aiutare gli **avventurieri** come te a capire come funziona il gioco.\n\n## Buona fortuna!",
+        "preface": "Questa è una storia breve e semplice, ideata per aiutare gli **avventurieri** come te a capire come funziona il gioco.\n\nNon è richiesta creazione di personaggio, viene impiegato solo il lancio dei dadi.\n\n## Buona fortuna!",
         "genre": "medieval_fantasy",
         "difficulty": "very_easy",
         "requires_character": false
